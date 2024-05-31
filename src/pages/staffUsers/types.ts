@@ -1,15 +1,7 @@
-import { Project } from '../toilets/types'
-
-export type UserRole = 'admin' | 'user' | 'owner'
-
 export type User = {
   id: number
-  fullname: string
-  email: string
   username: string
-  role: UserRole
-  avatar: string
-  projects: Project[]
+  email: string
   notes: string
   active: boolean
 }

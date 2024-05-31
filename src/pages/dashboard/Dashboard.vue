@@ -14,7 +14,7 @@ import Timeline from './cards/Timeline.vue'
       <RegionRevenue class="w-full md:w-2/6" />
     </div>
     <div class="flex flex-col md:flex-row gap-4">
-      <Timeline class="w-full md:w-1/2" />
+      <Timeline class="w-full" />
     </div>
   </section>
 </template>

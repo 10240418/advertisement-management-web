@@ -1,82 +1,64 @@
 import { Ref, ref, unref, watch } from 'vue'
-import { getUsers, updateUser, addUser, removeUser, type Filters, Pagination, Sorting } from '../../../data/pages/users'
 import { User } from '../types'
-import { watchIgnorable } from '@vueuse/core'
+import {
+  fetchStaffUsers,
+  addStaffUser,
+  activateStaffUser,
+  deactivateStaffUser,
+  deleteStaffUser,
+  addStaffAccountPermission,
+  deleteStaffAccountPermission,
+} from '../../../api_mocks/staffUser'
 
-const makePaginationRef = () => ref<Pagination>({ page: 1, perPage: 10, total: 0 })
-const makeSortingRef = () => ref<Sorting>({ sortBy: 'fullname', sortingOrder: null })
-const makeFiltersRef = () => ref<Partial<Filters>>({ isActive: true, search: '' })
-
-export const useUsers = (options?: {
-  pagination?: Ref<Pagination>
-  sorting?: Ref<Sorting>
-  filters?: Ref<Partial<Filters>>
-}) => {
+export const useUsers = (options?: { pagination?: Ref<any>; sorting?: Ref<any>; filters?: Ref<Partial<any>> }) => {
   const isLoading = ref(false)
   const users = ref<User[]>([])
 
-  const { filters = makeFiltersRef(), sorting = makeSortingRef(), pagination = makePaginationRef() } = options || {}
-
   const fetch = async () => {
     isLoading.value = true
-    const { data, pagination: newPagination } = await getUsers({
-      ...unref(filters),
-      ...unref(sorting),
-      ...unref(pagination),
-    })
-    users.value = data
-
-    ignoreUpdates(() => {
-      pagination.value = newPagination
-    })
-
+    const res = await fetchStaffUsers({})
+    users.value = res.data as User[]
     isLoading.value = false
   }
 
-  const { ignoreUpdates } = watchIgnorable([pagination, sorting], fetch, { deep: true })
+  const add = async (user: Omit<User, 'id'>) => {
+    isLoading.value = true
+    await addStaffUser({})
+    await fetch()
+    isLoading.value = false
+  }
 
-  watch(
-    filters,
-    () => {
-      // Reset pagination to first page when filters changed
-      pagination.value.page = 1
-      fetch()
-    },
-    { deep: true },
-  )
+  const remove = async () => {
+    isLoading.value = true
+    await deleteStaffUser({})
+    await fetch()
+    isLoading.value = false
+  }
+
+  const activate = async (id: number | string) => {
+    isLoading.value = true
+    await activateStaffUser(id)
+    await fetch()
+    isLoading.value = false
+  }
+
+  const deactivate = async (id: number | string) => {
+    isLoading.value = true
+    await deactivateStaffUser(id)
+    await fetch()
+    isLoading.value = false
+  }
 
   fetch()
 
   return {
     isLoading,
-
-    filters,
-    sorting,
-    pagination,
-
     users,
 
     fetch,
-
-    async add(user: User) {
-      isLoading.value = true
-      await addUser(user)
-      await fetch()
-      isLoading.value = false
-    },
-
-    async update(user: User) {
-      isLoading.value = true
-      await updateUser(user)
-      await fetch()
-      isLoading.value = false
-    },
-
-    async remove(user: User) {
-      isLoading.value = true
-      await removeUser(user)
-      await fetch()
-      isLoading.value = false
-    },
+    add,
+    remove,
+    activate,
+    deactivate,
   }
 }

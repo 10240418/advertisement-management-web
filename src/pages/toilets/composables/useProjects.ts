@@ -13,21 +13,21 @@ export const useProjects = (options?: { sorting?: Ref<any>; pagination?: Ref<any
     isLoading.value = false
   }
 
-  const add = async (project: Omit<Toilet, 'id' | 'creation_date'>) => {
+  const add = async (toilet: Omit<Toilet, 'id' | 'creation_date'>) => {
     isLoading.value = true
     await addToilet({})
     await fetch()
     isLoading.value = false
   }
 
-  const update = async (project: Toilet) => {
+  const update = async (toilet: Toilet) => {
     isLoading.value = true
     await updateToilet({})
     await fetch()
     isLoading.value = false
   }
 
-  const remove = async (project: Toilet) => {
+  const remove = async (toilet: Toilet) => {
     isLoading.value = true
     await deleteToilet({})
     await fetch()

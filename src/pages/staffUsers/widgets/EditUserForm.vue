@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { PropType, computed, ref, watch } from 'vue'
 import { useForm } from 'vuestic-ui'
-import { User, UserRole } from '../types'
-import UserAvatar from './UserAvatar.vue'
+import { User } from '../types'
 import { validators } from '../../../services/utils'
 
 const props = defineProps({
@@ -18,14 +17,10 @@ const props = defineProps({
 
 const defaultNewUser: User = {
   id: -1,
-  avatar: '',
-  fullname: '',
-  role: 'user',
   username: '',
   notes: '',
   email: '',
   active: true,
-  projects: [],
 }
 
 const newUser = ref<User>({ ...defaultNewUser })
@@ -53,7 +48,6 @@ watch(
 
     newUser.value = {
       ...props.user,
-      avatar: props.user.avatar || '',
     }
   },
   { immediate: true },
@@ -65,10 +59,6 @@ const makeAvatarBlobUrl = (avatar: File) => {
   return URL.createObjectURL(avatar)
 }
 
-watch(avatar, (newAvatar) => {
-  newUser.value.avatar = newAvatar ? makeAvatarBlobUrl(newAvatar) : ''
-})
-
 const form = useForm('add-user-form')
 
 const emit = defineEmits(['close', 'save'])
@@ -78,13 +68,6 @@ const onSave = () => {
     emit('save', newUser.value)
   }
 }
-
-const roleSelectOptions: { text: Capitalize<UserRole>; value: UserRole }[] = [
-  { text: 'Admin', value: 'admin' },
-  { text: 'User', value: 'user' },
-  { text: 'Owner', value: 'owner' },
-]
-
 </script>
 
 <template>
@@ -110,13 +93,6 @@ const roleSelectOptions: { text: Capitalize<UserRole>; value: UserRole }[] = [
     <div class="self-stretch flex-col justify-start items-start gap-4 flex">
       <div class="flex gap-4 flex-col sm:flex-row w-full">
         <VaInput
-          v-model="newUser.fullname"
-          label="Full name"
-          class="w-full sm:w-1/2"
-          :rules="[validators.required]"
-          name="fullname"
-        />
-        <VaInput
           v-model="newUser.username"
           label="Username"
           class="w-full sm:w-1/2"
@@ -135,18 +111,6 @@ const roleSelectOptions: { text: Capitalize<UserRole>; value: UserRole }[] = [
       </div>
 
       <div class="flex gap-4 w-full">
-        <div class="w-1/2">
-          <VaSelect
-            v-model="newUser.role"
-            label="Role"
-            class="w-full"
-            :options="roleSelectOptions"
-            :rules="[validators.required]"
-            name="role"
-            value-by="value"
-          />
-        </div>
-
         <div class="flex items-center w-1/2 mt-4">
           <VaCheckbox v-model="newUser.active" label="Active" class="w-full" name="active" />
         </div>

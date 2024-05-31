@@ -1,40 +1,101 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import VaTimelineItem from '../../../components/va-timeline-item.vue'
+
+const notifications = ref([
+  {
+    toilet: {
+      id: 1,
+      name: 'Toilet 1',
+    },
+    device: {
+      id: 1,
+      name: 'Device 1',
+    },
+  },
+  {
+    toilet: {
+      id: 2,
+      name: 'Toilet 1',
+    },
+    device: {
+      id: 2,
+      name: 'Device 2',
+    },
+  },
+  {
+    toilet: {
+      id: 3,
+      name: 'Toilet 1',
+    },
+    device: {
+      id: 3,
+      name: 'Device 3',
+    },
+  },
+  {
+    toilet: {
+      id: 4,
+      name: 'Toilet 4',
+    },
+    device: {
+      id: 4,
+      name: 'Device 4',
+    },
+  },
+  {
+    toilet: {
+      id: 5,
+      name: 'Toilet 5',
+    },
+    device: {
+      id: 5,
+      name: 'Device 5',
+    },
+  },
+  {
+    toilet: {
+      id: 6,
+      name: 'Toilet 6',
+    },
+    device: {
+      id: 6,
+      name: 'Device 6',
+    },
+  },
+  {
+    toilet: {
+      id: 7,
+      name: 'Toilet 7',
+    },
+    device: {
+      id: 7,
+      name: 'Device 7',
+    },
+  },
+])
 </script>
 
 <template>
   <VaCard>
     <VaCardTitle class="flex justify-between">
-      <h1 class="card-title text-secondary font-bold uppercase">Timeline</h1>
+      <h1 class="card-title text-secondary font-bold uppercase">Notifications</h1>
     </VaCardTitle>
     <VaCardContent>
       <table class="mt-4">
         <tbody>
-          <VaTimelineItem date="25m ago">
-            <RouterLink class="va-link font-semibold" to="/users">Donald</RouterLink> updated the status of
-            <RouterLink class="va-link font-semibold" to="/users">Refund #1234</RouterLink> to awaiting customer
-            response
-          </VaTimelineItem>
-          <VaTimelineItem date="1h ago">
-            <RouterLink class="va-link font-semibold" to="/users">Lycy Peterson</RouterLink> was added to the group,
-            group name is Overtake
-          </VaTimelineItem>
-          <VaTimelineItem date="2h ago">
-            <RouterLink class="va-link font-semibold" to="/users">Joseph Rust</RouterLink> opened new showcase
-            <RouterLink class="va-link font-semibold" to="/users">Mannat #112233</RouterLink> with theme market
-          </VaTimelineItem>
-          <VaTimelineItem date="3d ago">
-            <RouterLink class="va-link font-semibold" to="/users">Donald</RouterLink> updated the status to awaiting
-            customer response
-          </VaTimelineItem>
-          <VaTimelineItem date="Nov 14, 2023">
-            <RouterLink class="va-link font-semibold" to="/users">Lycy Peterson</RouterLink> was added to the group
-          </VaTimelineItem>
-          <VaTimelineItem date="Nov 14, 2023">
-            <RouterLink class="va-link font-semibold" to="/users">Dan Rya</RouterLink> was added to the group
-          </VaTimelineItem>
-          <VaTimelineItem date="Nov 15, 2023">
-            Project <RouterLink class="va-link font-semibold" to="/projects">Vuestic 2023</RouterLink> was created
+          <VaTimelineItem date="25m ago" v-for="notification in notifications">
+            Toilet
+            <RouterLink
+              class="va-link font-semibold"
+              :to="{ name: 'toiletDetail', params: { id: notification.toilet.id } }"
+              >{{ notification.toilet.name }}</RouterLink
+            >
+            's device
+            <RouterLink class="va-link font-semibold" to="/device/{{ notification.device.id }}">{{
+              notification.device.name
+            }}</RouterLink>
+            updated
           </VaTimelineItem>
         </tbody>
       </table>

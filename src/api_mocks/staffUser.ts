@@ -1,6 +1,6 @@
 import request from '.'
 
-export const fetchCubicles = (query: any) => {
+export const fetchStaffUsers = (query: any) => {
   return Promise.resolve({
     data: [
       {
@@ -10,7 +10,7 @@ export const fetchCubicles = (query: any) => {
         username: 'magicpan',
         role: 'user',
         avatar: '',
-        active: true,
+        active: false,
         notes: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.',
       },
       {
@@ -297,25 +297,47 @@ export const fetchCubicles = (query: any) => {
   })
 }
 
-export const addCubicle = (data: any) => {
+export const addStaffUser = (data: any) => {
   return request({
-    url: `/client/cubicle`,
+    url: `/admin/staff_account`,
     method: 'post',
     data,
   })
 }
 
-export const updateCubicle = (data: any) => {
+export const activateStaffUser = (id: number | string) => {
   return request({
-    url: `/admin/cubicle`,
+    url: `/admin/staff_account/${id}/activate`,
     method: 'put',
+  })
+}
+
+export const deactivateStaffUser = (id: number | string) => {
+  return request({
+    url: `/admin/staff_account/${id}/deactivate`,
+    method: 'put',
+  })
+}
+
+export const addStaffAccountPermission = (data: any) => {
+  return request({
+    url: `/admin/staff_account/permission`,
+    method: 'post',
     data,
   })
 }
 
-export const deleteCubicle = (data: any) => {
+export const deleteStaffAccountPermission = (data: any) => {
   return request({
-    url: `/admin/cubicle`,
+    url: `/admin/staff_account/permission`,
+    method: 'delete',
+    data,
+  })
+}
+
+export const deleteStaffUser = (data: any) => {
+  return request({
+    url: `/admin/staff_account`,
     method: 'delete',
     data,
   })

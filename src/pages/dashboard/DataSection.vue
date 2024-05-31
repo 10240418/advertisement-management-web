@@ -48,8 +48,8 @@ const dashboardMetrics = computed<DashboardMetric[]>(() => [
   },
   {
     id: 'ongoingProjects',
-    title: 'Ongoing project',
-    value: '15',
+    title: 'Toilets managed',
+    value: '2',
     icon: 'mso-folder_open',
     changeText: '25.36%',
     changeDirection: 'up',
@@ -68,8 +68,8 @@ const dashboardMetrics = computed<DashboardMetric[]>(() => [
   },
   {
     id: 'newProfit',
-    title: 'New profit',
-    value: '27%',
+    title: 'OpenAPI customers',
+    value: '27',
     icon: 'mso-grade',
     changeText: '4%',
     changeDirection: 'up',

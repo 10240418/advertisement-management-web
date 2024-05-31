@@ -32,6 +32,11 @@ const routes: Array<RouteRecordRaw> = [
             component: () => import('../pages/toilets/ToiletsPage.vue'),
           },
           {
+            name: 'toiletDetail',
+            path: 'toilet/:id',
+            component: () => import('../pages/cubicle/PaymentsPage.vue'),
+          },
+          {
             name: 'cubicle',
             path: 'cubicle',
             component: () => import('../pages/cubicle/PaymentsPage.vue'),
