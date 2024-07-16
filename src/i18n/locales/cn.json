@@ -113,7 +113,8 @@
     "openApi": "OpenAPI",
     "staffUser": "施工人员",
     "adminUser": "管理员",
-    "settings": "设置"
+    "settings": "设置",
+    "logs": "日志"
   },
   "messages": {
     "all": "查看所有消息",

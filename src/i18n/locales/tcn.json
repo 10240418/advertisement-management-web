@@ -1,0 +1,195 @@
+{
+    "auth": {
+      "agree": "我同意",
+      "createAccount": "創建賬號",
+      "createNewAccount": "創建新賬號",
+      "email": "電子郵箱",
+      "login": "登入",
+      "password": "密碼",
+      "recover_password": "恢復密碼",
+      "sign_up": "註冊",
+      "keep_logged_in": "保持登入",
+      "termsOfUse": "使用條款",
+      "reset_password": "重置密碼"
+    },
+    "404": {
+      "title": "此頁面不存在",
+      "text": "如果您覺得這不對，請給我們發送消息",
+      "back_button": "返回儀表板"
+    },
+    "typography": {
+      "primary": "主要文本樣式",
+      "secondary": "次要文本樣式"
+    },
+    "dashboard": {
+      "versions": "版本",
+      "setupRemoteConnections": "設置遠程連接",
+      "currentVisitors": "當前訪客",
+      "charts": {
+        "trendyTrends": "流行趨勢",
+        "showInMoreDetail": "顯示更多細節",
+        "showInLessDetail": "顯示較少細節",
+        "loadingSpeed": "載入速度",
+        "topContributors": "主要貢獻者",
+        "showNextFive": "顯示接下來的五個",
+        "commits": "提交"
+      },
+      "info": {
+        "componentRichTheme": "組件豐富的主題",
+        "completedPullRequests": "已完成的拉取請求",
+        "users": "用戶",
+        "points": "點數",
+        "units": "單位",
+        "exploreGallery": "探索畫廊",
+        "viewLibrary": "查看庫",
+        "commits": "提交",
+        "components": "組件",
+        "teamMembers": "團隊成員"
+      },
+      "tabs": {
+        "overview": {
+          "title": "概述",
+          "built": "使用 Vue.js 框架構建",
+          "free": "對所有人完全免費",
+          "fresh": "新穎且清新的設計",
+          "mobile": "響應式並優化移動端",
+          "components": "大量有用的組件",
+          "nojQuery": "完全不使用 jQuery"
+        },
+        "billingAddress": {
+          "title": "賬單地址",
+          "personalInfo": "個人資訊",
+          "firstName": "名字 & 姓氏",
+          "email": "電子郵箱",
+          "address": "地址",
+          "companyInfo": "公司資訊",
+          "city": "城市",
+          "country": "國家",
+          "infiniteConnections": "無限連接",
+          "addConnection": "新增連接"
+        },
+        "bankDetails": {
+          "title": "銀行詳細資訊",
+          "detailsFields": "詳細欄位",
+          "bankName": "銀行名稱",
+          "accountName": "賬戶名稱",
+          "sortCode": "排序代碼",
+          "accountNumber": "賬號",
+          "notes": "備註",
+          "sendDetails": "發送詳細資訊"
+        }
+      },
+      "navigationLayout": "導航布局",
+      "topBarButton": "頂部按鈕",
+      "sideBarButton": "側邊按鈕"
+    },
+    "language": {
+      "brazilian_portuguese": "巴西葡萄牙語",
+      "english": "英語",
+      "spanish": "西班牙語",
+      "simplified_chinese": "簡體中文",
+      "persian": "波斯語",
+      "traditional_chinese": "繁體中文"
+    },
+    "menu": {
+      "auth": "授權",
+      "buttons": "按鈕",
+      "timelines": "時間線",
+      "dashboard": "儀表板",
+      "billing": "計費",
+      "login": "登入",
+      "signUp": "註冊",
+      "preferences": "偏好設定",
+      "payments": "支付",
+      "pricing-plans": "定價方案",
+      "login-singup": "登入/註冊",
+      "404": "404頁面",
+      "faq": "常見問題解答",
+      "users": "用戶",
+      "projects": "項目",
+      "management": "厠所管理",
+      "toilet": "廁所",
+      "cubicle": "隔間",
+      "device": "設備",
+      "openApi": "OpenAPI",
+      "staffUser": "施工人員",
+      "adminUser": "管理員",
+      "settings": "設置"
+    },
+    "messages": {
+      "all": "檢視所有訊息",
+      "new": "來自{name}的新訊息",
+      "mark_as_read": "標記為已讀"
+    },
+    "navbar": {
+      "messageUs": "需要網頁開發協助嗎？請聯繫我們。",
+      "repository": "GitHub 存儲庫"
+    },
+    "notifications": {
+      "all": "檢視所有通知",
+      "mark_as_read": "標記為已讀",
+      "sentMessage": "{name} 給你發送了一條消息",
+      "uploadedZip": "{name} 上傳了一個新的 {type} Zip 文件",
+      "startedTopic": "{name} 開始了一個新話題"
+    },
+    "user": {
+      "language": "更改語言",
+      "logout": "登出",
+      "profile": "我的個人資料",
+      "settings": "設置",
+      "billing": "賬單",
+      "faq": "常見問題",
+      "helpAndSupport": "幫助與支持",
+      "projects": "項目",
+      "account": "賬戶",
+      "explore": "探索"
+    },
+    "treeView": {
+      "basic": "基本型",
+      "icons": "圖標",
+      "selectable": "可選",
+      "editable": "可編輯",
+      "advanced": "高級"
+    },
+    "chat": {
+      "title": "聊天"
+    },
+    "cards": {
+      "cards": "卡片",
+      "fixed": "固定",
+      "floating": "浮動",
+      "contentText": "獨特的斑馬紋使它們成為人們最熟悉的動物之一。",
+      "rowHeight": "行高",
+      "title": {
+        "dark": "暗色背景",
+        "bright": "亮色卡片",
+        "titleOnImageNoOverlay": "圖像上的標題，沒有遮罩",
+        "normal": "標準卡",
+        "overlayAndTextOnImage": "圖像上有覆蓋和文本的卡片",
+        "stripeNoImage": "無圖像條紋卡"
+      },
+      "button": {
+        "main": "主要",
+        "cancel": "取消"
+      },
+      "link": {
+        "edit": "編輯",
+        "setAsDefault": "設為預設",
+        "delete": "刪除",
+        "traveling": "旅行",
+        "france": "法國",
+        "review": "評論",
+        "feedback": "反饋",
+        "readFull": "閱讀全文",
+        "secondaryAction": "次要操作",
+        "action1": "操作1",
+        "action2": "操作2"
+      }
+    },
+    "helpAndSupport": "幫助與支持",
+    "aboutVuesticAdmin": "關於 Vuestic Admin",
+    "search": {
+      "placeholder": "搜尋..."
+    }
+  }
+  

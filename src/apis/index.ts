@@ -8,7 +8,7 @@ const service: AxiosInstance = axios.create({
 service.interceptors.request.use(
     (config: InternalAxiosRequestConfig) => {
         if (config.headers)
-            config.headers['Authorization'] = String(localStorage.getItem('iSmartToiletAdminToken'))
+            config.headers['Authorization'] = String(localStorage.getItem('toiletAdminToken'))
         return config;
     },
     (error: AxiosError) => {
@@ -28,7 +28,7 @@ service.interceptors.response.use(
     (error: AxiosError) => {
         console.log(error);
         if (error.response?.status === 401) {
-            localStorage.removeItem('iSmartToiletAdminToken')
+            localStorage.removeItem('toiletAdminToken')
         }
         return Promise.reject(error);
     }

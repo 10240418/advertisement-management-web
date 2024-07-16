@@ -1,5 +1,5 @@
 <template>
-  <h1 class="h1">Billing information</h1>
+  <h1 class="h1">Logs</h1>
 
   <VaSkeletonGroup v-if="cardStore.loading">
     <VaSkeleton height="360px" variant="squared" />

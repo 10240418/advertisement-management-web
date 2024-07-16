@@ -1,22 +1,18 @@
 <script setup lang="ts">
 import { PropType, computed } from 'vue'
 import { defineVaDataTableColumns } from 'vuestic-ui'
-import { Toilet } from '../types'
-import UserAvatar from '../../adminUsers/widgets/UserAvatar.vue'
-import ProjectStatusBadge from '../components/ToiletStatusBadge.vue'
-import { useVModel } from '@vueuse/core'
 
 const columns = defineVaDataTableColumns([
+  { label: 'ID', key: 'id', sortable: true },
   { label: 'Toilet name', key: 'name', sortable: true },
   { label: 'Toilet location', key: 'location', sortable: true },
-  { label: 'Status', key: 'status', sortable: true },
-  { label: 'Creation Date', key: 'creation_date', sortable: true },
+  { label: 'Remark', key: 'remark', sortable: true },
   { label: ' ', key: 'actions' },
 ])
 
 const props = defineProps({
   toilets: {
-    type: Array as PropType<Toilet[]>,
+    type: Array as PropType<any[]>,
     required: true,
   },
   loading: {
@@ -38,20 +34,11 @@ const props = defineProps({
 })
 
 const emit = defineEmits<{
-  (event: 'edit', toilet: Toilet): void
-  (event: 'delete', toilet: Toilet): void
+  (event: 'edit', toilet: any): void
+  (event: 'delete', toilet: any): void
 }>()
 
-const avatarColor = (userName: string) => {
-  const colors = ['primary', '#FFD43A', '#ADFF00', '#262824', 'danger']
-  const index = userName.charCodeAt(0) % colors.length
-  return colors[index]
-}
 
-// const sortByVModel = useVModel(props, 'sortBy', emit)
-// const sortingOrderVModel = useVModel(props, 'sortingOrder', emit)
-
-// const totalPages = computed(() => Math.ceil(props.pagination.total / props.pagination.perPage))
 </script>
 
 <template>
@@ -73,22 +60,10 @@ const avatarColor = (userName: string) => {
 
       <template #cell(actions)="{ rowData: toilet }">
         <div class="flex gap-2 justify-end">
-          <VaButton
-            preset="primary"
-            size="small"
-            color="primary"
-            icon="mso-edit"
-            aria-label="Edit toilet"
-            @click="$emit('edit', toilet as Toilet)"
-          />
-          <VaButton
-            preset="primary"
-            size="small"
-            icon="mso-delete"
-            color="danger"
-            aria-label="Delete toilet"
-            @click="$emit('delete', toilet as Toilet)"
-          />
+          <VaButton preset="primary" size="small" color="primary" icon="mso-edit" aria-label="Edit toilet"
+            @click="$emit('edit', toilet as any)" />
+          <VaButton preset="primary" size="small" icon="mso-delete" color="danger" aria-label="Delete toilet"
+            @click="$emit('delete', toilet as any)" />
         </div>
       </template>
     </VaDataTable>

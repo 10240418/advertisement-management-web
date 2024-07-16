@@ -11,13 +11,13 @@ export default {
     displayName: 'navigationRoutes.home',
   },
   routes: [
-    {
-      name: 'dashboard',
-      displayName: 'menu.dashboard',
-      meta: {
-        icon: 'vuestic-iconset-dashboard',
-      },
-    },
+    // {
+    //   name: 'dashboard',
+    //   displayName: 'menu.dashboard',
+    //   meta: {
+    //     icon: 'vuestic-iconset-dashboard',
+    //   },
+    // },
     {
       name: 'management',
       displayName: 'menu.management',
@@ -30,18 +30,18 @@ export default {
           displayName: 'menu.toilet',
         },
         {
-          name: 'device',
-          displayName: 'menu.device',
+          name: 'logs',
+          displayName: 'menu.logs',
         },
       ],
     },
-    {
-      name: 'open-api',
-      displayName: 'menu.openApi',
-      meta: {
-        icon: 'group',
-      },
-    },
+    // {
+    //   name: 'open-api',
+    //   displayName: 'menu.openApi',
+    //   meta: {
+    //     icon: 'group',
+    //   },
+    // },
     {
       name: 'staff-users',
       displayName: 'menu.staffUser',
@@ -56,13 +56,13 @@ export default {
         icon: 'group',
       },
     },
-    {
-      name: 'preferences',
-      displayName: 'menu.preferences',
-      meta: {
-        icon: 'manage_accounts',
-      },
-    },
+    // {
+    //   name: 'preferences',
+    //   displayName: 'menu.preferences',
+    //   meta: {
+    //     icon: 'manage_accounts',
+    //   },
+    // },
     {
       name: 'settings',
       displayName: 'menu.settings',

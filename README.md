@@ -1,1 +1,1 @@
-# Smart Toilet Admin WEB Client
+# Toilet Admin WEB Client

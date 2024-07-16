@@ -2,7 +2,6 @@
 import { ref } from 'vue'
 import UsersTable from './widgets/UsersTable.vue'
 import EditUserForm from './widgets/EditUserForm.vue'
-import { User } from './types'
 import { useUsers } from './composables/useUsers'
 import { useModal, useToast } from 'vuestic-ui'
 
@@ -10,45 +9,33 @@ const doShowEditUserModal = ref(false)
 
 const { isLoading, users, ...userApi } = useUsers()
 
-const userToEdit = ref<User | null>(null)
-
-const showEditUserModal = (user: User) => {
-  userToEdit.value = user
-  doShowEditUserModal.value = true
-}
 
 const showAddUserModal = () => {
-  userToEdit.value = null
   doShowEditUserModal.value = true
 }
 
 const { init: notify } = useToast()
 
-const onUserDelete = async (user: User) => {
-  await userApi.remove()
+const onUserDelete = async (user: any) => {
+  await userApi.remove(user.id)
   notify({
     message: `${user.username} has been deleted`,
     color: 'success',
   })
 }
 
-const editFormRef = ref()
+const onSave = (user: any) => {
+  userApi.add(user)
+  doShowEditUserModal.value = false
+}
 
-const { confirm } = useModal()
+const onActivate = (user: any) => {
+  userApi.activate(user.id)
+}
 
-const beforeEditFormModalClose = async (hide: () => unknown) => {
-  if (editFormRef.value.isFormHasUnsavedChanges) {
-    const agreed = await confirm({
-      maxWidth: '380px',
-      message: 'Form has unsaved changes. Are you sure you want to close it?',
-      size: 'small',
-    })
-    if (agreed) {
-      hide()
-    }
-  } else {
-    hide()
-  }
+const onDeactivate = (user: any) => {
+  console.log(user)
+  userApi.deactivate(user.id)
 }
 </script>
 
@@ -70,30 +57,19 @@ const beforeEditFormModalClose = async (hide: () => unknown) => {
             <template #prependInner>
               <VaIcon name="search" color="secondary" size="small" />
             </template>
-          </VaInput> -->
+</VaInput> -->
         </div>
         <VaButton @click="showAddUserModal">Add User</VaButton>
       </div>
 
-      <UsersTable :users="users" :loading="isLoading" @editUser="showEditUserModal" @deleteUser="onUserDelete" />
+      <UsersTable :users="users" :loading="isLoading" @deleteUser="onUserDelete" @activate-user="onActivate"
+        @deactivate-user="onDeactivate" />
     </VaCardContent>
   </VaCard>
 
-  <VaModal
-    v-slot="{ cancel, ok }"
-    v-model="doShowEditUserModal"
-    size="small"
-    mobile-fullscreen
-    close-button
-    hide-default-actions
-    :before-cancel="beforeEditFormModalClose"
-  >
-    <h1 class="va-h5">{{ userToEdit ? 'Edit user' : 'Add user' }}</h1>
-    <EditUserForm
-      ref="editFormRef"
-      :user="userToEdit"
-      :save-button-label="userToEdit ? 'Save' : 'Add'"
-      @close="cancel"
-    />
+  <VaModal v-slot="{ cancel, ok }" v-model="doShowEditUserModal" size="small" mobile-fullscreen close-button
+    hide-default-actions>
+    <h1 class="va-h5">Add user</h1>
+    <EditUserForm @close="cancel" @save="onSave" />
   </VaModal>
 </template>

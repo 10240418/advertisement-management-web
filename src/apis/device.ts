@@ -31,3 +31,10 @@ export const deleteDevice = (data: any) => {
         data
     });
 }
+
+export const getLogs = () => {
+    return request({
+        url: `/admin/log`,
+        method: 'get',
+    });
+}

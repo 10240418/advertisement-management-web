@@ -3,23 +3,13 @@
     <VaAccordion v-model="value" multiple>
       <VaCollapse v-for="(route, index) in navigationRoutes.routes" :key="index">
         <template #header="{ value: isCollapsed }">
-          <VaSidebarItem
-            :to="route.children ? undefined : { name: route.name }"
-            :active="routeHasActiveChild(route)"
-            :active-color="activeColor"
-            :text-color="textColor(route)"
-            :aria-label="`${route.children ? 'Open category ' : 'Visit'} ${t(route.displayName)}`"
-            role="button"
-            hover-opacity="0.10"
-          >
+          <VaSidebarItem :to="route.children ? undefined : { name: route.name }" :active="routeHasActiveChild(route)"
+            :active-color="activeColor" :text-color="textColor(route)"
+            :aria-label="`${route.children ? 'Open category ' : 'Visit'} ${t(route.displayName)}`" role="button"
+            hover-opacity="0.10">
             <VaSidebarItemContent class="py-3 pr-2 pl-4">
-              <VaIcon
-                v-if="route.meta.icon"
-                aria-hidden="true"
-                :name="route.meta.icon"
-                size="20px"
-                :color="iconColor(route)"
-              />
+              <VaIcon v-if="route.meta.icon" aria-hidden="true" :name="route.meta.icon" size="20px"
+                :color="iconColor(route)" />
               <VaSidebarItemTitle class="flex justify-between items-center leading-5 font-semibold">
                 {{ t(route.displayName) }}
                 <VaIcon v-if="route.children" :name="arrowDirection(isCollapsed)" size="20px" />
@@ -29,14 +19,9 @@
         </template>
         <template #body>
           <div v-for="(childRoute, index2) in route.children" :key="index2">
-            <VaSidebarItem
-              :to="{ name: childRoute.name }"
-              :active="isActiveChildRoute(childRoute)"
-              :active-color="activeColor"
-              :text-color="textColor(childRoute)"
-              :aria-label="`Visit ${t(route.displayName)}`"
-              hover-opacity="0.10"
-            >
+            <VaSidebarItem :to="{ name: childRoute.name }" :active="isActiveChildRoute(childRoute)"
+              :active-color="activeColor" :text-color="textColor(childRoute)"
+              :aria-label="`Visit ${t(route.displayName)}`" hover-opacity="0.10">
               <VaSidebarItemContent class="py-3 pr-2 pl-11">
                 <VaSidebarItemTitle class="leading-5 font-semibold">
                   {{ t(childRoute.displayName) }}
@@ -80,7 +65,7 @@ export default defineComponent({
 
     const isActiveChildRoute = (child: INavigationRoute) => {
       // Special case for toilet section
-      if (route.name === 'cubicle' && child.name === 'toilet') {
+      if (route.name === 'toiletDetail' && child.name === 'toilet') {
         return true
       } else {
         return route.name === child.name
@@ -89,7 +74,7 @@ export default defineComponent({
 
     const routeHasActiveChild = (section: INavigationRoute) => {
       // Special case for management section
-      if (route.name === 'cubicle' && section.name === 'management') {
+      if (route.name === 'toiletDetail' && section.name === 'management') {
         return true
       }
 

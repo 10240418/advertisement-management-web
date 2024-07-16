@@ -1,5 +1,5 @@
 import { Ref, ref, unref, watch } from 'vue'
-import { User } from '../types'
+
 import {
   fetchStaffUsers,
   addStaffUser,
@@ -8,29 +8,29 @@ import {
   deleteStaffUser,
   addStaffAccountPermission,
   deleteStaffAccountPermission,
-} from '../../../api_mocks/staffUser'
+} from '../../../apis/staffUser'
 
 export const useUsers = (options?: { pagination?: Ref<any>; sorting?: Ref<any>; filters?: Ref<Partial<any>> }) => {
   const isLoading = ref(false)
-  const users = ref<User[]>([])
+  const users = ref<any[]>([])
 
   const fetch = async () => {
     isLoading.value = true
     const res = await fetchStaffUsers({})
-    users.value = res.data as User[]
+    users.value = res.data.data
     isLoading.value = false
   }
 
-  const add = async (user: Omit<User, 'id'>) => {
+  const add = async (user: Omit<any, 'id'>) => {
     isLoading.value = true
-    await addStaffUser({})
+    await addStaffUser(user)
     await fetch()
     isLoading.value = false
   }
 
-  const remove = async () => {
+  const remove = async (id: number) => {
     isLoading.value = true
-    await deleteStaffUser({})
+    await deleteStaffUser({ids: [id]})
     await fetch()
     isLoading.value = false
   }

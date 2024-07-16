@@ -1,51 +1,34 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
-import { EmptyToilet, Toilet } from '../types'
 import { SelectOption } from 'vuestic-ui'
 
 const props = defineProps<{
-  project: Toilet | null
+  toilet: any
   saveButtonLabel: string
 }>()
 
 defineEmits<{
-  (event: 'save', project: Toilet): void
+  (event: 'save', toilet: any): void
   (event: 'close'): void
 }>()
 
-const defaultNewProject: EmptyToilet = {
+const defaultNewProject = {
   name: '',
   location: '',
-  status: undefined,
+  remark: '',
 }
 
 const newToilet = ref({ ...defaultNewProject })
 
-const isFormHasUnsavedChanges = computed(() => {
-  return Object.keys(newToilet.value).some((key) => {
-    if (key === 'team') {
-      return false
-    }
-
-    return (
-      newToilet.value[key as keyof EmptyToilet] !== (props.project ?? defaultNewProject)?.[key as keyof EmptyToilet]
-    )
-  })
-})
-
-defineExpose({
-  isFormHasUnsavedChanges,
-})
-
 watch(
-  () => props.project,
+  () => props.toilet,
   () => {
-    if (!props.project) {
+    if (!props.toilet) {
       return
     }
 
     newToilet.value = {
-      ...props.project,
+      ...props.toilet,
     }
   },
   { immediate: true },
@@ -58,25 +41,11 @@ const required = (v: string | SelectOption) => !!v || 'This field is required'
   <VaForm v-slot="{ validate }" class="flex flex-col gap-2">
     <VaInput v-model="newToilet.name" label="Toilet" :rules="[required]" />
     <VaInput v-model="newToilet.location" label="Location" :rules="[required]" />
-    <VaSelect
-      v-model="newToilet.status"
-      label="Status"
-      :rules="[required]"
-      track-by="value"
-      value-by="value"
-      :options="[
-        { text: 'In use', value: 'in use' },
-        { text: 'Deploying', value: 'deploying' },
-        { text: 'Suspended', value: 'suspended' },
-      ]"
-    >
-      <template #content="{ value }">
-        <ProjectStatusBadge v-if="value" :status="value.value" />
-      </template>
-    </VaSelect>
+    <VaTextarea v-model="newToilet.remark" label="Remark" :rules="[required]" />
+
     <div class="flex justify-end flex-col-reverse sm:flex-row mt-4 gap-2">
       <VaButton preset="secondary" color="secondary" @click="$emit('close')">Cancel</VaButton>
-      <VaButton @click="validate() && $emit('save', newToilet as Toilet)">{{ saveButtonLabel }}</VaButton>
+      <VaButton @click="validate() && $emit('save', newToilet)">{{ saveButtonLabel }}</VaButton>
     </div>
   </VaForm>
 </template>

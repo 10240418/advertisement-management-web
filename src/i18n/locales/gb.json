@@ -60,7 +60,8 @@
     "openApi": "OpenAPI",
     "staffUser": "StaffUser",
     "adminUser": "AdminUser",
-    "settings": "Application settings"
+    "settings": "Application settings",
+    "logs": "Logs"
   },
   "messages": {
     "all": "See all messages",

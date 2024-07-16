@@ -1,10 +1,10 @@
 {
-  "name": "vuestic-admin",
+  "name": "toilet-admin",
   "private": true,
-  "version": "3.1.0",
+  "version": "0.0.1",
   "scripts": {
     "prepare": "husky install",
-    "dev": "vite",
+    "dev": "vite --port 3000",
     "build": "npm run lint && vue-tsc --noEmit && vite build",
     "build:ci": "vite build",
     "start:ci": "serve -s ./dist",

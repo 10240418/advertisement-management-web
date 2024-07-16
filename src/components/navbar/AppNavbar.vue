@@ -3,22 +3,17 @@
     <template #left>
       <div class="left">
         <Transition v-if="isMobile" name="icon-fade" mode="out-in">
-          <VaIcon
-            color="primary"
-            :name="isSidebarMinimized ? 'menu' : 'close'"
-            size="24px"
-            style="margin-top: 3px"
-            @click="isSidebarMinimized = !isSidebarMinimized"
-          />
+          <VaIcon color="primary" :name="isSidebarMinimized ? 'menu' : 'close'" size="24px" style="margin-top: 3px"
+            @click="isSidebarMinimized = !isSidebarMinimized" />
         </Transition>
         <RouterLink to="/" aria-label="Visit home page" class="logo">
-          Graduation Project - Smart Toilet Admin
+          Toilet Admin
         </RouterLink>
       </div>
     </template>
-    <template #right>
+    <!-- <template #right>
       <AppNavbarActions class="app-navbar__actions" :is-mobile="isMobile" />
-    </template>
+    </template> -->
   </VaNavbar>
 </template>
 
@@ -52,7 +47,7 @@ const { isSidebarMinimized } = storeToRefs(GlobalStore)
 }
 
 .logo {
-  color:rgb(21, 78, 193);
+  color: rgb(21, 78, 193);
   font-size: 32px;
   font-weight: 900;
 }
@@ -62,11 +57,11 @@ const { isSidebarMinimized } = storeToRefs(GlobalStore)
   align-items: center;
   margin-left: 1rem;
 
-  & > * {
+  &>* {
     margin-right: 1rem;
   }
 
-  & > *:last-child {
+  &>*:last-child {
     margin-right: 0;
   }
 }

@@ -1,15 +1,16 @@
 import request from '.'
 
-export const fetchAdminUsers = () => {
+export const fetchAdminUsers = (query: any) => {
   return request({
-    url: '/admin/account',
+    url: '/admin/admin_user',
     method: 'get',
+    params: query,
   })
 }
 
 export const addAdminUser = (data: any) => {
   return request({
-    url: '/admin/account',
+    url: '/admin/admin_user',
     method: 'post',
     data,
   })
@@ -17,7 +18,7 @@ export const addAdminUser = (data: any) => {
 
 export const deleteAdminUser = (data: any) => {
   return request({
-    url: '/admin/account',
+    url: '/admin/admin_user',
     method: 'delete',
     data,
   })

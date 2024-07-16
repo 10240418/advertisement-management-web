@@ -8,13 +8,13 @@ import RouteViewComponent from '../layouts/RouterBypass.vue'
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/:pathMatch(.*)*',
-    redirect: { name: 'dashboard' },
+    redirect: { name: 'preferences' },
   },
   {
     name: 'admin',
     path: '/',
     component: AppLayout,
-    redirect: { name: 'dashboard' },
+    redirect: { name: 'preferences' },
     children: [
       {
         name: 'dashboard',
@@ -34,16 +34,16 @@ const routes: Array<RouteRecordRaw> = [
           {
             name: 'toiletDetail',
             path: 'toilet/:id',
-            component: () => import('../pages/cubicle/PaymentsPage.vue'),
+            component: () => import('../pages/cubicle/ToiletDetail.vue'),
           },
+          // {
+          //   name: 'cubicle',
+          //   path: 'cubicle',
+          //   component: () => import('../pages/cubicle/PaymentsPage.vue'),
+          // },
           {
-            name: 'cubicle',
-            path: 'cubicle',
-            component: () => import('../pages/cubicle/PaymentsPage.vue'),
-          },
-          {
-            name: 'device',
-            path: 'device',
+            name: 'logs',
+            path: 'logs',
             component: () => import('../pages/devices/BillingPage.vue'),
           },
         ],
@@ -112,5 +112,17 @@ const router = createRouter({
   },
   routes,
 })
+
+router.beforeResolve((to, from, next) => {
+  let token = localStorage.getItem('toiletAdminToken')
+  let hasLogin = token != null && token != ''
+
+  if ((to.name !== 'login') && !hasLogin) {
+      next({ name: 'login' })
+  }
+
+  next()
+});
+
 
 export default router

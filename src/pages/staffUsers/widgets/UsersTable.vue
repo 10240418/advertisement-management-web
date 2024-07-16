@@ -1,22 +1,17 @@
 <script setup lang="ts">
 import { defineVaDataTableColumns, useModal } from 'vuestic-ui'
-import { User } from '../types'
 import { PropType, computed, toRef } from 'vue'
-import { Pagination, Sorting } from '../../../data/pages/users'
-import { useVModel } from '@vueuse/core'
-import { Project } from '../../projects/types'
 
 const columns = defineVaDataTableColumns([
-  { label: 'Username', key: 'username', sortable: true },
+  { label: 'Name', key: 'name', sortable: true },
   { label: 'Email', key: 'email', sortable: true },
-  { label: 'Notes', key: 'notes', sortable: true },
   { label: 'Active', key: 'active', sortable: true },
   { label: ' ', key: 'actions', align: 'right' },
 ])
 
 const props = defineProps({
   users: {
-    type: Array as PropType<User[]>,
+    type: Array as PropType<any[]>,
     required: true,
   },
   loading: { type: Boolean, default: false },
@@ -26,10 +21,9 @@ const props = defineProps({
 })
 
 const emit = defineEmits<{
-  (event: 'edit-user', user: User): void
-  (event: 'delete-user', user: User): void
-  (event: 'update:sortBy', sortBy: Sorting['sortBy']): void
-  (event: 'update:sortingOrder', sortingOrder: Sorting['sortingOrder']): void
+  (event: 'delete-user', user: any): void
+  (event: 'activate-user', user: any): void
+  (event: 'deactivate-user', user: any): void
 }>()
 
 const users = toRef(props, 'users')
@@ -39,10 +33,10 @@ const getStatusColors = (status: boolean) => (status ? 'success' : 'danger')
 
 const { confirm } = useModal()
 
-const onUserDelete = async (user: User) => {
+const onUserDelete = async (user: any) => {
   const agreed = await confirm({
     title: 'Delete user',
-    message: `Are you sure you want to delete ${user.username}?`,
+    message: `Are you sure you want to delete ${user.name}?`,
     okText: 'Delete',
     cancelText: 'Cancel',
     size: 'small',
@@ -53,13 +47,21 @@ const onUserDelete = async (user: User) => {
     emit('delete-user', user)
   }
 }
+
+const onActivate = (user: any) => {
+  if (user.active) {
+    emit('deactivate-user', user)
+  } else {
+    emit('activate-user', user)
+  }
+}
 </script>
 
 <template>
   <VaDataTable :columns="columns" :items="users" :loading="$props.loading">
-    <template #cell(username)="{ rowData }">
+    <template #cell(name)="{ rowData }">
       <div class="max-w-[120px] ellipsis">
-        {{ rowData.username }}
+        {{ rowData.name }}
       </div>
     </template>
 
@@ -69,33 +71,17 @@ const onUserDelete = async (user: User) => {
       </div>
     </template>
 
-    <template #cell(notes)="{ rowData }">
-      <div class="ellipsis max-w-[230px]">
-        {{ rowData.notes }}
-      </div>
-    </template>
-
     <template #cell(active)="{ rowData }">
       <VaBadge :text="getStatusText(rowData.active)" :color="getStatusColors(rowData.active)" />
     </template>
 
     <template #cell(actions)="{ rowData }">
       <div class="flex gap-2 justify-end">
-        <VaButton
-          preset="primary"
-          size="small"
-          icon="mso-edit"
-          aria-label="Edit user"
-          @click="$emit('edit-user', rowData as User)"
-        />
-        <VaButton
-          preset="primary"
-          size="small"
-          icon="mso-delete"
-          color="danger"
-          aria-label="Delete user"
-          @click="onUserDelete(rowData as User)"
-        />
+        <VaButton preset="primary" size="small" aria-label="Activate" @click="onActivate(rowData)">{{
+    rowData.active ? 'Deactivate' : 'Activate' }}
+        </VaButton>
+        <VaButton preset="primary" size="small" icon="mso-delete" color="danger" aria-label="Delete user"
+          @click="onUserDelete(rowData)" />
       </div>
     </template>
   </VaDataTable>

@@ -1,0 +1,44 @@
+Date : 2024-06-07 21:43:20
+Directory : /Users/dreamsky/Projects/dreamsky/graduation_project/admin_client/src
+Total : 14 files,  -44250 codes, -1 comments, -42 blanks, all -44293 lines
+
+Languages
++------------+------------+------------+------------+------------+------------+
+| language   | files      | code       | comment    | blank      | total      |
++------------+------------+------------+------------+------------+------------+
+| TypeScript |         12 |       -666 |         -1 |        -40 |       -707 |
+| JSON       |          2 |    -43,584 |          0 |         -2 |    -43,586 |
++------------+------------+------------+------------+------------+------------+
+
+Directories
++-----------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                            | files      | code       | comment    | blank      | total      |
++-----------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                               |         14 |    -44,250 |         -1 |        -42 |    -44,293 |
+| data                                                                                                            |         14 |    -44,250 |         -1 |        -42 |    -44,293 |
+| data (Files)                                                                                                    |          4 |    -43,837 |          0 |         -7 |    -43,844 |
+| data/charts                                                                                                     |         10 |       -413 |         -1 |        -35 |       -449 |
+| data/charts (Files)                                                                                             |          8 |       -371 |         -1 |        -21 |       -393 |
+| data/charts/composables                                                                                         |          2 |        -42 |          0 |        -14 |        -56 |
++-----------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-----------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| filename                                                                                                        | language   | code       | comment    | blank      | total      |
++-----------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| /Users/dreamsky/Projects/dreamsky/graduation_project/admin_client/src/data/CountriesList.ts                     | TypeScript |       -243 |          0 |         -1 |       -244 |
+| /Users/dreamsky/Projects/dreamsky/graduation_project/admin_client/src/data/charts/barChartData.ts               | TypeScript |        -29 |          0 |         -2 |        -31 |
+| /Users/dreamsky/Projects/dreamsky/graduation_project/admin_client/src/data/charts/bubbleChartData.ts            | TypeScript |       -230 |          0 |         -2 |       -232 |
+| /Users/dreamsky/Projects/dreamsky/graduation_project/admin_client/src/data/charts/composables/useChartColors.ts | TypeScript |        -26 |          0 |         -9 |        -35 |
+| /Users/dreamsky/Projects/dreamsky/graduation_project/admin_client/src/data/charts/composables/useChartData.ts   | TypeScript |        -16 |          0 |         -5 |        -21 |
+| /Users/dreamsky/Projects/dreamsky/graduation_project/admin_client/src/data/charts/doughnutChartData.ts          | TypeScript |        -14 |          0 |         -3 |        -17 |
+| /Users/dreamsky/Projects/dreamsky/graduation_project/admin_client/src/data/charts/horizontalBarChartData.ts     | TypeScript |        -29 |          0 |         -2 |        -31 |
+| /Users/dreamsky/Projects/dreamsky/graduation_project/admin_client/src/data/charts/index.ts                      | TypeScript |         -6 |         -1 |         -2 |         -9 |
+| /Users/dreamsky/Projects/dreamsky/graduation_project/admin_client/src/data/charts/lineChartData.ts              | TypeScript |        -24 |          0 |         -2 |        -26 |
+| /Users/dreamsky/Projects/dreamsky/graduation_project/admin_client/src/data/charts/pieChartData.ts               | TypeScript |        -11 |          0 |         -2 |        -13 |
+| /Users/dreamsky/Projects/dreamsky/graduation_project/admin_client/src/data/charts/revenueChartData.ts           | TypeScript |        -28 |          0 |         -6 |        -34 |
+| /Users/dreamsky/Projects/dreamsky/graduation_project/admin_client/src/data/geo.json                             | JSON       |    -43,198 |          0 |         -1 |    -43,199 |
+| /Users/dreamsky/Projects/dreamsky/graduation_project/admin_client/src/data/types.ts                             | TypeScript |        -10 |          0 |         -4 |        -14 |
+| /Users/dreamsky/Projects/dreamsky/graduation_project/admin_client/src/data/users.json                           | JSON       |       -386 |          0 |         -1 |       -387 |
+| Total                                                                                                           |            |    -44,250 |         -1 |        -42 |    -44,293 |
++-----------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+

@@ -1,82 +1,44 @@
 import { Ref, ref, unref, watch } from 'vue'
-import { getUsers, updateUser, addUser, removeUser, type Filters, Pagination, Sorting } from '../../../data/pages/users'
-import { User } from '../types'
-import { watchIgnorable } from '@vueuse/core'
 
-const makePaginationRef = () => ref<Pagination>({ page: 1, perPage: 10, total: 0 })
-const makeSortingRef = () => ref<Sorting>({ sortBy: 'fullname', sortingOrder: null })
-const makeFiltersRef = () => ref<Partial<Filters>>({ isActive: true, search: '' })
+import {
+  fetchAdminUsers,
+  addAdminUser,
+  deleteAdminUser,
+} from '../../../apis/adminUser'
 
-export const useUsers = (options?: {
-  pagination?: Ref<Pagination>
-  sorting?: Ref<Sorting>
-  filters?: Ref<Partial<Filters>>
-}) => {
+export const useUsers = (options?: { pagination?: Ref<any>; sorting?: Ref<any>; filters?: Ref<Partial<any>> }) => {
   const isLoading = ref(false)
-  const users = ref<User[]>([])
+  const users = ref<any[]>([])
 
-  const { filters = makeFiltersRef(), sorting = makeSortingRef(), pagination = makePaginationRef() } = options || {}
-
-  const fetch = async () => {
+  const fetch = async (query: any) => {
     isLoading.value = true
-    const { data, pagination: newPagination } = await getUsers({
-      ...unref(filters),
-      ...unref(sorting),
-      ...unref(pagination),
-    })
-    users.value = data
-
-    ignoreUpdates(() => {
-      pagination.value = newPagination
-    })
-
+    const res = await fetchAdminUsers(query)
+    users.value = res.data.data
     isLoading.value = false
   }
 
-  const { ignoreUpdates } = watchIgnorable([pagination, sorting], fetch, { deep: true })
+  const add = async (user: Omit<any, 'id'>) => {
+    isLoading.value = true
+    await addAdminUser(user)
+    await fetch({})
+    isLoading.value = false
+  }
 
-  watch(
-    filters,
-    () => {
-      // Reset pagination to first page when filters changed
-      pagination.value.page = 1
-      fetch()
-    },
-    { deep: true },
-  )
+  const remove = async (id: number) => {
+    isLoading.value = true
+    await deleteAdminUser({ids: [id]})
+    await fetch({})
+    isLoading.value = false
+  }
 
-  fetch()
+  fetch({})
 
   return {
     isLoading,
-
-    filters,
-    sorting,
-    pagination,
-
     users,
 
     fetch,
-
-    async add(user: User) {
-      isLoading.value = true
-      await addUser(user)
-      await fetch()
-      isLoading.value = false
-    },
-
-    async update(user: User) {
-      isLoading.value = true
-      await updateUser(user)
-      await fetch()
-      isLoading.value = false
-    },
-
-    async remove(user: User) {
-      isLoading.value = true
-      await removeUser(user)
-      await fetch()
-      isLoading.value = false
-    },
+    add,
+    remove,
   }
 }
