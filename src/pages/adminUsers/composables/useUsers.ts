@@ -9,11 +9,9 @@ import {
 } from '../../../api_mocks/adminUser'
 
 
-//分页配置
+//初始化三个数据
 const makePaginationRef=()=>  ref<Pagination>({page :1,perPage:10,total:0})
-//排序配置
 const makeSortingRef = () => ref<Sorting>({sortBy:undefined,sortingOrder:null})
-//过滤器配置
 const makeFiltersRef = () => ref<Filters>({isActive:true,search:''})
 
 export const useAdminUsers = (options?: { pagination?: Ref<Pagination>; sorting?: Ref<Sorting>; filters?: Ref<Partial<Partial<Filters>>> }) => {
@@ -25,6 +23,7 @@ export const useAdminUsers = (options?: { pagination?: Ref<Pagination>; sorting?
     isLoading.value = true
     const res = await fetchAdminUsers()
     users.value = res.data
+    pagination.value.total = res.data.length;
     // console.log(users.value);//主要获取的数据
     isLoading.value = false
   }

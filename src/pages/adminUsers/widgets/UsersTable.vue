@@ -20,8 +20,6 @@ const props = defineProps({
   pagination: { type: Object as PropType<any>, required: true },
   sortBy: { type: String as PropType<any>, required: true },
   sortingOrder: { type: String as PropType<any>, required: true },
-
-
 })
 
 const emit = defineEmits<{

@@ -12,9 +12,13 @@ const doShowEditUserModal = ref(false)
 
 const { isLoading, users, filters, sorting, pagination, ...userApi } = useAdminUsers()
 
-// 使用深拷贝确保原始数据不受影响
+
+
 const adminUsersShowInTable = ref<adminUserType[]>([])
 const userToEdit = ref<adminUserType | null>(null)
+
+console.log(pagination.value)
+
 
 const showEditUserModal = (user: adminUserType) => {
   userToEdit.value = user
