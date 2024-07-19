@@ -1,31 +1,36 @@
 <script setup lang="ts">
 import { defineVaDataTableColumns, useModal } from 'vuestic-ui'
 import { PropType, computed, toRef } from 'vue'
+import {adminUserType} from '../type'
+// import { Pagination, Sorting } from '../../../data/page'
 
 const columns = defineVaDataTableColumns([
   { label: 'ID', key: 'id', sortable: true },
   { label: 'Name', key: 'name', sortable: true },
   { label: 'Email', key: 'email', sortable: true },
-  { label: ' ', key: 'actions', align: 'right' },
+  { label: 'Actions ', key: 'actions', align: 'right' },
 ])
 
 const props = defineProps({
   users: {
-    type: Array as PropType<any[]>,
+    type: Array as PropType<adminUserType[]>,
     required: true,
   },
   loading: { type: Boolean, default: false },
-  // pagination: { type: Object as PropType<Pagination>, required: true },
-  // sortBy: { type: String as PropType<Sorting['sortBy']>, required: true },
-  // sortingOrder: { type: String as PropType<Sorting['sortingOrder']>, required: true },
+  pagination: { type: Object as PropType<any>, required: true },
+  sortBy: { type: String as PropType<any>, required: true },
+  sortingOrder: { type: String as PropType<any>, required: true },
+
+
 })
 
 const emit = defineEmits<{
+  (event: 'edit-user', user: any): void
   (event: 'delete-user', user: any): void
 }>()
 
 const users = toRef(props, 'users')
-
+const totalPages = computed(() => Math.ceil(props.pagination.total / props.pagination.perPage))
 
 const { confirm } = useModal()
 
@@ -61,13 +66,20 @@ const onUserDelete = async (user: any) => {
 
     <template #cell(actions)="{ rowData }">
       <div class="flex gap-2 justify-end">
+        <VaButton
+          preset="primary"
+          size="small"
+          icon="mso-edit"
+          aria-label="Edit user"
+          @click="$emit('edit-user', rowData as any)"
+        />
         <VaButton preset="primary" size="small" icon="mso-delete" color="danger" aria-label="Delete user"
           @click="onUserDelete(rowData)" />
       </div>
     </template>
   </VaDataTable>
 
-  <!-- <div class="flex flex-col-reverse md:flex-row gap-2 justify-between items-center py-2">
+  <div class="flex flex-col-reverse md:flex-row gap-2 justify-between items-center py-2">
     <div>
       <b>{{ $props.pagination.total }} results.</b>
       Results per page
@@ -99,7 +111,7 @@ const onUserDelete = async (user: any) => {
         :direction-links="false"
       />
     </div>
-  </div> -->
+  </div>
 </template>
 
 <style lang="scss" scoped>

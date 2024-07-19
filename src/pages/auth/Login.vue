@@ -42,7 +42,7 @@ const submit = () => {
       localStorage.setItem('toiletAdminToken', res.data.token)
 
       toast.init({ message: res.data.message, color: "success" })
-      router.push({ name: 'dashboard' })
+      // router.push({ name: 'dashboard' })
     }).catch(err => {
       toast.init({ message: err.response.data.message, color: "danger" })
     })

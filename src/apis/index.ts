@@ -4,7 +4,7 @@ const service: AxiosInstance = axios.create({
     timeout: 5000,
     baseURL: import.meta.env.DEV ? '/api' : '/api'
 });
-
+// 请求拦截器 添加token
 service.interceptors.request.use(
     (config: InternalAxiosRequestConfig) => {
         if (config.headers)
@@ -16,7 +16,7 @@ service.interceptors.request.use(
         return Promise.reject();
     }
 );
-
+// 响应拦截器 响应错误处理
 service.interceptors.response.use(
     (response: AxiosResponse<any, any>) => {
         if (response && response.status >= 200 && response.status < 300) {

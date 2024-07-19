@@ -1,14 +1,25 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, reactive, toRaw, watch } from 'vue'
 import UsersTable from './widgets/UsersTable.vue'
 import EditUserForm from './widgets/EditUserForm.vue'
-import { useUsers } from './composables/useUsers'
+import { useAdminUsers } from './composables/useUsers'
 import { useModal, useToast } from 'vuestic-ui'
+import type { adminUserType } from './type'
+import { sleep } from '../../services/utils';
+import _ from 'lodash'
 
 const doShowEditUserModal = ref(false)
 
-const { isLoading, users, ...userApi } = useUsers()
+const { isLoading, users, filters, sorting, pagination, ...userApi } = useAdminUsers()
 
+// 使用深拷贝确保原始数据不受影响
+const adminUsersShowInTable = ref<adminUserType[]>([])
+const userToEdit = ref<adminUserType | null>(null)
+
+const showEditUserModal = (user: adminUserType) => {
+  userToEdit.value = user
+  doShowEditUserModal.value = true
+}
 
 const showAddUserModal = () => {
   doShowEditUserModal.value = true
@@ -29,6 +40,32 @@ const onSave = (user: any) => {
   doShowEditUserModal.value = false
 }
 
+// 根据名字过滤
+const filterData = (search: string) => {
+  // 重新获取深拷贝，确保筛选前的数据是最新的
+  const rawUsers = toRaw(users.value)
+  const filteredUsers = rawUsers.filter((item: adminUserType) => item.name.includes(search))
+  adminUsersShowInTable.value = _.cloneDeep(filteredUsers)
+  // console.log(adminUsersShowInTable.value)
+  // console.log(filters.value.search)
+  // console.log(users.value) 
+}
+
+watch(
+  () => filters.value.search,
+  (newSearch) => {
+    filterData(newSearch)
+  }
+)
+
+// 初始时填充数据
+watch(
+  users,
+  () => {
+    adminUsersShowInTable.value = _.cloneDeep(toRaw(users.value))
+  },
+  { deep: true }
+)
 </script>
 
 <template>
@@ -45,16 +82,23 @@ const onSave = (user: any) => {
               { label: 'Inactive', value: false },
             ]"
           /> -->
-          <!-- <VaInput v-model="filters.search" placeholder="Search">
+          <VaInput v-model="filters.search" placeholder="Search">
             <template #prependInner>
-              <VaIcon name="search" color="secondary" size="small" />
+              <VaIcon name="search" color="secondary" size="xl" />
             </template>
-</VaInput> -->
+          </VaInput>
         </div>
         <VaButton @click="showAddUserModal">Add User</VaButton>
       </div>
 
-      <UsersTable :users="users" :loading="isLoading" @deleteUser="onUserDelete" />
+      <UsersTable 
+      v-model:sort-by="sorting.sortBy"
+      v-model:sorting-order="sorting.sortingOrder"
+      :pagination="pagination"
+      :users="adminUsersShowInTable" 
+      :loading="isLoading" 
+      @edit-user="showEditUserModal"
+      @deleteUser="onUserDelete" />
     </VaCardContent>
   </VaCard>
 

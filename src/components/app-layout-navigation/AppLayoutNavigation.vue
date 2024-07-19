@@ -6,7 +6,7 @@
       :color="collapseIconColor"
       @click="isSidebarMinimized = !isSidebarMinimized"
     />
-
+    <!-- 路由标识栏 -->
     <nav class="flex items-center">
       <VaBreadcrumbs>
         <VaBreadcrumbsItem label="Home" :to="{ name: 'dashboard' }" />

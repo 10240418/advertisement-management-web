@@ -54,11 +54,11 @@
     "faq": "FAQ",
     "users": "Users",
     "projects": "Projects",
-    "management": "Management",
+    "devices": "Devices",
     "toilet": "Toilets",
     "device": "Devices",
     "openApi": "OpenAPI",
-    "staffUser": "StaffUser",
+    "resident": "Residents",
     "adminUser": "AdminUser",
     "settings": "Application settings",
     "logs": "Logs"

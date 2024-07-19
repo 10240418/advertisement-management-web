@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import UsersTable from './widgets/UsersTable.vue'
-import EditUserForm from './widgets/EditUserForm.vue'
-import { useUsers } from './composables/useUsers'
+import residentForm from './widgets/residentForm.vue';
+import residentTable from './widgets/residentTable.vue';
 import { useModal, useToast } from 'vuestic-ui'
+import { useResidents } from './composables/resident'
 
 const doShowEditUserModal = ref(false)
 
-const { isLoading, users, ...userApi } = useUsers()
+const { isLoading, users, ...userApi } = useResidents();
 
 
 const showAddUserModal = () => {
@@ -62,7 +62,7 @@ const onDeactivate = (user: any) => {
         <VaButton @click="showAddUserModal">Add User</VaButton>
       </div>
 
-      <UsersTable :users="users" :loading="isLoading" @deleteUser="onUserDelete" @activate-user="onActivate"
+      <residentTable :users="users" :loading="isLoading" @deleteUser="onUserDelete" @activate-user="onActivate"
         @deactivate-user="onDeactivate" />
     </VaCardContent>
   </VaCard>
@@ -73,3 +73,4 @@ const onDeactivate = (user: any) => {
     <EditUserForm @close="cancel" @save="onSave" />
   </VaModal>
 </template>
+./composables/resident

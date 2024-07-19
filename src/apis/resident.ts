@@ -1,38 +1,38 @@
 import request from '.'
 
-export const fetchStaffUsers = (query: any) => {
+export const fetchResidents = (query: any) => {
   return request({
-    url: `/admin/staff_user`,
+    url: `/admin/resident`,
     method: 'get',
     params: query,
   })
 }
 
-export const addStaffUser = (data: any) => {
+export const addResident = (data: any) => {
   return request({
-    url: `/admin/staff_user`,
+    url: `/admin/resident`,
     method: 'post',
     data,
   })
 }
 
-export const activateStaffUser = (id: number | string) => {
+export const activateResident = (id: number | string) => {
   return request({
-    url: `/admin/staff_user/${id}/activate`,
+    url: `/admin/resident/${id}/activate`,
     method: 'put',
   })
 }
 
-export const deactivateStaffUser = (id: number | string) => {
+export const deactivateResident = (id: number | string) => {
   return request({
-    url: `/admin/staff_user/${id}/deactivate`,
+    url: `/admin/resident/${id}/deactivate`,
     method: 'put',
   })
 }
 
 export const addStaffAccountPermission = (data: any) => {
   return request({
-    url: `/admin/staff_user/permission`,
+    url: `/admin/resident/permission`,
     method: 'post',
     data,
   })
@@ -40,15 +40,15 @@ export const addStaffAccountPermission = (data: any) => {
 
 export const deleteStaffAccountPermission = (data: any) => {
   return request({
-    url: `/admin/staff_user/permission`,
+    url: `/admin/resident/permission`,
     method: 'delete',
     data,
   })
 }
 
-export const deleteStaffUser = (data: any) => {
+export const deleteResident = (data: any) => {
   return request({
-    url: `/admin/staff_user`,
+    url: `/admin/resident`,
     method: 'delete',
     data,
   })

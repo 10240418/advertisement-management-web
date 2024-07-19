@@ -43,8 +43,8 @@ export default {
     //   },
     // },
     {
-      name: 'staff-users',
-      displayName: 'menu.staffUser',
+      name: 'resident',
+      displayName: 'menu.resident',
       meta: {
         icon: 'group',
       },

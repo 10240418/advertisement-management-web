@@ -10,12 +10,14 @@ const routes: Array<RouteRecordRaw> = [
     path: '/:pathMatch(.*)*',
     redirect: { name: 'preferences' },
   },
+  
   {
     name: 'admin',
     path: '/',
     component: AppLayout,
     redirect: { name: 'preferences' },
     children: [
+    
       {
         name: 'dashboard',
         path: 'dashboard',
@@ -54,9 +56,9 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('../pages/openApi/Invoices.vue'),
       },
       {
-        name: 'staff-users',
-        path: 'staff-users',
-        component: () => import('../pages/staffUsers/UsersPage.vue'),
+        name:'resident',
+        path: 'resident',
+        component: () => import('../pages/resident/residentPage.vue'),
       },
       {
         name: 'admin-users',
@@ -113,16 +115,16 @@ const router = createRouter({
   routes,
 })
 
-router.beforeResolve((to, from, next) => {
-  let token = localStorage.getItem('toiletAdminToken')
-  let hasLogin = token != null && token != ''
+// router.beforeResolve((to, from, next) => {
+//   let token = localStorage.getItem('toiletAdminToken')
+//   let hasLogin = token != null && token != ''
 
-  if ((to.name !== 'login') && !hasLogin) {
-      next({ name: 'login' })
-  }
+//   if ((to.name !== 'login') && !hasLogin) {
+//       next({ name: 'login' })
+//   }
 
-  next()
-});
+//   next()
+// });
 
 
 export default router
