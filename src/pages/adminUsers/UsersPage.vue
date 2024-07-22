@@ -4,8 +4,8 @@ import UsersTable from './widgets/UsersTable.vue'
 import EditUserForm from './widgets/EditUserForm.vue'
 import { useAdminUsers } from './composables/useUsers'
 import { useModal, useToast } from 'vuestic-ui'
-import type { adminUserType } from './type'
 import { sleep } from '../../services/utils';
+import { admin_user_type } from '../../data/admin_user'
 import _ from 'lodash'
 
 const doShowEditUserModal = ref(false)
@@ -14,13 +14,13 @@ const { isLoading, users, filters, sorting, pagination, ...userApi } = useAdminU
 
 
 
-const adminUsersShowInTable = ref<adminUserType[]>([])
-const userToEdit = ref<adminUserType | null>(null)
+const adminUsersShowInTable = ref<admin_user_type[]>([])
+const userToEdit = ref<admin_user_type | null>(null)
 
 console.log(pagination.value)
 
 
-const showEditUserModal = (user: adminUserType) => {
+const showEditUserModal = (user: admin_user_type) => {
   userToEdit.value = user
   doShowEditUserModal.value = true
 }
@@ -48,7 +48,7 @@ const onSave = (user: any) => {
 const filterData = (search: string) => {
   // 重新获取深拷贝，确保筛选前的数据是最新的
   const rawUsers = toRaw(users.value)
-  const filteredUsers = rawUsers.filter((item: adminUserType) => item.name.includes(search))
+  const filteredUsers = rawUsers.filter((item: admin_user_type) => item.name.includes(search))
   adminUsersShowInTable.value = _.cloneDeep(filteredUsers)
   // console.log(adminUsersShowInTable.value)
   // console.log(filters.value.search)

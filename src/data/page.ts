@@ -1,4 +1,5 @@
-import { adminUserType } from "../pages/adminUsers/type"
+import { admin_user_type } from "./admin_user"
+
 
 
 export type Pagination = {
@@ -8,7 +9,7 @@ export type Pagination = {
   }
   
   export type Sorting = {
-    sortBy: keyof adminUserType | undefined
+    sortBy: keyof admin_user_type| undefined
     sortingOrder: 'asc' | 'desc' | null
   }
   
