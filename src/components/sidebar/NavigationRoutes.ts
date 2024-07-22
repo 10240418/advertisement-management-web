@@ -50,10 +50,24 @@ export default {
       },
     },
     {
-      name: 'admin-users',
+      name: 'adminUsers',
       displayName: 'menu.adminUser',
       meta: {
         icon: 'group',
+      },
+    },
+    {
+      name: 'electricMeterManage',
+      displayName: 'menu.electricMeterManage',
+      meta: {
+        icon: 'manage_accounts',
+      },
+    },
+    {
+      name: 'waterMeterManage',
+      displayName: 'menu.waterMeterManage',
+      meta: {
+        icon: 'manage_accounts',
       },
     },
     // {

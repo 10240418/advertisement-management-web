@@ -113,6 +113,8 @@
     "openApi": "OpenAPI",
     "resident": "住户管理",
     "adminUser": "管理员",
+    "electricMeterManage": "电表管理",
+    "waterMeterManage":"水表管理",
     "settings": "设置",
     "logs": "日志"
   },
@@ -134,7 +136,6 @@
   },
   "user": {
     "language": "修改语言",
-    "logout": "登出",
     "logout": "登出",
     "profile": "我的资料",
     "settings": "设置",

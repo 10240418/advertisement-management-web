@@ -1,5 +1,6 @@
 
 import { Pagination, Sorting, Filters } from "../data/page";
+import { eletric_energy_meter_type } from "../data/electric_energy_meter";
 export const getElectricMeters = (pagination: Pagination) => {
   return Promise.resolve({
     data: [
@@ -305,12 +306,66 @@ export const getElectricMeters = (pagination: Pagination) => {
       }
     ], 
     success: 'true',
-    message: 'do it',
+    message: 'get users success',
     pagination: {
-      page: 1,
-      perPage: 10,
-      total: 30
+      pageNum: 1,
+      pageSize: 10,
+      total: 50
     }
 
+  })
+}
+
+export const addElectricMeter = (meter: eletric_energy_meter_type) =>{
+  return Promise.resolve({
+    data: meter,
+    success: 'true',
+    message: 'do it',
+  })
+}
+
+export const deleteElectricMeter = (meter: eletric_energy_meter_type) =>{
+  return Promise.resolve({
+    data: meter,
+    success: 'true',
+    message: 'do it',
+  })
+}
+
+export const getElectricMeterData = () => {
+  return Promise.resolve({
+    data: [
+      {
+        "id": 1,
+        "created_at": "2024-07-22T11:00:00Z",
+        "name": "Meter 1",
+        "gateway_id": "GW001",
+        "remark": "Living Room",
+        "unit_id": 111,
+      }
+    ]
+  })
+}
+
+export const getElectricMeterDataByID = () => {
+  return Promise.resolve({
+    data: [
+      {
+        "id": 1,
+        "created_at": "2024-07-22T11:00:00Z",
+        "name": "Meter 1",
+        "gateway_id": "GW001",
+        "remark": "Living Room",
+        "unit_id":111,
+      }
+    ]
+  })
+}
+
+export const updateElectricMeter = (meter: eletric_energy_meter_type) => {
+  return Promise.resolve({
+    data: meter,
+    success: 'true',
+    message: 'do it',
   })
 }

@@ -51,8 +51,8 @@ const routes: Array<RouteRecordRaw> = [
         ],
       },
       {
-        name: 'open-api',
-        path: 'open-api',
+        name: 'openApi',
+        path: 'openApi',
         component: () => import('../pages/openApi/Invoices.vue'),
       },
       {
@@ -61,9 +61,21 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('../pages/resident/residentPage.vue'),
       },
       {
-        name: 'admin-users',
-        path: 'admin-users',
+        name: 'adminUsers',
+        path: 'adminUsers',
         component: () => import('../pages/adminUsers/adminUsersPage.vue'),
+      },
+      {
+        name: 'electricMeterManage',
+        path: 'electricMeterManage',
+        component: () => import('../pages/electricMeterManage/electricMeterManage.vue'),
+        
+      },
+      {
+        name: 'waterMeterManage',
+        path: 'waterMeterManage',
+        component: () => import('../pages/waterMeterManage/waterMeterManage.vue'),
+
       },
       {
         name: 'settings',

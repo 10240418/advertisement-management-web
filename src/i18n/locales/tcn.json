@@ -113,6 +113,8 @@
       "device": "設備",
       "openApi": "OpenAPI",
       "resident": "住戶管理",
+      "waterMeterManage": "水錶管理",
+      "electricMeterManage": "電錶管理",
       "adminUser": "管理員",
       "settings": "設置"
     },

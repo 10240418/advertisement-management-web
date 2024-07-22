@@ -1,66 +1,55 @@
-import { Ref, ref, unref, watch } from 'vue'
-import { watchIgnorable } from '@vueuse/core'
+import { Ref, ref, unref } from 'vue'
 import { Pagination, Sorting, Filters } from '../../../data/page'
-import { eletric_energy_meter_type } from '../../../data/electric_energy_meter'
-import { get } from 'lodash'
-import { getElectricMeters, addElectricMeter, updateElectricMeter,deleteElectricMeter } from '../../../api_mocks/electricEnergy'
+import { water_meter_type } from '../../../data/water_meter'
+import { getWaterMeters, addWaterMeter, updateWaterMeter, deleteWaterMeter } from '../../../api_mocks/waterMeter'
 
 const makePaginationRef = () => ref<Pagination>({ pageNum: 1, pageSize: 10, total: 30 })
 const makeSortingRef = () => ref<Sorting>({ sortBy: 'id', sortingOrder: null })
 const makeFiltersRef = () => ref<Partial<Filters>>({ isActive: true, search: '' })
 
-export const useElectricMeters = (options?: {
+export const useWaterMeters = (options?: {
   pagination?: Ref<Pagination>
   sorting?: Ref<Sorting>
   filters?: Ref<Partial<Filters>>
 }) => {
   const isLoading = ref(false)
-  const electricMeters = ref<eletric_energy_meter_type[]>([])
+  const waterMeters = ref<water_meter_type[]>([])
   const { filters = makeFiltersRef(), sorting = makeSortingRef(), pagination = makePaginationRef() } = options || {}
 
   const fetch = async () => {
     isLoading.value = true
-    const res= await getElectricMeters({
-      // ...unref(filters),
-      // ...unref(sorting),
+    const res = await getWaterMeters({
       ...unref(pagination),
     })
-    electricMeters.value = res.data
+    waterMeters.value = res.data
     isLoading.value = false
-    pagination.value = res.pagination;
-    console.log(pagination.value)
+    pagination.value = res.pagination
   }
 
   fetch()
 
   return {
     isLoading,
-
     filters,
     sorting,
     pagination,
-
-    electricMeters,
-
+    waterMeters,
     fetch,
-
-    async add(meter: eletric_energy_meter_type) {
+    async add(meter: water_meter_type) {
       isLoading.value = true
-      await addElectricMeter(meter)
+      await addWaterMeter(meter)
       await fetch()
       isLoading.value = false
     },
-
-    async update(meter: eletric_energy_meter_type) {
+    async update(meter: water_meter_type) {
       isLoading.value = true
-      await updateElectricMeter(meter)
+      await updateWaterMeter(meter)
       await fetch()
       isLoading.value = false
     },
-
-    async remove(meter: eletric_energy_meter_type) {
+    async remove(meter: water_meter_type) {
       isLoading.value = true
-      await deleteElectricMeter(meter)
+      await deleteWaterMeter(meter)
       await fetch()
       isLoading.value = false
     },

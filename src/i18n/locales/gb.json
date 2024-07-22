@@ -60,6 +60,9 @@
     "openApi": "OpenAPI",
     "resident": "Residents",
     "adminUser": "AdminUser",
+    "electricMeterManage": "electricMeterManage",
+    "waterMeterManage":"waterMeterManage",
+    "management": "Management",
     "settings": "Application settings",
     "logs": "Logs"
   },

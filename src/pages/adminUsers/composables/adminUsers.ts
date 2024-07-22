@@ -8,7 +8,7 @@ import {
   deleteAdminUser,
 } from '../../../api_mocks/adminUser'
 
-const makePaginationRef=()=>  ref<Pagination>({page :1,perPage:10,total:30})
+const makePaginationRef=()=>  ref<Pagination>({pageNum :1,pageSize:10,total:30})
 const makeSortingRef = () => ref<Sorting>({sortBy:undefined,sortingOrder:null})
 const makeFiltersRef = () => ref<Filters>({isActive:true,search:''})
 
@@ -21,7 +21,7 @@ export const useAdminUsers = (options?: {
   const adminusers = ref<admin_user_type[]>([])
   const { filters = makeFiltersRef(), sorting = makeSortingRef(), pagination = makePaginationRef() } = options || {}
   
-  const fetch = async (query: {page?: number; perPage?: number;total?:number; filters?: Filters; sorting?: Sorting }) => {
+  const fetch = async (query: {pageNum?: number; pageSize?: number;total?:number; filters?: Filters; sorting?: Sorting }) => {
     isLoading.value = true
     //现在默认是没有传入参数的
     const res = await fetchAdminUsers()
@@ -43,6 +43,12 @@ export const useAdminUsers = (options?: {
     isLoading.value = false
   }
 
+  const update = async (user: admin_user_type) => {
+    isLoading.value = true
+    await fetch({})
+    isLoading.value = false
+  }
+
 
   fetch({})
 
@@ -57,6 +63,7 @@ export const useAdminUsers = (options?: {
     fetch,
     add,
     remove,
+    update,
   }
 }
 

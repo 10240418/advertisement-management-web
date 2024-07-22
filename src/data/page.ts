@@ -5,8 +5,8 @@ import { electric_energy_meter_data_type } from "./electric_energy_meter_data"
 
 
 export type Pagination = {
-    page: number
-    perPage: number
+    pageNum: number
+    pageSize: number
     total: number
   }
   
@@ -19,3 +19,4 @@ export type Pagination = {
     isActive: boolean
     search: string
   }
+  // 业务流程就是说,先我这边设定好

@@ -1,24 +1,51 @@
 <script setup lang="ts">
-import { PropType, computed, ref, watch } from 'vue'
+import { ref, watch, PropType,defineProps, defineEmits } from 'vue'
 import { useForm } from 'vuestic-ui'
 import { validators } from '../../../services/utils'
+import { admin_user_type } from '../../../data/admin_user'
 
-const defaultNewUser = {
+const defaultNewAdminUser = {
   name: '',
   email: '',
   password: '',
+  created_at: '',
+  updated_at: '',
 }
 
-const newUser = ref<any>({ ...defaultNewUser })
+const props = defineProps({
+  modelValue: {
+    type: Object as PropType<admin_user_type | null>,
+    required: true,
+  },
+})
+
+const emit = defineEmits(['update:modelValue', 'close', 'save'])
+
+const newAdminUser = ref<any>({ ...defaultNewAdminUser })
+
+watch(
+  () => props.modelValue,
+  (userToEdit) => {
+    if (userToEdit) {
+      newAdminUser.value = { ...userToEdit }
+    } else {
+      newAdminUser.value = { ...defaultNewAdminUser }
+    }
+  },
+  { immediate: true }
+)
 
 const form = useForm('add-user-form')
 
-const emit = defineEmits(['close', 'save'])
-
 const onSave = () => {
   if (form.validate()) {
-    emit('save', newUser.value)
+    emit('update:modelValue', newAdminUser.value)
+    emit('save', newAdminUser.value)
   }
+}
+
+const onCancel = () => {
+  emit('close')
 }
 </script>
 
@@ -26,21 +53,18 @@ const onSave = () => {
   <VaForm v-slot="{ isValid }" ref="add-user-form" class="flex-col justify-start items-start gap-4 inline-flex w-full">
     <div class="self-stretch flex-col justify-start items-start gap-4 flex">
       <div class="flex gap-4 flex-col w-full">
-        <VaInput v-model="newUser.name" label="Name" class="w-full" :rules="[validators.required]" name="name" />
+        <VaInput v-model="newAdminUser.name" label="Name" class="w-full" :rules="[validators.required]" name="name" />
       </div>
 
       <div class="flex gap-4 flex-col w-full">
-        <VaInput v-model="newUser.email" label="Email" class="w-full" :rules="[validators.required, validators.email]"
-          name="email" />
+        <VaInput v-model="newAdminUser.email" label="Email" class="w-full" :rules="[validators.required, validators.email]" name="email" />
       </div>
 
       <div class="flex gap-4 flex-col w-full">
-        <VaInput v-model="newUser.password" label="Password" class="w-full" :rules="[validators.required]"
-          name="password" />
+        <VaInput v-model="newAdminUser.password" label="Password" class="w-full" :rules="[validators.required]" name="password" />
       </div>
-
       <div class="flex gap-2 flex-col-reverse items-stretch justify-end w-full">
-        <VaButton preset="secondary" color="secondary" @click="$emit('close')">Cancel</VaButton>
+        <VaButton preset="secondary" color="secondary" @click="onCancel">Cancel</VaButton>
         <VaButton :disabled="!isValid" @click="onSave">Add</VaButton>
       </div>
     </div>

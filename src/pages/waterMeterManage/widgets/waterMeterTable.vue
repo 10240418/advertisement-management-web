@@ -1,43 +1,45 @@
 <script setup lang="ts">
 import { defineVaDataTableColumns, useModal } from 'vuestic-ui'
 import { PropType, computed, toRef } from 'vue'
-// import { Pagination, Sorting } from '../../../data/page'
-import { admin_user_type } from '../../../data/admin_user'
+import { water_meter_type } from '../../../data/water_meter'
 
 const columns = defineVaDataTableColumns([
   { label: 'ID', key: 'id', sortable: true },
   { label: 'Name', key: 'name', sortable: true },
-  { label: 'Email', key: 'email', sortable: true },
-  { label: 'create_at', key: 'created_at', sortable: true },
-  { label: 'updated_at', key: 'updated_at', sortable: true },
+  { label: 'Gateway ID', key: 'gateway_id', sortable: true },
+  { label: 'Remark', key: 'remark', sortable: true },
+  { label: 'Unit ID', key: 'unit_id', sortable: true },
+  { label: 'Modbus Address', key: 'modbus_address', sortable: true },
+  { label: 'Created At', key: 'created_at', sortable: true },
+  { label: 'Updated At', key: 'updated_at', sortable: true },
   { label: 'Actions', key: 'actions', sortable: false },
 ])
 
 const props = defineProps({
-  users: {
-    type: Array as PropType<admin_user_type[]>,
+  meters: {
+    type: Array as PropType<water_meter_type[]>,
     required: true,
   },
   loading: { type: Boolean, default: false },
   pagination: { type: Object as PropType<any>, required: true },
   sortBy: { type: String as PropType<any>, required: true },
-  sortingOrder: { type: String as PropType<any>, required: true },
+  sortingOrder: { type: String as PropType<any>, required: false },
 })
 
 const emit = defineEmits<{
-  (event: 'edit-user', user: any): void
-  (event: 'delete-user', user: any): void
+  (event: 'edit-meter', meter: any): void
+  (event: 'delete-meter', meter: any): void
 }>()
 
-const users = toRef(props, 'users')
+const meters = toRef(props, 'meters')
 const totalPages = computed(() => Math.ceil(props.pagination.total / props.pagination.pageSize))
 
 const { confirm } = useModal()
 
-const onUserDelete = async (user: any) => {
+const onMeterDelete = async (meter: any) => {
   const agreed = await confirm({
-    title: 'Delete user',
-    message: `Are you sure you want to delete ${user.name}?`,
+    title: 'Delete Meter',
+    message: `Are you sure you want to delete ${meter.name}?`,
     okText: 'Delete',
     cancelText: 'Cancel',
     size: 'small',
@@ -45,14 +47,15 @@ const onUserDelete = async (user: any) => {
   })
 
   if (agreed) {
-    emit('delete-user', user)
+    emit('delete-meter', meter)
   }
 }
+
 const currentPageData = computed(() => {
-  const startIndex = (props.pagination.pageNum - 1) * props.pagination.pageSize;
-  const endIndex = startIndex + props.pagination.pageSize;
-  return users.value.slice(startIndex, endIndex);
-});
+  const startIndex = (props.pagination.pageNum - 1) * props.pagination.pageSize
+  const endIndex = startIndex + props.pagination.pageSize
+  return meters.value.slice(startIndex, endIndex)
+})
 </script>
 
 <template>
@@ -62,24 +65,43 @@ const currentPageData = computed(() => {
         {{ rowData.name }}
       </div>
     </template>
-
-    <template #cell(email)="{ rowData }">
-      <div class="ellipsis max-w-[230px]">
-        {{ rowData.email }}
+    <template #cell(gateway_id)="{ rowData }">
+      <div class="ellipsis max-w-[120px]">
+        {{ rowData.gateway_id }}
       </div>
     </template>
-
+    <template #cell(remark)="{ rowData }">
+      <div class="ellipsis max-w-[120px]">
+        {{ rowData.remark }}
+      </div>
+    </template>
+    <template #cell(unit_id)="{ rowData }">
+      <div class="ellipsis max-w-[120px]">
+        {{ rowData.unit_id }}
+      </div>
+    </template>
+    <template #cell(modbus_address)="{ rowData }">
+      <div class="ellipsis max-w-[120px]">
+        {{ rowData.modbus_address }}
+      </div>
+    </template>
     <template #cell(actions)="{ rowData }">
       <div class="flex gap-2 justify-end">
         <VaButton
           preset="primary"
           size="small"
           icon="mso-edit"
-          aria-label="Edit user"
-          @click="$emit('edit-user', rowData as any)"
+          aria-label="Edit Meter"
+          @click="$emit('edit-meter', rowData as any)"
         />
-        <VaButton preset="primary" size="small" icon="mso-delete" color="danger" aria-label="Delete user"
-          @click="onUserDelete(rowData)" />
+        <VaButton
+          preset="primary"
+          size="small"
+          icon="mso-delete"
+          color="danger"
+          aria-label="Delete Meter"
+          @click="onMeterDelete(rowData)"
+        />
       </div>
     </template>
   </VaDataTable>
@@ -97,7 +119,7 @@ const currentPageData = computed(() => {
         icon="va-arrow-left"
         aria-label="Previous page"
         :disabled="$props.pagination.pageNum === 1"
-        @click="$props.pagination.pageNum--;console.log($props.pagination)"
+        @click="$props.pagination.pageNum--;"
       />
       <VaButton
         class="mr-2"

@@ -2,20 +2,18 @@
 import { ref, reactive, toRaw, watch } from 'vue'
 import { useAdminUsers } from './composables/adminUsers'
 import { useModal, useToast } from 'vuestic-ui'
-import { sleep } from '../../services/utils';
 import { admin_user_type } from '../../data/admin_user'
 import _ from 'lodash'
 import adminUsersTable from './widgets/adminUsersTable.vue'
+import EditAdminUserForm from './widgets/EditAdminUserForm.vue'
 
 const doShowEditUserModal = ref(false)
+const doShowAddUserModal = ref(false)
 
 const { isLoading, adminusers, filters, sorting, pagination, ...userApi } = useAdminUsers()
 
-
-
 const adminUsersShowInTable = ref<admin_user_type[]>([])
 const userToEdit = ref<admin_user_type | null>(null)
-
 
 const showEditUserModal = (user: admin_user_type) => {
   userToEdit.value = user
@@ -23,7 +21,8 @@ const showEditUserModal = (user: admin_user_type) => {
 }
 
 const showAddUserModal = () => {
-  doShowEditUserModal.value = true
+  doShowAddUserModal.value = true
+  userToEdit.value = null
 }
 
 const { init: notify } = useToast()
@@ -37,19 +36,20 @@ const onUserDelete = async (user: any) => {
 }
 
 const onSave = (user: any) => {
-  userApi.add(user)
+  console.log(user)
+  if (user.id) {
+    userApi.update(user)
+  } else {
+    userApi.add(user)
+  }
   doShowEditUserModal.value = false
+  doShowAddUserModal.value = false
 }
 
-// 根据名字过滤
 const filterData = (search: any) => {
-  // 重新获取深拷贝，确保筛选前的数据是最新的
   const rawUsers = toRaw(adminusers.value)
   const filteredUsers = rawUsers.filter((item: admin_user_type) => item.name.includes(search))
   adminUsersShowInTable.value = _.cloneDeep(filteredUsers)
-  // console.log(adminUsersShowInTable.value)
-  // console.log(filters.value.search)
-  // console.log(users.value) 
 }
 
 watch(
@@ -59,7 +59,6 @@ watch(
   }
 )
 
-// 初始时填充数据
 watch(
   adminusers,
   () => {
@@ -74,15 +73,6 @@ watch(
     <VaCardContent>
       <div class="flex flex-col md:flex-row gap-2 mb-2 justify-between">
         <div class="flex flex-col md:flex-row gap-2 justify-start">
-          <!-- <VaButtonToggle
-            v-model="filters.isActive"
-            color="background-element"
-            border-color="background-element"
-            :options="[
-              { label: 'Active', value: true },
-              { label: 'Inactive', value: false },
-            ]"
-          /> -->
           <span>根据名字筛选</span>
           <VaInput v-model="filters.search" placeholder="Search">
             <template #prependInner>
@@ -94,20 +84,23 @@ watch(
       </div>
 
       <adminUsersTable 
-      v-model:sort-by="sorting.sortBy"
-      v-model:sorting-order="sorting.sortingOrder"
-      :pagination="pagination"
-      :users="adminUsersShowInTable" 
-      :loading="isLoading" 
-      @edit-user="showEditUserModal"
-      @deleteUser="onUserDelete" />
+        v-model:sort-by="sorting.sortBy"
+        v-model:sorting-order="sorting.sortingOrder"
+        :pagination="pagination"
+        :users="adminUsersShowInTable" 
+        :loading="isLoading" 
+        @edit-user="showEditUserModal"
+        @delete-user="onUserDelete" 
+      />
     </VaCardContent>
   </VaCard>
 
-  <VaModal v-slot="{ cancel, ok }" v-model="doShowEditUserModal" size="small" mobile-fullscreen close-button
-    hide-default-actions>
-    <h1 class="va-h5">Add user</h1>
-    <editAdminUserForm @close="cancel" @save="onSave" />
+  <VaModal v-model="doShowAddUserModal" size="small" mobile-fullscreen close-button hide-default-actions>
+    <h1 class="va-h5">Add AdminUser</h1>
+    <editAdminUserForm v-model="userToEdit" @close="doShowAddUserModal = false" @save="onSave" />
+  </VaModal>
+  <VaModal v-model="doShowEditUserModal" size="small" mobile-fullscreen close-button hide-default-actions>
+    <h1 class="va-h5">Edit AdminUser</h1>
+    <editAdminUserForm v-model="userToEdit" @close="doShowEditUserModal = false" @save="onSave" />
   </VaModal>
 </template>
-./composables/adminUsers./composables/AdminUsers
