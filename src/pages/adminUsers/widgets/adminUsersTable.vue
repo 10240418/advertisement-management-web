@@ -1,19 +1,20 @@
 <script setup lang="ts">
 import { defineVaDataTableColumns, useModal } from 'vuestic-ui'
 import { PropType, computed, toRef } from 'vue'
-import {adminUserType} from '../type'
 // import { Pagination, Sorting } from '../../../data/page'
+import { admin_user_type } from '../../../data/admin_user'
 
 const columns = defineVaDataTableColumns([
   { label: 'ID', key: 'id', sortable: true },
   { label: 'Name', key: 'name', sortable: true },
   { label: 'Email', key: 'email', sortable: true },
-  { label: 'Actions ', key: 'actions', align: 'right' },
+  { label: 'create_at', key: 'created_at', sortable: true },
+  { label: 'updated_at', key: 'updated_at', sortable: true },
 ])
 
 const props = defineProps({
   users: {
-    type: Array as PropType<adminUserType[]>,
+    type: Array as PropType<admin_user_type[]>,
     required: true,
   },
   loading: { type: Boolean, default: false },
@@ -46,10 +47,15 @@ const onUserDelete = async (user: any) => {
     emit('delete-user', user)
   }
 }
+const currentPageData = computed(() => {
+  const startIndex = (props.pagination.page - 1) * props.pagination.perPage;
+  const endIndex = startIndex + props.pagination.perPage;
+  return users.value.slice(startIndex, endIndex);
+});
 </script>
 
 <template>
-  <VaDataTable :columns="columns" :items="users" :loading="$props.loading">
+  <VaDataTable :columns="columns" :items="currentPageData" :loading="$props.loading">
     <template #cell(name)="{ rowData }">
       <div class="max-w-[120px] ellipsis">
         {{ rowData.name }}
@@ -90,7 +96,7 @@ const onUserDelete = async (user: any) => {
         icon="va-arrow-left"
         aria-label="Previous page"
         :disabled="$props.pagination.page === 1"
-        @click="$props.pagination.page--"
+        @click="$props.pagination.page--;console.log($props.pagination)"
       />
       <VaButton
         class="mr-2"

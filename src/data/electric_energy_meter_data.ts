@@ -1,4 +1,4 @@
-export type electric_enegry_meter_data = {
+export type electric_energy_meter_data_type = {
     id: number 
     current:Float32Array
     frequency:Float32Array

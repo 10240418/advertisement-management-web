@@ -63,7 +63,7 @@ const routes: Array<RouteRecordRaw> = [
       {
         name: 'admin-users',
         path: 'admin-users',
-        component: () => import('../pages/adminUsers/UsersPage.vue'),
+        component: () => import('../pages/adminUsers/adminUsersPage.vue'),
       },
       {
         name: 'settings',

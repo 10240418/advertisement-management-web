@@ -1,5 +1,5 @@
 import { Ref, ref, unref, watch } from 'vue'
-import { adminUserType } from '../type';
+import { admin_user_type } from '../../../data/admin_user'
 import { type Filters, Pagination,Sorting} from '../../../data/page';
 import { sleep } from '../../../services/utils';
 import {
@@ -8,23 +8,25 @@ import {
   deleteAdminUser,
 } from '../../../api_mocks/adminUser'
 
-
-//初始化三个数据
-const makePaginationRef=()=>  ref<Pagination>({page :1,perPage:10,total:0})
+const makePaginationRef=()=>  ref<Pagination>({page :1,perPage:10,total:30})
 const makeSortingRef = () => ref<Sorting>({sortBy:undefined,sortingOrder:null})
 const makeFiltersRef = () => ref<Filters>({isActive:true,search:''})
 
-export const useAdminUsers = (options?: { pagination?: Ref<Pagination>; sorting?: Ref<Sorting>; filters?: Ref<Partial<Partial<Filters>>> }) => {
-  const isLoading = ref(false)
-  const users = ref<adminUserType[]>([])
-  const { filters = makeFiltersRef(), sorting = makeSortingRef(), pagination = makePaginationRef() } = options || {}
+export const useAdminUsers = (options?: { 
+  pagination?: Ref<Pagination>; 
+  sorting?: Ref<Sorting>;
+  filters?: Ref<Partial<Partial<Filters>>> }) => {
 
-  const fetch = async (query: any) => {
+  const isLoading = ref(false)
+  const adminusers = ref<admin_user_type[]>([])
+  const { filters = makeFiltersRef(), sorting = makeSortingRef(), pagination = makePaginationRef() } = options || {}
+  
+  const fetch = async (query: {page?: number; perPage?: number;total?:number; filters?: Filters; sorting?: Sorting }) => {
     isLoading.value = true
+    //现在默认是没有传入参数的
     const res = await fetchAdminUsers()
-    users.value = res.data
-    pagination.value.total = res.data.length;
-    // console.log(users.value);//主要获取的数据
+    adminusers.value = res.data
+    
     isLoading.value = false
   }
 
@@ -37,7 +39,6 @@ export const useAdminUsers = (options?: { pagination?: Ref<Pagination>; sorting?
 
   const remove = async (id: number) => {
     isLoading.value = true
-    // await deleteAdminUser({ids: [id]})
     await fetch({})
     isLoading.value = false
   }
@@ -47,7 +48,7 @@ export const useAdminUsers = (options?: { pagination?: Ref<Pagination>; sorting?
 
   return {
     isLoading,
-    users,
+    adminusers,
 
     filters,
     sorting,
