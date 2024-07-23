@@ -7,7 +7,7 @@
             @click="isSidebarMinimized = !isSidebarMinimized" />
         </Transition>
         <RouterLink to="/" aria-label="Visit home page" class="logo">
-          Toilet Admin
+          Meter Reading System
         </RouterLink>
       </div>
     </template>

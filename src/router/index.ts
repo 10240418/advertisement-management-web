@@ -23,38 +23,38 @@ const routes: Array<RouteRecordRaw> = [
         path: 'dashboard',
         component: () => import('../pages/dashboard/Dashboard.vue'),
       },
-      {
-        name: 'management',
-        path: 'management',
-        component: RouteViewComponent,
-        children: [
-          {
-            name: 'toilet',
-            path: 'toilet',
-            component: () => import('../pages/toilets/ToiletsPage.vue'),
-          },
-          {
-            name: 'toiletDetail',
-            path: 'toilet/:id',
-            component: () => import('../pages/cubicle/ToiletDetail.vue'),
-          },
-          // {
-          //   name: 'cubicle',
-          //   path: 'cubicle',
-          //   component: () => import('../pages/cubicle/PaymentsPage.vue'),
-          // },
-          {
-            name: 'logs',
-            path: 'logs',
-            component: () => import('../pages/devices/BillingPage.vue'),
-          },
-        ],
-      },
-      {
-        name: 'openApi',
-        path: 'openApi',
-        component: () => import('../pages/openApi/Invoices.vue'),
-      },
+      // {
+      //   name: 'management',
+      //   path: 'management',
+      //   component: RouteViewComponent,
+      //   children: [
+      //     {
+      //       name: 'toilet',
+      //       path: 'toilet',
+      //       component: () => import('../pages/toilets/ToiletsPage.vue'),
+      //     },
+      //     {
+      //       name: 'toiletDetail',
+      //       path: 'toilet/:id',
+      //       component: () => import('../pages/cubicle/ToiletDetail.vue'),
+      //     },
+      //     {
+      //       name: 'cubicle',
+      //       path: 'cubicle',
+      //       component: () => import('../pages/cubicle/PaymentsPage.vue'),
+      //     },
+      //     {
+      //       name: 'logs',
+      //       path: 'logs',
+      //       component: () => import('../pages/devices/BillingPage.vue'),
+      //     },
+      //   ],
+      // },
+      // {
+      //   name: 'openApi',
+      //   path: 'openApi',
+      //   component: () => import('../pages/openApi/Invoices.vue'),
+      // },
       {
         name:'resident',
         path: 'resident',

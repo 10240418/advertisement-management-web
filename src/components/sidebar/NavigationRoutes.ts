@@ -18,23 +18,23 @@ export default {
     //     icon: 'vuestic-iconset-dashboard',
     //   },
     // },
-    {
-      name: 'management',
-      displayName: 'menu.management',
-      meta: {
-        icon: 'group',
-      },
-      children: [
-        {
-          name: 'toilet',
-          displayName: 'menu.toilet',
-        },
-        {
-          name: 'logs',
-          displayName: 'menu.logs',
-        },
-      ],
-    },
+    // {
+    //   name: 'management',
+    //   displayName: 'menu.management',
+    //   meta: {
+    //     icon: 'group',
+    //   },
+    //   children: [
+    //     {
+    //       name: 'toilet',
+    //       displayName: 'menu.toilet',
+    //     },
+    //     {
+    //       name: 'logs',
+    //       displayName: 'menu.logs',
+    //     },
+    //   ],
+    // },
     // {
     //   name: 'open-api',
     //   displayName: 'menu.openApi',
