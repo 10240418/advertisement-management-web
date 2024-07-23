@@ -6,6 +6,7 @@ import { admin_user_type } from '../../data/admin_user'
 import _ from 'lodash'
 import adminUsersTable from './widgets/adminUsersTable.vue'
 import EditAdminUserForm from './widgets/EditAdminUserForm.vue'
+import draggableDialog  from  '../../../src/components/reusableModal/draggableDialog.vue'
 
 const doShowEditUserModal = ref(false)
 const doShowAddUserModal = ref(false)
@@ -103,4 +104,5 @@ watch(
     <h1 class="va-h5">Edit AdminUser</h1>
     <editAdminUserForm v-model="userToEdit" @close="doShowEditUserModal = false" @save="onSave" />
   </VaModal>
+  <draggableDialog></draggableDialog>
 </template>
