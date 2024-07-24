@@ -1,4 +1,5 @@
 <template>
+  <!-- 可操作的多开弹窗模板 -->
   <el-button plain @click="dialogVisible = true">
     Open a draggable Dialog
   </el-button>
@@ -14,8 +15,7 @@
     draggable
     :modal="false"
     :close-on-click-modal="false"
-
-     modal-class="dialog_class"
+    modal-class="dialog_class"
   >
     <span>It's a draggable Dialog</span>
     <template #footer>

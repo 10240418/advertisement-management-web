@@ -127,16 +127,21 @@ const router = createRouter({
   routes,
 })
 
-// router.beforeResolve((to, from, next) => {
-//   let token = localStorage.getItem('toiletAdminToken')
-//   let hasLogin = token != null && token != ''
+router.beforeResolve((to, from, next) => {
+  // 清
+  // localStorage.removeItem('toiletAdminToken')
+  let token = localStorage.getItem('toiletAdminToken')
+  let hasLogin = token != null && token != ''
 
-//   if ((to.name !== 'login') && !hasLogin) {
-//       next({ name: 'login' })
-//   }
+  if ((to.name !== 'login') && !hasLogin) {
+      next({ name: 'login' })
+  }
+  else{
+    next()
+  }
 
-//   next()
-// });
+  
+});
 
 
 export default router

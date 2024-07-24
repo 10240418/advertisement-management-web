@@ -6,7 +6,9 @@ import {
   fetchAdminUsers,
   addAdminUser,
   deleteAdminUser,
-} from '../../../api_mocks/adminUser'
+  updateAdminUser,
+} from '../../../apis/adminUser'
+import { pa } from 'element-plus/es/locale';
 
 const makePaginationRef=()=>  ref<Pagination>({pageNum :1,pageSize:10,total:30})
 const makeSortingRef = () => ref<Sorting>({sortBy:undefined,sortingOrder:null})
@@ -20,37 +22,69 @@ export const useAdminUsers = (options?: {
   const isLoading = ref(false)
   const adminusers = ref<admin_user_type[]>([])
   const { filters = makeFiltersRef(), sorting = makeSortingRef(), pagination = makePaginationRef() } = options || {}
-  
-  const fetch = async (query: {pageNum?: number; pageSize?: number;total?:number; filters?: Filters; sorting?: Sorting }) => {
-    isLoading.value = true
-    //现在默认是没有传入参数的
-    const res = await fetchAdminUsers()
-    adminusers.value = res.data
+ // Correct usage of fetchAdminUsers
+const fetch = async (body: any = {}) => {
+  isLoading.value = true
+  try {
+    const res = await fetchAdminUsers(body);
+    // console.log(res)
+    // console.log(body)
+    // 其实是不用带参数的
     
-    isLoading.value = false
+    adminusers.value = res.data.data
+    console.log(adminusers.value)
+    pagination.value = res.data.pagination
+    if(pagination.value.pageSize <=0)pagination.value.pageSize = 10
+    if(pagination.value.pageNum <=0)pagination.value.pageNum = 1
+
+  } catch (error) {
+    console.error(error);
   }
+  isLoading.value = false
+}
 
-  const add = async (user: Omit<any, 'id'>) => {
-    isLoading.value = true
-    await addAdminUser(user)
-    await fetch({})
-    isLoading.value = false
+// Correct usage of addAdminUser
+const add = async (user: Omit<any, 'id'>) => {
+  isLoading.value = true
+  try {
+    await addAdminUser(user);
+    console.log(user)
+    await fetch(); // Call fetch after adding the user
+  } catch (error) {
+    console.error(error);
   }
+  isLoading.value = false
+}
 
-  const remove = async (id: number) => {
-    isLoading.value = true
-    await fetch({})
-    isLoading.value = false
+// Correct usage of deleteAdminUser
+const remove = async (ids: number[]) => {
+  isLoading.value = true
+  try {
+    console.log(ids)
+    await deleteAdminUser({ids}); // Pass the id to delete
+    await fetch(); // Call fetch after deleting the user
+  } catch (error) {
+    console.error(error);
   }
+  isLoading.value = false
+}
+watch ( pagination, async (newValue, oldValue) => {
+  console.log(newValue, oldValue)
+})
 
-  const update = async (user: admin_user_type) => {
-    isLoading.value = true
-    await fetch({})
-    isLoading.value = false
+// Correct usage of update
+const update = async (user: admin_user_type) => {
+  isLoading.value = true
+  try {
+    // Assuming there's an updateAdminUser function
+    await updateAdminUser(user);
+    await fetch(); // Call fetch after updating the user
+  } catch (error) {
+    console.error(error);
   }
-
-
-  fetch({})
+  isLoading.value = false
+}
+  fetch()
 
   return {
     isLoading,

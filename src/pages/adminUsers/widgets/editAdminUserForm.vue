@@ -65,7 +65,7 @@ const onCancel = () => {
       </div>
       <div class="flex gap-2 flex-col-reverse items-stretch justify-end w-full">
         <VaButton preset="secondary" color="secondary" @click="onCancel">Cancel</VaButton>
-        <VaButton :disabled="!isValid" @click="onSave">Add</VaButton>
+        <VaButton :disabled="!isValid" @click="onSave">Save</VaButton>
       </div>
     </div>
   </VaForm>

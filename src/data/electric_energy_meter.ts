@@ -7,4 +7,5 @@ export type eletric_energy_meter_type = {
     unit_id: number
     updated_at: string
     modbus_address:string
+    type:string
   } 

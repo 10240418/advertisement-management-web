@@ -7,4 +7,5 @@ export type water_meter_type = {
     remark: string
     unit_id: number
     updated_at: string
+    type: string
   }

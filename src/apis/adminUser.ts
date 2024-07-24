@@ -23,3 +23,11 @@ export const deleteAdminUser = (data: any) => {
     data,
   })
 }
+
+export const updateAdminUser = (data: any) => {
+  return request({
+    url: '/admin/admin_user/reset_password',
+    method: 'post',
+    data,
+  })
+}

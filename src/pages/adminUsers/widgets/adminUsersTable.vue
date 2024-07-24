@@ -8,8 +8,8 @@ const columns = defineVaDataTableColumns([
   { label: 'ID', key: 'id', sortable: true },
   { label: 'Name', key: 'name', sortable: true },
   { label: 'Email', key: 'email', sortable: true },
-  { label: 'create_at', key: 'created_at', sortable: true },
-  { label: 'updated_at', key: 'updated_at', sortable: true },
+  { label: 'create_at', key: 'createdAt', sortable: true },
+  { label: 'updated_at', key: 'updatedAt', sortable: true },
   { label: 'Actions', key: 'actions', sortable: false },
 ])
 
@@ -24,6 +24,7 @@ const props = defineProps({
   sortingOrder: { type: String as PropType<any>, required: true },
 })
 
+// console.log(props.users);
 const emit = defineEmits<{
   (event: 'edit-user', user: any): void
   (event: 'delete-user', user: any): void
@@ -56,7 +57,11 @@ const currentPageData = computed(() => {
 </script>
 
 <template>
-  <VaDataTable :columns="columns" :items="currentPageData" :loading="$props.loading">
+  <VaDataTable
+   :columns="columns"  
+   :items="currentPageData" 
+   :loading="$props.loading">
+
     <template #cell(name)="{ rowData }">
       <div class="max-w-[120px] ellipsis">
         {{ rowData.name }}
@@ -86,8 +91,10 @@ const currentPageData = computed(() => {
 
   <div class="flex flex-col-reverse md:flex-row gap-2 justify-between items-center py-2">
     <div>
-      <b>{{ $props.pagination.total }} results.</b>
-      Results per page
+      <b>total:{{ $props.pagination.total }} </b>
+      pageNum:
+      <VaInput v-model="$props.pagination.pageNum" class="!w-16" />
+         pageSize:
       <VaSelect v-model="$props.pagination.pageSize" class="!w-20" :options="[10, 50, 100]" />
     </div>
 
@@ -97,7 +104,7 @@ const currentPageData = computed(() => {
         icon="va-arrow-left"
         aria-label="Previous page"
         :disabled="$props.pagination.pageNum === 1"
-        @click="$props.pagination.pageNum--;console.log($props.pagination)"
+        @click="$props.pagination.pageNum--"
       />
       <VaButton
         class="mr-2"

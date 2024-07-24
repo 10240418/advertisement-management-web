@@ -28,7 +28,6 @@ export const useElectricMeters = (options?: {
     electricMeters.value = res.data
     isLoading.value = false
     pagination.value = res.pagination;
-    console.log(pagination.value)
   }
 
   fetch()

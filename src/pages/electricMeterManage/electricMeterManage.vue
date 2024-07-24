@@ -23,7 +23,6 @@ const showEditMeterModal = (meter: eletric_energy_meter_type) => {
 
 const showAddMeterModal = () => {
   doShowAddMeterModal.value = true
-  console.log(pagination)
   meterToEdit.value = null
 }
 

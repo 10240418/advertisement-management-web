@@ -57,7 +57,7 @@ const currentPageData = computed(() => {
   const endIndex = startIndex + props.pagination.pageSize
   return meters.value.slice(startIndex, endIndex)
 })
-console.log(props.pagination)
+
 </script>
 
 <template>
