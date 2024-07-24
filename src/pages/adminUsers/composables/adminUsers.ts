@@ -23,17 +23,18 @@ export const useAdminUsers = (options?: {
   const adminusers = ref<admin_user_type[]>([])
   const { filters = makeFiltersRef(), sorting = makeSortingRef(), pagination = makePaginationRef() } = options || {}
  // Correct usage of fetchAdminUsers
-const fetch = async (body: any = {}) => {
+ const body = ref({pageNum:pagination.value.pageNum,pageSize:pagination.value.pageSize})
+const fetch = async (body: any) => {
   isLoading.value = true
   try {
-    const res = await fetchAdminUsers(body);
+    const res = await fetchAdminUsers(body?body:body.value);
     // console.log(res)
     // console.log(body)
     // 其实是不用带参数的
-    
+    //if adminusers.value.length < total || adminusers.value.length < pageNum * pageSize 就把数据拼起来
     adminusers.value = res.data.data
     console.log(adminusers.value)
-    pagination.value = res.data.pagination
+    pagination.value.total = res.data.pagination.total
     if(pagination.value.pageSize <=0)pagination.value.pageSize = 10
     if(pagination.value.pageNum <=0)pagination.value.pageNum = 1
 
@@ -49,7 +50,7 @@ const add = async (user: Omit<any, 'id'>) => {
   try {
     await addAdminUser(user);
     console.log(user)
-    await fetch(); // Call fetch after adding the user
+    await fetch({pageNum:pagination.value.pageNum,pageSize:pagination.value.pageSize}); // Call fetch after adding the user
   } catch (error) {
     console.error(error);
   }
@@ -62,7 +63,7 @@ const remove = async (ids: number[]) => {
   try {
     console.log(ids)
     await deleteAdminUser({ids}); // Pass the id to delete
-    await fetch(); // Call fetch after deleting the user
+    await fetch({pageNum:pagination.value.pageNum,pageSize:pagination.value.pageSize}); // Call fetch after deleting the user
   } catch (error) {
     console.error(error);
   }
@@ -77,14 +78,14 @@ const update = async (user: admin_user_type) => {
   isLoading.value = true
   try {
     // Assuming there's an updateAdminUser function
-    await updateAdminUser(user);
-    await fetch(); // Call fetch after updating the user
+    await updateAdminUser({id:user.id,password:user.password});
+    await fetch({pageNum:pagination.value.pageNum,pageSize:pagination.value.pageSize}); // Call fetch after updating the user
   } catch (error) {
     console.error(error);
   }
   isLoading.value = false
 }
-  fetch()
+  fetch({pageNum:pagination.value.pageNum,pageSize:pagination.value.pageSize})
 
   return {
     isLoading,

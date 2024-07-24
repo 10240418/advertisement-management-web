@@ -6,7 +6,7 @@ import { admin_user_type } from '../../data/admin_user'
 import _ from 'lodash'
 import adminUsersTable from './widgets/adminUsersTable.vue'
 import editAdminUserForm from './widgets/editAdminUserForm.vue'
-import draggableDialog  from  '../../../src/components/reusableModal/draggableDialog.vue'
+import draggableDialog from '../../../src/components/reusableModal/draggableDialog.vue'
 
 const doShowEditUserModal = ref(false)
 const doShowAddUserModal = ref(false)
@@ -14,7 +14,7 @@ const doShowAddUserModal = ref(false)
 const { isLoading, adminusers, filters, sorting, pagination, ...userApi } = useAdminUsers()
 
 const adminUsersShowInTable = ref<admin_user_type[]>([])
-const userToEdit = ref<admin_user_type |  null>(null)
+const userToEdit = ref<admin_user_type | null>(null)
 
 
 const showEditUserModal = (user: admin_user_type) => {
@@ -35,8 +35,12 @@ const onUserDelete = async (user: any) => {
     message: `${user.username} has been deleted`,
     color: 'success',
   })
+} 
+const fectchUserByPa = async (pagination: any) => {
+  await userApi.fetch(pagination)
+  adminUsersShowInTable.value  = adminusers.value
+  console.log(adminUsersShowInTable.value)
 }
-
 const onSave = (user: any) => {
   // console.log(user)
   if (user.id) {
@@ -54,12 +58,12 @@ const filterData = (search: any) => {
   adminUsersShowInTable.value = _.cloneDeep(filteredUsers)
 }
 
-watch(
-  () => filters.value.search,
-  (newSearch) => {
-    return filterData(newSearch)
-  }
-)
+// watch(
+//   () => filters.value.search,
+//   (newSearch) => {
+//     return filterData(newSearch)
+//   }
+// )
 
 watch(
   adminusers,
@@ -76,26 +80,21 @@ watch(
     <VaCardContent>
       <div class="flex flex-col md:flex-row gap-2 mb-2 justify-between">
         <div class="flex flex-col md:flex-row gap-2 justify-start">
-          <span class="span-filter">name:</span>
+          <!-- <span class="span-filter">name:</span>
           <VaInput v-model="filters.search" placeholder="Search">
             <template #prependInner>
               <VaIcon name="search" color="secondary" size="s" />
             </template>
-          </VaInput>
-        
+          </VaInput> -->
+
         </div>
         <VaButton @click="showAddUserModal">Add User</VaButton>
       </div>
 
       <adminUsersTable 
-        v-model:sort-by="sorting.sortBy"
-        v-model:sorting-order="sorting.sortingOrder"
-        :pagination="pagination"
-        :users="adminUsersShowInTable" 
-        :loading="isLoading" 
-        @edit-user="showEditUserModal"
-        @delete-user="onUserDelete" 
-      />
+        :pagination="pagination" :users="adminUsersShowInTable" :loading="isLoading" @edit-user="showEditUserModal"
+        @delete-user="onUserDelete"
+        @fectch-user="fectchUserByPa" />
     </VaCardContent>
   </VaCard>
 
@@ -110,7 +109,7 @@ watch(
   <!-- <draggableDialog></draggableDialog> -->
 </template>
 <style scoped>
-.span-filter{
+.span-filter {
   white-space: nowrap;
   display: flex;
   justify-content: center;
