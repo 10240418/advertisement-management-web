@@ -9,7 +9,6 @@ import {
   updateAdminUser,
 } from '../../../apis/adminUser'
 import { pa } from 'element-plus/es/locale';
-
 const makePaginationRef=()=>  ref<Pagination>({pageNum :1,pageSize:10,total:30})
 const makeSortingRef = () => ref<Sorting>({sortBy:undefined,sortingOrder:null})
 const makeFiltersRef = () => ref<Filters>({isActive:true,search:''})
@@ -22,16 +21,12 @@ export const useAdminUsers = (options?: {
   const isLoading = ref(false)
   const adminusers = ref<admin_user_type[]>([])
   const { filters = makeFiltersRef(), sorting = makeSortingRef(), pagination = makePaginationRef() } = options || {}
- // Correct usage of fetchAdminUsers
+ 
  const body = ref({pageNum:pagination.value.pageNum,pageSize:pagination.value.pageSize})
 const fetch = async (body: any) => {
   isLoading.value = true
   try {
     const res = await fetchAdminUsers(body?body:body.value);
-    // console.log(res)
-    // console.log(body)
-    // 其实是不用带参数的
-    //if adminusers.value.length < total || adminusers.value.length < pageNum * pageSize 就把数据拼起来
     adminusers.value = res.data.data
     console.log(adminusers.value)
     pagination.value.total = res.data.pagination.total
@@ -44,7 +39,7 @@ const fetch = async (body: any) => {
   isLoading.value = false
 }
 
-// Correct usage of addAdminUser
+
 const add = async (user: Omit<any, 'id'>) => {
   isLoading.value = true
   try {
@@ -57,7 +52,6 @@ const add = async (user: Omit<any, 'id'>) => {
   isLoading.value = false
 }
 
-// Correct usage of deleteAdminUser
 const remove = async (ids: number[]) => {
   isLoading.value = true
   try {
@@ -69,15 +63,12 @@ const remove = async (ids: number[]) => {
   }
   isLoading.value = false
 }
-watch ( pagination, async (newValue, oldValue) => {
-  console.log(newValue, oldValue)
-})
 
-// Correct usage of update
+
+
 const update = async (user: admin_user_type) => {
   isLoading.value = true
   try {
-    // Assuming there's an updateAdminUser function
     await updateAdminUser({id:user.id,password:user.password});
     await fetch({pageNum:pagination.value.pageNum,pageSize:pagination.value.pageSize}); // Call fetch after updating the user
   } catch (error) {

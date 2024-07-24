@@ -39,10 +39,10 @@ const onUserDelete = async (user: any) => {
 const fectchUserByPa = async (pagination: any) => {
   await userApi.fetch(pagination)
   adminUsersShowInTable.value  = adminusers.value
-  console.log(adminUsersShowInTable.value)
+  
 }
 const onSave = (user: any) => {
-  // console.log(user)
+  
   if (user.id) {
     userApi.update(user)
   } else {
@@ -58,12 +58,6 @@ const filterData = (search: any) => {
   adminUsersShowInTable.value = _.cloneDeep(filteredUsers)
 }
 
-// watch(
-//   () => filters.value.search,
-//   (newSearch) => {
-//     return filterData(newSearch)
-//   }
-// )
 
 watch(
   adminusers,

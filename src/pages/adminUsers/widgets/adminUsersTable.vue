@@ -59,7 +59,6 @@ const currentPageData = computed(() => {
 console.log(currentPageData)
 console.log(users.value)
 
-//watch pageNum 和pageSize 的变化
 watch(
   () => [props.pagination.pageNum, props.pagination.pageSize],
   () => {
