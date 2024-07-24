@@ -2,6 +2,7 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 
 import AuthLayout from '../layouts/AuthLayout.vue'
 import AppLayout from '../layouts/AppLayout.vue'
+import DeviceLayout from '../layouts/DeviceLayout.vue'
 
 import RouteViewComponent from '../layouts/RouterBypass.vue'
 
@@ -97,12 +98,31 @@ const routes: Array<RouteRecordRaw> = [
         name: 'login',
         path: 'login',
         component: () => import('../pages/auth/Login.vue'),
+      }
+    ],
+  },
+  {
+    path:'/deviceMange',
+    component:DeviceLayout,
+    children:[
+      {
+        name:'status',
+        path:'status',
+        component:()=>import('../../src/pages/deviceManage/status/devicesStatus.vue')
       },
       {
-        path: '',
-        redirect: { name: 'login' },
+        name:'meter',
+        path:'meter',
+        component:()=>import('../../src/pages/deviceManage/meter/meterManage.vue')
       },
-    ],
+      {
+        name:'gateway',
+        path:'gateway',
+        component:()=>import('../../src/pages/deviceManage/gateway/gatewayPage.vue')
+      }
+    ]
+    
+
   },
   {
     name: '404',

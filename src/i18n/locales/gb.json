@@ -63,6 +63,10 @@
     "electricMeterManage": "electricMeterManage",
     "waterMeterManage":"waterMeterManage",
     "management": "Management",
+    "deviceManage": "Device Manage",
+    "status": "Status",
+    "meter":"meter",
+    "gateway": "Gateway",
     "settings": "Application settings",
     "logs": "Logs"
   },

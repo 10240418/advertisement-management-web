@@ -78,6 +78,41 @@ export default {
     //   },
     // },
     {
+      name: 'auth',
+      displayName: 'menu.auth',
+      meta: {
+        icon: 'login',
+      },
+      children: [
+        {
+          name: 'login',
+          displayName: 'menu.login',
+        },
+      ],
+    },
+    {
+      name:'deviceManage',
+      displayName:'menu.deviceManage',
+      meta:{
+        icon:'settings'
+      },
+      children:[
+        {
+          name:'status',
+          displayName:'menu.status'
+        },
+        {
+          name:'meter',
+          displayName:'menu.meter'
+        },
+        {
+          name:'gateway',
+          displayName:'menu.gateway'
+        }
+      ]
+
+    },
+    {
       name: 'settings',
       displayName: 'menu.settings',
       meta: {
