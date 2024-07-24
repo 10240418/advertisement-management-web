@@ -51,7 +51,7 @@ const currentPageData = computed(() => {
   const startIndex = (props.pagination.pageNum - 1) * props.pagination.pageSize
   const endIndex = startIndex + props.pagination.pageSize
   
-  if(users.value.length ==props.pagination.pageSize)
+  if(users.value.length <=props.pagination.pageSize)
   return users.value;
   else 
   return users.value.slice(startIndex, endIndex)
@@ -64,7 +64,7 @@ watch(
   () => [props.pagination.pageNum, props.pagination.pageSize],
   () => {
     console.log(props.pagination.pageNum)
-    if(props.pagination.total < props.pagination.pageSize * props.pagination.pageNum){
+    if(props.pagination.total < props.pagination.pageSize * (props.pagination.pageNum-1)){
     props.pagination.pageNum = 1;
   }
     emit('fectch-user',{pageNum:props.pagination.pageNum,pageSize:props.pagination.pageSize})
