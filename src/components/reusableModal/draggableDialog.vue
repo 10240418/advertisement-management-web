@@ -1,21 +1,73 @@
 <template>
-  <!-- 可操作的多开弹窗模板 -->
-  <!-- <el-button plain @click="dialogVisible = true">
-    Open a draggable Dialog
-  </el-button> -->
-
-
-
   <el-dialog 
     v-model="$props.visible" 
-    title="Tips" 
-    width="500" 
+    width="700" 
     draggable
     :modal="false"
     :close-on-click-modal="false"
     modal-class="dialog_class"
+    :show-close="false"
   >
-    <span>It's a draggable Dialog</span>
+ 
+  <VaCard>
+    <div class="grid grid-flow-row grid-cols-6 va-card__content__meter">
+      <VaCardContent class="bg-gray-100"> 
+   
+      <VaInput
+      v-model="$props.meter.name"
+      placeholder="Solid"
+      label="Name"
+    
+     
+    />
+    </VaCardContent>
+    <VaCardContent class="bg-gray-200">
+      <VaInput
+      v-model="$props.meter.id"
+      placeholder="Solid"
+      label="id"
+     
+    />
+    </VaCardContent>
+    <VaCardContent class="bg-gray-300"> 
+      <VaInput
+      v-model="$props.meter.unit_id"
+      placeholder="Solid"
+      label="unit_id"
+      
+    />
+    </VaCardContent>
+    <VaCardContent> 
+      <VaInput
+      v-model="$props.meter.updated_at"
+      placeholder="Solid"
+      label="updated_at"
+      
+    />
+    </VaCardContent>
+    <VaCardContent> 
+      <VaInput
+      v-model="$props.meter.gateway_id"
+      placeholder="Solid"
+      label="gateway_id"
+     
+    />
+    </VaCardContent>
+    <VaCardContent> 
+      <VaInput
+      v-model="$props.meter.modbus_address"
+      placeholder="Solid"
+      label="modbus_address"
+      
+    />
+    </VaCardContent>
+
+    </div>
+   
+   
+  </VaCard>
+
+   
     <template #footer>
       <div class="dialog-footer">
         <el-button @click="$emit('close',$props.meter)">Cancel</el-button>
@@ -37,6 +89,7 @@ const props = defineProps({
   visible: {type: Boolean, default: false},
   index:{type: Number, default: 0}
 })
+
 console.log(props)
 const emit = defineEmits<{
   (event: 'close',meter: any): void
@@ -53,6 +106,13 @@ const emit = defineEmits<{
  
 .el-dialog {
   pointer-events: auto;
+  /* background: #eee; */
+  border-radius: 2px;
+  box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.5);
+
 }
+
+
+
 
 </style>

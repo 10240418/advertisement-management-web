@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, toRaw, watch } from 'vue'
+import { ref, toRaw, watch ,onBeforeMount} from 'vue'
 import { useMeters } from './composables/meter'
 import { useToast } from 'vuestic-ui'
 import { meter_type } from '../../../data/meter'
@@ -28,6 +28,7 @@ const closeEditMeterDialog = (meter: meter_type) => {
   console.log('closeEditMeterDialog')
   console.log(meter)
   dialogList.value = dialogList.value.filter((item) => item.meter.id !== meter.id)
+  console.log(dialogList.value)
 }
 
 const showAddMeterModal = () => {
@@ -69,6 +70,9 @@ watch(
   },
   { deep: true }
 )
+onBeforeMount(() => {
+  fetchMeter({})
+})
 </script>
 
 <template>
