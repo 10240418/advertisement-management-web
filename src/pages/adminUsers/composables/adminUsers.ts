@@ -1,14 +1,13 @@
 import { Ref, ref, unref, watch } from 'vue'
 import { admin_user_type } from '../../../data/admin_user'
 import { type Filters, Pagination,Sorting} from '../../../data/page';
-import { sleep } from '../../../services/utils';
 import {
   fetchAdminUsers,
   addAdminUser,
   deleteAdminUser,
   updateAdminUser,
 } from '../../../apis/adminUser'
-import { pa } from 'element-plus/es/locale';
+
 const makePaginationRef=()=>  ref<Pagination>({pageNum :1,pageSize:10,total:30})
 const makeSortingRef = () => ref<Sorting>({sortBy:undefined,sortingOrder:null})
 const makeFiltersRef = () => ref<Filters>({isActive:true,search:''})
@@ -22,13 +21,13 @@ export const useAdminUsers = (options?: {
   const adminusers = ref<admin_user_type[]>([])
   const { filters = makeFiltersRef(), sorting = makeSortingRef(), pagination = makePaginationRef() } = options || {}
  
- const body = ref({pageNum:pagination.value.pageNum,pageSize:pagination.value.pageSize})
+  const body = ref({pageNum:pagination.value.pageNum,pageSize:pagination.value.pageSize})
 const fetch = async (body: any) => {
   isLoading.value = true
   try {
     const res = await fetchAdminUsers(body?body:body.value);
     adminusers.value = res.data.data
-    console.log(adminusers.value)
+    // console.log(adminusers.value)
     pagination.value.total = res.data.pagination.total
     if(pagination.value.pageSize <=0)pagination.value.pageSize = 10
     if(pagination.value.pageNum <=0)pagination.value.pageNum = 1
@@ -44,8 +43,8 @@ const add = async (user: Omit<any, 'id'>) => {
   isLoading.value = true
   try {
     await addAdminUser(user);
-    console.log(user)
-    await fetch({pageNum:pagination.value.pageNum,pageSize:pagination.value.pageSize}); // Call fetch after adding the user
+    // console.log(user)
+    await fetch({pageNum:pagination.value.pageNum,pageSize:pagination.value.pageSize}); 
   } catch (error) {
     console.error(error);
   }
@@ -55,9 +54,9 @@ const add = async (user: Omit<any, 'id'>) => {
 const remove = async (ids: number[]) => {
   isLoading.value = true
   try {
-    console.log(ids)
-    await deleteAdminUser({ids}); // Pass the id to delete
-    await fetch({pageNum:pagination.value.pageNum,pageSize:pagination.value.pageSize}); // Call fetch after deleting the user
+    // console.log(ids)
+    await deleteAdminUser({ids}); 
+    await fetch({pageNum:pagination.value.pageNum,pageSize:pagination.value.pageSize}); 
   } catch (error) {
     console.error(error);
   }
@@ -70,7 +69,7 @@ const update = async (user: admin_user_type) => {
   isLoading.value = true
   try {
     await updateAdminUser({id:user.id,password:user.password});
-    await fetch({pageNum:pagination.value.pageNum,pageSize:pagination.value.pageSize}); // Call fetch after updating the user
+    await fetch({pageNum:pagination.value.pageNum,pageSize:pagination.value.pageSize}); 
   } catch (error) {
     console.error(error);
   }

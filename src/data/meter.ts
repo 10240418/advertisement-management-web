@@ -1,4 +1,4 @@
-export type meter_type = {
+export  type meter_type = {
     id: number 
     created_at: string
     name: string

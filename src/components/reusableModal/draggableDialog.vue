@@ -1,15 +1,13 @@
 <template>
   <!-- 可操作的多开弹窗模板 -->
-  <el-button plain @click="dialogVisible = true">
+  <!-- <el-button plain @click="dialogVisible = true">
     Open a draggable Dialog
-  </el-button>
+  </el-button> -->
 
-  <el-button plain @click="dialogOverflowVisible = true">
-    Open a overflow draggable Dialog
-  </el-button>
+
 
   <el-dialog 
-    v-model="dialogVisible" 
+    v-model="$props.visible" 
     title="Tips" 
     width="500" 
     draggable
@@ -20,43 +18,32 @@
     <span>It's a draggable Dialog</span>
     <template #footer>
       <div class="dialog-footer">
-        <el-button @click="dialogVisible = false">Cancel</el-button>
-        <el-button type="primary" @click="dialogVisible = false">
+        <el-button @click="$emit('close',$props.meter)">Cancel</el-button>
+        <el-button type="primary" @click="$emit('save',$props.meter)">
           Confirm
         </el-button>
       </div>
     </template>
   </el-dialog>
 
-  <el-dialog
-    v-model="dialogOverflowVisible"
-  
-    destroy-on-close
-    title="Tips"
-    width="500"
-    draggable
-    :modal="false"
-    :close-on-click-modal="false"
-    
-     modal-class="dialog_class"
-  >
-    <span>It's a overflow draggable Dialog</span>
-    <template #footer>
-      <div class="dialog-footer">
-        <el-button @click="dialogOverflowVisible = false">Cancel</el-button>
-        <el-button type="primary" @click="dialogOverflowVisible = false">
-          Confirm
-        </el-button>
-      </div>
-    </template>
-  </el-dialog>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { PropType, ref} from 'vue'
+import {meter_type} from '../../data/meter'
 
-const dialogVisible = ref(false)
-const dialogOverflowVisible = ref(false)
+const props = defineProps({
+  meter: {type: Object as PropType<meter_type>, required: true},
+  visible: {type: Boolean, default: false},
+  index:{type: Number, default: 0}
+})
+console.log(props)
+const emit = defineEmits<{
+  (event: 'close',meter: any): void
+  (event: 'save' , meter : any):void
+}>()
+// const dialogVisible = ref(false)
+
 </script>
 <style>
 
