@@ -2,7 +2,7 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 
 import AuthLayout from '../layouts/AuthLayout.vue'
 import AppLayout from '../layouts/AppLayout.vue'
-import DeviceLayout from '../layouts/DeviceLayout.vue'
+
 
 import RouteViewComponent from '../layouts/RouterBypass.vue'
 

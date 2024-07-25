@@ -10,7 +10,7 @@ export type Pagination = {
   
   export type Sorting = {
     sortBy: keyof any|undefined
-    sortingOrder: 'asc' | 'desc' | null
+    sortingOrder: 'asc' | " desc"| null | string
   }
   
   export type Filters = {

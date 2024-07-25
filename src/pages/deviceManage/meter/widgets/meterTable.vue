@@ -8,7 +8,6 @@ const columns = defineVaDataTableColumns([
   { label: 'Name', key: 'name', sortable: true },
   { label: 'Gateway ID', key: 'gateway_id', sortable: true },
   { label: 'Modbus Address', key: 'modbus_address', sortable: true },
-  { label: 'Type', key: 'type', sortable: true },
   { label: 'Remark', key: 'remark', sortable: false },
   { label: 'Created At', key: 'created_at', sortable: true },
   { label: 'Updated At', key: 'updated_at', sortable: true },
@@ -16,20 +15,19 @@ const columns = defineVaDataTableColumns([
 ])
 
 const props = defineProps({
-  meters: {
-    type: Array as PropType<meter_type[]>,
-    required: true,
-  },
+  meters: { type: Array as PropType<meter_type[]>, required: true,},
   loading: { type: Boolean, default: false },
   pagination: { type: Object as PropType<any>, required: true },
+  sorting:{ type: Object as PropType<any>, required: true,}
 })
-
+console.log(props)
+// console.log(props.meters)
 const emit = defineEmits<{
   (event: 'edit-meter', meter: any): void
   (event: 'delete-meter', meter: any): void
   (event: 'fetch-meter', params: any): void
 }>()
-
+// console.log(meters.value)
 const meters = toRef(props, 'meters')
 const totalPages = computed(() => Math.ceil(props.pagination.total / props.pagination.pageSize))
 
@@ -60,11 +58,12 @@ const currentPageData = computed(() => {
 })
 
 watch(
-  () => [props.pagination.pageNum, props.pagination.pageSize],
+  () => [props.pagination.pageNum, props.pagination.pageSize,props.sorting.sortingOrder,props.sorting.sortBy],
   () => {
     if (props.pagination.total < props.pagination.pageSize * (props.pagination.pageNum - 1)) {
       props.pagination.pageNum = 1;
     }
+    console.log(props.sorting)
     emit('fetch-meter', { pageNum: props.pagination.pageNum, pageSize: props.pagination.pageSize })
   }
 )
@@ -75,6 +74,8 @@ watch(
     :columns="columns"
     :items="currentPageData"
     :loading="$props.loading"
+    v-model:sort-by="$props.sorting.sortBy"
+    v-model:sorting-order="$props.sorting.sortingOrder"
   >
     <template #cell(name)="{ rowData }">
       <div class="max-w-[120px] ellipsis">

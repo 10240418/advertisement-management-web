@@ -1,17 +1,16 @@
 <script setup lang="ts">
-import { ref, reactive, toRaw, watch } from 'vue'
+import { ref, toRaw, watch } from 'vue'
 import { useMeters } from './composables/meter'
-import { useModal, useToast } from 'vuestic-ui'
+import { useToast } from 'vuestic-ui'
 import { meter_type } from '../../../data/meter'
 import _ from 'lodash'
 import meterTable from './widgets/meterTable.vue'
 import editMeterForm from './widgets/editMeterForm.vue'
-import draggableDialog from '../../../../src/components/reusableModal/draggableDialog.vue'
 
 const doShowEditMeterModal = ref(false)
 const doShowAddMeterModal = ref(false)
 
-const { isLoading, meters,  sorting, pagination, ...meterApi } = useMeters()
+const { isLoading, meters, sorting, pagination, ...meterApi } = useMeters()
 
 const metersShowInTable = ref<meter_type[]>([])
 const meterToEdit = ref<meter_type | null>(null)
@@ -34,11 +33,13 @@ const onMeterDelete = async (meter: any) => {
     message: `${meter.name} has been deleted`,
     color: 'success',
   })
-} 
-const fetchMeterByPa = async (pagination: any) => {
-  await meterApi.fetch(pagination)
-  metersShowInTable.value  = meters.value
 }
+
+const fetchMeter = async (fetch: any) => {
+  await meterApi.fetch({ ...fetch })
+  metersShowInTable.value = meters.value
+}
+
 const onSave = (meter: any) => {
   if (meter.id) {
     meterApi.update(meter)
@@ -49,6 +50,7 @@ const onSave = (meter: any) => {
   doShowAddMeterModal.value = false
 }
 
+// 每当 meters 的值改变的时候就深拷贝一次
 watch(
   meters,
   () => {
@@ -56,6 +58,7 @@ watch(
   },
   { deep: true }
 )
+// console.log(useMeters().meters.value) // 输出 meter
 
 </script>
 
@@ -63,15 +66,18 @@ watch(
   <VaCard>
     <VaCardContent>
       <div class="flex flex-col md:flex-row gap-2 mb-2 justify-between">
-        <div class="flex flex-col md:flex-row gap-2 justify-start">
-        </div>
+        <div class="flex flex-col md:flex-row gap-2 justify-start"></div>
         <VaButton @click="showAddMeterModal">Add Meter</VaButton>
       </div>
 
       <meterTable 
-        :pagination="pagination" :meters="metersShowInTable" :loading="isLoading" @edit-meter="showEditMeterModal"
+        :pagination="pagination" 
+        :meters="metersShowInTable" 
+        :loading="isLoading" 
+        :sorting="sorting"
+        @edit-meter="showEditMeterModal"
         @delete-meter="onMeterDelete"
-        @fetch-meter="fetchMeterByPa" />
+        @fetch-meter="fetchMeter" />
     </VaCardContent>
   </VaCard>
 
@@ -79,11 +85,9 @@ watch(
     <h1 class="va-h5">Add Meter</h1>
     <editMeterForm v-model="meterToEdit" @close="doShowAddMeterModal = false" @save="onSave(meterToEdit)" />
   </VaModal>
+
   <VaModal v-model="doShowEditMeterModal" size="small" mobile-fullscreen close-button hide-default-actions>
     <h1 class="va-h5">Edit Meter</h1>
     <editMeterForm v-model="meterToEdit" @close="doShowEditMeterModal = false" @save="onSave" />
   </VaModal>
-  <!-- <draggableDialog></draggableDialog> -->
 </template>
-
-
