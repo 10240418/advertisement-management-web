@@ -63,13 +63,19 @@ watch(
   () => [props.pagination.pageNum, props.pagination.pageSize],
   () => {
     console.log(props.pagination.pageNum)
-    if(props.pagination.total < props.pagination.pageSize * (props.pagination.pageNum-1)){
+    
+    if(props.pagination.pageNum <= 0 || props.pagination.pageNum == null){
+    }
+    else if(props.pagination.total < props.pagination.pageSize * (props.pagination.pageNum-1)){
     props.pagination.pageNum = 1;
-  }
     emit('fectch-user',{pageNum:props.pagination.pageNum,pageSize:props.pagination.pageSize})
+    }else{
+    emit('fectch-user',{pageNum:props.pagination.pageNum,pageSize:props.pagination.pageSize})
+    }
+  }
     
 
-  }
+  
 )
 
 </script>
