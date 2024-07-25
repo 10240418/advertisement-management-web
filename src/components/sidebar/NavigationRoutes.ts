@@ -103,7 +103,10 @@ export default {
         },
         {
           name:'meter',
-          displayName:'menu.meter'
+          displayName:'menu.meter',
+          meta :{
+            icon:''
+          }
         },
         {
           name:'gateway',

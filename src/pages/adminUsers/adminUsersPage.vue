@@ -11,7 +11,7 @@ import draggableDialog from '../../../src/components/reusableModal/draggableDial
 const doShowEditUserModal = ref(false)
 const doShowAddUserModal = ref(false)
 
-const { isLoading, adminusers, filters, sorting, pagination, ...userApi } = useAdminUsers()
+const { isLoading, adminusers,  sorting, pagination, ...userApi } = useAdminUsers()
 
 const adminUsersShowInTable = ref<admin_user_type[]>([])
 const userToEdit = ref<admin_user_type | null>(null)
