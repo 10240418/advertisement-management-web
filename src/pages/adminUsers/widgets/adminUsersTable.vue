@@ -4,11 +4,11 @@ import { PropType, computed, toRef, watch } from 'vue'
 import { admin_user_type } from '../../../data/admin_user'
 
 const columns = defineVaDataTableColumns([
-  { label: 'ID', key: 'id', sortable: true },
-  { label: 'Name', key: 'name', sortable: true },
-  { label: 'Email', key: 'email', sortable: true },
-  { label: 'create_at', key: 'createdAt', sortable: true },
-  { label: 'updated_at', key: 'updatedAt', sortable: true },
+  { label: 'ID', key: 'id', sortable: false},
+  { label: 'Name', key: 'name', sortable: false },
+  { label: 'Email', key: 'email', sortable: false},
+  { label: 'create_at', key: 'createdAt', sortable: false},
+  { label: 'updated_at', key: 'updatedAt', sortable: false },
   { label: 'Actions', key: 'actions', sortable: false },
 ])
 
@@ -56,8 +56,7 @@ const currentPageData = computed(() => {
   else 
   return users.value.slice(startIndex, endIndex)
 })
-console.log(currentPageData)
-console.log(users.value)
+
 
 watch(
   () => [props.pagination.pageNum, props.pagination.pageSize],

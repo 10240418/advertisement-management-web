@@ -1,7 +1,7 @@
-<!-- <script setup lang="ts">
+<script setup lang="ts">
 import { defineVaDataTableColumns, useModal } from 'vuestic-ui'
 import { PropType, computed, toRef, watch } from 'vue'
-import { meter_type } from '../../../data/meter'
+import { meter_type } from '../../../../data/meter'
 
 const columns = defineVaDataTableColumns([
   { label: 'ID', key: 'id', sortable: true },
@@ -152,4 +152,4 @@ watch(
     border-bottom: 1px solid var(--va-background-border);
   }
 }
-</style> -->
+</style>

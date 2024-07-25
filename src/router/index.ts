@@ -62,6 +62,26 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('../pages/resident/residentPage.vue'),
       },
       {
+        path:'/deviceMange',
+        children:[
+          {
+            name:'status',
+            path:'status',
+            component:()=>import('../../src/pages/deviceManage/status/devicesStatus.vue')
+          },
+          {
+            name:'meter',
+            path:'meter',
+            component:()=>import('../../src/pages/deviceManage/meter/meterManage.vue')
+          },
+          {
+            name:'gateway',
+            path:'gateway',
+            component:()=>import('../../src/pages/deviceManage/gateway/gatewayPage.vue')
+          }
+        ]
+      },
+      {
         name: 'adminUsers',
         path: 'adminUsers',
         component: () => import('../pages/adminUsers/adminUsersPage.vue'),
@@ -101,29 +121,7 @@ const routes: Array<RouteRecordRaw> = [
       }
     ],
   },
-  {
-    path:'/deviceMange',
-    component:DeviceLayout,
-    children:[
-      {
-        name:'status',
-        path:'status',
-        component:()=>import('../../src/pages/deviceManage/status/devicesStatus.vue')
-      },
-      {
-        name:'meter',
-        path:'meter',
-        component:()=>import('../../src/pages/deviceManage/meter/meterManage.vue')
-      },
-      {
-        name:'gateway',
-        path:'gateway',
-        component:()=>import('../../src/pages/deviceManage/gateway/gatewayPage.vue')
-      }
-    ]
-    
 
-  },
   {
     name: '404',
     path: '/404',

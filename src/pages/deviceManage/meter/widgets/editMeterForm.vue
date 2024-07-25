@@ -1,8 +1,8 @@
-<!-- <script setup lang="ts">
+<script setup lang="ts">
 import { ref, watch, PropType, defineProps, defineEmits } from 'vue'
 import { useForm } from 'vuestic-ui'
-import { validators } from '../../../services/utils'
-import { meter_type } from '../../../data/meter'
+import { validators } from '../../../../services/utils'
+import { meter_type } from '../../../../data/meter'
 
 const defaultNewMeter = {
   name: '',
@@ -80,4 +80,4 @@ const onCancel = () => {
       </div>
     </div>
   </VaForm>
-</template> -->
+</template>

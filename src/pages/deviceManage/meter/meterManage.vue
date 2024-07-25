@@ -1,17 +1,17 @@
-<!-- <script setup lang="ts">
+<script setup lang="ts">
 import { ref, reactive, toRaw, watch } from 'vue'
 import { useMeters } from './composables/meter'
 import { useModal, useToast } from 'vuestic-ui'
-import { meter_type } from '../../data/meter'
+import { meter_type } from '../../../data/meter'
 import _ from 'lodash'
 import meterTable from './widgets/meterTable.vue'
 import editMeterForm from './widgets/editMeterForm.vue'
-import draggableDialog from '../../../src/components/reusableModal/draggableDialog.vue'
+import draggableDialog from '../../../../src/components/reusableModal/draggableDialog.vue'
 
 const doShowEditMeterModal = ref(false)
 const doShowAddMeterModal = ref(false)
 
-const { isLoading, meters, filters, sorting, pagination, ...meterApi } = useMeters()
+const { isLoading, meters,  sorting, pagination, ...meterApi } = useMeters()
 
 const metersShowInTable = ref<meter_type[]>([])
 const meterToEdit = ref<meter_type | null>(null)
@@ -83,7 +83,7 @@ watch(
     <h1 class="va-h5">Edit Meter</h1>
     <editMeterForm v-model="meterToEdit" @close="doShowEditMeterModal = false" @save="onSave" />
   </VaModal>
-  <draggableDialog></draggableDialog> -->
-<!-- </template> -->
+  <!-- <draggableDialog></draggableDialog> -->
+</template>
 
 
