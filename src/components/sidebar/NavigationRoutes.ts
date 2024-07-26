@@ -53,21 +53,21 @@ export default {
       name: 'adminUsers',
       displayName: 'menu.adminUser',
       meta: {
-        icon: 'group',
+        icon: 'manage_accounts',
       },
     },
     {
       name: 'electricMeterManage',
       displayName: 'menu.electricMeterManage',
       meta: {
-        icon: 'manage_accounts',
+        icon: 'electric_meter',
       },
     },
     {
       name: 'waterMeterManage',
       displayName: 'menu.waterMeterManage',
       meta: {
-        icon: 'manage_accounts',
+        icon: 'gas_meter',
       },
     },
     // {
@@ -94,12 +94,15 @@ export default {
       name:'deviceManage',
       displayName:'menu.deviceManage',
       meta:{
-        icon:'settings'
+        icon:'dvr'
       },
       children:[
         {
           name:'status',
-          displayName:'menu.status'
+          displayName:'menu.status',
+          meta:{
+            icon:'browse_activity'
+          }
         },
         {
           name:'meter',

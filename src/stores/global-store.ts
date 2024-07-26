@@ -10,6 +10,7 @@ export const useGlobalStore = defineStore('global', {
   actions: {
     toggleSidebar() {
       this.isSidebarMinimized = !this.isSidebarMinimized
+      console.log('就是显示和隐藏bar的啦~~~')
     },
   },
 })

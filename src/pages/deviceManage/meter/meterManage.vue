@@ -6,7 +6,7 @@ import { meter_type } from '../../../data/meter'
 import _ from 'lodash'
 import meterTable from './widgets/meterTable.vue'
 import editMeterForm from './widgets/editMeterForm.vue'
-import draggableDialog from '../../../components/reusableModal/draggableDialog.vue'
+import draggableDialog from './widgets/draggableDialog.vue'
 
 const doShowAddMeterModal = ref(false)
 

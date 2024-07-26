@@ -7,64 +7,48 @@
     :close-on-click-modal="false"
     modal-class="dialog_class"
     :show-close="false"
+    bg-color="red"
   >
  
   <VaCard>
-    <div class="grid grid-flow-row grid-cols-6 va-card__content__meter">
-      <VaCardContent class="bg-gray-100"> 
-   
+    <div class=" grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-1 items-end">
       <VaInput
       v-model="$props.meter.name"
       placeholder="Solid"
       label="Name"
-    
-     
+ 
     />
-    </VaCardContent>
-    <VaCardContent class="bg-gray-200">
       <VaInput
       v-model="$props.meter.id"
       placeholder="Solid"
       label="id"
      
     />
-    </VaCardContent>
-    <VaCardContent class="bg-gray-300"> 
       <VaInput
       v-model="$props.meter.unit_id"
       placeholder="Solid"
       label="unit_id"
       
     />
-    </VaCardContent>
-    <VaCardContent> 
       <VaInput
       v-model="$props.meter.updated_at"
       placeholder="Solid"
       label="updated_at"
       
-    />
-    </VaCardContent>
-    <VaCardContent> 
+    />  
       <VaInput
       v-model="$props.meter.gateway_id"
       placeholder="Solid"
       label="gateway_id"
      
     />
-    </VaCardContent>
-    <VaCardContent> 
       <VaInput
       v-model="$props.meter.modbus_address"
       placeholder="Solid"
       label="modbus_address"
       
     />
-    </VaCardContent>
-
-    </div>
-   
-   
+    </div>     
   </VaCard>
 
    
@@ -82,7 +66,7 @@
 
 <script lang="ts" setup>
 import { PropType, ref} from 'vue'
-import {meter_type} from '../../data/meter'
+import {meter_type} from '../../../../data/meter'
 
 const props = defineProps({
   meter: {type: Object as PropType<meter_type>, required: true},
@@ -103,7 +87,6 @@ const emit = defineEmits<{
 .dialog_class {
   pointer-events: none;
 }
- 
 .el-dialog {
   pointer-events: auto;
   /* background: #eee; */
@@ -111,8 +94,4 @@ const emit = defineEmits<{
   box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.5);
 
 }
-
-
-
-
 </style>
