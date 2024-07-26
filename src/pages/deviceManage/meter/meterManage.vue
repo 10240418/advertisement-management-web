@@ -1,3 +1,4 @@
+<!-- meterManage -->
 <script setup lang="ts">
 import { ref, toRaw, watch ,onBeforeMount} from 'vue'
 import { useMeters } from './composables/meter'

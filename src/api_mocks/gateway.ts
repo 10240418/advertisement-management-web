@@ -1,97 +1,163 @@
-import { Pagination } from "../data/page";
-import { gateway_type } from "../data/gateway";
+import request from '.';
+// gateway.ts api_mocks
 
-export const getGateways = (pagination: Pagination) => {
-  return Promise.resolve({
-    data: [
-      {
-        "id": 1,
-        "created_at": "2024-07-22T10:00:00Z",
-        "name": "Gateway 1",
-        "ip_address": "192.168.1.1",
-        "remark": "Main building gateway",
-        "updated_at": "2024-07-22T10:00:00Z",
-      },
-      {
-        "id": 2,
-        "created_at": "2024-07-22T10:05:00Z",
-        "name": "Gateway 2",
-        "ip_address": "192.168.1.2",
-        "remark": "Warehouse gateway",
-        "updated_at": "2024-07-22T10:05:00Z",
-      },
-      {
-        "id": 3,
-        "created_at": "2024-07-22T10:10:00Z",
-        "name": "Gateway 3",
-        "ip_address": "192.168.1.3",
-        "remark": "Office gateway",
-        "updated_at": "2024-07-22T10:10:00Z",
-      },
-      // 其他网关数据...
-    ],
-    success: 'true',
-    message: 'get gateways success',
-    pagination: {
-      pageNum: 1,
-      pageSize: 10,
-      total: 30
-    }
-  });
-}
+// 获取网关列表
+// id: number 
+// created_at: string
+// name: string
+// ip_address: string
+// remark: string
+// updated_at: string
+export const fetchGateways = (query: any) => {
+    return Promise.resolve({
+        data: [
+          {
+            id: 1,
+            created_at: '2023-04-01T09:00:00.000Z',
+            name: '网关1',
+            ip_address: '192.168.0.1',
+            remark: '备注信息',
+            updated_at: '2023-04-01T09:00:00.000Z',
+          },
+          {
+            id: 2,
+            created_at: '2023-04-01T09:00:00.000Z',
+            name: '网关2',
+            ip_address: '192.168.0.2',
+            remark: '备注信息',
+            updated_at: '2023-04-01T09:00:00.000Z',
+          },
+          {
+            id: 3,
+            created_at: '2023-04-01T09:00:00.000Z',
+            name: '网关3',
+            ip_address: '192.168.0.3',
+            remark: '备注信息',
+            updated_at: '2023-04-01T09:00:00.000Z',
+          }
+        ],
+        pagination: {
+          total: 3,
+          page: 1,
+          pageSize: 10,
+          pageNum: 1,
+        },
+    });
+};
 
-export const addGateway = (gateway: gateway_type) => {
-  return Promise.resolve({
-    data: gateway,
-    success: 'true',
-    message: 'add gateway success',
-  });
-}
+// 添加网关
+export const addGateway = (data: any) => {
+    return Promise.resolve({
+        data: [
+          {
+            id: 1,
+            created_at: '2023-04-01T09:00:00.000Z',
+            name: '网关1',
+            ip_address: '192.168.0.1',
+            remark: '备注信息',
+            updated_at: '2023-04-01T09:00:00.000Z',
+          },
+          {
+            id: 2,
+            created_at: '2023-04-01T09:00:00.000Z',
+            name: '网关2',
+            ip_address: '192.168.0.2',
+            remark: '备注信息',
+            updated_at: '2023-04-01T09:00:00.000Z',
+          },
+          {
+            id: 3,
+            created_at: '2023-04-01T09:00:00.000Z',
+            name: '网关3',
+            ip_address: '192.168.0.3',
+            remark: '备注信息',
+            updated_at: '2023-04-01T09:00:00.000Z',
+          }
+        ],
+        pagination: {
+          total: 3,
+          page: 1,
+          pageSize: 10,
+          pageNum: 1,
+        },
+      
+    });
+};
 
-export const deleteGateway = (gateway: gateway_type) => {
-  return Promise.resolve({
-    data: gateway,
-    success: 'true',
-    message: 'delete gateway success',
-  });
-}
+// 删除网关
+export const deleteGateway = (id: any) => {
+    return Promise.resolve({
+        data: [
+          {
+            id: 1,
+            created_at: '2023-04-01T09:00:00.000Z',
+            name: '网关1',
+            ip_address: '192.168.0.1',
+            remark: '备注信息',
+            updated_at: '2023-04-01T09:00:00.000Z',
+          },
+          {
+            id: 2,
+            created_at: '2023-04-01T09:00:00.000Z',
+            name: '网关2',
+            ip_address: '192.168.0.2',
+            remark: '备注信息',
+            updated_at: '2023-04-01T09:00:00.000Z',
+          },
+          {
+            id: 3,
+            created_at: '2023-04-01T09:00:00.000Z',
+            name: '网关3',
+            ip_address: '192.168.0.3',
+            remark: '备注信息',
+            updated_at: '2023-04-01T09:00:00.000Z',
+          }
+        ],
+        pagination: {
+          total: 3,
+          page: 1,
+          pageSize: 10,
+          pageNum: 1,
+        },
+      
+    });
+};
 
-export const getGatewayData = () => {
-  return Promise.resolve({
-    data: [
-      {
-        "id": 1,
-        "created_at": "2024-07-22T11:00:00Z",
-        "name": "Gateway 1",
-        "ip_address": "192.168.1.1",
-        "remark": "Main building gateway",
-        "updated_at": "2024-07-22T11:00:00Z",
-      }
-    ],
-    success: 'true',
-    message: 'get gateway data success',
-  });
-}
-
-export const getGatewayDataByID = (id: number) => {
-  return Promise.resolve({
-    data: {
-      "id": id,
-      "created_at": "2024-07-22T11:00:00Z",
-      "name": "Gateway " + id,
-      "ip_address": `192.168.1.${id}`,
-      "remark": "Specific gateway",
-      "updated_at": "2024-07-22T11:00:00Z",
-    },
-    success: 'true',
-    message: 'get gateway data by ID success',
-  });
-}
-
-export const updateGateway = (gateway: gateway_type) => {
-  return Promise.resolve({
-    data: gateway,
-    success: 'true',
-    message: 'update gateway success',
-  });
-}
+// 更新网关信息
+export const updateGateway = (data: any) => {
+    return Promise.resolve({
+        data: [
+          {
+            id: 1,
+            created_at: '2023-04-01T09:00:00.000Z',
+            name: '网关1',
+            ip_address: '192.168.0.1',
+            remark: '备注信息',
+            updated_at: '2023-04-01T09:00:00.000Z',
+          },
+          {
+            id: 2,
+            created_at: '2023-04-01T09:00:00.000Z',
+            name: '网关2',
+            ip_address: '192.168.0.2',
+            remark: '备注信息',
+            updated_at: '2023-04-01T09:00:00.000Z',
+          },
+          {
+            id: 3,
+            created_at: '2023-04-01T09:00:00.000Z',
+            name: '网关3',
+            ip_address: '192.168.0.3',
+            remark: '备注信息',
+            updated_at: '2023-04-01T09:00:00.000Z',
+          }
+        ],
+        pagination: {
+          total: 3,
+          page: 1,
+          pageSize: 10,
+          pageNum: 1,
+        },
+       
+    });
+};

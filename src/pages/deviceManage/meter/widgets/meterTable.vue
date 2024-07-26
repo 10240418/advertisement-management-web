@@ -1,3 +1,4 @@
+<!-- meterTable -->
 <script setup lang="ts">
 import { defineVaDataTableColumns, useModal } from 'vuestic-ui'
 import { PropType, computed, toRef, watch } from 'vue'

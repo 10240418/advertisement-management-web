@@ -1,61 +1,98 @@
-// composables/gateways.ts
-import { ref, unref } from 'vue';
-import { Pagination, Sorting, Filters } from '../../../../data/page';
+import { onBeforeMount, Ref, ref } from 'vue';
 import { gateway_type } from '../../../../data/gateway';
-import { getGateways, addGateway, updateGateway, deleteGateway } from '../../../../api_mocks/gateway';
+import { type Filters, Pagination, Sorting } from '../../../../data/page';
+import {
+  fetchGateways,
+  addGateway,
+  deleteGateway,
+  updateGateway,
+} from '../../../../api_mocks/gateway';
 
 const makePaginationRef = () => ref<Pagination>({ pageNum: 1, pageSize: 10, total: 30 });
-const makeSortingRef = () => ref<Sorting>({ sortBy: 'id', sortingOrder: null });
-const makeFiltersRef = () => ref<Partial<Filters>>({ search: '' });
+const makeSortingRef = () => ref<Sorting>({ sortBy: "id", sortingOrder: "asc" });
+
+let useGatewaysInstance: any = null;
 
 export const useGateways = (options?: {
-  pagination?: Pagination,
-  sorting?: Sorting,
-  filters?: Filters,
+  // 初始化值的提交
+  pagination?: Ref<Pagination>;
+  sorting?: Ref<Sorting>;
 }) => {
+  // 缓存 避免重复创建
+  if (useGatewaysInstance) {
+    return useGatewaysInstance;
+  }
+
   const isLoading = ref(false);
   const gateways = ref<gateway_type[]>([]);
-  const pagination = options?.pagination ? ref(options.pagination) : makePaginationRef();
-  const sorting = options?.sorting ? ref(options.sorting) : makeSortingRef();
-  const filters = options?.filters ? ref(options.filters) : makeFiltersRef();
+  const { sorting = makeSortingRef(), pagination = makePaginationRef() } = options || {};
 
+  // fetch 获取数据, 并且赋值
   const fetch = async () => {
     isLoading.value = true;
-    const res = await getGateways({
-      ...unref(pagination.value),
-    //   ...unref(filters.value),
-    });
-    gateways.value = res.data;
+    try {
+      const res = await fetchGateways({ pageNum: pagination.value.pageNum, pageSize: pagination.value.pageSize, sortingOrder: sorting.value.sortingOrder, sortBy: sorting.value.sortBy });
+      
+      console.log(res);
+      gateways.value = res.data;
+      pagination.value.total = res.pagination.total;
+
+      if (pagination.value.pageSize <= 0) pagination.value.pageSize = 10;
+      if (pagination.value.pageNum <= 0) pagination.value.pageNum = 1;
+    } catch (error) {
+      console.error(error);
+    }
     isLoading.value = false;
-    pagination.value = res.pagination;
   };
 
-  fetch();
-
-  return {
-    isLoading,
-    filters,
-    sorting,
-    pagination,
-    gateways,
-    fetch,
-    async add(gateway: gateway_type) {
-      isLoading.value = true;
+  // 实现 CRUD
+  const add = async (gateway: any) => {
+    isLoading.value = true;
+    try {
       await addGateway(gateway);
       await fetch();
-      isLoading.value = false;
-    },
-    async update(gateway: gateway_type) {
-      isLoading.value = true;
+    } catch (error) {
+      console.error(error);
+    }
+    isLoading.value = false;
+  };
+
+  const remove = async (gateway: any) => {
+    isLoading.value = true;
+    try {
+      await deleteGateway(gateway.id);
+      await fetch();
+    } catch (error) {
+      console.error(error);
+    }
+    isLoading.value = false;
+  };
+
+  const update = async (gateway: any) => {
+    isLoading.value = true;
+    try {
       await updateGateway(gateway);
       await fetch();
-      isLoading.value = false;
-    },
-    async remove(gateway: gateway_type) {
-      isLoading.value = true;
-      await deleteGateway(gateway);
-      await fetch();
-      isLoading.value = false;
-    },
+    } catch (error) {
+      console.error(error);
+    }
+    isLoading.value = false;
   };
+
+  onBeforeMount(() => {
+    fetch();
+  });
+
+  useGatewaysInstance = {
+    isLoading,
+    gateways,
+    sorting,
+    pagination,
+    fetch,
+    add,
+    remove,
+    update,
+  };
+
+  return useGatewaysInstance;
 };

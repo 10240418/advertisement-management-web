@@ -1,51 +1,57 @@
-<!-- widgets/editGatewayForm.vue -->
+<!-- editGatewayForm.vue -->
 <script setup lang="ts">
-import { PropType, ref, watch } from 'vue';
-import { useForm, VaInput, VaButton } from 'vuestic-ui';
-import { gateway_type } from '../../../../data/gateway';
+import { ref, watch, PropType, defineProps, defineEmits } from 'vue'
+import { useForm } from 'vuestic-ui'
 import { validators } from '../../../../services/utils'
+import { gateway_type } from '../../../../data/gateway'
 
 const defaultNewGateway = {
-  id: 0,
   name: '',
   ip_address: '',
   remark: '',
   created_at: '',
   updated_at: '',
-};
+}
 
-const newGateway = ref<any>({ ...defaultNewGateway });
 const props = defineProps({
-  gateway: {
+  modelValue: {
     type: Object as PropType<gateway_type | null>,
     required: true,
   },
-});
+})
+
+const emit = defineEmits(['update:modelValue', 'close', 'save'])
+
+const newGateway = ref<any>({ ...defaultNewGateway })
 
 watch(
-  () => props.gateway,
+  () => props.modelValue,
   (gatewayToEdit) => {
     if (gatewayToEdit) {
-      newGateway.value = { ...gatewayToEdit };
+      newGateway.value = { ...gatewayToEdit }
     } else {
-      newGateway.value = { ...defaultNewGateway };
+      newGateway.value = { ...defaultNewGateway }
     }
   },
-  { immediate: true },
-);
+  { immediate: true }
+)
 
-const form = useForm('edit-gateway-form');
-const emit = defineEmits(['close', 'save']);
+const form = useForm('add-gateway-form')
 
 const onSave = () => {
   if (form.validate()) {
-    emit('save', newGateway.value);
+    emit('update:modelValue', newGateway.value)
+    emit('save', newGateway.value)
   }
-};
+}
+
+const onCancel = () => {
+  emit('close')
+}
 </script>
 
 <template>
-  <VaForm v-slot="{ isValid }" ref="edit-gateway-form" class="flex-col justify-start items-start gap-4 inline-flex w-full">
+  <VaForm v-slot="{ isValid }" ref="add-gateway-form" class="flex-col justify-start items-start gap-4 inline-flex w-full">
     <div class="self-stretch flex-col justify-start items-start gap-4 flex">
       <div class="flex gap-4 flex-col w-full">
         <VaInput v-model="newGateway.name" label="Name" class="w-full" :rules="[validators.required]" name="name" />
@@ -56,11 +62,11 @@ const onSave = () => {
       </div>
 
       <div class="flex gap-4 flex-col w-full">
-        <VaInput v-model="newGateway.remark" label="Remark" class="w-full" />
+        <VaInput v-model="newGateway.remark" label="Remark" class="w-full" name="remark" />
       </div>
 
       <div class="flex gap-2 flex-col-reverse items-stretch justify-end w-full">
-        <VaButton preset="secondary" color="secondary" @click="$emit('close')">Cancel</VaButton>
+        <VaButton preset="secondary" color="secondary" @click="onCancel">Cancel</VaButton>
         <VaButton :disabled="!isValid" @click="onSave">Save</VaButton>
       </div>
     </div>

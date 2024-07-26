@@ -122,7 +122,7 @@ onBeforeUnmount(() => {
         </VaIcon>
       </div>
       <transition name="fade">
-        <div v-show="showContentUser?.id === rowData.id" class="flex  flex-col translate-x-6 dropdown-content justify-center z-999 items-center absolute bg-white border border-solid">
+        <div v-show="showContentUser?.id === rowData.id" class="flex  flex-col translate-x-4 dropdown-content justify-center z-999 items-center absolute bg-white border border-solid">
           <VaButton
             preset="secondary"
             size="small"

@@ -77,7 +77,7 @@ const routes: Array<RouteRecordRaw> = [
           {
             name:'gateway',
             path:'gateway',
-            component:()=>import('../../src/pages/deviceManage/gateway/gatewayPage.vue')
+            component:()=>import('../../src/pages/deviceManage/gateway/gatewayManage.vue')
           }
         ]
       },

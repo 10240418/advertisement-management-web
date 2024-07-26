@@ -5,4 +5,5 @@ export type gateway_type = {
     ip_address: string
     remark: string
     updated_at: string
+    
   }

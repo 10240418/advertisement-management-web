@@ -48,7 +48,7 @@ export const fetchMeters = (query: any) => {
           total: 3,
           page: 1,
           pageSize: 10,
-          pageCount: 1,
+          pageNum: 1,
         },
        
       });
