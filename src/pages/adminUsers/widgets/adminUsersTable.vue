@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { defineVaDataTableColumns, useModal } from 'vuestic-ui'
-import { PropType, computed, toRef, watch } from 'vue'
+import { PropType, computed, toRef, watch, ref, onMounted, onBeforeUnmount } from 'vue'
 import { admin_user_type } from '../../../data/admin_user'
 
 const columns = defineVaDataTableColumns([
-  { label: 'ID', key: 'id', sortable: false},
+  { label: 'ID', key: 'id', sortable: false },
   { label: 'Name', key: 'name', sortable: false },
-  { label: 'Email', key: 'email', sortable: false},
-  { label: 'create_at', key: 'createdAt', sortable: false},
+  { label: 'Email', key: 'email', sortable: false },
+  { label: 'create_at', key: 'createdAt', sortable: false },
   { label: 'updated_at', key: 'updatedAt', sortable: false },
   { label: 'Actions', key: 'actions', sortable: false },
 ])
@@ -46,37 +46,56 @@ const onUserDelete = async (user: any) => {
     emit('delete-user', user)
   }
 }
-//计算属性 计算当前页的数据 计算的是users的属性
+
 const currentPageData = computed(() => {
   const startIndex = (props.pagination.pageNum - 1) * props.pagination.pageSize
   const endIndex = startIndex + props.pagination.pageSize
-  
-  if(users.value.length <=props.pagination.pageSize)
-  return users.value;
-  else 
-  return users.value.slice(startIndex, endIndex)
-})
 
+  if (users.value.length <= props.pagination.pageSize) return users.value
+  else return users.value.slice(startIndex, endIndex)
+})
 
 watch(
   () => [props.pagination.pageNum, props.pagination.pageSize],
   () => {
-    console.log(props.pagination.pageNum)
-    
-    if(props.pagination.pageNum <= 0 || props.pagination.pageNum == null){
-    }
-    else if(props.pagination.total < props.pagination.pageSize * (props.pagination.pageNum-1)){
-    props.pagination.pageNum = 1;
-    emit('fectch-user',{pageNum:props.pagination.pageNum,pageSize:props.pagination.pageSize})
-    }else{
-    emit('fectch-user',{pageNum:props.pagination.pageNum,pageSize:props.pagination.pageSize})
+    if (props.pagination.pageNum <= 0 || props.pagination.pageNum == null) {
+    } else if (props.pagination.total < props.pagination.pageSize * (props.pagination.pageNum - 1)) {
+      props.pagination.pageNum = 1
+      emit('fectch-user', { pageNum: props.pagination.pageNum, pageSize: props.pagination.pageSize })
+    } else {
+      emit('fectch-user', { pageNum: props.pagination.pageNum, pageSize: props.pagination.pageSize })
     }
   }
-    
-
-  
 )
 
+const showContentUser = ref<admin_user_type | null>(null)
+
+const showContent = (rowData: any) => {
+  console.log(rowData)
+  if (showContentUser.value === rowData) {
+    showContentUser.value = null
+  } else {
+    showContentUser.value = rowData
+  }
+}
+
+const handleClickOutside = (event: MouseEvent) => {
+  const target = event.target as HTMLElement
+  const dropdowns = document.querySelectorAll('.dropdown-content')
+  dropdowns.forEach(dropdown => {
+    if (!dropdown.contains(target)) {
+      showContentUser.value = null
+    }
+  })
+}
+
+onMounted(() => {
+  document.addEventListener('click', handleClickOutside)
+})
+
+onBeforeUnmount(() => {
+  document.removeEventListener('click', handleClickOutside)
+})
 </script>
 
 <template>
@@ -97,30 +116,40 @@ watch(
       </div>
     </template>
 
-    <template #cell(actions)="{ rowData }">
-      <div class="flex gap-2 justify-end">
-        <VaButton
-          preset="primary"
-          size="small"
-          icon="mso-edit"
-          aria-label="Edit user"
-          @click="$emit('edit-user', rowData as any)"
-        />
-        <VaButton
-          preset="primary"
-          size="small"
-          icon="mso-delete"
-          color="danger"
-          aria-label="Delete user"
-          @click="onUserDelete(rowData)"
-        />
+    <template #cell(actions)="{ rowData }" class= "relative overflow-y-scroll">
+      <div class="flex justify-center items-center ">
+        <VaIcon name="more_horiz" size="20px" class="mr-2 cursor-pointer" @click.stop="showContent(rowData)">
+        </VaIcon>
       </div>
+      <transition name="fade">
+        <div v-show="showContentUser?.id === rowData.id" class="flex  flex-col translate-x-6 dropdown-content justify-center z-999 items-center absolute bg-white border border-solid">
+          <VaButton
+            preset="secondary"
+            size="small"
+            icon="mso-edit"
+            aria-label="Edit user"
+            @click="$emit('edit-user', rowData as any)"
+          >
+            <span>编辑</span>
+          </VaButton>
+          <VaButton
+            preset="secondary"
+            size="small"
+            icon="mso-delete"
+            color="danger"
+            aria-label="Delete user"
+            @click="onUserDelete(rowData)"
+          >
+            <span>删除</span>
+          </VaButton>
+        </div>
+      </transition>
     </template>
   </VaDataTable>
 
   <div class="flex flex-col-reverse md:flex-row gap-2 justify-between items-center py-2">
     <div>
-      <b>total:{{ $props.pagination.total }} </b>
+      <b>total: {{ $props.pagination.total }} </b>
       pageNum:
       <VaInput v-model="$props.pagination.pageNum" class="!w-16" />
       pageSize:
@@ -160,5 +189,31 @@ watch(
   ::v-deep(.va-data-table__table-tr) {
     border-bottom: 1px solid var(--va-background-border);
   }
+}
+
+.dropdown-content {
+  display: flex;
+  flex-direction: column;
+  border-radius: 4px;
+  padding:0 8px;
+  // box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-content > * {
+  margin-bottom: 0%;
+ 
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition:  0.3s;
+}
+
+// .fade-enter, .fade-leave-to {
+//   opacity: 100%;
+// }
+
+span {
+  font-size: 10px;
+  margin-left: 6px;
 }
 </style>
