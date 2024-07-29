@@ -6,7 +6,7 @@ import {
   addGateway,
   deleteGateway,
   updateGateway,
-} from '../../../../api_mocks/gateway';
+} from '../../../../apis/gateway';
 
 const makePaginationRef = () => ref<Pagination>({ pageNum: 1, pageSize: 10, total: 30 });
 const makeSortingRef = () => ref<Sorting>({ sortBy: "id", sortingOrder: "asc" });
@@ -31,11 +31,16 @@ export const useGateways = (options?: {
   const fetch = async () => {
     isLoading.value = true;
     try {
-      const res = await fetchGateways({ pageNum: pagination.value.pageNum, pageSize: pagination.value.pageSize, sortingOrder: sorting.value.sortingOrder, sortBy: sorting.value.sortBy });
+      const res = await fetchGateways(
+        {params:{
+          email:localStorage.getItem('toiletAdminEmail'),
+          password:localStorage.getItem('toiletAdminPassword')
+        },
+        data:{ pageNum: pagination.value.pageNum, pageSize: pagination.value.pageSize, sortingOrder: sorting.value.sortingOrder, sortBy: sorting.value.sortBy }});
       
       console.log(res);
-      gateways.value = res.data;
-      pagination.value.total = res.pagination.total;
+      gateways.value = res.data.data;
+      pagination.value.total = res.data.pagination.total;
 
       if (pagination.value.pageSize <= 0) pagination.value.pageSize = 10;
       if (pagination.value.pageNum <= 0) pagination.value.pageNum = 1;

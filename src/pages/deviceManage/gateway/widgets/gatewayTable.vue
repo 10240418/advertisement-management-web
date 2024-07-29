@@ -31,6 +31,7 @@ const emit = defineEmits<{
 }>()
 
 const gateways = toRef(props, 'gateways')
+console.log(gateways)
 const totalPages = computed(() => Math.ceil(props.pagination.total / props.pagination.pageSize))
 
 const { confirm } = useModal()
