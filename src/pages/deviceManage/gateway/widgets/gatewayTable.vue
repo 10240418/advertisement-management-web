@@ -1,7 +1,7 @@
 <!-- gatewayTable.vue -->
 <script setup lang="ts">
 import { defineVaDataTableColumns, useModal } from 'vuestic-ui'
-import { PropType, computed, toRef, watch } from 'vue'
+import { PropType, computed, toRef, watch ,ref} from 'vue'
 import { gateway_type } from '../../../../data/gateway'
 
 const columns = defineVaDataTableColumns([
@@ -62,6 +62,17 @@ watch(
     emit('fetch-gateway', { pageNum: props.pagination.pageNum, pageSize: props.pagination.pageSize })
   }
 )
+//气泡下拉框
+const showContentGateway = ref<gateway_type | null>(null)
+const showContent = (rowData: any) => {
+  console.log(rowData)
+  if (showContentGateway.value === rowData) {
+    showContentGateway.value = null
+  } else {
+    showContentGateway.value = rowData
+  }
+}
+
 </script>
 
 <template>
@@ -80,24 +91,37 @@ watch(
       <div class="ellipsis max-w-[230px]">{{ rowData.ip_address }}</div>
     </template>
 
-    <template #cell(actions)="{ rowData }">
-      <div class="flex gap-2 justify-end">
-        <VaButton
-          preset="primary"
-          size="small"
-          icon="mso-edit"
-          aria-label="Edit gateway"
-          @click="$emit('edit-gateway', rowData)"
-        />
-        <VaButton
-          preset="primary"
-          size="small"
-          icon="mso-delete"
-          color="danger"
-          aria-label="Delete gateway"
-          @click="onGatewayDelete(rowData)"
-        />
+    <template #cell(actions)="{ rowData }" class= " overflow-y-scroll">
+      <div class="flex justify-center items-center relative  hover:bg-slate-100  rounded-[4px]" @click.stop="showContent(rowData)">
+        <VaIcon name="more_horiz" size="20px" class="mr-2 cursor-pointer" >
+        </VaIcon>
       </div>
+
+      <transition name="fade">
+    <div v-show="showContentGateway?.id === rowData.id" class="tooltip-content flex flex-col  justify-center z-999 items-center relative  border border-solid border-gray-300 p-2 rounded-md shadow-lg">
+      <VaButton
+        preset="secondary"
+        size="small"
+        icon="mso-edit"
+        aria-label="Edit user"
+        @click="$emit('edit-gateway', rowData as any)"
+        class="w-full"
+      >
+        <span>编辑</span>
+      </VaButton>
+      <VaButton
+        preset="secondary"
+        size="small"
+        icon="mso-delete"
+        color="danger"
+        aria-label="Delete user"
+        @click="onGatewayDelete(rowData)"
+        class="w-full"
+      >
+        <span>删除</span>
+      </VaButton>
+    </div>
+  </transition>
     </template>
   </VaDataTable>
 

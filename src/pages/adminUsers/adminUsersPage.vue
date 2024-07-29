@@ -6,7 +6,7 @@ import { admin_user_type } from '../../data/admin_user'
 import _ from 'lodash'
 import adminUsersTable from './widgets/adminUsersTable.vue'
 import editAdminUserForm from './widgets/editAdminUserForm.vue'
-import draggableDialog from '../../../src/components/reusableModal/draggableDialog.vue'
+
 
 const doShowEditUserModal = ref(false)
 const doShowAddUserModal = ref(false)
