@@ -87,7 +87,7 @@ onBeforeMount(() => {
       <meterTable :pagination="pagination" :meters="metersShowInTable" :loading="isLoading" :sorting="sorting"
         @edit-meter="showEditMeterDialog" @delete-meter="onMeterDelete" @fetch-meter="fetchMeter" />
     </VaCardContent>
-    <div style="z-index: 988;" v-for="(itemDialog, index) in dialogList" :key="itemDialog.meter.id">
+    <div style="z-index: 9988;position: fixed;" v-for="(itemDialog, index) in dialogList" :key="itemDialog.meter.id">
     <draggableDialog 
       :visible="true"
       :meter="itemDialog.meter"

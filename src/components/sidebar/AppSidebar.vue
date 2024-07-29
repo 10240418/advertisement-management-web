@@ -1,5 +1,5 @@
 <template>
-  <VaSidebar v-model="writableVisible" :width="sidebarWidth" :color="color" minimized-width="0">
+  <VaSidebar v-model="writableVisible" :width="sidebarWidth" :color="color" minimized-width="0" class="z-1000">
     <VaAccordion v-model="value" multiple>
       <VaCollapse v-for="(route, index) in navigationRoutes.routes" :key="index">
         <template #header="{ value: isCollapsed }">

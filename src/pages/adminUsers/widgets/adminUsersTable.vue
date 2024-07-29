@@ -116,34 +116,37 @@ onBeforeUnmount(() => {
       </div>
     </template>
 
-    <template #cell(actions)="{ rowData }" class= "relative overflow-y-scroll">
-      <div class="flex justify-center items-center ">
-        <VaIcon name="more_horiz" size="20px" class="mr-2 cursor-pointer" @click.stop="showContent(rowData)">
+    <template #cell(actions)="{ rowData }" class= " overflow-y-scroll">
+      <div class="flex justify-center items-center relative  hover:bg-slate-100  rounded-[4px]" @click.stop="showContent(rowData)">
+        <VaIcon name="more_horiz" size="20px" class="mr-2 cursor-pointer" >
         </VaIcon>
       </div>
+
       <transition name="fade">
-        <div v-show="showContentUser?.id === rowData.id" class="flex  flex-col translate-x-4 dropdown-content justify-center z-999 items-center absolute bg-white border border-solid">
-          <VaButton
-            preset="secondary"
-            size="small"
-            icon="mso-edit"
-            aria-label="Edit user"
-            @click="$emit('edit-user', rowData as any)"
-          >
-            <span>编辑</span>
-          </VaButton>
-          <VaButton
-            preset="secondary"
-            size="small"
-            icon="mso-delete"
-            color="danger"
-            aria-label="Delete user"
-            @click="onUserDelete(rowData)"
-          >
-            <span>删除</span>
-          </VaButton>
-        </div>
-      </transition>
+    <div v-show="showContentUser?.id === rowData.id" class="tooltip-content flex flex-col  justify-center z-999 items-center relative  border border-solid border-gray-300 p-2 rounded-md shadow-lg">
+      <VaButton
+        preset="secondary"
+        size="small"
+        icon="mso-edit"
+        aria-label="Edit user"
+        @click="$emit('edit-user', rowData as any)"
+        class="w-full"
+      >
+        <span>编辑</span>
+      </VaButton>
+      <VaButton
+        preset="secondary"
+        size="small"
+        icon="mso-delete"
+        color="danger"
+        aria-label="Delete user"
+        @click="onUserDelete(rowData)"
+        class="w-full"
+      >
+        <span>删除</span>
+      </VaButton>
+    </div>
+  </transition>
     </template>
   </VaDataTable>
 
@@ -205,15 +208,41 @@ onBeforeUnmount(() => {
 }
 
 .fade-enter-active, .fade-leave-active {
-  transition:  0.3s;
+  transition:  0s;
 }
-
-// .fade-enter, .fade-leave-to {
-//   opacity: 100%;
-// }
 
 span {
   font-size: 10px;
   margin-left: 6px;
+}
+.tooltip-content {
+  position: relative;
+  background-color: white;
+  border: 1px solid #d1d5db; 
+  padding: 6px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.tooltip-content::before {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 8px;
+  border-style: solid;
+  border-color: transparent transparent #d1d5db transparent; 
+}
+
+.tooltip-content::after {
+  content: '';
+  position: absolute;
+  bottom: 100%; 
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 7px;
+  border-style: solid;
+  border-color: transparent transparent white transparent; // 
 }
 </style>

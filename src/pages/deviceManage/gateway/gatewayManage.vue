@@ -83,7 +83,7 @@ onBeforeMount(() => {
       <gatewayTable :pagination="pagination" :gateways="gatewaysShowInTable" :loading="isLoading" :sorting="sorting"
         @edit-gateway="showEditGatewayDialog" @delete-gateway="onGatewayDelete" @fetch-gateway="fetchGateway" />
     </VaCardContent>
-    <div style="z-index: 988;" v-for="(itemDialog, index) in dialogList" :key="itemDialog.gateway.id">
+    <div style="z-index: 9999;" v-for="(itemDialog, index) in dialogList" :key="itemDialog.gateway.id">
       <draggableDialog 
         :visible="itemDialog.visible"
         :gateway="itemDialog.gateway"
