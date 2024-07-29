@@ -17,7 +17,7 @@ import {
   CategoryScale,
   Filler,
 } from 'chart.js'
-import { TLineChartData } from '../../../data/types'
+import { TLineChartData } from '@/data/chart_type'
 import { computed } from 'vue'
 import { useColors } from 'vuestic-ui/web-components'
 

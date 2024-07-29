@@ -6,7 +6,7 @@
 import { Pie } from 'vue-chartjs'
 import type { ChartOptions } from 'chart.js'
 import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, CategoryScale } from 'chart.js'
-import { TPieChartData } from '../../../data/types'
+import { TPieChartData } from '@/data/chart_type'
 
 ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale)
 

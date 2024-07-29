@@ -6,7 +6,7 @@
 import { Bar } from 'vue-chartjs'
 import type { ChartOptions } from 'chart.js'
 import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, LinearScale, CategoryScale } from 'chart.js'
-import { TBarChartData } from '../../../data/types'
+import { TBarChartData } from '@/data/chart_type'
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, LinearScale, CategoryScale)
 
