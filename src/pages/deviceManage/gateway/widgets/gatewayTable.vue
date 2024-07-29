@@ -4,14 +4,17 @@ import { defineVaDataTableColumns, useModal } from 'vuestic-ui'
 import { PropType, computed, toRef, watch ,ref} from 'vue'
 import { gateway_type } from '../../../../data/gateway'
 
+
 const columns = defineVaDataTableColumns([
   { label: 'ID', key: 'id', sortable: true },
   { label: 'Name', key: 'name', sortable: true },
   { label: 'IP Address', key: 'ip_address', sortable: true },
   { label: 'Remark', key: 'remark', sortable: false },
-  { label: 'Created At', key: 'created_at', sortable: true },
-  { label: 'Updated At', key: 'updated_at', sortable: true },
+  // { label: 'Created At', key: 'created_at', sortable: true },
+  // { label: 'Updated At', key: 'updated_at', sortable: true },
+  { label: 'device', key: 'device', sortable: false },
   { label: 'Actions', key: 'actions', sortable: false },
+
 ])
 
 const props = defineProps({
@@ -73,6 +76,10 @@ const showContent = (rowData: any) => {
   }
 }
 
+
+
+ 
+
 </script>
 
 <template>
@@ -90,15 +97,54 @@ const showContent = (rowData: any) => {
     <template #cell(ip_address)="{ rowData }">
       <div class="ellipsis max-w-[230px]">{{ rowData.ip_address }}</div>
     </template>
+    
+
+    <template #cell(device)="{ row, isExpanded }">
+      <VaButton
+        :icon="isExpanded ? 'va-arrow-up': 'va-arrow-down'"
+        preset="secondary"
+        class="justify-center items-center relative fontsize-[8px]"
+        @click="row.toggleRowDetails()"
+      >
+        {{ isExpanded ? 'Hide': 'More info' }}
+      </VaButton>
+    </template>
+    
+    <template #expandableRow="{ rowData }">
+      <div class="flex gap-2">
+        <!-- <VaAvatar :src="`https://randomuser.me/api/portraits/men/${rowData.id}.jpg`" /> -->
+        <div class="pl-2">
+          <div class="flex gap-1">
+            <span>{{ rowData.name }}</span>
+          </div>
+          <div class="flex items-center">
+            <VaIcon size="small" name="phone" color="secondary" class="mr-2" />
+            <span>{{ rowData.phone }}</span>
+          </div>
+          <div class="flex items-center">
+            <VaIcon size="small" name="email" color="secondary" class="mr-2" />
+            <span>{{ rowData.email }}</span>
+          </div>
+          <div class="flex items-center">
+            <VaIcon size="small" name="language" color="secondary" class="mr-2" />
+            <span class="va-link">{{ rowData.website }}</span>
+          </div>
+        </div>
+      </div>
+    </template>
+
+
 
     <template #cell(actions)="{ rowData }" class= " overflow-y-scroll">
-      <div class="flex justify-center items-center relative  hover:bg-slate-100  rounded-[4px]" @click.stop="showContent(rowData)">
+      <VaPopover placement="bottom" trigger="click" color="backgroundSecondary">
+      <div class="flex justify-center items-center relative hover:bg-slate-400 rounded-[4px] " @click.stop="showContent(rowData)">
         <VaIcon name="more_horiz" size="20px" class="mr-2 cursor-pointer" >
         </VaIcon>
       </div>
 
+      <template #body>
       <transition name="fade">
-    <div v-show="showContentGateway?.id === rowData.id" class="tooltip-content flex flex-col  justify-center z-999 items-center relative  border border-solid border-gray-300 p-2 rounded-md shadow-lg">
+    <div v-show="showContentGateway?.id === rowData.id" class="tooltip-content flex flex-col  justify-center z-999 items-center relative  border border-solid p-2 rounded-md shadow-lg">
       <VaButton
         preset="secondary"
         size="small"
@@ -107,7 +153,7 @@ const showContent = (rowData: any) => {
         @click="$emit('edit-gateway', rowData as any)"
         class="w-full"
       >
-        <span>编辑</span>
+        <span>明细</span>
       </VaButton>
       <VaButton
         preset="secondary"
@@ -121,10 +167,11 @@ const showContent = (rowData: any) => {
         <span>删除</span>
       </VaButton>
     </div>
-  </transition>
+    </transition>
+    </template>
+</VaPopover>
     </template>
   </VaDataTable>
-
   <div class="flex flex-col-reverse md:flex-row gap-2 justify-between items-center py-2">
     <div>
       <b>Total: {{ props.pagination.total }} </b>
@@ -167,5 +214,35 @@ const showContent = (rowData: any) => {
   ::v-deep(.va-data-table__table-tr) {
     border-bottom: 1px solid var(--va-background-border);
   }
+}
+.tooltip-content {
+  position: relative;
+  // background-color: white;
+  border: 1px solid #d1d5db; 
+  padding: 6px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.tooltip-content::before {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 8px;
+  border-style: solid;
+  border-color: transparent transparent #d1d5db transparent; 
+}
+
+.tooltip-content::after {
+  content: '';
+  position: absolute;
+  bottom: 100%; 
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 7px;
+  border-style: solid;
+  border-color: transparent transparent white transparent; // 
 }
 </style>

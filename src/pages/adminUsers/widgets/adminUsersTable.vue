@@ -99,11 +99,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <VaDataTable
-    :columns="columns"
-    :items="currentPageData"
-    :loading="$props.loading"
-  >
+  <VaDataTable :columns="columns" :items="currentPageData" :loading="$props.loading">
     <template #cell(name)="{ rowData }">
       <div class="max-w-[120px] ellipsis">
         {{ rowData.name }}
@@ -116,37 +112,31 @@ onBeforeUnmount(() => {
       </div>
     </template>
 
-    <template #cell(actions)="{ rowData }" class= " overflow-y-scroll">
-      <div class="flex justify-center items-center relative  hover:bg-slate-100  rounded-[4px]" @click.stop="showContent(rowData)">
-        <VaIcon name="more_horiz" size="20px" class="mr-2 cursor-pointer" >
-        </VaIcon>
-      </div>
+    <template #cell(actions)="{ rowData }" class=" overflow-y-scroll max-h[40px]">
+      <VaPopover placement="bottom" trigger="click" color=" backgroundSecondary">
+        <div class="flex justify-center items-center relative  hover:bg-slate-100  rounded-[4px]"
+          @click.stop="showContent(rowData)">
+          <VaIcon name="more_horiz" size="20px" class="mr-2 cursor-pointer">
+          </VaIcon>
+        </div>
+        <template #body>
+          <transition name="fade">
+        <div v-show="showContentUser?.id === rowData.id"
+          class="tooltip-content flex flex-col  justify-center z-999 items-center relative  border border-solid border-gray-300 p-2 rounded-md shadow-lg">
+          <VaButton preset="secondary" size="small" icon="mso-edit" aria-label="Edit user"
+            @click="$emit('edit-user', rowData as any)" class="w-full">
+            <span>编辑</span>
+          </VaButton>
+          <VaButton preset="secondary" size="small" icon="mso-delete" color="danger" aria-label="Delete user"
+            @click="onUserDelete(rowData)" class="w-full">
+            <span>删除</span>
+          </VaButton>
+        </div>
+      </transition>
+        </template>
+      </VaPopover>
 
-      <transition name="fade">
-    <div v-show="showContentUser?.id === rowData.id" class="tooltip-content flex flex-col  justify-center z-999 items-center relative  border border-solid border-gray-300 p-2 rounded-md shadow-lg">
-      <VaButton
-        preset="secondary"
-        size="small"
-        icon="mso-edit"
-        aria-label="Edit user"
-        @click="$emit('edit-user', rowData as any)"
-        class="w-full"
-      >
-        <span>编辑</span>
-      </VaButton>
-      <VaButton
-        preset="secondary"
-        size="small"
-        icon="mso-delete"
-        color="danger"
-        aria-label="Delete user"
-        @click="onUserDelete(rowData)"
-        class="w-full"
-      >
-        <span>删除</span>
-      </VaButton>
-    </div>
-  </transition>
+      
     </template>
   </VaDataTable>
 
@@ -160,29 +150,12 @@ onBeforeUnmount(() => {
     </div>
 
     <div v-if="totalPages > 1" class="flex">
-      <VaButton
-        preset="secondary"
-        icon="va-arrow-left"
-        aria-label="Previous page"
-        :disabled="$props.pagination.pageNum === 1"
-        @click="$props.pagination.pageNum--"
-      />
-      <VaButton
-        class="mr-2"
-        preset="secondary"
-        icon="va-arrow-right"
-        aria-label="Next page"
-        :disabled="$props.pagination.pageNum === totalPages"
-        @click="$props.pagination.pageNum++"
-      />
-      <VaPagination
-        v-model="$props.pagination.pageNum"
-        buttons-preset="secondary"
-        :pages="totalPages"
-        :visible-pages="5"
-        :boundary-links="false"
-        :direction-links="false"
-      />
+      <VaButton preset="secondary" icon="va-arrow-left" aria-label="Previous page"
+        :disabled="$props.pagination.pageNum === 1" @click="$props.pagination.pageNum--" />
+      <VaButton class="mr-2" preset="secondary" icon="va-arrow-right" aria-label="Next page"
+        :disabled="$props.pagination.pageNum === totalPages" @click="$props.pagination.pageNum++" />
+      <VaPagination v-model="$props.pagination.pageNum" buttons-preset="secondary" :pages="totalPages"
+        :visible-pages="5" :boundary-links="false" :direction-links="false" />
     </div>
   </div>
 </template>
@@ -198,27 +171,29 @@ onBeforeUnmount(() => {
   display: flex;
   flex-direction: column;
   border-radius: 4px;
-  padding:0 8px;
+  padding: 0 8px;
   // box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.dropdown-content > * {
+.dropdown-content>* {
   margin-bottom: 0%;
- 
+
 }
 
-.fade-enter-active, .fade-leave-active {
-  transition:  0s;
+.fade-enter-active,
+.fade-leave-active {
+  transition: 0s;
 }
 
 span {
   font-size: 10px;
   margin-left: 6px;
 }
+
 .tooltip-content {
   position: relative;
-  background-color: white;
-  border: 1px solid #d1d5db; 
+  // background-color: white;
+  border: 1px solid #d1d5db;
   padding: 6px;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -232,13 +207,13 @@ span {
   transform: translateX(-50%);
   border-width: 8px;
   border-style: solid;
-  border-color: transparent transparent #d1d5db transparent; 
+  border-color: transparent transparent #d1d5db transparent;
 }
 
 .tooltip-content::after {
   content: '';
   position: absolute;
-  bottom: 100%; 
+  bottom: 100%;
   left: 50%;
   transform: translateX(-50%);
   border-width: 7px;
