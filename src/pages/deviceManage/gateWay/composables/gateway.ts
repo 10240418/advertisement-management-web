@@ -8,6 +8,9 @@ import {
   updateGateway,
   getGateway
 } from '../../../../apis/gateway';
+import { useThrottle } from '../../../../data/dataControl';
+import {  useGatewayStore } from '@/stores/gateway-store';
+
 
 const makePaginationRef = () => ref<Pagination>({ pageNum: 1, pageSize: 10, total: 30 });
 const makeSortingRef = () => ref<Sorting>({ sortBy: "id", sortingOrder: "asc" });
@@ -27,8 +30,8 @@ export const useGateways = (options?: {
   const isLoading = ref(false);
   const gateways = ref<gateway_type[]>([]);
   const { sorting = makeSortingRef(), pagination = makePaginationRef() } = options || {};
-
-  // fetch 获取数据, 并且赋值
+ 
+   // fetch 获取数据, 并且赋值
   const fetch = async () => {
     isLoading.value = true;
     try {
@@ -39,7 +42,8 @@ export const useGateways = (options?: {
         });
       gateways.value = res.data.data;
       pagination.value.total = res.data.pagination.total;
-
+  
+  
       if (pagination.value.pageSize <= 0) pagination.value.pageSize = 10;
       if (pagination.value.pageNum <= 0) pagination.value.pageNum = 1;
     } catch (error) {
@@ -82,7 +86,7 @@ export const useGateways = (options?: {
     isLoading.value = false;
   };
 
-  const SearchGateway = async (query: any) => {
+  const SearchGatewayByid = async (query: any) => {
     isLoading.value = true;
     try {
       const res = await getGateway(query);
@@ -92,7 +96,7 @@ export const useGateways = (options?: {
     }
     isLoading.value = false;
   };
-
+const SearchGateway = useThrottle(SearchGatewayByid,500);
   onBeforeMount(() => {
     fetch();
   });

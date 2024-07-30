@@ -2,8 +2,6 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 
 import AuthLayout from '../layouts/AuthLayout.vue'
 import AppLayout from '../layouts/AppLayout.vue'
-
-
 import RouteViewComponent from '../layouts/RouterBypass.vue'
 
 const routes: Array<RouteRecordRaw> = [
@@ -121,7 +119,11 @@ const routes: Array<RouteRecordRaw> = [
       }
     ],
   },
-
+  {
+    name: 'gatewayDetail',
+    path: '/gatewayDetail/:id?', // `?` 表示可选的
+    component: () => import('../pages/deviceManage/gateway/widgets/gatewayDialog.vue'),
+  },
   {
     name: '404',
     path: '/404',

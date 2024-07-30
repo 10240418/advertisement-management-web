@@ -15,15 +15,19 @@ export default defineConfig({
       include: resolve(dirname(fileURLToPath(import.meta.url)), './src/i18n/locales/**'),
     }),
   ],
-  // 注释:
+  resolve: {
+    alias: {
+      '@': resolve(__dirname, './src'), 
+    },
+  },
   server: {
-		host: "0.0.0.0",
-		proxy: {
-			"/api": {
-				target: "http://192.168.1.21:18888",
-				changeOrigin: true,
-				// rewrite: (path) => path.replace(/^\/api/, ""),
-			},
-		},
-	},
+    host: "0.0.0.0",
+    proxy: {
+      "/api": {
+        target: "http://192.168.1.21:18888",
+        changeOrigin: true,
+        // rewrite: (path) => path.replace(/^\/api/, ""),
+      },
+    },
+  },
 })

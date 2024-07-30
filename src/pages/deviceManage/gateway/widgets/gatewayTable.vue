@@ -8,7 +8,7 @@ import { gateway_type } from '../../../../data/gateway'
 const columns = defineVaDataTableColumns([
   { label: 'ID', key: 'id', sortable: true },
   { label: 'Name', key: 'name', sortable: true },
-  { label: 'IP Address', key: 'ip_address', sortable: true },
+  { label: 'IP Address', key: 'ipAddr', sortable: true },
   { label: 'Remark', key: 'remark', sortable: false },
   // { label: 'Created At', key: 'created_at', sortable: true },
   // { label: 'Updated At', key: 'updated_at', sortable: true },
@@ -78,9 +78,9 @@ watch(
 //气泡下拉框
 const showContentGateway = ref<gateway_type | null>(null)
 const showContent = (rowData: any) => {
-  console.log(rowData)
+  
   if (showContentGateway.value === rowData) {
-    showContentGateway.value = null
+    showContentGateway.value = rowData
   } else {
     showContentGateway.value = rowData
   }
@@ -104,8 +104,8 @@ const showContent = (rowData: any) => {
       <div class="max-w-[120px] ellipsis">{{ rowData.name }}</div>
     </template>
 
-    <template #cell(ip_address)="{ rowData }">
-      <div class="ellipsis max-w-[230px]">{{ rowData.ip_address }}</div>
+    <template #cell(ipAddr)="{ rowData }">
+      <div class="ellipsis max-w-[230px]">{{ rowData.ipAddr}}</div>
     </template>
     
 
@@ -119,7 +119,7 @@ const showContent = (rowData: any) => {
         {{ isExpanded ? 'Hide': 'More info' }}
       </VaButton>
     </template>
-    
+    <!-- 拓展出来的信息 -->
     <template #expandableRow="{ rowData }">
       <div class="flex gap-2">
         <!-- <VaAvatar :src="`https://randomuser.me/api/portraits/men/${rowData.id}.jpg`" /> -->

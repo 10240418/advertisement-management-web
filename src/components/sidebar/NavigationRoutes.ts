@@ -107,13 +107,16 @@ export default {
         {
           name:'meter',
           displayName:'menu.meter',
-          meta :{
-            icon:''
+          meta:{
+            icon:'browse_activity'
           }
         },
         {
           name:'gateway',
-          displayName:'menu.gateway'
+          displayName:'menu.gateway',
+          meta:{
+            icon:'browse_activity'
+          }
         }
       ]
 

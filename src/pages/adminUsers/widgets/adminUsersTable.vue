@@ -2,6 +2,7 @@
 import { defineVaDataTableColumns, useModal } from 'vuestic-ui'
 import { PropType, computed, toRef, watch, ref, onMounted, onBeforeUnmount } from 'vue'
 import { admin_user_type } from '../../../data/admin_user'
+import { debounce} from 'lodash'
 
 const columns = defineVaDataTableColumns([
   { label: 'ID', key: 'id', sortable: false },
@@ -68,8 +69,9 @@ watch(
   }
 )
 
-const showContentUser = ref<admin_user_type | null>(null)
 
+//气泡提示框
+const showContentUser = ref<admin_user_type | null>(null)
 const showContent = (rowData: any) => {
   console.log(rowData)
   if (showContentUser.value === rowData) {
@@ -78,7 +80,6 @@ const showContent = (rowData: any) => {
     showContentUser.value = rowData
   }
 }
-
 const handleClickOutside = (event: MouseEvent) => {
   const target = event.target as HTMLElement
   const dropdowns = document.querySelectorAll('.dropdown-content')
