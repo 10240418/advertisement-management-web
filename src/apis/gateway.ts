@@ -19,7 +19,7 @@ export const fetchGateways = (query: any) => {
 
 export const getGateway = (query:any) => {
     return request({
-        url: `/admin/gateway/${query.id}`,
+        url: `/admin/gateway/${query.params}`,
         method: 'get',
         data:query.data
     });

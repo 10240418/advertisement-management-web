@@ -10,12 +10,9 @@ import editGatewayForm from './widgets/editGatewayForm.vue';
 import draggableDialog from './widgets/draggableDialog.vue';
 
 const doShowAddGatewayModal = ref(false);
-
 const { isLoading, gateways, sorting, pagination, ...gatewayApi } = useGateways();
-
 const gatewaysShowInTable = ref<gateway_type[]>([]);
 const gatewayToEdit = ref<gateway_type | null>(null);
-
 const dialogList = ref<{ gateway: gateway_type, visible: boolean }[]>([]);
 
 const showEditGatewayDialog = (gateway: gateway_type) => {
@@ -37,7 +34,7 @@ const showAddGatewayModal = () => {
 const { init: notify } = useToast();
 
 const onGatewayDelete = async (gateway: any) => {
-  await gatewayApi.remove(gateway.id);
+  await gatewayApi.remove([gateway.id]);
   notify({
     message: `${gateway.name} has been deleted`,
     color: 'success',
@@ -59,6 +56,15 @@ const onSave = async (gateway: any) => {
   closeEditGatewayDialog(gateway);
 };
 
+const searchValue = ref('');
+const onSearch = async (searchValue: any) => {
+  const res = await gatewayApi.SearchGateway({
+    data:{email:localStorage.getItem('AdminEmail'),password:localStorage.getItem('AdminPassword')},
+    params: Number( searchValue ),
+    //轉換為Number
+  });
+};
+
 watch(
   gateways,
   () => {
@@ -78,9 +84,10 @@ onBeforeMount(() => {
   <VaCard>
     <VaCardContent>
       <div class="flex flex-col md:flex-row gap-2 mb-2 justify-between">
-        <div class="flex flex-col md:flex-row gap-2 justify-start"></div>
+        <VaInput v-model="searchValue" placeholder="Search" class="w-full md:w-2/3" @keyup.enter="onSearch(searchValue)" />
+        
         <VaButton @click="showAddGatewayModal">Add Gateway</VaButton>
-      </div>
+       </div>
 
       <gatewayTable :pagination="pagination" :gateways="gatewaysShowInTable" :loading="isLoading" :sorting="sorting"
         @edit-gateway="showEditGatewayDialog" @delete-gateway="onGatewayDelete" @fetch-gateway="fetchGateway" />

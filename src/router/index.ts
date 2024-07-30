@@ -146,9 +146,7 @@ const router = createRouter({
 })
 
 router.beforeResolve((to, from, next) => {
-  // 清
-  // localStorage.removeItem('toiletAdminToken')
-  let token = localStorage.getItem('toiletAdminToken')
+  let token = localStorage.getItem('AdminToken')
   let hasLogin = token != null && token != ''
 
   if ((to.name !== 'login') && !hasLogin) {
@@ -157,8 +155,6 @@ router.beforeResolve((to, from, next) => {
   else{
     next()
   }
-
-  
 });
 
 

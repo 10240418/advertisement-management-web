@@ -39,10 +39,10 @@ const formData = reactive({
 const submit = () => {
   if (validate()) {
     login({ ...formData }).then(res => {
-      localStorage.setItem('toiletAdminToken', res.data.token)
+      localStorage.setItem('AdminToken', res.data.token)
       //保存賬號和密碼在localStorage
-      localStorage.setItem('toiletAdminEmail', formData.email)
-      localStorage.setItem('toiletAdminPassword', formData.password)
+      localStorage.setItem('AdminEmail', formData.email)
+      localStorage.setItem('AdminPassword', formData.password)
       toast.init({ message: res.data.message, color: "success" })
       router.push({ name: 'adminUsers' })
     }).catch(err => {

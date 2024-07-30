@@ -6,6 +6,7 @@ import {
   addGateway,
   deleteGateway,
   updateGateway,
+  getGateway
 } from '../../../../apis/gateway';
 
 const makePaginationRef = () => ref<Pagination>({ pageNum: 1, pageSize: 10, total: 30 });
@@ -32,13 +33,10 @@ export const useGateways = (options?: {
     isLoading.value = true;
     try {
       const res = await fetchGateways(
-        {params:{
-          email:localStorage.getItem('toiletAdminEmail'),
-          password:localStorage.getItem('toiletAdminPassword')
-        },
-        data:{ pageNum: pagination.value.pageNum, pageSize: pagination.value.pageSize, sortingOrder: sorting.value.sortingOrder, sortBy: sorting.value.sortBy }});
-      
-      console.log(res);
+        {
+          params: {email: localStorage.getItem('AdminEmail'),password: localStorage.getItem('AdminPassword') },
+          data: { pageNum: pagination.value.pageNum, pageSize: pagination.value.pageSize, sortingOrder: sorting.value.sortingOrder, sortBy: sorting.value.sortBy }
+        });
       gateways.value = res.data.data;
       pagination.value.total = res.data.pagination.total;
 
@@ -62,10 +60,10 @@ export const useGateways = (options?: {
     isLoading.value = false;
   };
 
-  const remove = async (gateway: any) => {
+  const remove = async (ids: number[]) => {
     isLoading.value = true;
     try {
-      await deleteGateway(gateway.id);
+      await deleteGateway({ids});
       await fetch();
     } catch (error) {
       console.error(error);
@@ -78,6 +76,17 @@ export const useGateways = (options?: {
     try {
       await updateGateway(gateway);
       await fetch();
+    } catch (error) {
+      console.error(error);
+    }
+    isLoading.value = false;
+  };
+
+  const SearchGateway = async (query: any) => {
+    isLoading.value = true;
+    try {
+      const res = await getGateway(query);
+      gateways.value = res.data.data;
     } catch (error) {
       console.error(error);
     }
@@ -97,6 +106,7 @@ export const useGateways = (options?: {
     add,
     remove,
     update,
+    SearchGateway,
   };
 
   return useGatewaysInstance;

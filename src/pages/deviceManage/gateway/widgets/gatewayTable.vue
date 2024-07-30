@@ -31,7 +31,7 @@ const emit = defineEmits<{
 }>()
 
 const gateways = toRef(props, 'gateways')
-console.log(gateways)
+
 const totalPages = computed(() => Math.ceil(props.pagination.total / props.pagination.pageSize))
 
 const { confirm } = useModal()
@@ -52,11 +52,20 @@ const onGatewayDelete = async (gateway: any) => {
 }
 
 const currentPageData = computed(() => {
-  const startIndex = (props.pagination.pageNum - 1) * props.pagination.pageSize
-  const endIndex = startIndex + props.pagination.pageSize
-  return gateways.value.slice(startIndex, endIndex)
-})
+  let gatewaysArray : any = [];
 
+  // 检查是否为数组，如果不是，则包裹在数组中
+  if (Array.isArray(gateways.value)) {
+    gatewaysArray = gateways.value;
+  } else if (gateways.value && typeof gateways.value === 'object') {
+    gatewaysArray = [gateways.value];
+  }
+
+  const startIndex = (props.pagination.pageNum - 1) * props.pagination.pageSize;
+  const endIndex = startIndex + props.pagination.pageSize;
+  
+  return gatewaysArray.slice(startIndex, endIndex);
+});
 watch(
   () => [props.pagination.pageNum, props.pagination.pageSize, props.sorting.sortingOrder, props.sorting.sortBy],
   () => {

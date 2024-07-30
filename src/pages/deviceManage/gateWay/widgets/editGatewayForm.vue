@@ -7,10 +7,8 @@ import { gateway_type } from '../../../../data/gateway'
 
 const defaultNewGateway = {
   name: '',
-  ip_address: '',
-  remark: '',
-  created_at: '',
-  updated_at: '',
+  ipAddr: '',
+  // remark: '',
 }
 
 const props = defineProps({
@@ -58,12 +56,12 @@ const onCancel = () => {
       </div>
 
       <div class="flex gap-4 flex-col w-full">
-        <VaInput v-model="newGateway.ip_address" label="IP Address" class="w-full" :rules="[validators.required]" name="ip_address" />
+        <VaInput v-model="newGateway.ipAddr" label="IP Address" class="w-full" :rules="[validators.required]" name="ip_address" />
       </div>
 
-      <div class="flex gap-4 flex-col w-full">
+      <!-- <div class="flex gap-4 flex-col w-full">
         <VaInput v-model="newGateway.remark" label="Remark" class="w-full" name="remark" />
-      </div>
+      </div> -->
 
       <div class="flex gap-2 flex-col-reverse items-stretch justify-end w-full">
         <VaButton preset="secondary" color="secondary" @click="onCancel">Cancel</VaButton>
