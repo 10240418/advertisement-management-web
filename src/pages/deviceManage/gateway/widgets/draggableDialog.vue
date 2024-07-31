@@ -1,4 +1,4 @@
-<!-- draggableDialog.vue -->
+<!-- draggableDialog.vue
 <template>
   <el-dialog 
     v-model="$props.visible" 
@@ -15,10 +15,11 @@
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-1 items-end">
         <VaInput v-model="gateway.name" placeholder="Solid" label="Name" />
         <VaInput v-model="gateway.id" placeholder="Solid" label="ID" />
-        <VaInput v-model="gateway.ip_address" placeholder="Solid" label="IP Address" />
+        <VaInput v-model="gateway.ipAddr" placeholder="Solid" label="IP Address" />
         <VaInput v-model="gateway.remark" placeholder="Solid" label="Remark" />
-        <!-- <VaInput v-model="gateway.created_at" placeholder="Solid" label="Created At" />
-        <VaInput v-model="gateway.updated_at" placeholder="Solid" label="Updated At" /> -->
+      
+        <VaInput v-model="gateway.created_at" placeholder="Solid" label="Created At" />
+        <VaInput v-model="gateway.updated_at" placeholder="Solid" label="Updated At" /> 
         </div>
         
         <div>
@@ -99,4 +100,5 @@ const options: ChartOptions<'line'> = {
   border-radius: 2px;
   box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.5);
 }
-</style>
+</style> 
+-->

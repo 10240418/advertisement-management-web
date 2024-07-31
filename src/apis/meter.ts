@@ -33,11 +33,8 @@ export const addMeter = (data: any) => {
 
 export const fetchMeter = (data: any) => {
   return request({
-    url:'/admin/meter',
+    url: `/admin/meter/${data.id}`,
     method: 'get',
-    params:{
-      id:data.id
-    }
   })
 };
 // 删除电表

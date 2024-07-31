@@ -4,10 +4,13 @@ import { meter_type } from '../../../../data/meter'
 import { type Filters, Pagination, Sorting } from '../../../../data/page';
 import {
   fetchMeters,
+  fetchMeter,
   addMeter,
-  deleteMeter,
   updateMeter,
-} from '../../../../api_mocks/meter'
+  deleteMeter,
+  operateMeter,
+} from '../../../../apis/meter'
+import { useThrottle } from '../../../../data/dataControl';
 
 const makePaginationRef = () => ref<Pagination>({ pageNum: 1, pageSize: 10, total: 30 })
 const makeSortingRef = () => ref<Sorting>({ sortBy: "id", sortingOrder: "asc" })
@@ -29,40 +32,39 @@ export const useMeters = (options?: {
   const { sorting = makeSortingRef(), pagination = makePaginationRef() } = options || {}
 
   //fetch获取数据,并且赋值
-  const fetch = async (meter: any) => {
+  const fetch = async () => {
     isLoading.value = true
-    try {   
-      const res = await fetchMeters({ pageNum: pagination.value.pageNum, pageSize: pagination.value.pageSize ,sortingOrder: sorting.value.sortingOrder ,sortBy: sorting.value.sortBy });
-      
-      console.log(res)
-      meters.value = res.data
-      pagination.value.total = res.pagination.total
-
-      if (pagination.value.pageSize <= 0) pagination.value.pageSize = 10
-      if (pagination.value.pageNum <= 0) pagination.value.pageNum = 1
+    try {
+      const res = await fetchMeters({
+        pageNum: pagination.value.pageNum,
+        pageSize: pagination.value.pageSize,
+        desc: sorting.value.sortingOrder === "asc" ? true : false
+      });
+      console.log(res.data.data)
+      meters.value = res.data.data
+      pagination.value.total = res.data.pagination.total
     } catch (error) {
       console.error(error);
     }
     isLoading.value = false
   }
 
-  //实现crud
   const add = async (meter: any) => {
     isLoading.value = true
     try {
       await addMeter(meter);
-      await fetch({ pageNum: pagination.value.pageNum, pageSize: pagination.value.pageSize ,sortingOrder: sorting.value.sortingOrder ,sortBy: sorting.value.sortBy });
+      await fetch();
     } catch (error) {
       console.error(error);
     }
     isLoading.value = false
   }
 
-  const remove = async (meter: any) => {
+  const remove = async (ids: any) => {
     isLoading.value = true
     try {
-      await deleteMeter(meter.ids);
-      await fetch({ pageNum: pagination.value.pageNum, pageSize: pagination.value.pageSize ,sortingOrder: sorting.value.sortingOrder ,sortBy: sorting.value.sortBy });
+      await deleteMeter(ids);
+      await fetch();
     } catch (error) {
       console.error(error);
     }
@@ -73,15 +75,32 @@ export const useMeters = (options?: {
     isLoading.value = true
     try {
       await updateMeter(meter);
-      await fetch({ pageNum: pagination.value.pageNum, pageSize: pagination.value.pageSize ,sortingOrder: sorting.value.sortingOrder ,sortBy:sorting.value.sortBy });
+      await fetch();
     } catch (error) {
       console.error(error);
     }
     isLoading.value = false
   }
+  //节流实现搜索
+  const searchByid = async (searchValue: any) => {
+    isLoading.value = true
+    try {
+      const res = await fetchMeter(
+        {id: searchValue.id}
+      );
+      meters.value = res.data.data
+      pagination.value.total = 1
+    }
+    catch (error) {
+      console.error(error);
+    }
+    isLoading.value = false
+  }
+
+  const search = useThrottle(searchByid, 500);
 
   onBeforeMount(() => {
-    fetch({ pageNum: pagination.value.pageNum, pageSize: pagination.value.pageSize ,sortingOrder: sorting.value.sortingOrder ,sortBy: sorting.value.sortBy });
+    fetch();
   })
 
   useMetersInstance = {
@@ -93,6 +112,8 @@ export const useMeters = (options?: {
     add,
     remove,
     update,
+    search,
+
   }
 
   return useMetersInstance;

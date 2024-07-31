@@ -49,11 +49,18 @@ const onUserDelete = async (user: any) => {
 }
 
 const currentPageData = computed(() => {
+
+  let usersArray: any = [];
+  if (Array.isArray(users.value)) {
+    usersArray = users.value;
+  }else if (users.value && typeof users.value === 'object'){
+    usersArray = [users.value];
+  }
   const startIndex = (props.pagination.pageNum - 1) * props.pagination.pageSize
   const endIndex = startIndex + props.pagination.pageSize
 
-  if (users.value.length <= props.pagination.pageSize) return users.value
-  else return users.value.slice(startIndex, endIndex)
+  if (usersArray.length <= props.pagination.pageSize) return users.value
+  else return usersArray.value.slice(startIndex, endIndex)
 })
 
 watch(

@@ -125,6 +125,11 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('../pages/deviceManage/gateway/widgets/gatewayDialog.vue'),
   },
   {
+    name: 'meterDetail',
+    path: '/meterDetail/:id?', // `?` 表示可选的
+    component: () => import('../pages/deviceManage/meter/widgets/meterDialog.vue'),
+  },
+  {
     name: '404',
     path: '/404',
     component: () => import('../pages/404.vue'),
