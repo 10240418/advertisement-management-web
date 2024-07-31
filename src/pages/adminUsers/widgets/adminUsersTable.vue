@@ -80,7 +80,7 @@ watch(
 //气泡提示框
 const showContentUser = ref<admin_user_type | null>(null)
 const showContent = (rowData: any) => {
-  console.log(rowData)
+  
   if (showContentUser.value === rowData) {
     showContentUser.value = null
   } else {

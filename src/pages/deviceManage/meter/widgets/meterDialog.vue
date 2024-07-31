@@ -34,7 +34,7 @@ const meterId = ref(route.query.id);
 const fetch = async () => {
     if (meterId.value) {
         const res = await fetchMeter({ id: meterId.value });
-        console.log(res.data);
+       
         meter.value = res.data.data;
     }
 };

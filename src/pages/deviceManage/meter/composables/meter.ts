@@ -40,7 +40,7 @@ export const useMeters = (options?: {
         pageSize: pagination.value.pageSize,
         desc: sorting.value.sortingOrder === "asc" ? true : false
       });
-      console.log(res.data.data)
+     
       meters.value = res.data.data
       pagination.value.total = res.data.pagination.total
     } catch (error) {

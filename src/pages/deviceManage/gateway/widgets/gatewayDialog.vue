@@ -38,7 +38,7 @@ const fetchGateway = async () => {
       email:localStorage.getItem('AdminEmail'),
       password:localStorage.getItem('AdminPassword')
     }});
-    console.log(res.data)
+   
     gateway.value = res.data. data;
   }
 }; 

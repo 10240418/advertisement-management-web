@@ -104,7 +104,7 @@ const currentPageData = computed(() => {
   }
   const startIndex = (props.pagination.pageNum - 1) * props.pagination.pageSize;
   const endIndex = startIndex + props.pagination.pageSize;
-  console.log(startIndex, endIndex)
+
   if(metersArray.length <= props.pagination.pageSize) return metersArray;
   else return metersArray.slice(startIndex, endIndex);
 });

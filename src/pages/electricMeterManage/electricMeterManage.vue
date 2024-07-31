@@ -37,7 +37,6 @@ const onMeterDelete = async (meter: any) => {
 }
 
 const onSave = (meter: any) => {
-  console.log(meter)
   if (meter.id) {
     meterApi.update(meter)
   } else {

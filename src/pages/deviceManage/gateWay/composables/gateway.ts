@@ -33,14 +33,14 @@ export const useGateways = (options?: {
   const fetch = async () => {
     isLoading.value = true;
     try {
-      console.log(pagination.value.pageNum,pagination.value.pageSize);
+      
       const res = await fetchGateways(
         {
           data: { email: localStorage.getItem('AdminEmail'), password: localStorage.getItem('AdminPassword') },
           params: { pageNum: pagination.value.pageNum, pageSize: pagination.value.pageSize}
         });
       gateways.value = res.data.data;
-      console.log(res.data.data);
+      
       pagination.value.total = res.data.pagination.total;
 
 

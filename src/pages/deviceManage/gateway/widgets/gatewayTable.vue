@@ -73,7 +73,6 @@ watch(
     if (props.pagination.total < props.pagination.pageSize * (props.pagination.pageNum - 1)) {
       props.pagination.pageNum = 1
     }
-    console.log('pageNum', props.pagination.pageNum, 'pageSize', props.pagination.pageSize)
     emit('fetch-gateway', { pageNum: props.pagination.pageNum, pageSize: props.pagination.pageSize })
   }
 )
