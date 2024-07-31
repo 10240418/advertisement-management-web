@@ -80,3 +80,4 @@ export const fetchLogs = (query:any) => {
         method: 'get',
     });
 }
+// gateway.ts

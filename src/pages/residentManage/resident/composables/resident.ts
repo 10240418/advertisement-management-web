@@ -1,48 +1,40 @@
 import { onBeforeMount, Ref, ref } from 'vue';
-import { gateway_type } from '../../../../data/gateway';
+import { resident_user_type } from '@/data/resident_user';
 import { type Filters, Pagination, Sorting } from '../../../../data/page';
 import {
-  fetchGateways,
-  addGateway,
-  deleteGateway,
-  updateGateway,
-  getGateway
-} from '../../../../apis/gateway';
+  fetchResidents,
+  addResident,
+  deleteResident,
+  updateResident
+} from '../../../../apis/resident';
 import { useThrottle } from '../../../../data/dataControl';
 
 const makePaginationRef = () => ref<Pagination>({ pageNum: 1, pageSize: 10, total: 30 });
 const makeSortingRef = () => ref<Sorting>({ sortBy: "id", sortingOrder: "asc" });
 
-let useGatewaysInstance: any = null;
+let useResidentsInstance: any = null;
 
-export const useGateways = (options?: {
-  // 初始化值的提交
+export const useResidents = (options?: {
   pagination?: Ref<Pagination>;
   sorting?: Ref<Sorting>;
 }) => {
-  // 缓存 避免重复创建
-  if (useGatewaysInstance) {
-    return useGatewaysInstance;
+  if (useResidentsInstance) {
+    return useResidentsInstance;
   }
 
   const isLoading = ref(false);
-  const gateways = ref<gateway_type[]>([]);
+  const residents = ref<resident_user_type[]>([]);
   const { sorting = makeSortingRef(), pagination = makePaginationRef() } = options || {};
 
-  // fetch 获取数据, 并且赋值
   const fetch = async () => {
     isLoading.value = true;
     try {
-      
-      const res = await fetchGateways(
-        {
-          data: { email: localStorage.getItem('AdminEmail'), password: localStorage.getItem('AdminPassword') },
-          params: { pageNum: pagination.value.pageNum, pageSize: pagination.value.pageSize}
-        });
-      gateways.value = res.data.data;
-      
+      const res = await fetchResidents({
+        data: { email: localStorage.getItem('AdminEmail'), password: localStorage.getItem('AdminPassword') },
+        params: { pageNum: pagination.value.pageNum, pageSize: pagination.value.pageSize }
+      });
+      residents.value = res.data.data;
       pagination.value.total = res.data.pagination.total;
-
 
       if (pagination.value.pageSize <= 0) pagination.value.pageSize = 10;
       if (pagination.value.pageNum <= 0) pagination.value.pageNum = 1;
@@ -52,11 +44,10 @@ export const useGateways = (options?: {
     isLoading.value = false;
   };
 
-  // 实现 CRUD
-  const add = async (gateway: any) => {
+  const add = async (resident: any) => {
     isLoading.value = true;
     try {
-      await addGateway(gateway);
+      await addResident(resident);
       await fetch();
     } catch (error) {
       console.error(error);
@@ -67,7 +58,7 @@ export const useGateways = (options?: {
   const remove = async (ids: number[]) => {
     isLoading.value = true;
     try {
-      await deleteGateway({ ids });
+      await deleteResident({ ids });
       await fetch();
     } catch (error) {
       console.error(error);
@@ -75,44 +66,44 @@ export const useGateways = (options?: {
     isLoading.value = false;
   };
 
-  const update = async (gateway: any) => {
+  const update = async (resident: any) => {
     isLoading.value = true;
     try {
-      await updateGateway(gateway);
+      await updateResident(resident);
       await fetch();
     } catch (error) {
       console.error(error);
     }
     isLoading.value = false;
   };
-  //节流实现搜索
-  const searchGatewayByid = async (query: any) => {
+
+  const searchResidentByid = async (query: any) => {
     isLoading.value = true;
     try {
-      const res = await getGateway(query);
-      gateways.value = res.data.data;
+      const res = await fetchResidents(query);
+      residents.value = res.data.data;
     } catch (error) {
       console.error(error);
     }
     isLoading.value = false;
   };
-  const searchGateway = useThrottle(searchGatewayByid, 500);
+  const searchResident = useThrottle(searchResidentByid, 500);
+  
   onBeforeMount(() => {
     fetch();
   });
 
-  useGatewaysInstance = {
+  useResidentsInstance = {
     isLoading,
-    gateways,
+    residents,
     sorting,
     pagination,
     fetch,
     add,
     remove,
     update,
-    searchGateway,
+    searchResident,
   };
 
-  return useGatewaysInstance;
+  return useResidentsInstance;
 };
-// gateway.ts

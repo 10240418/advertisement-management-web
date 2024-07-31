@@ -59,6 +59,8 @@
     "device": "Devices",
     "openApi": "OpenAPI",
     "resident": "Residents",
+    "residentManage": "Resident Manage",
+    "unit": "Unit",
     "adminUser": "AdminUser",
     "electricMeterManage": "electricMeterManage",
     "waterMeterManage":"waterMeterManage",

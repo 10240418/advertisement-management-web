@@ -87,3 +87,4 @@ onBeforeMount(() => {
 </script>
 
 
+<!-- gatewayPage.vue -->

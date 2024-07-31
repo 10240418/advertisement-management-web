@@ -11,43 +11,28 @@ export default {
     displayName: 'navigationRoutes.home',
   },
   routes: [
-    // {
-    //   name: 'dashboard',
-    //   displayName: 'menu.dashboard',
-    //   meta: {
-    //     icon: 'vuestic-iconset-dashboard',
-    //   },
-    // },
-    // {
-    //   name: 'management',
-    //   displayName: 'menu.management',
-    //   meta: {
-    //     icon: 'group',
-    //   },
-    //   children: [
-    //     {
-    //       name: 'toilet',
-    //       displayName: 'menu.toilet',
-    //     },
-    //     {
-    //       name: 'logs',
-    //       displayName: 'menu.logs',
-    //     },
-    //   ],
-    // },
-    // {
-    //   name: 'open-api',
-    //   displayName: 'menu.openApi',
-    //   meta: {
-    //     icon: 'group',
-    //   },
-    // },
     {
       name: 'resident',
-      displayName: 'menu.resident',
+      displayName: 'menu.residentManage',
       meta: {
         icon: 'group',
       },
+      children: [
+        {
+          name: 'resident',
+          displayName: 'menu.resident',
+          meta: {
+            icon: 'group',
+          },
+        },
+        {
+          name: 'unit',
+          displayName: 'menu.unit',
+          meta: {
+            icon: 'group',
+          },
+        },
+      ],
     },
     {
       name: 'adminUsers',
@@ -56,25 +41,18 @@ export default {
         icon: 'manage_accounts',
       },
     },
-    {
-      name: 'electricMeterManage',
-      displayName: 'menu.electricMeterManage',
-      meta: {
-        icon: 'electric_meter',
-      },
-    },
-    {
-      name: 'waterMeterManage',
-      displayName: 'menu.waterMeterManage',
-      meta: {
-        icon: 'gas_meter',
-      },
-    },
     // {
-    //   name: 'preferences',
-    //   displayName: 'menu.preferences',
+    //   name: 'electricMeterManage',
+    //   displayName: 'menu.electricMeterManage',
     //   meta: {
-    //     icon: 'manage_accounts',
+    //     icon: 'electric_meter',
+    //   },
+    // },
+    // {
+    //   name: 'waterMeterManage',
+    //   displayName: 'menu.waterMeterManage',
+    //   meta: {
+    //     icon: 'gas_meter',
     //   },
     // },
     {

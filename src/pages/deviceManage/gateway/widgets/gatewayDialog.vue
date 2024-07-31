@@ -70,3 +70,4 @@ const save = () => {
   window.close();
 };
 </script>
+<!-- gatewayDialog.vue -->

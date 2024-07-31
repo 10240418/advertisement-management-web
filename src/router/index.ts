@@ -22,42 +22,21 @@ const routes: Array<RouteRecordRaw> = [
         path: 'dashboard',
         component: () => import('../pages/dashboard/Dashboard.vue'),
       },
-      // {
-      //   name: 'management',
-      //   path: 'management',
-      //   component: RouteViewComponent,
-      //   children: [
-      //     {
-      //       name: 'toilet',
-      //       path: 'toilet',
-      //       component: () => import('../pages/toilets/ToiletsPage.vue'),
-      //     },
-      //     {
-      //       name: 'toiletDetail',
-      //       path: 'toilet/:id',
-      //       component: () => import('../pages/cubicle/ToiletDetail.vue'),
-      //     },
-      //     {
-      //       name: 'cubicle',
-      //       path: 'cubicle',
-      //       component: () => import('../pages/cubicle/PaymentsPage.vue'),
-      //     },
-      //     {
-      //       name: 'logs',
-      //       path: 'logs',
-      //       component: () => import('../pages/devices/BillingPage.vue'),
-      //     },
-      //   ],
-      // },
-      // {
-      //   name: 'openApi',
-      //   path: 'openApi',
-      //   component: () => import('../pages/openApi/Invoices.vue'),
-      // },
       {
-        name:'resident',
-        path: 'resident',
-        component: () => import('../pages/resident/residentPage.vue'),
+        
+        path: '/',
+        children:[
+          {
+            name:'resident',
+            path:'resident',
+            component:()=>import('@/pages/residentManage/resident/residentPage.vue')
+          },
+          {
+            name:'unit',
+            path:'unit',
+            component:()=>import('@/pages/residentManage/unit/unitPage.vue')
+          },
+        ]
       },
       {
         path:'/deviceMange',
@@ -70,12 +49,12 @@ const routes: Array<RouteRecordRaw> = [
           {
             name:'meter',
             path:'meter',
-            component:()=>import('../../src/pages/deviceManage/meter/meterManage.vue')
+            component:()=>import('../../src/pages/deviceManage/meter/meterPage.vue')
           },
           {
             name:'gateway',
             path:'gateway',
-            component:()=>import('../../src/pages/deviceManage/gateway/gatewayManage.vue')
+            component:()=>import('../../src/pages/deviceManage/gateway/gatewayPage.vue')
           }
         ]
       },
@@ -128,6 +107,16 @@ const routes: Array<RouteRecordRaw> = [
     name: 'meterDetail',
     path: '/meterDetail/:id?', // `?` 表示可选的
     component: () => import('../pages/deviceManage/meter/widgets/meterDialog.vue'),
+  },
+  // {
+  //   name: 'unitDetail',
+  //   path: '/unitDetail/:id?', // `?` 表示可选的
+  //   component: () => import('../pages/residentManage/unit/widgets/unitDialog.vue'),
+  // },
+  {
+    name: 'residentDetail',
+    path: '/residentDetail/:id?', // `?` 表示可选的
+    component: () => import('../pages/residentManage/resident/widgets/residentDialog.vue'),
   },
   {
     name: '404',

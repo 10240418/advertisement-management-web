@@ -221,3 +221,4 @@ const showContent = (rowData: any) => {
   border-color: transparent transparent white transparent; // 
 }
 </style>
+<!-- gatewayTable.vue -->
