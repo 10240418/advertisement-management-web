@@ -48,18 +48,6 @@ export const addResident = (data: any) => {
 //   "email": "dreamskyll@foxmail.com"
 // }
 
-export const deleteResident = (data: any) => {
-  return request({
-    url: `/admin/resident_user/reset_password`,
-    method: 'delete',
-    data,
-  })
-}
-// {
-//   "id": 1,
-//   "password": "123456"
-// }
-
 export const updateResident = (data: any) => {
   return request({
     url: `/admin/resident_user`,
@@ -70,4 +58,16 @@ export const updateResident = (data: any) => {
 // {
 //   "id": 1,
 //   "active": false
+// }
+
+export const resetResidentPassword = (data: any) => {
+  return request({
+    url: `/admin/resident_user/reset_password`,
+    method: 'put',
+    data,
+  })
+}
+// {
+//   "id": 1,
+//   "password": "123456"
 // }
