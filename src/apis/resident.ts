@@ -48,7 +48,7 @@ export const addResident = (data: any) => {
 //   "email": "dreamskyll@foxmail.com"
 // }
 
-export const updateResident = (data: any) => {
+export const updateResidentActive = (data: any) => {
   return request({
     url: `/admin/resident_user`,
     method: 'put',

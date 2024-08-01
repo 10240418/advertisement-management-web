@@ -7,7 +7,7 @@
       </div>
 
       <ResidentTable :pagination="pagination" :residents="residentsShowInTable" :loading="isLoading" :sorting="sorting"
-        @edit-resident="showEditResidentDialog" @delete-resident="onResidentDelete" @fetch-resident="fetchResident" />
+        @edit-resident="showEditResidentDialog" @update-resident="onResidentUpdateActive" @fetch-resident="fetchResident" />
     </VaCardContent>
     <VaModal v-model="doShowAddResidentModal" size="small" mobile-fullscreen close-button hide-default-actions>
       <h1 class="va-h5">Add Resident</h1>
@@ -32,7 +32,7 @@ const residentsShowInTable = ref<resident_user_type[]>([]);
 const residentToEdit = ref<resident_user_type | null>(null);
 
 const showEditResidentDialog = (resident: resident_user_type) => {
-  const newWindow = window.open(`/residentDetail?id=${resident.id}`, '_blank', 'width=600,height=400,left=500,top=500');
+  const newWindow = window.open(`/residentDetail?id=${resident.id}`, '_blank','width=600,height=400,left=500,top=500,menubar=no,location=no,status=no,titlebar=no,toolbar=no');
 };
 
 const showAddResidentModal = () => {
@@ -40,8 +40,8 @@ const showAddResidentModal = () => {
   residentToEdit.value = null;
 };
 
-const onResidentDelete = async (resident: any) => {
-  await residentApi.remove([resident.id,]);
+const onResidentUpdateActive = async (resident: any) => {
+  await residentApi.updateActive({ id: resident.id, active: !resident.active });
   notify({
     message: `${resident.name} has been deleted`,
     color: 'success',

@@ -64,18 +64,6 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('../pages/adminUsers/adminUsersPage.vue'),
       },
       {
-        name: 'electricMeterManage',
-        path: 'electricMeterManage',
-        component: () => import('../pages/electricMeterManage/electricMeterManage.vue'),
-        
-      },
-      {
-        name: 'waterMeterManage',
-        path: 'waterMeterManage',
-        component: () => import('../pages/waterMeterManage/waterMeterManage.vue'),
-
-      },
-      {
         name: 'settings',
         path: 'settings',
         component: () => import('../pages/settings/Settings.vue'),

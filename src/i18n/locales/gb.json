@@ -62,8 +62,6 @@
     "residentManage": "Resident Manage",
     "unit": "Unit",
     "adminUser": "AdminUser",
-    "electricMeterManage": "electricMeterManage",
-    "waterMeterManage":"waterMeterManage",
     "management": "Management",
     "deviceManage": "Device Manage",
     "status": "Status",

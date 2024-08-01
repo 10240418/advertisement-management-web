@@ -20,7 +20,7 @@ const props = defineProps({
 
 const emit = defineEmits<{
   (event: 'edit-resident', resident: any): void
-  (event: 'delete-resident', resident: any): void
+  (event: 'update-resident', resident: any): void
 }>()
 
 const residents = toRef(props, 'residents')
@@ -28,18 +28,18 @@ const totalPages = computed(() => Math.ceil(props.pagination.total / props.pagin
 
 const { confirm } = useModal()
 
-const onResidentDelete = async (resident: any) => {
+const onResidentUpdate = async (resident: any) => {
   const agreed = await confirm({
-    title: 'Delete Resident',
-    message: `Are you sure you want to delete ${resident.name}?`,
-    okText: 'Delete',
+    title: 'Update Resident',
+    message: `Are you sure you want to update ${resident.name}?`,
+    okText: 'Update',
     cancelText: 'Cancel',
     size: 'small',
     maxWidth: '380px',
   })
 
   if (agreed) {
-    emit('delete-resident', resident)
+    emit('update-resident', resident)
   }
 }
 
@@ -96,12 +96,12 @@ watch(
             <div v-show="showContentResident?.id === rowData.id"
               class="tooltip-content flex flex-col justify-center z-999 items-center relative border border-solid p-2 rounded-md shadow-lg">
               <VaButton preset="secondary" size="small" icon="mso-edit" aria-label="Edit Resident"
-                @click="$emit('edit-resident', rowData as any)" class="w-full">
+                @click="$emit('edit-resident', rowData as any)" class="w-full justify-between">
                 <span>Edit</span>
               </VaButton>
               <VaButton preset="secondary" size="small" icon="mso-delete" color="danger" aria-label="Delete Resident"
-                @click="onResidentDelete(rowData)" class="w-full">
-                <span>Delete</span>
+                @click="onResidentUpdate(rowData)" class="w-full justify-between">
+                <span>Update</span>
               </VaButton>
             </div>
           </transition>

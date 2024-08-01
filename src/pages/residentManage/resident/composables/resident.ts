@@ -4,8 +4,9 @@ import { type Filters, Pagination, Sorting } from '../../../../data/page';
 import {
   fetchResidents,
   addResident,
-  deleteResident,
-  updateResident
+  fetchResident,
+  resetResidentPassword,
+  updateResidentActive
 } from '../../../../apis/resident';
 import { useThrottle } from '../../../../data/dataControl';
 
@@ -55,21 +56,23 @@ export const useResidents = (options?: {
     isLoading.value = false;
   };
 
-  const remove = async (ids: number[]) => {
+  const updateActive = async (data:any) => {
     isLoading.value = true;
     try {
-      await deleteResident({ ids });
+      await updateResidentActive(data);
+      
       await fetch();
+      console.log(residents.value)
     } catch (error) {
       console.error(error);
     }
     isLoading.value = false;
   };
 
-  const update = async (resident: any) => {
+  const resetP = async (resident: any) => {
     isLoading.value = true;
     try {
-      await updateResident(resident);
+      await resetResidentPassword(resident);
       await fetch();
     } catch (error) {
       console.error(error);
@@ -100,8 +103,8 @@ export const useResidents = (options?: {
     pagination,
     fetch,
     add,
-    remove,
-    update,
+    resetP,
+    updateActive,
     searchResident,
   };
 
