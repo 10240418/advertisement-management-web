@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref, reactive, toRaw, watch } from 'vue'
+import { ref, toRaw, watch } from 'vue'
 import { useUnits } from './composables/unit'
-import { useModal, useToast } from 'vuestic-ui'
+import { useToast } from 'vuestic-ui'
 import { unit_type } from '../../../data/unit'
 import _ from 'lodash'
 import unitsTable from './widgets/unitsTable.vue'
@@ -9,17 +9,17 @@ import editUnitForm from './widgets/editUnitForm.vue'
 
 const doShowEditUnitModal = ref(false)
 const doShowAddUnitModal = ref(false)
-
 const { isLoading, units, sorting, pagination, ...unitApi } = useUnits()
-
 const unitsShowInTable = ref<unit_type[]>([])
 const unitToEdit = ref<unit_type | null>(null)
 
+//编辑或者是新增
 const showEditUnitModal = (unit: unit_type) => {
   unitToEdit.value = unit
   doShowEditUnitModal.value = true
 }
 
+//新增Modal
 const showAddUnitModal = () => {
   doShowAddUnitModal.value = true
   unitToEdit.value = null
@@ -34,11 +34,9 @@ const onUnitDelete = async (unit: any) => {
     color: 'success',
   })
 }
-
-const fetchUnits = async (params: any) => {
-  console.log(sorting.value.sortingOrder)
+//watch监听units
+const fetchUnits = async () => {
   await unitApi.fetch()
-  // unitsShowInTable.value = units.value
 }
 
 const onSave = (unit: any) => {
@@ -51,11 +49,7 @@ const onSave = (unit: any) => {
   doShowAddUnitModal.value = false
 }
 
-const filterData = (search: any) => {
-  const rawUnits = toRaw(units.value)
-  const filteredUnits = rawUnits.filter((item: unit_type) => item.unit.includes(search))
-  unitsShowInTable.value = _.cloneDeep(filteredUnits)
-}
+
 
 watch(
   units,
@@ -75,10 +69,8 @@ watch(
         <VaButton @click="showAddUnitModal">Add Unit</VaButton>
       </div>
 
-      <unitsTable 
-        :pagination="pagination" :sorting="sorting" :units="unitsShowInTable" :loading="isLoading" @edit-unit="showEditUnitModal"
-        @delete-unit="onUnitDelete"
-        @fetch-units="fetchUnits" />
+      <unitsTable :pagination="pagination" :sorting="sorting" :units="unitsShowInTable" :loading="isLoading"
+        @edit-unit="showEditUnitModal" @delete-unit="onUnitDelete" @fetch-units="fetchUnits" />
     </VaCardContent>
   </VaCard>
 

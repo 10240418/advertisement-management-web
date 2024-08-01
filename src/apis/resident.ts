@@ -9,7 +9,7 @@ export const fetchResidents = (query: any) => {
     params: query,
   })
 }
-// pageNum pageSize
+// pageNum pageSize sortingOrder
 export const fetchResident = (query: any) => {
   return request({
     url: `/admin/resident_user/${query.id}`,

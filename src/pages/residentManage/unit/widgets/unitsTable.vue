@@ -2,7 +2,6 @@
 import { defineVaDataTableColumns, useModal } from 'vuestic-ui'
 import { PropType, computed, toRef, ref, watch, onMounted, onBeforeUnmount } from 'vue'
 import { unit_type } from '../../../../data/unit'
-import { debounce } from 'lodash'
 
 const columns = defineVaDataTableColumns([
   { label: 'ID', key: 'id', sortable: true },
@@ -15,7 +14,7 @@ const columns = defineVaDataTableColumns([
 
 const props = defineProps({
   units: {
-    type: Array as PropType<unit_type []>,
+    type: Array as PropType<unit_type[]>,
     required: true,
   },
   loading: { type: Boolean, default: false },
@@ -26,7 +25,7 @@ const props = defineProps({
 const emit = defineEmits<{
   (event: 'edit-unit', unit: any): void
   (event: 'delete-unit', unit: any): void
-  (event: 'fetch-units', params: any): void
+  (event: 'fetch-units'): void
 }>()
 
 const units = toRef(props, 'units')
@@ -49,6 +48,7 @@ const onUnitDelete = async (unit: any) => {
   }
 }
 
+// 每一页的数据处理
 const currentPageData = computed(() => {
   let unitsArray: any = []
   if (Array.isArray(units.value)) {
@@ -63,6 +63,7 @@ const currentPageData = computed(() => {
   else return unitsArray.slice(startIndex, endIndex)
 })
 
+//watch pagination和sorting 变化fetch 数据
 watch(
   () => [
     props.pagination.pageNum,
@@ -78,15 +79,11 @@ watch(
     ) {
       props.pagination.pageNum = 1
     }
-    emit('fetch-units', {
-      pageNum: props.pagination.pageNum,
-      pageSize: props.pagination.pageSize,
-      desc: props.sorting.sortingOrder === 'desc'? true: false,
-    })
+    emit('fetch-units')
   }
 )
-
-const showContentUnit = ref<unit_type  | null>(null)
+//控制气泡下拉框
+const showContentUnit = ref<unit_type | null>(null)
 const showContent = (rowData: any) => {
   if (showContentUnit.value === rowData) {
     showContentUnit.value = null
@@ -94,7 +91,6 @@ const showContent = (rowData: any) => {
     showContentUnit.value = rowData
   }
 }
-
 const handleClickOutside = (event: MouseEvent) => {
   const target = event.target as HTMLElement
   const dropdowns = document.querySelectorAll('.dropdown-content')
@@ -115,13 +111,8 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <VaDataTable
-    :columns="columns"
-    :items="currentPageData"
-    :loading="$props.loading"
-    v-model:sort-by="props.sorting.sortBy"
-    v-model:sorting-order="props.sorting.sortingOrder"
-  >
+  <VaDataTable :columns="columns" :items="currentPageData" :loading="$props.loading"
+    v-model:sort-by="props.sorting.sortBy" v-model:sorting-order="props.sorting.sortingOrder">
     <template #cell(floor)="{ rowData }">
       <div class="max-w-[120px] ellipsis">{{ rowData.floor }}</div>
     </template>
@@ -132,37 +123,19 @@ onBeforeUnmount(() => {
 
     <template #cell(actions)="{ rowData }" class="overflow-y-scroll max-h[40px]">
       <VaPopover placement="bottom" trigger="click" color=" backgroundSecondary">
-        <div
-          class="flex items-center relative hover:bg-slate-100 rounded-[4px]"
-          @click.stop="showContent(rowData)"
-        >
+        <div class="flex items-center relative hover:bg-slate-100 rounded-[4px]" @click.stop="showContent(rowData)">
           <VaIcon name="more_horiz" size="20px" class="mr-2 cursor-pointer"></VaIcon>
         </div>
         <template #body>
           <transition name="fade">
-            <div
-              v-show="showContentUnit?.id === rowData.id"
-              class="tooltip-content flex flex-col justify-center z-999 items-center relative border border-solid border-gray-300 p-2 rounded-md shadow-lg"
-            >
-              <VaButton
-                preset="secondary"
-                size="small"
-                icon="mso-edit"
-                aria-label="Edit unit"
-                @click="$emit('edit-unit', rowData as any)"
-                class="w-full justify-between"
-              >
+            <div v-show="showContentUnit?.id === rowData.id"
+              class="tooltip-content flex flex-col justify-center z-999 items-center relative border border-solid border-gray-300 p-2 rounded-md shadow-lg">
+              <VaButton preset="secondary" size="small" icon="mso-edit" aria-label="Edit unit"
+                @click="$emit('edit-unit', rowData as any)" class="w-full justify-between">
                 <span>Edit</span>
               </VaButton>
-              <VaButton
-                preset="secondary"
-                size="small"
-                icon="mso-delete"
-                color="danger"
-                aria-label="Delete unit"
-                @click="onUnitDelete(rowData)"
-                class="w-full"
-              >
+              <VaButton preset="secondary" size="small" icon="mso-delete" color="danger" aria-label="Delete unit"
+                @click="onUnitDelete(rowData)" class="w-full">
                 <span>Delete</span>
               </VaButton>
             </div>
@@ -182,29 +155,12 @@ onBeforeUnmount(() => {
     </div>
 
     <div v-if="totalPages > 1" class="flex">
-      <VaButton
-        preset="secondary"
-        icon="va-arrow-left"
-        aria-label="Previous page"
-        :disabled="$props.pagination.pageNum === 1"
-        @click="$props.pagination.pageNum--"
-      />
-      <VaButton
-        class="mr-2"
-        preset="secondary"
-        icon="va-arrow-right"
-        aria-label="Next page"
-        :disabled="$props.pagination.pageNum === totalPages"
-        @click="$props.pagination.pageNum++"
-      />
-      <VaPagination
-        v-model="$props.pagination.pageNum"
-        buttons-preset="secondary"
-        :pages="totalPages"
-        :visible-pages="5"
-        :boundary-links="false"
-        :direction-links="false"
-      />
+      <VaButton preset="secondary" icon="va-arrow-left" aria-label="Previous page"
+        :disabled="$props.pagination.pageNum === 1" @click="$props.pagination.pageNum--" />
+      <VaButton class="mr-2" preset="secondary" icon="va-arrow-right" aria-label="Next page"
+        :disabled="$props.pagination.pageNum === totalPages" @click="$props.pagination.pageNum++" />
+      <VaPagination v-model="$props.pagination.pageNum" buttons-preset="secondary" :pages="totalPages"
+        :visible-pages="5" :boundary-links="false" :direction-links="false" />
     </div>
   </div>
 </template>
@@ -223,7 +179,7 @@ onBeforeUnmount(() => {
   padding: 0 8px;
 }
 
-.dropdown-content > * {
+.dropdown-content>* {
   margin-bottom: 0%;
 }
 

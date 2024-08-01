@@ -31,14 +31,12 @@ export const useResidents = (options?: {
     isLoading.value = true;
     try {
       const res = await fetchResidents({
-        data: { email: localStorage.getItem('AdminEmail'), password: localStorage.getItem('AdminPassword') },
-        params: { pageNum: pagination.value.pageNum, pageSize: pagination.value.pageSize }
+        pageNum: pagination.value.pageNum,
+        pageSize: pagination.value.pageSize,
+        desc: sorting.value.sortingOrder === "asc" ? false : true,
       });
       residents.value = res.data.data;
       pagination.value.total = res.data.pagination.total;
-
-      if (pagination.value.pageSize <= 0) pagination.value.pageSize = 10;
-      if (pagination.value.pageNum <= 0) pagination.value.pageNum = 1;
     } catch (error) {
       console.error(error);
     }
@@ -56,13 +54,11 @@ export const useResidents = (options?: {
     isLoading.value = false;
   };
 
-  const updateActive = async (data:any) => {
+  const updateActive = async (data: any) => {
     isLoading.value = true;
     try {
-      await updateResidentActive(data);
-      
+      await updateResidentActive(data)
       await fetch();
-      console.log(residents.value)
     } catch (error) {
       console.error(error);
     }
@@ -91,7 +87,7 @@ export const useResidents = (options?: {
     isLoading.value = false;
   };
   const searchResident = useThrottle(searchResidentByid, 500);
-  
+
   onBeforeMount(() => {
     fetch();
   });

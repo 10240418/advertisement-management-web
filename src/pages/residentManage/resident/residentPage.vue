@@ -7,7 +7,7 @@
       </div>
 
       <ResidentTable :pagination="pagination" :residents="residentsShowInTable" :loading="isLoading" :sorting="sorting"
-        @edit-resident="showEditResidentDialog" @update-resident="onResidentUpdateActive" @fetch-resident="fetchResident" />
+        @edit-resident="showEditResidentDialog" @update-resident="onResidentUpdateActive" @fetch-resident="fetchResidents" />
     </VaCardContent>
     <VaModal v-model="doShowAddResidentModal" size="small" mobile-fullscreen close-button hide-default-actions>
       <h1 class="va-h5">Add Resident</h1>
@@ -49,9 +49,8 @@ const onResidentUpdateActive = async (resident: any) => {
 };
 
 // 搜索居民
-const fetchResident = async (fetch: any) => {
-  await residentApi.fetch({ ...fetch });
-  residentsShowInTable.value = residents.value;
+const fetchResidents = async () => {
+  await residentApi.fetch();
 };
 
 const onSave = async (resident: any) => {
@@ -80,7 +79,7 @@ watch(
 );
 
 onBeforeMount(() => {
-  fetchResident({});
+  fetchResidents();
 });
 </script>
 

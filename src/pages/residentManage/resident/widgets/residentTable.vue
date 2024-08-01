@@ -5,8 +5,8 @@ import { resident_user_type } from '@/data/resident_user'
 
 const columns = defineVaDataTableColumns([
   { label: 'ID', key: 'id', sortable: true },
-  { label: 'Name', key: 'name', sortable: true },
-  { label: 'Email', key: 'email', sortable: true },
+  { label: 'Name', key: 'name', sortable: false},
+  { label: 'Email', key: 'email', sortable: false},
   { label: 'Active', key: 'active', sortable: false },
   { label: 'Actions', key: 'actions', sortable: false },
 ])
@@ -21,6 +21,7 @@ const props = defineProps({
 const emit = defineEmits<{
   (event: 'edit-resident', resident: any): void
   (event: 'update-resident', resident: any): void
+  (event: 'fetch-resident'): void
 }>()
 
 const residents = toRef(props, 'residents')
@@ -43,23 +44,32 @@ const onResidentUpdate = async (resident: any) => {
   }
 }
 
+
 const currentPageData = computed(() => {
+  let residentsArray: any = []
+  if (Array.isArray(residents.value)) {
+    residentsArray = residents.value
+  } else if (residents.value && typeof residents.value === 'object') {
+    residentsArray = [residents.value]
+  }
   const startIndex = (props.pagination.pageNum - 1) * props.pagination.pageSize
   const endIndex = startIndex + props.pagination.pageSize
-  return residents.value.slice(startIndex, endIndex)
+  if (residentsArray.length <= props.pagination.pageSize) return residents.value
+  else return residentsArray.slice(startIndex, endIndex)
 })
-
 const showContentResident = ref<resident_user_type | null>(null)
 const showContent = (rowData: any) => {
   showContentResident.value = rowData
 }
 
 watch(
-  () => [props.pagination.pageNum, props.pagination.pageSize],
+  () => [props.pagination.pageNum, props.pagination.pageSize,props.sorting.sortingOrder,props.sorting.sortBy],
   () => {
+    console.log(props.sorting.sortingOrder)
     if (props.pagination.total < props.pagination.pageSize * (props.pagination.pageNum - 1)) {
       props.pagination.pageNum = 1
     }
+    (emit('fetch-resident'))
   }
 )
 </script>
