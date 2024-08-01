@@ -5,8 +5,8 @@ import { admin_user_type } from '../../../data/admin_user'
 import { debounce} from 'lodash'
 
 const columns = defineVaDataTableColumns([
-  { label: 'ID', key: 'id', sortable: false },
-  { label: 'Name', key: 'name', sortable: false },
+  { label: 'ID', key: 'id', sortable: true },
+  { label: 'Name', key: 'name', sortable: true},
   { label: 'Email', key: 'email', sortable: false },
   { label: 'create_at', key: 'createdAt', sortable: false },
   { label: 'Actions', key: 'actions', sortable: false },
@@ -19,6 +19,7 @@ const props = defineProps({
   },
   loading: { type: Boolean, default: false },
   pagination: { type: Object as PropType<any>, required: true },
+  sorting: { type: Object as PropType<any>, required: true },
 })
 
 const emit = defineEmits<{
@@ -63,19 +64,20 @@ const currentPageData = computed(() => {
 })
 
 watch(
-  () => [props.pagination.pageNum, props.pagination.pageSize],
+  () => [props.pagination.pageNum, props.pagination.pageSize,props.sorting.sortingOrder,props.sorting.sortBy],
   () => {
-    if (props.pagination.pageNum <= 0 || props.pagination.pageNum == null) {
-    } else if (props.pagination.total < props.pagination.pageSize * (props.pagination.pageNum - 1)) {
-      props.pagination.pageNum = 1
-      emit('fectch-user', { pageNum: props.pagination.pageNum, pageSize: props.pagination.pageSize })
-    } else {
-      emit('fectch-user', { pageNum: props.pagination.pageNum, pageSize: props.pagination.pageSize })
+    console.log(props.sorting.sortingOrder)
+    console.log(props.sorting.sortBy)
+    if(props.pagination.total < props.pagination.pageSize * (props.pagination.pageNum - 1)){
+      props.pagination.pageNum = 1;
     }
+      emit('fectch-user', { pageNum: props.pagination.pageNum, pageSize: props.pagination.pageSize,desc: props.sorting.sortOrder==="desc"? true:false})
+    
+
   }
 )
 
-
+console.log(props.sorting.sortingOrder)
 //气泡提示框
 const showContentUser = ref<admin_user_type | null>(null)
 const showContent = (rowData: any) => {
@@ -106,7 +108,8 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <VaDataTable :columns="columns" :items="currentPageData" :loading="$props.loading">
+  <VaDataTable :columns="columns" :items="currentPageData" :loading="$props.loading"
+  v-model:sort-by="props.sorting.sortBy" v-model:sorting-order="props.sorting.sortingOrder">
     <template #cell(name)="{ rowData }">
       <div class="max-w-[120px] ellipsis">
         {{ rowData.name }}

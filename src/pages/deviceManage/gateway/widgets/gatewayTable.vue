@@ -107,7 +107,7 @@ const showContent = (rowData: any) => {
 
     <template #cell(device)="{ row, isExpanded }">
       <VaButton :icon="isExpanded ? 'va-arrow-up' : 'va-arrow-down'" preset="secondary"
-        class="justify-center items-center relative fontsize-[8px]" @click="row.toggleRowDetails()">
+        class=" flex justify-start  items-center relative fontsize-[8px]" @click="row.toggleRowDetails()">
         {{ isExpanded ? 'Hide' : 'More info' }}
       </VaButton>
     </template>
@@ -139,7 +139,7 @@ const showContent = (rowData: any) => {
 
     <template #cell(actions)="{ rowData }" class=" overflow-y-scroll">
       <VaPopover placement="bottom" trigger="click" color="backgroundSecondary">
-        <div class="flex  items-center relative hover:bg-slate-400 rounded-[4px] "
+        <div class="flex  items-center relative hover:bg-blue-200 rounded-[4px] "
           @click.stop="showContent(rowData)">
           <VaIcon name="more_horiz" size="20px" class="mr-2 cursor-pointer">
           </VaIcon>
@@ -148,7 +148,7 @@ const showContent = (rowData: any) => {
         <template #body>
           <transition name="fade">
             <div v-show="showContentGateway?.id === rowData.id"
-              class="tooltip-content flex flex-col  justify-center z-999 items-center relative  border border-solid p-2 rounded-md shadow-lg">
+              class="tooltip-content flex flex-col  justify-start z-999 items-center relative  border border-solid p-2 rounded-md shadow-lg">
               <VaButton preset="secondary" size="small" icon="mso-edit" aria-label="Edit user"
                 @click="$emit('edit-gateway', rowData as any)" class="w-full justify-start">
                 <span>Detail</span>

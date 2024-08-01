@@ -90,6 +90,8 @@ watch(
     if(props.pagination.total < props.pagination.pageSize * (props.pagination.pageNum - 1)){
       props.pagination.pageNum = 1;
     }
+    console.log(props.sorting.sortingOrder)
+    console.log(props.sorting.sortBy)
     emit('fetch-meter',{pageNum:props.pagination.pageNum,pageSize:props.pagination.pageSize});
   }
 );

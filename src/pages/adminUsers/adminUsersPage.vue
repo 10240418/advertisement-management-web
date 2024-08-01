@@ -37,7 +37,7 @@ const onUserDelete = async (user: any) => {
   })
 } 
 const fectchUserByPa = async (pagination: any) => {
-  await userApi.fetch(pagination)
+  await userApi.fetch()
   adminUsersShowInTable.value  = adminusers.value
   
 }
@@ -74,19 +74,12 @@ watch(
     <VaCardContent>
       <div class="flex flex-col md:flex-row gap-2 mb-2 justify-between">
         <div class="flex flex-col md:flex-row gap-2 justify-start">
-          <!-- <span class="span-filter">name:</span>
-          <VaInput v-model="filters.search" placeholder="Search">
-            <template #prependInner>
-              <VaIcon name="search" color="secondary" size="s" />
-            </template>
-          </VaInput> -->
-
         </div>
         <VaButton @click="showAddUserModal">Add User</VaButton>
       </div>
 
       <adminUsersTable 
-        :pagination="pagination" :users="adminUsersShowInTable" :loading="isLoading" @edit-user="showEditUserModal"
+        :pagination="pagination" :sorting="sorting" :users="adminUsersShowInTable" :loading="isLoading" @edit-user="showEditUserModal"
         @delete-user="onUserDelete"
         @fectch-user="fectchUserByPa" />
     </VaCardContent>

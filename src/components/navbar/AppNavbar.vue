@@ -7,7 +7,7 @@
             @click="isSidebarMinimized = !isSidebarMinimized" />
         </Transition>
         <RouterLink to="/" aria-label="Visit home page" class="logo">
-          Meter Reading System
+          SmartMeter
         </RouterLink>
       </div>
     </template>
@@ -48,7 +48,7 @@ const { isSidebarMinimized } = storeToRefs(GlobalStore)
 
 .logo {
   color: rgb(21, 78, 193);
-  font-size: 32px;
+  font-size: 28px;
   font-weight: 900;
 }
 

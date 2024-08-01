@@ -35,40 +35,6 @@ export default {
       ],
     },
     {
-      name: 'adminUsers',
-      displayName: 'menu.adminUser',
-      meta: {
-        icon: 'manage_accounts',
-      },
-    },
-    // {
-    //   name: 'electricMeterManage',
-    //   displayName: 'menu.electricMeterManage',
-    //   meta: {
-    //     icon: 'electric_meter',
-    //   },
-    // },
-    // {
-    //   name: 'waterMeterManage',
-    //   displayName: 'menu.waterMeterManage',
-    //   meta: {
-    //     icon: 'gas_meter',
-    //   },
-    // },
-    {
-      name: 'auth',
-      displayName: 'menu.auth',
-      meta: {
-        icon: 'login',
-      },
-      children: [
-        {
-          name: 'login',
-          displayName: 'menu.login',
-        },
-      ],
-    },
-    {
       name:'deviceManage',
       displayName:'menu.deviceManage',
       meta:{
@@ -99,6 +65,28 @@ export default {
       ]
 
     },
+    
+    {
+      name: 'auth',
+      displayName: 'menu.auth',
+      meta: {
+        icon: 'login',
+      },
+      children: [
+        {
+          name: 'login',
+          displayName: 'menu.login',
+        },
+      ],
+    },
+    {
+      name: 'adminUsers',
+      displayName: 'menu.adminUser',
+      meta: {
+        icon: 'manage_accounts',
+      },
+    },
+    
     {
       name: 'settings',
       displayName: 'menu.settings',
