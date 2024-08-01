@@ -139,7 +139,7 @@ const showContent = (rowData: any) => {
 
     <template #cell(actions)="{ rowData }" class=" overflow-y-scroll">
       <VaPopover placement="bottom" trigger="click" color="backgroundSecondary">
-        <div class="flex justify-center items-center relative hover:bg-slate-400 rounded-[4px] "
+        <div class="flex  items-center relative hover:bg-slate-400 rounded-[4px] "
           @click.stop="showContent(rowData)">
           <VaIcon name="more_horiz" size="20px" class="mr-2 cursor-pointer">
           </VaIcon>
@@ -150,12 +150,12 @@ const showContent = (rowData: any) => {
             <div v-show="showContentGateway?.id === rowData.id"
               class="tooltip-content flex flex-col  justify-center z-999 items-center relative  border border-solid p-2 rounded-md shadow-lg">
               <VaButton preset="secondary" size="small" icon="mso-edit" aria-label="Edit user"
-                @click="$emit('edit-gateway', rowData as any)" class="w-full">
-                <span>明细</span>
+                @click="$emit('edit-gateway', rowData as any)" class="w-full justify-start">
+                <span>Detail</span>
               </VaButton>
               <VaButton preset="secondary" size="small" icon="mso-delete" color="danger" aria-label="Delete user"
                 @click="onGatewayDelete(rowData)" class="w-full">
-                <span>删除</span>
+                <span>Delete</span>
               </VaButton>
             </div>
           </transition>

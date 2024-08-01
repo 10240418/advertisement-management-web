@@ -11,7 +11,7 @@
 
     <template #cell(actions)="{ rowData }" class="overflow-y-scroll">
       <VaPopover placement="bottom" trigger="click" color="backgroundSecondary">
-        <div class="flex justify-center items-center relative hover:bg-slate-400 rounded-[4px]"
+        <div class="flex  items-center relative hover:bg-slate-400 rounded-[4px]"
           @click.stop="showContent(rowData)">
           <VaIcon name="more_horiz" size="20px" class="mr-2 cursor-pointer" />
         </div>
@@ -20,7 +20,7 @@
             <div v-show="showContentMeter?.id === rowData.id"
               class="tooltip-content flex flex-col justify-center z-999 items-center relative border border-solid p-2 rounded-md shadow-lg">
               <VaButton preset="secondary" size="small" icon="mso-edit" aria-label="Edit meter"
-                @click="$emit('edit-meter', rowData as any)" class="w-full">
+                @click="$emit('edit-meter', rowData as any)" class="w-full justify-start">
                 <span>Edit</span>
               </VaButton>
               <VaButton preset="secondary" size="small" icon="mso-delete" color="danger" aria-label="Delete meter"

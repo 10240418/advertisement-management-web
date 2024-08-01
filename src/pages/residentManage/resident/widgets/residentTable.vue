@@ -51,7 +51,7 @@ const currentPageData = computed(() => {
 
 const showContentResident = ref<resident_user_type | null>(null)
 const showContent = (rowData: any) => {
-  showContentResident.value = showContentResident.value === rowData ? null : rowData
+  showContentResident.value = rowData
 }
 
 watch(
@@ -87,19 +87,19 @@ watch(
 
     <template #cell(actions)="{ rowData }">
       <VaPopover placement="bottom" trigger="click" color="backgroundSecondary">
-        <div class="flex justify-center items-center relative hover:bg-slate-400 rounded-[4px]"
+        <div class="flex justify-start items-center relative hover:bg-blue-200 rounded-[4px]"
           @click.stop="showContent(rowData)">
           <VaIcon name="more_horiz" size="20px" class="mr-2 cursor-pointer" />
         </div>
         <template #body>
           <transition name="fade">
             <div v-show="showContentResident?.id === rowData.id"
-              class="tooltip-content flex flex-col justify-center z-999 items-center relative border border-solid p-2 rounded-md shadow-lg">
+              class="tooltip-content flex flex-col justify-center z-999 items-center relative border  p-1 rounded-md">
               <VaButton preset="secondary" size="small" icon="mso-edit" aria-label="Edit Resident"
                 @click="$emit('edit-resident', rowData as any)" class="w-full justify-between">
                 <span>Edit</span>
               </VaButton>
-              <VaButton preset="secondary" size="small" icon="mso-delete" color="danger" aria-label="Delete Resident"
+              <VaButton preset="secondary" size="small" icon="update"  aria-label="Update Resident"
                 @click="onResidentUpdate(rowData)" class="w-full justify-between">
                 <span>Update</span>
               </VaButton>

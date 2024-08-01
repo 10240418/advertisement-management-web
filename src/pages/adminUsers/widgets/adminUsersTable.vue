@@ -9,7 +9,6 @@ const columns = defineVaDataTableColumns([
   { label: 'Name', key: 'name', sortable: false },
   { label: 'Email', key: 'email', sortable: false },
   { label: 'create_at', key: 'createdAt', sortable: false },
-  { label: 'updated_at', key: 'updatedAt', sortable: false },
   { label: 'Actions', key: 'actions', sortable: false },
 ])
 
@@ -122,7 +121,7 @@ onBeforeUnmount(() => {
 
     <template #cell(actions)="{ rowData }" class=" overflow-y-scroll max-h[40px]">
       <VaPopover placement="bottom" trigger="click" color=" backgroundSecondary">
-        <div class="flex justify-center items-center relative  hover:bg-slate-100  rounded-[4px]"
+        <div class="flex  items-center relative  hover:bg-slate-100  rounded-[4px]"
           @click.stop="showContent(rowData)">
           <VaIcon name="more_horiz" size="20px" class="mr-2 cursor-pointer">
           </VaIcon>
@@ -132,12 +131,12 @@ onBeforeUnmount(() => {
         <div v-show="showContentUser?.id === rowData.id"
           class="tooltip-content flex flex-col  justify-center z-999 items-center relative  border border-solid border-gray-300 p-2 rounded-md shadow-lg">
           <VaButton preset="secondary" size="small" icon="mso-edit" aria-label="Edit user"
-            @click="$emit('edit-user', rowData as any)" class="w-full">
-            <span>编辑</span>
+            @click="$emit('edit-user', rowData as any)" class="w-full justify-between">
+            <span>Edit</span>
           </VaButton>
           <VaButton preset="secondary" size="small" icon="mso-delete" color="danger" aria-label="Delete user"
             @click="onUserDelete(rowData)" class="w-full">
-            <span>删除</span>
+            <span>Delete</span>
           </VaButton>
         </div>
       </transition>
@@ -193,10 +192,7 @@ onBeforeUnmount(() => {
   transition: 0s;
 }
 
-span {
-  font-size: 10px;
-  margin-left: 6px;
-}
+
 
 .tooltip-content {
   position: relative;
