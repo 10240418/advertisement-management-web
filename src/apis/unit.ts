@@ -1,13 +1,11 @@
 import request from '@/apis/index'
 
-//{pageSize,pageNum}
+//{pageSize,pageNum,desc}
 export const fetchUnitList = (query: any) => {
     return request({
         url: `/admin/unit`,
         method: 'get',
         params: query.params,
-        data: query.data
-        
     });
 };
 
@@ -18,6 +16,10 @@ export const addUnit = (data: any) => {
         data,
     });
 };
+// {
+//     "floor": "G",
+//     "unit": "033"
+//   }
 
 export const updateUnit = (data: any) => {
     return request({
@@ -26,7 +28,11 @@ export const updateUnit = (data: any) => {
         data,
     });
 };
-
+// {
+//     "id": 2,
+//     "floor": "G",
+//     "unit": "03"
+//   }
 export const deleteUnit = (ids: any) => {
     return request({
         url: `/admin/unit`,
@@ -34,3 +40,6 @@ export const deleteUnit = (ids: any) => {
         data: ids,
     });
 };
+// {
+//     "ids": [3]
+//   }
