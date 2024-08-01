@@ -5,7 +5,7 @@ export const fetchUnitList = (query: any) => {
     return request({
         url: `/admin/unit`,
         method: 'get',
-        params: query.params,
+        params: query,
     });
 };
 
