@@ -1,8 +1,8 @@
 <template>
   <VaCard>
     <VaCardContent>
-      <div class="flex flex-col md:flex-row gap-2 mb-2 justify-between">
-        <VaInput v-model="searchValue" placeholder="Search" class="w-full md:w-2/3" @keyup.enter="onSearch(searchValue)" />
+      <div class="flex flex-col md:flex-row gap-2 mb-2 justify-end">
+        <!-- <VaInput v-model="searchValue" placeholder="Search" class="w-full md:w-2/3" @keyup.enter="onSearch(searchValue)" /> -->
         <VaButton @click="showAddResidentModal">Add Resident</VaButton>
       </div>
 
@@ -62,13 +62,13 @@ const onSave = async (resident: any) => {
   doShowAddResidentModal.value = false;
 };
 
-const searchValue = ref('');
-const onSearch = async (searchValue: any) => {
-  const res = await residentApi.searchResident({
-    data: { email: localStorage.getItem('AdminEmail'), password: localStorage.getItem('AdminPassword') },
-    params: Number(searchValue),
-  });
-};
+// const searchValue = ref('');
+// const onSearch = async (searchValue: any) => {
+//   const res = await residentApi.searchResident({
+//     data: { email: localStorage.getItem('AdminEmail'), password: localStorage.getItem('AdminPassword') },
+//     params: Number(searchValue),
+//   });
+// };
 
 watch(
   residents,
