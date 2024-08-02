@@ -32,7 +32,7 @@ const residentsShowInTable = ref<resident_user_type[]>([]);
 const residentToEdit = ref<resident_user_type | null>(null);
 
 const showEditResidentDialog = (resident: resident_user_type) => {
-  const newWindow = window.open(`/residentDetail?id=${resident.id}`, '_blank','width=600,height=400,left=500,top=500,menubar=no,location=no,status=no,titlebar=no,toolbar');
+  const newWindow = window.open(`/residentDetail?id=${resident.id}`, '_blank','width=800,height=400,left=500,top=500,menubar=no,location=no,status=no,titlebar=no,toolbar');
 };
 
 const showAddResidentModal = () => {

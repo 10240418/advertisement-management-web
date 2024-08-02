@@ -2,43 +2,47 @@
   <VaCard>
     <div class="w-full h-full flex flex-col gap-4 ml-3">
       <!-- top section -->
-      <div class="flex flex-row justify-between">
-        <div class="grid grid-cols-[1fr_3fr] " :class="{ 'gap-y-[2.2px]': !editable }" >
+     
+        <div class="grid grid-cols-[1fr_3fr] " :class="{ 'gap-y-[2.2px]': !editable }">
 
           <VaListLabel class="flex justify-start">ID</VaListLabel>
-          <VaInput v-if="resident " v-model="resident.id" placeholder="ID" class="custom-input" :class="{ 'read-only': !editable }" />
-         
-
-
+          <VaInput v-if="resident" v-model="resident.id" placeholder="ID" class="custom-input"
+            :class="{ 'read-only': !editable }" />
           <VaListLabel class="flex justify-start">Name</VaListLabel>
-          <VaInput v-if="resident " v-model="resident.name" placeholder="Name" class="custom-input" :class="{ 'read-only': !editable }" />
-          
-
-
+          <VaInput v-if="resident" v-model="resident.name" placeholder="Name" class="custom-input"
+            :class="{ 'read-only': !editable }" />
           <VaListLabel class="flex justify-start">Email</VaListLabel>
-          <VaInput v-if="resident " v-model="resident.email" placeholder="Email"  class="custom-input" :class="{ 'read-only': !editable }" />
-         
-
+          <VaInput v-if="resident" v-model="resident.email" placeholder="Email" class="custom-input"
+            :class="{ 'read-only': !editable }" />
         </div>
-        <div class="flex flex-row justify-end h-[30px] w-[72px] mt-[3px] mr-4">
-          <VaButton color="primary" @click="editable = !editable" class="h-[30px] w-[72px]">Edit</VaButton>
-        </div>
-      </div>
+       
+     
 
-
-
-      <!-- Chart Section -->
+      <!-- Table Section -->
+      <VaDataTable
+      :items="currentPageData"
+      class="mr-3"
+      :style="{
+        '--va-data-table-height': '220px',
+        '--va-data-table-thead-background': 'var(--va-background-element)',
+        '--va-data-table-tfoot-background': 'var(--va-background-element)',
+        '--va-data-table-thead-color': '#2C82E0',
+      }"
+      sticky-header
+      footer-clone
+      sticky-footer
+    />
       <!-- Dialog Footer -->
-      <div class="dialog-footer">
-        <VaButton @click="onClose">Cancel</VaButton>
-        <VaButton color="primary" @click="onConfirm">Confirm</VaButton>
+      <div class="dialog-footer flex flex-row gap-2 ">
+        <VaButton color="primary" @click="editable = !editable" class="h-[30px] w-[72px]">Edit</VaButton>
+        <VaButton @click="onClose" class="h-[30px] w-[72px] mr-5">Cancel</VaButton>
       </div>
     </div>
   </VaCard>
 </template>
 
 <script lang="ts" setup>
-import { ref, onBeforeMount } from 'vue';
+import { ref, onBeforeMount ,computed} from 'vue';
 import { resident_user_type } from '@/data/resident_user';
 import { useRoute } from 'vue-router';
 import { fetchResident } from '../../../../apis/resident';
@@ -62,6 +66,23 @@ const fetch = async () => {
     }
   }
 };
+const currentPageData = computed(() => {
+  let unitsArray: any = []
+  if (Array.isArray(resident.value?.units)) {
+    unitsArray = resident.value?.units
+  } else if (resident.value?.units && typeof resident.value?.units === 'object') {
+    unitsArray = [resident.value?.units]
+  }
+  return unitsArray;
+
+});
+
+// let residentsArray: any = []
+//   if (Array.isArray(residents.value)) {
+//     residentsArray = residents.value
+//   } else if (residents.value && typeof residents.value === 'object') {
+//     residentsArray = [residents.value]
+//   }
 
 onBeforeMount(() => {
   fetch();
@@ -79,21 +100,22 @@ const onClose = () => {
 };
 </script>
 
-<style >
+<style>
 .custom-input {
   --va-input-line-height: 8px;
-  --va-input-wrapper-min-height:20px
-  --va-input-font-stretch: expanded;
+  --va-input-wrapper-min-height: 20px --va-input-font-stretch: expanded;
   --va-input-letter-spacing: 0.05em;
   --va-input-disabled-opacity: 0.5;
- 
+
 }
-.read-only .va-input-wrapper__field{
+
+.read-only .va-input-wrapper__field {
   --va-form-element-border-width: 0px;
-  border-width:0px;
+  border-width: 0px;
 }
-.va-input-wrapper__field{
-    padding:4px 12px
+
+.va-input-wrapper__field {
+  padding: 4px 12px
 }
 
 .resident-dialog {

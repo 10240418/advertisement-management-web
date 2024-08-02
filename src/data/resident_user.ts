@@ -4,7 +4,7 @@ export type resident_user_type ={
     name: string,
     email: string,
     active: boolean,
-    units: null
+    units: object[]
 }
 // {
 //     "id": 1,

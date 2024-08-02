@@ -103,6 +103,5 @@ export const useResidents = (options?: {
     updateActive,
     searchResident,
   };
-
   return useResidentsInstance;
 };
