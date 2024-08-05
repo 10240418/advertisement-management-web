@@ -46,7 +46,7 @@ const showAddResidentModal = () => {
 //... 下拉气泡框 
 //detail 
 const showEditResidentDialog = (resident: resident_user_type) => {
-  const newWindow = window.open(`/residentDetail?id=${resident.id}`, '_blank', 'width=800,height=400,left=500,top=500,menubar=no,location=no,status=no,titlebar=no,toolbar');
+  const newWindow = window.open(`/residentDetail?id=${resident.id}`, '_blank', 'width=900,height=500,left=500,top=500,menubar=no,location=no,status=no,titlebar=no,toolbar');
 };
 //edit
 const onResidentEdit = (resident: resident_user_type) => {

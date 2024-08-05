@@ -29,9 +29,8 @@
         v-model="form.active"
         name="active"
       />
-    
       </div>
-    
+
       <div class="flex gap-2 justify-end mt-4">
         <VaButton preset="secondary" color="secondary" @click="onClose">Cancel</VaButton>
         <VaButton :disabled="!isValid" @click="submit">Save</VaButton>
