@@ -19,9 +19,10 @@ const props = defineProps({
 })
 
 const emit = defineEmits<{
-  (event: 'edit-resident', resident: any): void
+  (event: 'detail-resident', resident: any): void
   (event: 'update-resident', resident: any): void
   (event: 'fetch-resident'): void
+  (event: 'edit-resident', resident: any): void
 }>()
 
 const residents = toRef(props, 'residents')
@@ -106,12 +107,16 @@ watch(
             <div v-show="showContentResident?.id === rowData.id"
               class="tooltip-content flex flex-col justify-center z-999 items-center relative border  p-1 rounded-md">
               <VaButton preset="secondary" size="small" icon="mso-edit" aria-label="Edit Resident"
-                @click="$emit('edit-resident', rowData as any)" class="w-full justify-between">
+              @click="$emit('edit-resident',rowData as any)" class="w-full justify-between">
                 <span>Edit</span>
               </VaButton>
               <VaButton preset="secondary" size="small" icon="update"  aria-label="Update Resident"
                 @click="onResidentUpdate(rowData)" class="w-full justify-between">
                 <span>Update</span>
+              </VaButton>
+              <VaButton preset="secondary" size="small" icon="info"  aria-label="Info Resident"
+                @click="$emit('detail-resident', rowData as any)" class="w-full justify-between">
+                <span>Detail</span>
               </VaButton>
             </div>
           </transition>

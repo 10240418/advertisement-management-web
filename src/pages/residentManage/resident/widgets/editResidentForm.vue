@@ -8,7 +8,6 @@
         :rules="[validators.required]"
         name="name"
       />
-      
       <VaInput
         v-model="form.email"
         label="Email"
@@ -16,6 +15,22 @@
         :rules="[validators.required, validators.email]"
         name="email"
       />
+      <VaInput
+        v-model="form.password"
+        label="Password"
+        placeholder="Enter password"
+        :rules="[validators.required]"
+        name="password"
+        type="password"
+      />
+      <div class="flex flex-col gap-1">
+          <VaListLabel class="flex justify-start">Active</VaListLabel>  
+      <VaSwitch
+        v-model="form.active"
+        name="active"
+      />
+    
+      </div>
     
       <div class="flex gap-2 justify-end mt-4">
         <VaButton preset="secondary" color="secondary" @click="onClose">Cancel</VaButton>
@@ -36,40 +51,52 @@ const props = defineProps({
  resident: { type: Object as PropType<resident_user_type | null>, required: true },
   onClose: Function,
 });
-
 const emit = defineEmits(['close']);
-
-
-const { add, update } = useResidents();
+const { add, updateActive,resetP } = useResidents();
 
 const form = ref({
+  id:props.resident? props.resident.id : '',
   name: props.resident ? props.resident.name : '',
   email: props.resident ? props.resident.email : '',
   units: props.resident ? props.resident.units : [],
   createdAt: props.resident ? props.resident.createdAt : '',
-  active: props.resident ? props.resident.active : true,
+  active: props.resident ? props.resident.active : false,
+  password: props.resident ? props.resident.password : '',
+  
 });
-
 
 watch(
   () => props.resident,
   (newResident) => {
     if (newResident) {
-      form.value = newResident.value;
-      console.log(form.value)
+      form.value = { ...newResident };
+    } else {
+      form.value = {
+        id: '',
+        name: '',
+        email: '',
+        units: [],
+        createdAt: '',
+        active: false,
+        password: '',
+      };
     }
   },
   { immediate: true }
 );
+
 
 const formInstance = useForm('edit-resident-form');
 
 const submit = () => {
   if (formInstance.validate()) {
     if (props.resident?.id) {
-      update({ ...form.value, id: props.resident.id });
+      updateActive({id:form.value.id, active:form.value.active,email:form.value.email,name:form.value.name});
+      resetP({id:form.value.id, password:form.value.password})
+
     } else {
-      add(form.value);
+      console.log(form.value)
+      add({ name: form.value.name, email: form.value.email, password: form.value.password, active: form.value.active });
     }
     emit('close');
   }

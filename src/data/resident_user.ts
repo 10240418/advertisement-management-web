@@ -1,11 +1,12 @@
 export type resident_user_type ={
-    id: number,
+    id: any,
     createdAt: string,
     name: string,
     email: string,
     active: boolean,
-    units: object[]
-}
+    units: object[],
+    password: string,
+}       
 // {
 //     "id": 1,
 //     "createdAt": "2024-07-31T01:57:59.379Z",

@@ -63,7 +63,7 @@ export const updateResidentActive = (data: any) => {
 export const resetResidentPassword = (data: any) => {
   return request({
     url: `/admin/resident_user/reset_password`,
-    method: 'put',
+    method: 'post',
     data,
   })
 }
