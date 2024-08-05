@@ -11,13 +11,17 @@
     </VaCardContent>
     <VaModal v-model="doShowAddResidentModal" size="small" mobile-fullscreen close-button hide-default-actions>
       <h1 class="va-h5">Add Resident</h1>
-      <EditResidentForm v-model="residentToEdit" @close="doShowAddResidentModal = false" @save="onSave(residentToEdit)" />
+      <EditResidentForm :resident="residentToEdit" @close="doShowAddResidentModal = false" @save="onSave(residentToEdit)" />
+    </VaModal>
+    <VaModal v-model="doShowEditResidentModal" size="small" mobile-fullscreen close-button hide-default-actions>
+      <h1 class="va-h5">Edit Resident</h1>
+      <EditResidentForm  :resident="residentToEdit" @close="doShowAddResidentModal = false" @save="onSave(residentToEdit)" />
     </VaModal>
   </VaCard>
 </template>
 
 <script setup lang="ts">
-import { ref, toRaw, watch, onBeforeMount } from 'vue';
+import { ref, toRaw, watch, onBeforeMount ,toRef} from 'vue';
 import { useResidents } from './composables/resident';
 import { useToast } from 'vuestic-ui';
 import { resident_user_type } from '@/data/resident_user';
@@ -39,6 +43,23 @@ const showAddResidentModal = () => {
   doShowAddResidentModal.value = true;
   residentToEdit.value = null;
 };
+const doShowEditResidentModal = ref(false);
+// 创建一个新的 BroadcastChannel 实例
+const bc = new BroadcastChannel('resident-dialog');
+
+// 监听收到的消息
+bc.onmessage = (event) => {
+  console.log('Received message:', event.data);
+  if (event.data.type === 'edit') {
+    // 处理接收到的数据
+    console.log('Editing data:', event.data.data);
+    residentToEdit.value =toRef(event.data.data) ;
+    console.log(residentToEdit.value)
+    doShowEditResidentModal.value = true;
+  }
+};
+
+
 
 const onResidentUpdateActive = async (resident: any) => {
   await residentApi.updateActive({ id: resident.id, active: !resident.active });
@@ -62,13 +83,6 @@ const onSave = async (resident: any) => {
   doShowAddResidentModal.value = false;
 };
 
-// const searchValue = ref('');
-// const onSearch = async (searchValue: any) => {
-//   const res = await residentApi.searchResident({
-//     data: { email: localStorage.getItem('AdminEmail'), password: localStorage.getItem('AdminPassword') },
-//     params: Number(searchValue),
-//   });
-// };
 
 watch(
   residents,

@@ -1,8 +1,8 @@
 <template>
   <VaCard>
-    <div class="w-full h-full flex flex-col gap-4 ml-3">
+    <div class="w-full h-full flex flex-col ml-3">
       <!-- top section -->
-     
+      <div class="flex flex-row justify-between">
         <div class="grid grid-cols-[1fr_3fr] " :class="{ 'gap-y-[2.2px]': !editable }">
 
           <VaListLabel class="flex justify-start">ID</VaListLabel>
@@ -14,9 +14,16 @@
           <VaListLabel class="flex justify-start">Email</VaListLabel>
           <VaInput v-if="resident" v-model="resident.email" placeholder="Email" class="custom-input"
             :class="{ 'read-only': !editable }" />
+            <VaListLabel class="flex justify-start">Email</VaListLabel>
+            <VaInput v-if="resident" v-model="resident.email" placeholder="Email" class="custom-input"
+            :class="{ 'read-only': !editable }" />
         </div>
-       
-     
+        <div class="flex flex-col justify-between w-[72px] mt-[3px] mr-4">
+          <VaButton color="primary" @click="postEdit" icon="mso-edit" class="h-[30px] w-[72px]">Edit</VaButton>
+          <VaButton color="primary" @click="postEdit" icon="mso-edit" class="h-[30px] w-[72px]">Edit</VaButton>
+
+        </div>
+      </div>
 
       <!-- Table Section -->
       <VaDataTable
@@ -33,8 +40,7 @@
       sticky-footer
     />
       <!-- Dialog Footer -->
-      <div class="dialog-footer flex flex-row gap-2 ">
-        <VaButton color="primary" @click="editable = !editable" class="h-[30px] w-[72px]">Edit</VaButton>
+      <div class="dialog-footer">
         <VaButton @click="onClose" class="h-[30px] w-[72px] mr-5">Cancel</VaButton>
       </div>
     </div>
@@ -42,7 +48,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onBeforeMount ,computed} from 'vue';
+import { ref, onBeforeMount ,computed,toRaw} from 'vue';
 import { resident_user_type } from '@/data/resident_user';
 import { useRoute } from 'vue-router';
 import { fetchResident } from '../../../../apis/resident';
@@ -57,7 +63,7 @@ const fetch = async () => {
     try {
       const res = await fetchResident({ id: residentId.value });
       resident.value = res.data.data;
-      console.log(resident.value)
+      // console.log(resident.value)
 
     } catch (error) {
       console.error('Error fetching resident:', error);
@@ -76,17 +82,30 @@ const currentPageData = computed(() => {
   return unitsArray;
 
 });
+// 创建一个新的 BroadcastChannel 实例
+const bc = new BroadcastChannel('resident-dialog');
 
-// let residentsArray: any = []
-//   if (Array.isArray(residents.value)) {
-//     residentsArray = residents.value
-//   } else if (residents.value && typeof residents.value === 'object') {
-//     residentsArray = [residents.value]
-//   }
+// 发送编辑消息的函数
+const postEdit = () => {
+  if (resident.value) {
+    console.log('Sending message:', resident.value); // 调试信息
+    bc.postMessage({
+      type: 'edit',
+      data: toRaw(resident.value) // 发送 resident 数据
+    });
+    console.log('Message sent:', resident.value);
+  }
+};
+// 示例：调用发送编辑消息
+// 取消此行的调用，避免在组件加载时自动发送消息
+// postEdit();
 
+// 当组件挂载前，获取 resident 数据
 onBeforeMount(() => {
   fetch();
 });
+
+
 
 
 const onConfirm = () => {

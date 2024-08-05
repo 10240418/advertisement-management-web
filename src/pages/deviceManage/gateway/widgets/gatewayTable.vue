@@ -154,7 +154,7 @@ const showContent = (rowData: any) => {
                 <span>Detail</span>
               </VaButton>
               <VaButton preset="secondary" size="small" icon="mso-delete" color="danger" aria-label="Delete user"
-                @click="onGatewayDelete(rowData)" class="w-full">
+                @click="onGatewayDelete(rowData)" class="w-full flex-start">
                 <span>Delete</span>
               </VaButton>
             </div>
