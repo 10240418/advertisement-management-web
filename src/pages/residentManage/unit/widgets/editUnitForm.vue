@@ -53,8 +53,7 @@ const onCancel = () => {
   <VaForm v-slot="{ isValid }" ref="edit-unit-form" class="flex-col justify-start items-start gap-4 inline-flex w-full">
     <div class="self-stretch flex-col justify-start items-start gap-4 flex">
       <div class="flex gap-4 flex-row w-full justify-center items-center">
-        <VaListLabel>Id:</VaListLabel>
-        <VaInput v-if="modelValue!==null" v-model="newUnit.id"  class="w-full read-only" :rules="[validators.required]" name="id"/>
+        <VaInput v-if="modelValue"  v-model="newUnit.id" label="ID"  class="w-full" :class="{ 'read-only': modelValue }" :rules="[validators.required]" name="id"/>
       </div>
       <div class="flex gap-4 flex- w-full">
         <VaInput v-model="newUnit.floor" label="Floor" class="w-full " :rules="[validators.required]" name="floor" />

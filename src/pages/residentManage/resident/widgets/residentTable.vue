@@ -114,7 +114,7 @@ watch(
                 @click="onResidentUpdate(rowData)" class="w-full justify-between">
                 <span>Update</span>
               </VaButton>
-              <VaButton preset="secondary" size="small" icon="info"  aria-label="Info Resident"
+              <VaButton preset="secondary" size="small" icon="mso-info"  aria-label="Info Resident"
                 @click="$emit('detail-resident', rowData as any)" class="w-full justify-between">
                 <span>Detail</span>
               </VaButton>
