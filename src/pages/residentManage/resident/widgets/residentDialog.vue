@@ -218,10 +218,12 @@ const onSave = async (resident: any) => {
   }
   doShowEditResidentModal.value = false;
 };
-
+//
 const onClose = () => {
-  doShowEditResidentModal.value = false;
+  //关闭弹窗
+  window.close();
 };
+
 
 const onCloseEditResidentModal = () => {
   doShowEditResidentModal.value = false;

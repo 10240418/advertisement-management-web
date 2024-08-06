@@ -44,7 +44,9 @@ const showAddResidentModal = () => {
   residentToEdit.value = null;
 };
 //... 下拉气泡框 
+
 //detail 
+const newWindow =ref<any>()
 const showEditResidentDialog = (resident: resident_user_type) => {
   const newWindow = window.open(`/residentDetail?id=${resident.id}`, '_blank', 'width=900,height=500,left=500,top=500,menubar=no,location=no,status=no,titlebar=no,toolbar');
 };
@@ -52,6 +54,7 @@ const showEditResidentDialog = (resident: resident_user_type) => {
 const onResidentEdit = (resident: resident_user_type) => {
   residentToEdit.value = resident;
   doShowEditResidentModal.value = true;
+  
 };
 //update
 const onResidentUpdateActive = async (resident: any) => {
