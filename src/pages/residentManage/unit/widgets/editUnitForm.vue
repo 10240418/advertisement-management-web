@@ -19,7 +19,7 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(['update:modelValue', 'close', 'save'])
+const emit = defineEmits(['close', 'save'])
 
 const newUnit = ref<any>({ ...defaultNewUnit })
 
@@ -39,7 +39,7 @@ const form = useForm('edit-unit-form')
 
 const onSave = () => {
   if (form.validate()) {
-    emit('update:modelValue', newUnit.value)
+    // emit('update:modelValue', newUnit.value)
     emit('save', newUnit.value)
   }
 }
@@ -52,15 +52,20 @@ const onCancel = () => {
 <template>
   <VaForm v-slot="{ isValid }" ref="edit-unit-form" class="flex-col justify-start items-start gap-4 inline-flex w-full">
     <div class="self-stretch flex-col justify-start items-start gap-4 flex">
-      <div class="flex gap-4 flex-col w-full">
-        <VaInput v-if="modelValue!==null" v-model="newUnit.id" label="Id" class="w-full" :rules="[validators.required]" name="id" />
+      <div class="flex gap-4 flex-row w-full justify-center items-center">
+        <VaListLabel>Id:</VaListLabel>
+        <VaInput v-if="modelValue!==null" v-model="newUnit.id"  class="w-full read-only" :rules="[validators.required]" name="id"/>
       </div>
-      <div class="flex gap-4 flex-col w-full">
-        <VaInput v-model="newUnit.floor" label="Floor" class="w-full" :rules="[validators.required]" name="floor" />
+      <div class="flex gap-4 flex- w-full">
+        <VaInput v-model="newUnit.floor" label="Floor" class="w-full " :rules="[validators.required]" name="floor" />
       </div>
 
       <div class="flex gap-4 flex-col w-full">
         <VaInput v-model="newUnit.unit" label="Unit" class="w-full" :rules="[validators.required]" name="unit" />
+      </div>
+
+      <div class="flex gap-4 flex-col w-full">
+        <VaInput v-model="newUnit.remark" label="Remark" class="w-full"  name="remark"  placeholder="Remark"/>
       </div>
 
       <div class="flex gap-2 flex-col-reverse items-stretch justify-end w-full">
@@ -70,3 +75,10 @@ const onCancel = () => {
     </div>
   </VaForm>
 </template>
+<style lang="scss">
+.read-only .va-input-wrapper__field {
+  --va-form-element-border-width: 0px;
+  border-width: 0px;
+}
+</style>
+

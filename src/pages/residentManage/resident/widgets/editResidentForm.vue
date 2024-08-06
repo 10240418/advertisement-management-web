@@ -24,7 +24,7 @@
         type="password"
       />
       <div class="flex flex-col gap-1">
-          <VaListLabel class="flex justify-start">Active</VaListLabel>  
+        <VaListLabel class="flex justify-start">Active</VaListLabel>  
       <VaSwitch
         v-model="form.active"
         name="active"

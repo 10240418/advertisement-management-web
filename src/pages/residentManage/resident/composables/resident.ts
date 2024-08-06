@@ -38,7 +38,8 @@ export const useResidents = (options?: {
         pageNum: pagination.value.pageNum,
         pageSize: pagination.value.pageSize,
         desc: sorting.value.sortingOrder === "asc" ? false : true,
-      });
+      })
+      
       residents.value = res.data.data;
       pagination.value.total = res.data.pagination.total;
     } catch (err: any) {
