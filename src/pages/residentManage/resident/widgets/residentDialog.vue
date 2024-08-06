@@ -218,7 +218,7 @@ const onSave = async (resident: any) => {
   }
   doShowEditResidentModal.value = false;
 };
-//
+//关闭
 const onClose = () => {
   //关闭弹窗
   window.close();
