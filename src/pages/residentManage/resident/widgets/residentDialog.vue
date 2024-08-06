@@ -49,7 +49,7 @@
     <!-- Add Unit Modal -->
     <VaModal v-model="doShowAddUnitModal" size="small" mobile-fullscreen close-button hide-default-actions>
       <h1 class="va-h5">Add Unit</h1>
-      <addUnitForm :resident="residentToEdit" @close="onCloseAddUnitModal" />
+      <addUnitForm :resident="residentToEdit" @close="onCloseAddUnitModal" @fetch="fetch" />
     </VaModal>
   </div>
 </template>
