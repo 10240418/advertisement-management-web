@@ -33,7 +33,7 @@ const pagination = ref({
   desc: false,
 });
 //type
-const typeOptions = ref(['owner', 'user']);
+const typeOptions = ref(['owner', 'tenant']);
 const selectTypeValue = ref<any>() 
 
 //unit 

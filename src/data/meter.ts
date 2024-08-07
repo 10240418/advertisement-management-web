@@ -6,6 +6,7 @@ export  type meter_type = {
   createdAt: string,
   name: string,
   type: number,
+  model: number,
   modbusAddr: number,
   remark: string,
   unitId: number,

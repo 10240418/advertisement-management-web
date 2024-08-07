@@ -20,11 +20,11 @@ export const addMeter = (data: any) => {
     data:{
       name:data.name,
       type:data.type as number,
+      model:data.model as number,
       modbusAddr:data.modbusAddr as number,
       gatewayId:data.gatewayId as number,
       remark:data.remark,
       unitId:data.unitId as number,
-
     },
   });
 };
@@ -66,6 +66,7 @@ export const updateMeter = ( data: any) => {
       id:data.id,
       name:data.name,
       type:data.type,
+      model:data.model,
       modbusAddr:data.modbusAddr,
       remark:data.remark,
       unitId:data.unitId,
@@ -83,13 +84,11 @@ export const updateMeter = ( data: any) => {
 //   "gatewayId": 6
 // }
 
-export const operateMeter = (data: any) => {
+export const operateMeter = (query: any) => {
   return request({
-    url: `/admin/meter/${data.id}/operate`,
+    url: `/admin/meter/${query.id}/operate`,
     method: 'post',
-    data:{
-     type:data.type,
-    }
+    data:query.body
   });
 };
 
@@ -105,4 +104,5 @@ export const fetchMeterData = (query: any) => {
     },
   });
 };
+
 

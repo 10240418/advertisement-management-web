@@ -13,11 +13,11 @@
     </VaCardContent>
     <VaModal v-model="doShowAddMeterModal" size="small" mobile-fullscreen close-button hide-default-actions>
       <h1 class="va-h5">Add Meter</h1>
-      <editMeterForm v-model="meterToEdit" @close="doShowAddMeterModal = false" @save="onSave(meterToEdit)" />
+      <editMeterForm v-model="meterToEdit" @close="doShowAddMeterModal = false" @save="onSave" />
     </VaModal>
     <VaModal v-model="doShowEditMeterModal" size="small" mobile-fullscreen close-button hide-default-actions>
       <h1 class="va-h5">Edit Meter</h1>
-      <editMeterForm v-model="meterToEdit" @close="doShowEditMeterModal = false" @save="onSave(meterToEdit)" />
+      <editMeterForm v-model="meterToEdit" @close="doShowEditMeterModal = false" @save="onSave" />
     </VaModal>
   </VaCard>
 </template>
@@ -69,32 +69,18 @@ const onMeterDelete = async (meter: meter_type) => {
   }
 }
 
-// const onResidentUpdate = async (resident: any) => {
-//   const agreed = await confirm({
-//     title: 'Update Resident',
-//     message: `Are you sure you want to update ${resident.name}?`,
-//     okText: 'Update',
-//     cancelText: 'Cancel',
-//     size: 'small',
-//     maxWidth: '380px',
-//   })
-
-//   if (agreed) {
-//     emit('update-resident', resident)
-//   }
-// }
-
 
 const fetchMeter = async (fetch: any) => {
   await meterApi.fetch({ ...fetch });
   metersShowInTable.value = meters.value;
 };
 
-const onSave = async (meter: any) => {
-  if (meter.id) {
-    await meterApi.update(meter);
+const onSave = async (newMeter: any) => {
+  if (newMeter.id) {
+    await meterApi.update(newMeter);
   } else {
-    await meterApi.add(meter);
+    console.log('newMeter', newMeter);
+    await meterApi.add(newMeter);
   }
   doShowAddMeterModal.value = false;
 };

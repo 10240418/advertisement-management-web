@@ -62,18 +62,23 @@
                     <VaListLabel class="flex justify-start">Remark</VaListLabel>
                     <span>{{ meter?.remark }}</span>
                 </div>
-                <div class="flex flex-col justify-between w-[72px] mt-[3px] mr-4">
+                <div class="flex flex-col justify-between items-end w-[120px] mt-[3px] ">
+                    <div class="flex flex-row items-center gap-5">
+                        <div class="w-[20px] h-[20px]  rounded-full"
+                            :class="{ 'bg-green-600': meterStatus === 1, 'bg-black': meterStatus === 0 }"></div>
+                        <VaButton color="primary" @click="operateMeterStatus" class="h-[30px] w-[72px]">
+                            Operate
+                        </VaButton>
+                    </div>
                     <VaButton color="primary" @click="openEditModal" icon="mso-edit" class="h-[30px] w-[72px]">
                         Edit
                     </VaButton>
                 </div>
             </div>
-
             <!-- chart -->
             <div>
                 <VaChart :data="chartData" class="h-24" type="line" :options="options" />
             </div>
-
             <!-- footer -->
             <div class="dialog-footer">
                 <VaButton @click="cancel">Cancel</VaButton>
@@ -100,7 +105,7 @@ import { useRoute } from 'vue-router';
 import { fetchMeter } from '../../../../apis/meter';
 import EditMeterForm from './editMeterForm.vue';
 import { useToast } from 'vuestic-ui';
-import { updateMeter } from '../../../../apis/meter';
+import { updateMeter, operateMeter } from '../../../../apis/meter';
 
 const toast = useToast();
 const meter = ref<meter_type | null>(null);
@@ -110,20 +115,19 @@ const editable = ref(false);
 const isUnitCollapsed = ref(true);
 const isGatewayCollapsed = ref(true);
 const showEditModal = ref(false);
-
 const arrowDirection = (state: boolean) => (state ? 'va-arrow-up' : 'va-arrow-down');
 
+//初始化
 const fetch = async () => {
     if (meterId.value) {
         const res = await fetchMeter({ id: meterId.value });
         meter.value = res.data.data;
     }
 };
-
 onBeforeMount(() => {
     fetch();
 });
-
+//图表
 const chartData = useChartData(lineChartData);
 const options: ChartOptions<'line'> = {
     scales: {
@@ -150,20 +154,32 @@ const updateMeterData = (newMeter: meter_type) => {
     console.log(meter.value);
 };
 
+//开关阀门
+const meterStatus = ref(0)
+const operateMeterStatus = async () => {
+    try {
+        //TODO: status 要根据实际数据来获取
+        meterStatus.value = meterStatus.value === 0 ? 1 : 0;
+        await operateMeter({ id: Number(meterId.value), body: { type: meterStatus.value } });
+        toast.init({ message: 'operate successfully', color: 'success' });
+    } catch (error) {
+        toast.init({ message: 'operate Meter failed', color: 'danger' });
+        console.error(error);
+
+    }
+    await fetch(); // 重新获取数据以刷新视图
+}
 const saveMeter = async (updatedMeter: any) => {
     // 调用API保存更新的meter
     console.log(updatedMeter);
     try {
-        await updateMeter({id:Number(meterId.value),...updatedMeter});
+        await updateMeter({ id: Number(meterId.value), ...updatedMeter });
         toast.init({ message: 'Edit Meter successfully', color: 'success' });
     } catch (error) {
         toast.init({ message: 'Edit Meter failed', color: 'danger' });
         console.error(error);
-        
-    }
-  
 
-    
+    }
     await fetch(); // 重新获取数据以刷新视图
     closeEditModal();
 };

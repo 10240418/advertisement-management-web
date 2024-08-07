@@ -4,18 +4,14 @@ export const fetchGateways = (query: any) => {
     return request({
         url: `/admin/gateway`,
         method: 'get',
-        params: query.params,
-        data: query.data
+        params: query,
     });
 }
 //    {
 //     pageSize: 10,
 //     pageNum: 1
 //    }
-//   {
-//     "email": "admin@admin.admin",
-//     "password": "admin"
-//   }
+
 
 export const getGateway = (query:any) => {
     return request({
