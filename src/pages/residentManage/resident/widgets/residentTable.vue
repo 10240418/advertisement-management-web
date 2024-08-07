@@ -5,10 +5,10 @@ import { resident_user_type } from '@/data/resident_user'
 
 const columns = defineVaDataTableColumns([
   { label: 'ID', key: 'id', sortable: true , width: '5%'},
-  { label: 'Name', key: 'name', sortable: false, width: '10%'},
+  { label: 'Name', key: 'name', sortable: false, width: '20%'},
   { label: 'Email', key: 'email', sortable: false, width: '35%'},
-  { label: 'Active', key: 'active', sortable: false , width: '10%'},
-  { label: 'Actions', key: 'actions', sortable: false , width: '20%'},
+  { label: 'Active', key: 'active', sortable: false , width: '15%'},
+  { label: 'Actions', key: 'actions', sortable: false , width: '5%'},
 ])
 
 const props = defineProps({

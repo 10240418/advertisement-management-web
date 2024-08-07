@@ -19,17 +19,23 @@ export const addMeter = (data: any) => {
     method: 'post',
     data:{
       name:data.name,
-      type:data.type,
-      modbusAddr:data.modbusAddr,
-      gatewayId:data.gatewayId,},
+      type:data.type as number,
+      modbusAddr:data.modbusAddr as number,
+      gatewayId:data.gatewayId as number,
+      remark:data.remark,
+      unitId:data.unitId as number,
+
+    },
   });
 };
 // {
-//   "name": "TestMeter 003",
-//   "type": "water",
-//   "modbusAddr": 213,
-//   "gatewayId": 1
-// }
+//   "name": "Test2Mete2r 02201223",
+//   "type": 1,
+//   "modbusAddr": 1,
+//   "remark": "測試水表",
+//   "unitId": 1,
+//   "gatewayId": 6
+// // }
 
 export const fetchMeter = (data: any) => {
   return request({

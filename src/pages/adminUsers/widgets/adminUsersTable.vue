@@ -8,8 +8,8 @@ const columns = defineVaDataTableColumns([
   { label: 'ID', key: 'id', sortable: true ,width:'5%' },
   { label: 'Name', key: 'name', sortable: true,width:'20%'},
   { label: 'Email', key: 'email', sortable: false ,width:'25%'},
-  { label: 'create_at', key: 'createdAt', sortable: false ,width:'20%'},
-  { label: 'Actions', key: 'actions', sortable: false ,width:'10%'},
+  { label: 'create_at', key: 'createdAt', sortable: false ,width:'25%'},
+  { label: 'Actions', key: 'actions', sortable: false ,width:'5%'},
 ])
 
 const props = defineProps({

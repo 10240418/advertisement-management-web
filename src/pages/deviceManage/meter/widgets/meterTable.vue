@@ -1,22 +1,26 @@
 <template>
-  <VaDataTable :columns="columns" :items="currentPageData" :loading="props.loading" 
-    v-model:sort-by="props.sorting.sortBy" v-model:sorting-order="props.sorting.sortingOrder" >
-    <template #cell(actions)="{ rowData }" class="overflow-y-scroll">
+  <VaDataTable :columns="columns" :items="currentPageData" :loading="props.loading"
+    v-model:sort-by="props.sorting.sortBy" v-model:sorting-order="props.sorting.sortingOrder">
+    <template #cell(actions)="{ rowData }">
       <VaPopover placement="bottom" trigger="click" color="backgroundSecondary">
-        <div class="flex  items-center relative hover:bg-slate-400 rounded-[4px]"
+        <div class="flex justify-start items-center relative hover:bg-blue-200 rounded-[4px]"
           @click.stop="showContent(rowData)">
           <VaIcon name="more_horiz" size="20px" class="mr-2 cursor-pointer" />
         </div>
         <template #body>
           <transition name="fade">
             <div v-show="showContentMeter?.id === rowData.id"
-              class="tooltip-content flex flex-col justify-center z-999 items-center relative border border-solid p-2 rounded-md shadow-lg">
+              class="tooltip-content flex flex-col justify-center z-999 items-center relative border p-1 rounded-md">
+              <VaButton preset="secondary" size="small" icon="mso-info"  aria-label="Info Resident"
+                @click="$emit('detail-meter', rowData as any)" class="w-full justify-between">
+                <span>Detail</span>
+              </VaButton>
               <VaButton preset="secondary" size="small" icon="mso-edit" aria-label="Edit meter"
-                @click="$emit('edit-meter', rowData as any)" class="w-full justify-start">
+                @click="$emit('edit-meter', rowData as any)" class="w-full justify-between">
                 <span>Edit</span>
               </VaButton>
               <VaButton preset="secondary" size="small" icon="mso-delete" color="danger" aria-label="Delete meter"
-                @click="onMeterDelete(rowData)" class="w-full">
+                @click="onMeterDelete(rowData)" class="w-full justify-between">
                 <span>Delete</span>
               </VaButton>
             </div>
@@ -46,19 +50,19 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits, computed, toRef, watch, ref, PropType } from 'vue';
-import { defineVaDataTableColumns, useModal } from 'vuestic-ui';
+import { defineProps, defineEmits, computed, ref, watch, toRef,PropType } from 'vue';
+import { defineVaDataTableColumns, VaPopover, VaButton, VaIcon, VaInput, VaSelect, VaPagination } from 'vuestic-ui';
 import { meter_type } from '../../../../data/meter';
 
 const columns = defineVaDataTableColumns([
-  { label: 'ID', key: 'id', sortable: true ,width: '5%'},
-  { label: 'Name', key: 'name', sortable: true , width: '20%' },
-  { label: 'Remark', key: 'remark', sortable: false , width: '20%' },
-  { label: 'Type', key: 'type', sortable: true , width: '5%' },
-  { label: 'ModbusAddr', key: 'modbusAddr', sortable: true , width: '10%' },
-  { label: 'UnitId', key: 'unitId', sortable: true , width: '5%' },
-  { label: 'GatewayId', key: 'gatewayId', sortable: true  , width: '5%'},
-  { label: 'Actions', key: 'actions', sortable: false , width: '10%' },
+  { label: 'ID', key: 'id', sortable: true, width: '5%' },
+  { label: 'Name', key: 'name', sortable: true, width: '20%' },
+  { label: 'Remark', key: 'remark', sortable: false, width: '20%' },
+  { label: 'Type', key: 'type', sortable: true, width: '5%' },
+  { label: 'ModbusAddr', key: 'modbusAddr', sortable: true, width: '15%' },
+  { label: 'UnitId', key: 'unitId', sortable: true, width: '5%' },
+  { label: 'GatewayId', key: 'gatewayId', sortable: true, width: '5%' },
+  { label: 'Actions', key: 'actions', sortable: false, width: '5%' },
 ]);
 
 const props = defineProps({
@@ -69,28 +73,27 @@ const props = defineProps({
 });
 
 const totalPages = computed(() => Math.ceil(props.pagination.total / props.pagination.pageSize));
-
-const emit = defineEmits(['edit-meter', 'delete-meter', 'fetch-meter']);
+const emit = defineEmits(['edit-meter', 'delete-meter', 'fetch-meter','detail-meter']);
 
 const onMeterDelete = (meter: any) => {
   emit('delete-meter', meter);
 };
 
 watch(
-  ()=>[props.pagination.pageNum, props.pagination.pageSize, props.sorting.sortBy, props.sorting.sortingOrder],
-  ()=>{
-    if(props.pagination.total < props.pagination.pageSize * (props.pagination.pageNum - 1)){
+  () => [props.pagination.pageNum, props.pagination.pageSize, props.sorting.sortBy, props.sorting.sortingOrder],
+  () => {
+    if (props.pagination.total < props.pagination.pageSize * (props.pagination.pageNum - 1)) {
       props.pagination.pageNum = 1;
     }
-    console.log(props.sorting.sortingOrder)
-    console.log(props.sorting.sortBy)
-    emit('fetch-meter',{pageNum:props.pagination.pageNum,pageSize:props.pagination.pageSize});
+    console.log(props.sorting.sortingOrder);
+    console.log(props.sorting.sortBy);
+    emit('fetch-meter', { pageNum: props.pagination.pageNum, pageSize: props.pagination.pageSize });
   }
 );
+
 const currentPageData = computed(() => {
   let metersArray: any = []
 
-  //检查是否为数组，如果不是，则包裹在数组中
   if (Array.isArray(props.meters)) {
     metersArray = props.meters;
   } else {
@@ -99,13 +102,13 @@ const currentPageData = computed(() => {
   const startIndex = (props.pagination.pageNum - 1) * props.pagination.pageSize;
   const endIndex = startIndex + props.pagination.pageSize;
 
-  if(metersArray.length <= props.pagination.pageSize) return metersArray;
+  if (metersArray.length <= props.pagination.pageSize) return metersArray;
   else return metersArray.slice(startIndex, endIndex);
 });
 
 const showContentMeter = ref<meter_type | null>(null);
 const showContent = (meter: any) => {
-  showContentMeter.value = showContentMeter.value?.id === meter.id ? null : meter;
+  showContentMeter.value = meter;
 };
 </script>
 
@@ -115,9 +118,34 @@ const showContent = (meter: any) => {
     border-bottom: 1px solid var(--va-background-border);
   }
 }
-.ellipsis {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+
+.tooltip-content {
+  position: relative;
+  border: 1px solid #d1d5db;
+  padding: 6px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.tooltip-content::before {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 8px;
+  border-style: solid;
+  border-color: transparent transparent #d1d5db transparent;
+}
+
+.tooltip-content::after {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 7px;
+  border-style: solid;
+  border-color: transparent transparent white transparent;
 }
 </style>

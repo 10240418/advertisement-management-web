@@ -8,12 +8,12 @@ import { gateway_type } from '../../../../data/gateway'
 const columns = defineVaDataTableColumns([
   { label: 'ID', key: 'id', sortable: true ,width:'5%'},
   { label: 'Name', key: 'name', sortable: true ,width:'10%'},
-  { label: 'IP Address', key: 'ipAddr', sortable: true,width:'10%' },
-  { label: 'Remark', key: 'remark', sortable: false,width:'25%' },
+  { label: 'IP Address', key: 'ipAddr', sortable: true,width:'20%' },
+  { label: 'Remark', key: 'remark', sortable: false,width:'30%' },
   // { label: 'Created At', key: 'created_at', sortable: true },
   // { label: 'Updated At', key: 'updated_at', sortable: true },
   { label: 'device', key: 'device', sortable: false ,width:'10%'},
-  { label: 'Actions', key: 'actions', sortable: false,width:'10%' },
+  { label: 'Actions', key: 'actions', sortable: false,width:'5%' },
 
 ])
 
@@ -77,7 +77,7 @@ watch(
   }
 )
 //气泡下拉框
-const showContentGateway = ref<gateway_type | null>(null)
+const showContentGateway = ref<gateway_type>()
 const showContent = (rowData: any) => {
 
   if (showContentGateway.value === rowData) {

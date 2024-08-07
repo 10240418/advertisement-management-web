@@ -52,6 +52,7 @@ export const useMeters = (options?: {
   const add = async (meter: any) => {
     isLoading.value = true
     try {
+      console.log(meter)
       await addMeter(meter);
       await fetch();
     } catch (error) {
