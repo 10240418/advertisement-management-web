@@ -47,13 +47,12 @@ const fetchUnits = async () => {
     const res = await fetchUnitList(pagination.value);
     units.value = res.data.units;
 
-    unitOptions.value = units.value.map(unit => unit.id + ' ' + "Floor:" + unit.floor + " " + "Unit:" + unit.unit);
-    //去掉resident.units 
-    // console.log(props.resident?.units)
-    unitNeedRemove.value = props.resident?.units.map(unit => unit.id + ' ' + "Floor:" + unit.floor + " " + "Unit:" + unit.unit);
-    // console.log('units:', unitOptions.value);
+    unitOptions.value = units.value.map(unit => `${unit.id} Floor: ${unit.floor} Unit: ${unit.unit}`);
+    
+    //去掉 resident.units
+    unitNeedRemove.value = props.resident?.units.map((unit: any) => `${unit.id} Floor: ${unit.floor} Unit: ${unit.unit}`);
+    // 过滤掉已绑定的单位
     unitOptions.value = unitOptions.value.filter(option => !unitNeedRemove.value.includes(option));
-    // console.log('units:', unitOptions.value);
     selectValue.value = unitOptions.value.length > 0 ? unitOptions.value[0] : '';
   } catch (err: any) {
     console.error(err);
@@ -61,6 +60,7 @@ const fetchUnits = async () => {
     toast.init({ message: error.value, color: 'danger' });
   }
 };
+
 
 onBeforeMount(() => {
   fetchUnits();

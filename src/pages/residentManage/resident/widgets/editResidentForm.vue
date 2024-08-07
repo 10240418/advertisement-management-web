@@ -12,7 +12,7 @@
         v-model="form.email"
         label="Email"
         placeholder="Enter email"
-        :rules="[validators.required, validators.email]"
+        :rules="[validators.required]"
         name="email"
       />
       <VaInput
@@ -47,44 +47,32 @@ import { useResidents } from '../composables/resident';
 import { resident_user_type } from '@/data/resident_user';
 
 const props = defineProps({
- resident: { type: Object as PropType<resident_user_type | null>, required: true },
+  resident: { type: Object as PropType<resident_user_type | null>, required: true },
   onClose: Function,
 });
+
 const emit = defineEmits(['close']);
 const { add, updateActive,resetP } = useResidents();
-
-const form = ref({
-  id:props.resident? props.resident.id : '',
-  name: props.resident ? props.resident.name : '',
-  email: props.resident ? props.resident.email : '',
-  units: props.resident ? props.resident.units : [],
-  createdAt: props.resident ? props.resident.createdAt : '',
-  active: props.resident ? props.resident.active : false,
-  password: props.resident ? props.resident.password : '',
-  
-});
-
+const defaultForm = {
+  id:0,
+  name: '',
+  email: '',
+  password: '',
+  active: true,
+};
+const form = ref<any>({...defaultForm})
 watch(
   () => props.resident,
   (newResident) => {
     if (newResident) {
       form.value = { ...newResident };
     } else {
-      form.value = {
-        id: '',
-        name: '',
-        email: '',
-        units: [],
-        createdAt: '',
-        active: false,
-        password: '',
-      };
+      form.value = { ...defaultForm };
     }
   },
   { immediate: true }
 );
-
-
+console.log(form.value)
 const formInstance = useForm('edit-resident-form');
 
 const submit = () => {
@@ -94,13 +82,11 @@ const submit = () => {
       resetP({id:form.value.id, password:form.value.password})
 
     } else {
-      console.log(form.value)
       add({ name: form.value.name, email: form.value.email, password: form.value.password, active: form.value.active });
     }
     emit('close');
   }
 };
-
 const onClose = () => {
   emit('close');
 };

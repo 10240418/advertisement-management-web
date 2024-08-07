@@ -6,14 +6,14 @@ import { gateway_type } from '../../../../data/gateway'
 
 
 const columns = defineVaDataTableColumns([
-  { label: 'ID', key: 'id', sortable: true },
-  { label: 'Name', key: 'name', sortable: true },
-  { label: 'IP Address', key: 'ipAddr', sortable: true },
-  { label: 'Remark', key: 'remark', sortable: false },
+  { label: 'ID', key: 'id', sortable: true ,width:'5%'},
+  { label: 'Name', key: 'name', sortable: true ,width:'10%'},
+  { label: 'IP Address', key: 'ipAddr', sortable: true,width:'10%' },
+  { label: 'Remark', key: 'remark', sortable: false,width:'25%' },
   // { label: 'Created At', key: 'created_at', sortable: true },
   // { label: 'Updated At', key: 'updated_at', sortable: true },
-  { label: 'device', key: 'device', sortable: false },
-  { label: 'Actions', key: 'actions', sortable: false },
+  { label: 'device', key: 'device', sortable: false ,width:'10%'},
+  { label: 'Actions', key: 'actions', sortable: false,width:'10%' },
 
 ])
 

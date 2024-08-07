@@ -1,14 +1,6 @@
 <template>
-  <VaDataTable :columns="columns" :items="currentPageData" :loading="props.loading"
-    v-model:sort-by="props.sorting.sortBy" v-model:sorting-order="props.sorting.sortingOrder">
-    <!-- <template #cell(name)="{ rowData }">
-      <div class="max-w-[120px] ellipsis">{{ rowData.name }}</div>
-    </template>
-
-<template #cell(ipAddr)="{ rowData }">
-      <div class="ellipsis max-w-[230px]">{{ rowData.ipAddr }}</div>
-    </template> -->
-
+  <VaDataTable :columns="columns" :items="currentPageData" :loading="props.loading" 
+    v-model:sort-by="props.sorting.sortBy" v-model:sorting-order="props.sorting.sortingOrder" >
     <template #cell(actions)="{ rowData }" class="overflow-y-scroll">
       <VaPopover placement="bottom" trigger="click" color="backgroundSecondary">
         <div class="flex  items-center relative hover:bg-slate-400 rounded-[4px]"
@@ -59,14 +51,14 @@ import { defineVaDataTableColumns, useModal } from 'vuestic-ui';
 import { meter_type } from '../../../../data/meter';
 
 const columns = defineVaDataTableColumns([
-  { label: 'ID', key: 'id', sortable: true },
-  { label: 'Name', key: 'name', sortable: true },
-  { label: 'Remark', key: 'remark', sortable: false },
-  { label: 'Type', key: 'type', sortable: true },
-  { label: 'ModbusAddr', key: 'modbusAddr', sortable: true },
-  { label: 'UnitId', key: 'unitId', sortable: true },
-  { label: 'GatewayId', key: 'gatewayId', sortable: true },
-  { label: 'Actions', key: 'actions', sortable: false },
+  { label: 'ID', key: 'id', sortable: true ,width: '5%'},
+  { label: 'Name', key: 'name', sortable: true , width: '20%' },
+  { label: 'Remark', key: 'remark', sortable: false , width: '20%' },
+  { label: 'Type', key: 'type', sortable: true , width: '5%' },
+  { label: 'ModbusAddr', key: 'modbusAddr', sortable: true , width: '10%' },
+  { label: 'UnitId', key: 'unitId', sortable: true , width: '5%' },
+  { label: 'GatewayId', key: 'gatewayId', sortable: true  , width: '5%'},
+  { label: 'Actions', key: 'actions', sortable: false , width: '10%' },
 ]);
 
 const props = defineProps({
@@ -117,7 +109,12 @@ const showContent = (meter: any) => {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+.va-data-table {
+  ::v-deep(.va-data-table__table-tr) {
+    border-bottom: 1px solid var(--va-background-border);
+  }
+}
 .ellipsis {
   overflow: hidden;
   text-overflow: ellipsis;

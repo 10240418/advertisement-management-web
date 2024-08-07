@@ -30,7 +30,7 @@
             { key: 'floor', label: 'Floor', sortable: true },
             { key: 'remark', label: 'Remark', sortable: true },
             { key: 'actions', label: 'Actions', sortable: false },
-          ]" class="mr-3"
+          ]" class="mr-3 va-data-table"
            :style="{
             '--va-data-table-height': '320px',
             '--va-data-table-thead-background': 'var(--va-background-element)',
@@ -239,7 +239,11 @@ onBeforeMount(() => {
 });
 </script>
 
-<style>
+<style lang="scss">
+.va-data-table__table-tr {
+  border-bottom: 1px solid var(--va-background-border);
+}
+
 
 .tooltip-content {
   position: relative;

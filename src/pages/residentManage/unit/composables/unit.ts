@@ -36,7 +36,6 @@ export const useUnits = (options?: {
       });
       units.value = res.data.units;
       pagination.value.total = res.data.pagination.total;
-      toast.init({ message: 'Units fetched successfully', color: 'success' });
     } catch (err: any) {
       console.error(err);
       error.value = (err.message || 'Failed to fetch units') as string;

@@ -4,11 +4,11 @@ import { PropType, computed, toRef, ref, watch } from 'vue'
 import { resident_user_type } from '@/data/resident_user'
 
 const columns = defineVaDataTableColumns([
-  { label: 'ID', key: 'id', sortable: true },
-  { label: 'Name', key: 'name', sortable: false},
-  { label: 'Email', key: 'email', sortable: false},
-  { label: 'Active', key: 'active', sortable: false },
-  { label: 'Actions', key: 'actions', sortable: false },
+  { label: 'ID', key: 'id', sortable: true , width: '5%'},
+  { label: 'Name', key: 'name', sortable: false, width: '10%'},
+  { label: 'Email', key: 'email', sortable: false, width: '35%'},
+  { label: 'Active', key: 'active', sortable: false , width: '10%'},
+  { label: 'Actions', key: 'actions', sortable: false , width: '20%'},
 ])
 
 const props = defineProps({
@@ -145,11 +145,14 @@ watch(
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .va-data-table {
   ::v-deep(.va-data-table__table-tr) {
     border-bottom: 1px solid var(--va-background-border);
   }
+}
+.va-data-table__table-td{
+  border-bottom: 1px solid var(--va-background-border);
 }
 
 .tooltip-content {

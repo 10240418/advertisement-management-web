@@ -5,11 +5,11 @@ import { admin_user_type } from '../../../data/admin_user'
 import { debounce} from 'lodash'
 
 const columns = defineVaDataTableColumns([
-  { label: 'ID', key: 'id', sortable: true },
-  { label: 'Name', key: 'name', sortable: true},
-  { label: 'Email', key: 'email', sortable: false },
-  { label: 'create_at', key: 'createdAt', sortable: false },
-  { label: 'Actions', key: 'actions', sortable: false },
+  { label: 'ID', key: 'id', sortable: true ,width:'5%' },
+  { label: 'Name', key: 'name', sortable: true,width:'20%'},
+  { label: 'Email', key: 'email', sortable: false ,width:'25%'},
+  { label: 'create_at', key: 'createdAt', sortable: false ,width:'20%'},
+  { label: 'Actions', key: 'actions', sortable: false ,width:'10%'},
 ])
 
 const props = defineProps({

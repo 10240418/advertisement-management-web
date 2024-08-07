@@ -51,7 +51,6 @@ export const bindUnitResident = (data: any) => {
         data,
     });
 };
-
 // {
 //     "type": "owner",
 //     "residentUserId": 1,
@@ -65,7 +64,6 @@ export const unbindUnitResident = (data: any) => {
         data,
     });
 };
-
 // {
 //     "residentUserId": 1,
 //     "unitId": 1

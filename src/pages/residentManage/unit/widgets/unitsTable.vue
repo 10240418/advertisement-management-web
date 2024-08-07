@@ -4,12 +4,12 @@ import { PropType, computed, toRef, ref, watch, onMounted, onBeforeUnmount } fro
 import { unit_type } from '../../../../data/unit'
 
 const columns = defineVaDataTableColumns([
-  { label: 'ID', key: 'id', sortable: true },
-  { label: 'Floor', key: 'floor', sortable: true },
-  { label: 'Unit ', key: 'unit', sortable: true },
-  { label: 'Created At', key: 'createdAt', sortable: false },
-  { label: 'remark', key: 'remark', sortable: false },
-  { label: 'Actions', key: 'actions', sortable: false },
+  { label: 'ID', key: 'id', sortable: true,width:'5%' },
+  { label: 'Floor', key: 'floor', sortable: true ,width:'10%'},
+  { label: 'Unit ', key: 'unit', sortable: true ,width:'10%'},
+  { label: 'Created At', key: 'createdAt', sortable: false,width:'25%' },
+  { label: 'remark', key: 'remark', sortable: false ,width:'20%'},
+  { label: 'Actions', key: 'actions', sortable: false ,width:'10%'},
 ])
 
 const props = defineProps({
