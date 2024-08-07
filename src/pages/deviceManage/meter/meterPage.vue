@@ -2,12 +2,14 @@
   <VaCard>
     <VaCardContent>
       <div class="flex flex-col md:flex-row gap-2 mb-2 justify-between">
-        <VaInput v-model="searchValue" placeholder="Search By ID" class="w-full md:w-2/3" @keyup.enter="onSearch(searchValue)" />
+        <VaInput v-model="searchValue" placeholder="Search By ID" class="w-full md:w-2/3"
+          @keyup.enter="onSearch(searchValue)" />
         <VaButton @click="showAddMeterModal">Add Meter</VaButton>
       </div>
 
       <meterTable :pagination="pagination" :meters="metersShowInTable" :loading="isLoading" :sorting="sorting"
-        @edit-meter="showEditMeterModal" @detail-meter="showEditMeterDialog" @delete-meter="onMeterDelete" @fetch-meter="fetchMeter" />
+        @edit-meter="showEditMeterModal" @detail-meter="showEditMeterDialog" @delete-meter="onMeterDelete"
+        @fetch-meter="fetchMeter" />
     </VaCardContent>
     <VaModal v-model="doShowAddMeterModal" size="small" mobile-fullscreen close-button hide-default-actions>
       <h1 class="va-h5">Add Meter</h1>
@@ -23,7 +25,7 @@
 <script setup lang="ts">
 import { ref, toRaw, watch, onBeforeMount } from 'vue';
 import { useMeters } from './composables/meter';
-import { useToast } from 'vuestic-ui';
+import { useToast ,useModal} from 'vuestic-ui';
 import { meter_type } from '../../../data/meter';
 import _ from 'lodash';
 import meterTable from './widgets/meterTable.vue';
@@ -32,7 +34,7 @@ import editMeterForm from './widgets/editMeterForm.vue';
 
 const { init: notify } = useToast();
 const doShowAddMeterModal = ref(false);
-const doShowEditMeterModal = ref(false);  
+const doShowEditMeterModal = ref(false);
 const { isLoading, meters, sorting, pagination, ...meterApi } = useMeters();
 const metersShowInTable = ref<meter_type[]>([]);
 const meterToEdit = ref<meter_type | null>(null);
@@ -47,17 +49,41 @@ const showAddMeterModal = () => {
   doShowAddMeterModal.value = true;
   meterToEdit.value = null;
 };
-const showEditMeterModal = (meter: meter_type) =>{
+const showEditMeterModal = (meter: meter_type) => {
   doShowEditMeterModal.value = true;
   meterToEdit.value = meter;
 }
-const onMeterDelete = async (meter: meter_type)=> {
-  await meterApi.remove([meter.id]);
-  notify({
-    message: `${meter.name} has been deleted`,
-    color: 'success',
-  });
-};
+const { confirm } = useModal()
+const onMeterDelete = async (meter: meter_type) => {
+  const agreed = await confirm({
+    title: 'Delete Meter',
+    message: `Are you sure you want to delete ${meter.name}?`,
+    okText: 'Delete',
+    cancelText: 'Cancel',
+    size: 'small',
+    maxWidth: '380px',
+  })
+
+  if (agreed) {
+    await meterApi.remove([meter.id])
+  }
+}
+
+// const onResidentUpdate = async (resident: any) => {
+//   const agreed = await confirm({
+//     title: 'Update Resident',
+//     message: `Are you sure you want to update ${resident.name}?`,
+//     okText: 'Update',
+//     cancelText: 'Cancel',
+//     size: 'small',
+//     maxWidth: '380px',
+//   })
+
+//   if (agreed) {
+//     emit('update-resident', resident)
+//   }
+// }
+
 
 const fetchMeter = async (fetch: any) => {
   await meterApi.fetch({ ...fetch });
@@ -76,7 +102,7 @@ const onSave = async (meter: any) => {
 const searchValue = ref('');
 const onSearch = async (searchValue: any) => {
   const res = await meterApi.search({
-    id:Number(searchValue) ,
+    id: Number(searchValue),
   });
 };
 

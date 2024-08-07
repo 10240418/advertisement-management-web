@@ -44,7 +44,6 @@ const showAddResidentModal = () => {
   residentToEdit.value = null;
 };
 //... 下拉气泡框 
-
 //detail 
 const newWindow =ref<any>()
 const showEditResidentDialog = (resident: resident_user_type) => {
@@ -65,10 +64,6 @@ const onResidentUpdateActive = async (resident: any) => {
 const fetchResidents = async () => {
   await residentApi.fetch();
 };
-
-
-
-
 watch(
   residents,
   () => {
@@ -76,12 +71,10 @@ watch(
   },
   { deep: true }
 );
-
 onBeforeMount(() => {
   fetchResidents();
 });
 </script>
-
 <style scoped>
 .resident-page {
   padding: 16px;

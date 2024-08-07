@@ -44,9 +44,9 @@ export const fetchMeter = (data: any) => {
   })
 };
 // 删除电表
-export const deleteMeter = (ids: any) => {
+export const deleteMeter = (ids: number[]) => {
   return request({
-    url: `/admin/meters`,
+    url: `/admin/meter`,
     method: 'delete',
     data:{
       ids:ids
@@ -60,7 +60,7 @@ export const deleteMeter = (ids: any) => {
 // 更新电表信息
 export const updateMeter = ( data: any) => {
   return request({
-    url: `/admin/meters`,
+    url: `/admin/meter`,
     method: 'put',
     data:{
       id:data.id,

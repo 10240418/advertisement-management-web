@@ -12,6 +12,9 @@ const defaultNewMeter = {
   remark: '',
   unitId: null,
   gatewayId: null,
+  unit: '',
+  gateway: '',
+  createAt: '',
 }
 
 const props = defineProps({
@@ -61,6 +64,7 @@ const onSave = () => {
       gatewayId: newMeter.value.gatewayId,
     })
   }
+  emit('close')
 }
 
 const onCancel = () => {
@@ -70,7 +74,7 @@ const onCancel = () => {
 
 <template>
   <VaForm v-slot="{ isValid }" ref="add-meter-form" class="flex-col justify-start items-start gap-4 inline-flex w-full">
-    <div class="self-stretch flex-col justify-start items-start gap-2 flex">
+    <div class="self-stretch flex-col justify-start items-start gap-0.75 flex">
 
       <div class="flex gap-4 flex-col w-full">
         <VaInput v-model="newMeter.name" label="Name" class="w-full" :rules="[validators.required]" name="name" />

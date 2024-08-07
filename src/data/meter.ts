@@ -1,3 +1,6 @@
+import { gateway_type } from "./gateway"
+import { unit_type } from "./unit"
+
 export  type meter_type = {
   id: number,
   createdAt: string,
@@ -6,9 +9,9 @@ export  type meter_type = {
   modbusAddr: number,
   remark: string,
   unitId: number,
-  unit: string,
+  unit: unit_type,
   gatewayId: number,
-  gateway: string
+  gateway: gateway_type
   } 
   // {
   //   "data": {

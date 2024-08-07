@@ -1,60 +1,73 @@
 <template>
-    <VaCard>
-        <div class="w-full h-full flex flex-col gap-4 justify-center items-center">
-
-            <!-- table -->
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-1 items-end">
-                <VaInput v-if="meter" v-model="meter.name" placeholder="Name" label="Name" />
-                <VaInput v-if="meter" v-model="meter.id" placeholder="ID" label="ID" />
-                <VaInput v-if="meter" v-model="meter.modbusAddr" placeholder="IP Address" label="IP Address" />
-                <VaInput v-if="meter" v-model="meter.remark" placeholder="Remark" label="Remark" />
-            </div>
-            <VaDataTable :items="currentPageData" :columns="[
-                { key: 'id', label: 'ID', sortable: true ,width: '10%' },
-                { key: 'unit', label: 'Unit', sortable: true ,width: '10%' },
-                { key: 'floor', label: 'Floor', sortable: true ,width: '10%' },
-                { key: 'remark', label: 'Remark', sortable: true ,width: '30%' },
-                { key: 'actions', label: 'Actions', sortable: false,width: '20%'  },
-            ]" class="mr-3" :style="{
-                '--va-data-table-height': '320px',
-                '--va-data-table-thead-background': 'var(--va-background-element)',
-                '--va-data-table-tfoot-background': 'var(--va-background-element)',
-                '--va-data-table-thead-color': '#2C82E0',
-            }" sticky-header footer-clone sticky-footer>
-
-
-                <template #cell(actions)="{ rowData }">
-                    <VaPopover placement="bottom" trigger="click" color="backgroundSecondary">
-                        <div class="flex justify-start items-center relative hover:bg-blue-200 rounded-[4px]"
-                            @click.stop="showContent(rowData)">
-                            <VaIcon name="more_horiz" size="20px" class="mr-2 cursor-pointer" />
-                        </div>
-                        <template #body>
-                            <transition name="fade">
-                                <div v-show="showContentResident?.id === rowData.id"
-                                    class="tooltip-content flex flex-col justify-center z-999 items-center relative border  p-1 rounded-md">
-                                    <VaButton preset="secondary" size="small" icon="mso-edit" aria-label="Edit Resident"
-                                        @click="showEidtModal(rowData)" class="w-full justify-between">
-                                        <span>编辑单位</span>
-                                    </VaButton>
-                                    <VaButton preset="secondary" size="small" icon="mso-not_started"
-                                        aria-label="Update Resident" class="w-full justify-between">
-                                        <span>设为使用</span>
-                                    </VaButton>
-                                    <VaButton preset="secondary" size="small" icon="mso-cancel"
-                                        aria-label="Update Resident" class="w-full justify-between">
-                                        <span>设为闲置</span>
-                                    </VaButton>
-                                    <VaButton preset="secondary" size="small" icon="mso-info" aria-label="Info Resident"
-                                        @click="showDeleteModal(rowData)" class="w-full justify-between">
-                                        <span>删除关联</span>
-                                    </VaButton>
+    <VaCard class="w-full h-full flex">
+        <div class="w-full h-full flex flex-col ml-3">
+            <!-- top -->
+            <div class="flex flex-row justify-between">
+                <div class="grid grid-cols-[1fr_3fr_1fr_3fr]" :class="{ 'gap-y-[2.2px]': !editable }">
+                    <VaListLabel class="flex justify-start">ID</VaListLabel>
+                    <span>{{ meter?.id }}</span>
+                    <VaListLabel class="flex justify-start">Name</VaListLabel>
+                    <span>{{ meter?.name }}</span>
+                    <VaListLabel class="flex justify-start">type</VaListLabel>
+                    <span v-if="meter?.type === 0" class="flex justify-start">Electricity</span>
+                    <span v-if="meter?.type === 1" class="flex justify-start">Water</span>
+                    <VaListLabel class="flex justify-start">UnitID</VaListLabel>
+                    <div class="flex flex-row justify-between mr-3 items-center gap-3">
+                        <span>{{ meter?.unitId }}</span>
+                        <VaPopover color="backgroundSecondary" trigger="click"
+                            :style="{ '--va-popover-content-background-color': '#ffffff', }">
+                            <VaIcon :name="arrowDirection(isUnitCollapsed)" size="20px"
+                                @click="isUnitCollapsed = !isUnitCollapsed" />
+                            <template #body>
+                                <div class="grid grid-cols-[1fr_3fr] border border-solid p-2 rounded-md shadow-lg">
+                                    <VaListLabel class="flex justify-start">ID</VaListLabel>
+                                    <span>{{ meter?.unit.id }}</span>
+                                    <VaListLabel class="flex justify-start">Floor</VaListLabel>
+                                    <span>{{ meter?.unit.floor }}</span>
+                                    <VaListLabel class="flex justify-start">Unit</VaListLabel>
+                                    <span>{{ meter?.unit.unit }}</span>
+                                    <VaListLabel class="flex justify-start">Remark</VaListLabel>
+                                    <span>{{ meter?.unit.remark }}</span>
+                                    <VaListLabel class="flex justify-start">createdAt</VaListLabel>
+                                    <span>{{ meter?.unit.createdAt }}</span>
                                 </div>
-                            </transition>
-                        </template>
-                    </VaPopover>
-                </template>
-            </VaDataTable>
+                            </template>
+                        </VaPopover>
+                    </div>
+                    <VaListLabel class="flex justify-start">GatewayID</VaListLabel>
+                    <div class="flex flex-row justify-between mr-3 items-center gap-3">
+                        <span>{{ meter?.gatewayId }}</span>
+                        <VaPopover color="backgroundSecondary" trigger="click"
+                            :style="{ '--va-popover-content-background-color': '#ffffff', }">
+                            <VaIcon :name="arrowDirection(isGatewayCollapsed)" size="20px"
+                                @click="isGatewayCollapsed = !isGatewayCollapsed" />
+                            <template #body>
+                                <div class="grid grid-cols-[1fr_3fr] border border-solid p-2 rounded-md shadow-lg">
+                                    <VaListLabel class="flex justify-start">ID</VaListLabel>
+                                    <span>{{ meter?.gateway.id }}</span>
+                                    <VaListLabel class="flex justify-start">Name</VaListLabel>
+                                    <span>{{ meter?.gateway.name }}</span>
+                                    <VaListLabel class="flex justify-start">IPAddr</VaListLabel>
+                                    <span>{{ meter?.gateway.ipAddr }}</span>
+                                    <VaListLabel class="flex justify-start">Remark</VaListLabel>
+                                    <span>{{ meter?.gateway.remark }}</span>
+                                    <VaListLabel class="flex justify-start">createdAt</VaListLabel>
+                                    <span>{{ meter?.gateway.createdAt }}</span>
+                                </div>
+                            </template>
+                        </VaPopover>
+                    </div>
+                    <VaListLabel class="flex justify-start">ModbusAddr</VaListLabel>
+                    <span>{{ meter?.modbusAddr }}</span>
+                    <VaListLabel class="flex justify-start">Remark</VaListLabel>
+                    <span>{{ meter?.remark }}</span>
+                </div>
+                <div class="flex flex-col justify-between w-[72px] mt-[3px] mr-4">
+                    <VaButton color="primary" @click="openEditModal" icon="mso-edit" class="h-[30px] w-[72px]">
+                        Edit
+                    </VaButton>
+                </div>
+            </div>
 
             <!-- chart -->
             <div>
@@ -64,8 +77,14 @@
             <!-- footer -->
             <div class="dialog-footer">
                 <VaButton @click="cancel">Cancel</VaButton>
-                <VaButton @click="save">Confirm</VaButton>
             </div>
+
+            <!-- edit modal -->
+            <VaModal v-model="showEditModal" size="small" mobile-fullscreen close-button hide-default-actions>
+                <h1>Edit Meter</h1>
+                <EditMeterForm :modelValue="meter" @update:modelValue="updateMeterData" @save="saveMeter"
+                    @close="closeEditModal" />
+            </VaModal>
         </div>
     </VaCard>
 </template>
@@ -79,15 +98,25 @@ import { lineChartData } from '../../../../data/charts/lineChartData';
 import { ChartOptions } from 'chart.js';
 import { useRoute } from 'vue-router';
 import { fetchMeter } from '../../../../apis/meter';
+import EditMeterForm from './editMeterForm.vue';
+import { useToast } from 'vuestic-ui';
+import { updateMeter } from '../../../../apis/meter';
 
+const toast = useToast();
 const meter = ref<meter_type | null>(null);
 const route = useRoute();
 const meterId = ref(route.query.id);
+const editable = ref(false);
+const isUnitCollapsed = ref(true);
+const isGatewayCollapsed = ref(true);
+const showEditModal = ref(false);
+
+const arrowDirection = (state: boolean) => (state ? 'va-arrow-up' : 'va-arrow-down');
+
 const fetch = async () => {
     if (meterId.value) {
         const res = await fetchMeter({ id: meterId.value });
         meter.value = res.data.data;
-        console.log(meter.value)
     }
 };
 
@@ -98,30 +127,58 @@ onBeforeMount(() => {
 const chartData = useChartData(lineChartData);
 const options: ChartOptions<'line'> = {
     scales: {
-        x: { display: false, grid: { display: false } },
-        y: { display: false, grid: { display: false }, ticks: { display: false } },
+        x: { display: true, grid: { display: true } },
+        y: { display: true, grid: { display: true }, ticks: { display: true } },
     },
-    interaction: { intersect: false, mode: 'index' },
+    interaction: { intersect: true, mode: 'index' },
     plugins: {
         legend: { display: false },
         tooltip: { enabled: true },
     },
 };
 
-const cancel = () => {
-    fetch();
+const openEditModal = () => {
+    showEditModal.value = true;
 };
 
-const save = () => {
+const closeEditModal = () => {
+    showEditModal.value = false;
+};
+
+const updateMeterData = (newMeter: meter_type) => {
+    meter.value = newMeter;
+    console.log(meter.value);
+};
+
+const saveMeter = async (updatedMeter: any) => {
+    // 调用API保存更新的meter
+    console.log(updatedMeter);
+    try {
+        await updateMeter({id:Number(meterId.value),...updatedMeter});
+        toast.init({ message: 'Edit Meter successfully', color: 'success' });
+    } catch (error) {
+        toast.init({ message: 'Edit Meter failed', color: 'danger' });
+        console.error(error);
+        
+    }
+  
+
+    
+    await fetch(); // 重新获取数据以刷新视图
+    closeEditModal();
+};
+
+const cancel = () => {
     window.close();
 };
+
 </script>
 
 <style lang="scss">
 .va-data-table {
-  ::v-deep(.va-data-table__table-tr) {
-    border-bottom: 1px solid var(--va-background-border);
-  }
+    ::v-deep(.va-data-table__table-tr) {
+        border-bottom: 1px solid var(--va-background-border);
+    }
 }
 
 .dialog-footer {
