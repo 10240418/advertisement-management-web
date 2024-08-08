@@ -5,7 +5,7 @@ import VaTimelineItem from '@/components/va-timeline-item.vue'
 </script>
 
 <template>
-  <VaCard>
+  <VaCard class="border border-solid shadow-lg w-[60]">
     <VaCardTitle class="flex justify-between">
       <h1 class="card-title text-secondary font-bold uppercase">Timeline</h1>
     </VaCardTitle>

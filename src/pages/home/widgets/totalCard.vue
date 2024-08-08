@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col gap-4 p-4 bg-white shadow-lg border border-gray-200 rounded-md greek-card">
+    <div class="flex flex-col w-[30%] gap-4 p-4 bg-white shadow-lg border border-gray-200 rounded-md greek-card">
       <div class="flex flex-row gap-4 items-center">
         <span class="indicator bg-blue-300"></span>
         <span class="text-[16px] font-bold">用户</span>

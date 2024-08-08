@@ -16,12 +16,15 @@ import totalPage from './widgets/totalCard.vue'
 
   <VaCard>
     <VaCardContent>
-      <div class="flex flex-col md:flex-row gap-2 mb-2">
-        <header class="flex flex-row gap-4  border border-solid shadow-lg">
+      <div class="flex flex-col  gap-2 mb-2">
+        <header class="flex  flex-row gap-4 w-full ">
           <totalPage></totalPage>
           <logsCard></logsCard>
         </header>
-        <section></section>
+
+        <section>
+          <meterTable></meterTable>
+        </section>
         
       
       </div>
