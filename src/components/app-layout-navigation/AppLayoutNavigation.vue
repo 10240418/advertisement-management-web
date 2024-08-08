@@ -9,7 +9,7 @@
     <!-- 路由标识栏 -->
     <nav class="flex items-center">
       <VaBreadcrumbs>
-        <VaBreadcrumbsItem label="Home" :to="{ name: 'dashboard' }" />
+        <VaBreadcrumbsItem label="Home" :to="{ name: 'home' }" />
         <VaBreadcrumbsItem
           v-for="item in items"
           :key="item.label"

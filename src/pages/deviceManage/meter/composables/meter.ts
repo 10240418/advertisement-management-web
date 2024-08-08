@@ -11,6 +11,7 @@ import {
 } from '../../../../apis/meter';
 import { useThrottle } from '../../../../data/dataControl';
 import { useToast } from 'vuestic-ui';
+import { useGlobalStore } from '@/stores/global-store';
 
 const makePaginationRef = () => ref<Pagination>({ pageNum: 1, pageSize: 10, total: 30 });
 const makeSortingRef = () => ref<Sorting>({ sortBy: "id", sortingOrder: "asc" });
@@ -30,6 +31,7 @@ export const useMeters = (options?: {
   const error = ref<string | null>(null); // Error state
   const toast = useToast(); // Toast for notifications
   const { sorting = makeSortingRef(), pagination = makePaginationRef() } = options || {};
+  const globalStore = useGlobalStore();
 
   const fetch = async () => {
     isLoading.value = true;
@@ -43,6 +45,7 @@ export const useMeters = (options?: {
       
       meters.value = res.data.data;
       pagination.value.total = res.data.pagination.total;
+      globalStore.setMetersTotal({abnormal:0,normal:res.data.pagination.total});
     } catch (err: any) {
       console.error(err);
       error.value = (err.message || 'Failed to fetch meters') as string;

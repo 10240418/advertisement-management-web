@@ -10,6 +10,7 @@ import {
 } from '../../../../apis/resident';
 import { useThrottle } from '../../../../data/dataControl';
 import { useToast } from 'vuestic-ui';
+import { useGlobalStore } from '@/stores/global-store';
 
 const makePaginationRef = () => ref<Pagination>({ pageNum: 1, pageSize: 10, total: 30 });
 const makeSortingRef = () => ref<Sorting>({ sortBy: "id", sortingOrder: "asc" });
@@ -29,6 +30,7 @@ export const useResidents = (options?: {
   const error = ref<string | null>(null); // Error state
   const toast = useToast(); // Toast for notifications
   const { sorting = makeSortingRef(), pagination = makePaginationRef() } = options || {};
+  const globalStore = useGlobalStore(); // 正确实例化
 
   const fetch = async () => {
     isLoading.value = true;
@@ -38,10 +40,13 @@ export const useResidents = (options?: {
         pageNum: pagination.value.pageNum,
         pageSize: pagination.value.pageSize,
         desc: sorting.value.sortingOrder === "asc" ? false : true,
-      })
+      });
       
       residents.value = res.data.data;
       pagination.value.total = res.data.pagination.total;
+      // console.log(res.data.pagination.total);
+      globalStore.setResidentsTotal(res.data.pagination.total); // 设置全局状态
+      // console.log(globalStore.getResidentsTotal);
     } catch (err: any) {
       console.error(err);
       error.value = (err.message || 'Failed to fetch residents') as string;
@@ -109,7 +114,6 @@ export const useResidents = (options?: {
     isLoading.value = false;
   };
   
-
   const searchResident = useThrottle(searchResidentByid, 500);
 
   onBeforeMount(() => {

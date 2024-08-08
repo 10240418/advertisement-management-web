@@ -8,6 +8,7 @@ import {
   updateUnit,
 } from '@/apis/unit';
 import { useToast } from 'vuestic-ui';
+import { useGlobalStore } from '@/stores/global-store';
 
 const makePaginationRef = () => ref<Pagination>({ pageNum: 1, pageSize: 10, total: 0 });
 const makeSortingRef = () => ref<Sorting>({ sortBy: undefined, sortingOrder: 'desc' });
@@ -22,7 +23,7 @@ export const useUnits = (options?: {
   const units = ref<unit_type[]>([]);
   const error = ref<string | null>(null); // Error state
   const toast = useToast(); // Toast for notifications
-
+  const globalStore = useGlobalStore();
   const { filters = makeFiltersRef(), sorting = makeSortingRef(), pagination = makePaginationRef() } = options || {};
 
   const fetch = async () => {
@@ -36,6 +37,7 @@ export const useUnits = (options?: {
       });
       units.value = res.data.units;
       pagination.value.total = res.data.pagination.total;
+      globalStore.setUnitsTotal({normal:res.data.pagination.total,abnormal:0});
     } catch (err: any) {
       console.error(err);
       error.value = (err.message || 'Failed to fetch units') as string;

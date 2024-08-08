@@ -12,6 +12,13 @@ export default {
   },
   routes: [
     {
+      name:'home',
+      displayName:'menu.home',
+      meta:{
+        icon:'home'
+      }
+    },
+    {
       name: 'resident',
       displayName: 'menu.residentManage',
       meta: {
@@ -77,6 +84,11 @@ export default {
           name: 'login',
           displayName: 'menu.login',
         },
+        {
+          name: 'preferences',
+          displayName: 'menu.preferences',
+        }
+      
       ],
     },
     {
