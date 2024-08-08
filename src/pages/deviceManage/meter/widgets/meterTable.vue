@@ -11,7 +11,7 @@
           <transition name="fade">
             <div v-show="showContentMeter?.id === rowData.id"
               class="tooltip-content flex flex-col justify-center z-999 items-center relative border p-1 rounded-md">
-              <VaButton preset="secondary" size="small" icon="mso-info"  aria-label="Info Resident"
+              <VaButton preset="secondary" id="detailMeter" size="small" icon="mso-info" aria-label="Info Resident"
                 @click="$emit('detail-meter', rowData as any)" class="w-full justify-between">
                 <span>Detail</span>
               </VaButton>
@@ -50,7 +50,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits, computed, ref, watch, toRef,PropType } from 'vue';
+import { defineProps, defineEmits, computed, ref, watch, toRef, PropType } from 'vue';
 import { defineVaDataTableColumns, VaPopover, VaButton, VaIcon, VaInput, VaSelect, VaPagination } from 'vuestic-ui';
 import { meter_type } from '../../../../data/meter';
 
@@ -73,7 +73,7 @@ const props = defineProps({
 });
 
 const totalPages = computed(() => Math.ceil(props.pagination.total / props.pagination.pageSize));
-const emit = defineEmits(['edit-meter', 'delete-meter', 'fetch-meter','detail-meter']);
+const emit = defineEmits(['edit-meter', 'delete-meter', 'fetch-meter', 'detail-meter']);
 
 const onMeterDelete = (meter: any) => {
   emit('delete-meter', meter);
@@ -85,12 +85,9 @@ watch(
     if (props.pagination.total < props.pagination.pageSize * (props.pagination.pageNum - 1)) {
       props.pagination.pageNum = 1;
     }
-    console.log(props.sorting.sortingOrder);
-    console.log(props.sorting.sortBy);
     emit('fetch-meter', { pageNum: props.pagination.pageNum, pageSize: props.pagination.pageSize });
   }
 );
-
 const currentPageData = computed(() => {
   let metersArray: any = []
 

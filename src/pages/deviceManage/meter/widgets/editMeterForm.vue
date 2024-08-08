@@ -6,6 +6,8 @@ import { meter_type } from '../../../../data/meter'
 import { fetchUnitList, bindUnitResident } from '@/apis/unit'
 import { unit_type } from '@/data/unit'
 import { fetchGateways } from '@/apis/gateway'
+import { MeterType, MeterModel, MeterOperationType, ResidentType, TaskOperation } from '@/data/api_field_type/api_field_type';
+
 
 const defaultNewMeter = {
   id: null,
@@ -109,15 +111,10 @@ const form = useForm('add-meter-form')
 const onSave = () => {
   if (form.validate()) {
     emit('update:modelValue', newMeter.value)
-    console.log(newMeter.value)
-    console.log( Number(selectModelValue.value==='MeterModelWaterHDSB'?0:selectModelValue.value==='MeterModelWaterHDSW'?1:0))
-    console.log( Number(selectUnitValue.value.split(' ')[0]))
-    console.log(  selectGatewayValue.value.split(' ')[0])
-    console.log( Number(newMeter.value.modbusAddr))
     emit('save', {
       name: newMeter.value.name,
-      type: Number(selectTypeValue.value === 'Water Meter' ? 0 : 1),
-      model: Number(selectModelValue.value==='MeterModelWaterHDSB'?0:selectModelValue.value==='MeterModelWaterHDSW'?1:0),
+      type: Number(selectTypeValue.value === 'Water Meter' ? MeterType.Water : MeterType.Electric),
+      model: Number(selectModelValue.value==='MeterModelWaterHDSB'?MeterModel.MeterModelWaterHDSB:selectModelValue.value==='MeterModelWaterHDSW'?MeterModel.MeterModelWaterHDSW:MeterModel.ElectricMeterModelTEST),
       modbusAddr:newMeter.value.modbusAddr ,
       remark: newMeter.value.remark,
       unitId: Number(selectUnitValue.value.split(' ')[0]),

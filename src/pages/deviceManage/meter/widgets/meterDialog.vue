@@ -106,6 +106,7 @@ import { fetchMeter } from '../../../../apis/meter';
 import EditMeterForm from './editMeterForm.vue';
 import { useToast } from 'vuestic-ui';
 import { updateMeter, operateMeter } from '../../../../apis/meter';
+import { useMeters} from '../composables/meter'
 
 const toast = useToast();
 const meter = ref<meter_type | null>(null);
@@ -178,9 +179,11 @@ const saveMeter = async (updatedMeter: any) => {
     } catch (error) {
         toast.init({ message: 'Edit Meter failed', color: 'danger' });
         console.error(error);
-
+        return
     }
     await fetch(); // 重新获取数据以刷新视图
+    console.log(meter.value)
+    await useMeters().fetch();
     closeEditModal();
 };
 
