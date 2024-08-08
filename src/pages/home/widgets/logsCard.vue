@@ -1,51 +1,45 @@
 <script setup lang="ts">
 import { PropType } from 'vue'
 import router from '../../../router'
-
-defineProps({
-  toilets: {
-    type: Array as PropType<any[]>,
-    required: true,
-  },
-  loading: {
-    type: Boolean,
-    required: true,
-  },
-})
-
-defineEmits<{
-  (event: 'edit', toilet: any): void
-  (event: 'delete', toilet: any): void
-}>()
-
-const onToiletClick = (toiletId: number) => {
-  router.push({ name: 'toiletDetail', params: { id: toiletId } })
-}
+import VaTimelineItem from '@/components/va-timeline-item.vue'
 </script>
 
 <template>
-  <VaInnerLoading v-if="toilets.length > 0 || loading" :loading="loading"
-    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 min-h-[4rem]">
-    <VaCard v-for="toilet in toilets" :key="toilet.name"
-      :style="{ '--va-card-outlined-border': '1px solid var(--va-background-element)' }" outlined>
-      <VaCardContent class="flex flex-col h-full">
-        <div class="flex flex-col items-center gap-4 grow" @click="onToiletClick(toilet.id)">
-          <h4 class="va-h4 text-center self-stretch overflow-hidden line-clamp-2 text-ellipsis">
-            {{ toilet.name }}
-          </h4>
-          <p>
-            <span class="text-[var(--va-secondary)]">Location: </span>
-            <span>{{ toilet.location }}</span>
-          </p>
-          <VaBadge square color="success" :text="'ID: ' + toilet.id" />
-        </div>
-        <VaDivider class="my-3" />
-        <div class="flex justify-between">
-          <VaButton preset="secondary" icon="mso-edit" color="secondary" @click="$emit('edit', toilet)" />
-          <VaButton preset="secondary" icon="mso-delete" color="danger" @click="$emit('delete', toilet)" />
-        </div>
-      </VaCardContent>
-    </VaCard>
-  </VaInnerLoading>
-  <div v-else class="p-4 flex justify-center items-center text-[var(--va-secondary)]">No toilets</div>
+  <VaCard>
+    <VaCardTitle class="flex justify-between">
+      <h1 class="card-title text-secondary font-bold uppercase">Timeline</h1>
+    </VaCardTitle>
+    <VaCardContent>
+      <table class="mt-4">
+        <tbody>
+          <VaTimelineItem date="25m ago">
+            <RouterLink class="va-link font-semibold" to="/users">Donald</RouterLink> updated the status of
+            <RouterLink class="va-link font-semibold" to="/users">Refund #1234</RouterLink> to awaiting customer
+            response
+          </VaTimelineItem>
+          <VaTimelineItem date="1h ago">
+            <RouterLink class="va-link font-semibold" to="/users">Lycy Peterson</RouterLink> was added to the group,
+            group name is Overtake
+          </VaTimelineItem>
+          <VaTimelineItem date="2h ago">
+            <RouterLink class="va-link font-semibold" to="/users">Joseph Rust</RouterLink> opened new showcase
+            <RouterLink class="va-link font-semibold" to="/users">Mannat #112233</RouterLink> with theme market
+          </VaTimelineItem>
+          <VaTimelineItem date="3d ago">
+            <RouterLink class="va-link font-semibold" to="/users">Donald</RouterLink> updated the status to awaiting
+            customer response
+          </VaTimelineItem>
+          <VaTimelineItem date="Nov 14, 2023">
+            <RouterLink class="va-link font-semibold" to="/users">Lycy Peterson</RouterLink> was added to the group
+          </VaTimelineItem>
+          <VaTimelineItem date="Nov 14, 2023">
+            <RouterLink class="va-link font-semibold" to="/users">Dan Rya</RouterLink> was added to the group
+          </VaTimelineItem>
+          <VaTimelineItem date="Nov 15, 2023">
+            Project <RouterLink class="va-link font-semibold" to="/projects">Vuestic 2023</RouterLink> was created
+          </VaTimelineItem>
+        </tbody>
+      </table>
+    </VaCardContent>
+  </VaCard>
 </template>
