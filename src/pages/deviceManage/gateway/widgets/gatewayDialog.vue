@@ -24,7 +24,7 @@
           <VaChart :data="chartData" class="h-24" type="line" :options="options" />
         </div>
       </div>
-      
+
       <!-- table part -->
       <VaDataTable :items="meters" :columns="[
           { label: 'ID', key: 'id', width: '5%' },
@@ -45,39 +45,46 @@
               <VaIcon name="more_horiz" size="20px" class="mr-2 cursor-pointer" />
             </div>
             <template #body>
-                <transition name="fade">
-                  <div v-show="showContentMeter?.id === rowData.id"
-                    class="tooltip-content flex flex-col justify-center z-999 items-center relative border  p-1 rounded-md">
-                    <VaButton preset="secondary" size="small" icon="mso-edit" aria-label="Edit Resident"
-                      @click="showEidtModal(rowData)" class="w-full justify-between">
-                      <span>编辑单位</span>
-                    </VaButton>
-                    <VaButton preset="secondary" size="small" icon="mso-not_started"  aria-label="Update Resident"
-                     @click="operateMeterStatus(MeterOperationType.WaterMeterValveOn)" class="w-full justify-between" >
-                      <span>设为使用</span>
-                    </VaButton>
-                    <VaButton preset="secondary" size="small" icon="mso-cancel" aria-label="Update Resident"
+              <transition name="fade">
+                <div v-show="showContentMeter?.id === rowData.id"
+                  class="tooltip-content flex flex-col justify-center z-999 items-center relative border  p-1 rounded-md">
+                  <VaButton preset="secondary" size="small" icon="mso-edit" aria-label="Edit Resident"
+                    @click="showEidtModal(rowData)" class="w-full justify-between">
+                    <span>编辑单位</span>
+                  </VaButton>
+                  <VaButton preset="secondary" size="small" icon="mso-not_started" aria-label="Update Resident"
+                    @click="operateMeterStatus(MeterOperationType.WaterMeterValveOn)" class="w-full justify-between">
+                    <span>设为使用</span>
+                  </VaButton>
+                  <VaButton preset="secondary" size="small" icon="mso-cancel" aria-label="Update Resident"
                     @click="operateMeterStatus(MeterOperationType.WaterMeterValveOff)" class="w-full justify-between">
-                      <span>设为闲置</span>
-                    </VaButton>
-                   
-                  </div>
-                </transition>
-              </template>
+                    <span>设为闲置</span>
+                  </VaButton>
+
+                </div>
+              </transition>
+            </template>
           </VaPopover>
         </template>
       </VaDataTable>
-      <div class="dialog-footer flex flex-row gap-2 justify-end items-center"> 
+      <div class="dialog-footer flex flex-row gap-2 justify-end items-center">
+        <VaButton @click="showEditGatewayModal">Edit</VaButton>
         <VaButton @click="pingGatewayByID">Ping</VaButton>
         <VaButton @click="cancel">Cancel</VaButton>
       </div>
 
-       <!-- edit modal -->
-       <VaModal v-model="showEditModal" size="small" mobile-fullscreen close-button hide-default-actions>
-                <h1>Edit Meter</h1>
-                <EditMeterForm :modelValue="showContentMeter" @update:modelValue="updateMeterData" @save="saveMeter"
-                    @close="closeEditModal" />
-            </VaModal>
+      <!-- edit modal -->
+      <VaModal v-model="showEditModal" size="small" mobile-fullscreen close-button hide-default-actions>
+        <h1>Edit Meter</h1>
+        <EditMeterForm :modelValue="showContentMeter" @update:modelValue="updateMeterData" @save="saveMeter"
+          @close="closeEditModal" />
+      </VaModal>
+      <!-- Edit Gateway Modal -->
+      <VaModal v-model="isShowEditGatewayModal" size="small" mobile-fullscreen close-button hide-default-actions>
+        <h1>Edit Gateway</h1>
+        <editGatewayForm :modelValue="gatewayToEdit" @update:modelValue="updateGatewayData" @save="saveGateway"
+          @close="closeEditGatewayModal" />
+      </VaModal>
     </div>
   </VaCard>
 </template>
@@ -91,11 +98,12 @@ import { lineChartData } from '../../../../data/charts/lineChartData';
 import { ChartOptions } from 'chart.js';
 import { useRoute } from 'vue-router';
 import { useToast } from 'vuestic-ui';
-import { getGateway,pingGateway } from '../../../../apis/gateway';
+import { getGateway, pingGateway ,updateGateway} from '../../../../apis/gateway';
 import EditMeterForm from '@/pages/deviceManage/meter/widgets/editMeterForm.vue';
-import { updateMeter,operateMeter } from '../../../../apis/meter';
+import { updateMeter, operateMeter } from '../../../../apis/meter';
 import { meter_type } from '../../../../data/meter';
-import {MeterOperationType} from '../../../../data/api_field_type/api_field_type';
+import { MeterOperationType } from '../../../../data/api_field_type/api_field_type';
+import editGatewayForm from '@/pages/deviceManage/gateway/widgets/editGatewayForm.vue';
 
 // State and Reactive Properties
 const gateway = ref<gateway_type | null>(null);
@@ -156,7 +164,7 @@ const operateMeterStatus = async (query: Number) => {
     console.error(error);
     return;
   }
-  
+
 };
 
 //编辑Meter 
@@ -199,7 +207,40 @@ const cancel = () => {
   window.close();
 };
 
-</script >
+// State and Reactive Properties
+const gatewayToEdit = ref<gateway_type | null>(null);
+const isShowEditGatewayModal = ref(false);
+
+
+// Methods
+const showEditGatewayModal = () => {
+  gatewayToEdit.value = gateway.value;
+  console.log(gatewayToEdit.value)
+  isShowEditGatewayModal.value = true;
+};
+
+const updateGatewayData = (updatedGateway: gateway_type) => {
+  gatewayToEdit.value = updatedGateway;
+};
+
+const saveGateway = async (updatedGateway: gateway_type) => {
+  try {
+    console.log(updatedGateway);
+    await updateGateway({  ...updatedGateway });
+    toast.init({ message: 'Edit Gateway successfully', color: 'success' });
+  } catch (error) {
+    toast.init({ message: 'Edit Gateway failed', color: 'danger' });
+    console.error(error);
+  }
+  closeEditGatewayModal();
+};
+
+const closeEditGatewayModal = () => {
+  isShowEditGatewayModal.value = false;
+};
+
+
+</script>
 
 
 <style lang="scss">
@@ -251,7 +292,7 @@ const cancel = () => {
   transform: translateX(-50%);
   border-width: 7px;
   border-style: solid;
-  border-color: transparent transparent white transparent; 
+  border-color: transparent transparent white transparent;
 }
 </style>
 <!-- gatewayDialog.vue -->

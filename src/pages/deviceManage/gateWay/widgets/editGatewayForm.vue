@@ -29,6 +29,7 @@ watch(
       newGateway.value = { ...gatewayToEdit }
     } else {
       newGateway.value = { ...defaultNewGateway }
+      console.log('newGateway', newGateway.value)
     }
   },
   { immediate: true }

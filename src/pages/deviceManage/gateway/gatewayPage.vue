@@ -47,6 +47,7 @@ const showAddGatewayModal = () => {
 };
 const showEditGatewayModal=(newGateway:any) =>{
   doShowEditGatewayModal.value = true;
+  console.log(newGateway)
   gatewayToEdit.value = newGateway;
 }
 
