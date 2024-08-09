@@ -162,6 +162,7 @@ const showContent = (rowData: any) => {
       <VaPagination v-model="props.pagination.pageNum" buttons-preset="secondary" :pages="totalPages" :visible-pages="5"
         :boundary-links="false" :direction-links="false" />
     </div>
+
   </div>
 </template>
 
@@ -185,7 +186,6 @@ const showContent = (rowData: any) => {
 
 .tooltip-content {
   position: relative;
-  // background-color: white;
   border: 1px solid #d1d5db;
   padding: 6px;
   border-radius: 8px;
@@ -211,7 +211,7 @@ const showContent = (rowData: any) => {
   transform: translateX(-50%);
   border-width: 7px;
   border-style: solid;
-  border-color: transparent transparent white transparent; // 
+  border-color: transparent transparent white transparent;  
 }
 </style>
 <!-- gatewayTable.vue -->

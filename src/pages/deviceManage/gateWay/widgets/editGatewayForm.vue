@@ -8,12 +8,12 @@ import { gateway_type } from '../../../../data/gateway'
 const defaultNewGateway = {
   name: '',
   ipAddr: '',
-  // remark: '',
+  remark: '',
 }
 
 const props = defineProps({
   modelValue: {
-    type: Object as PropType<gateway_type | null>,
+    type: Object as PropType<any>,
     required: true,
   },
 })
@@ -59,9 +59,9 @@ const onCancel = () => {
         <VaInput v-model="newGateway.ipAddr" label="IP Address" class="w-full" :rules="[validators.required]" name="ip_address" />
       </div>
 
-      <!-- <div class="flex gap-4 flex-col w-full">
+      <div class="flex gap-4 flex-col w-full">
         <VaInput v-model="newGateway.remark" label="Remark" class="w-full" name="remark" />
-      </div> -->
+      </div>
 
       <div class="flex gap-2 flex-col-reverse items-stretch justify-end w-full">
         <VaButton preset="secondary" color="secondary" @click="onCancel">Cancel</VaButton>

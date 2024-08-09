@@ -107,6 +107,7 @@ import EditMeterForm from './editMeterForm.vue';
 import { useToast } from 'vuestic-ui';
 import { updateMeter, operateMeter } from '../../../../apis/meter';
 import { useMeters} from '../composables/meter'
+import {MeterOperationType} from '../../../../data/api_field_type/api_field_type';
 
 const toast = useToast();
 const meter = ref<meter_type | null>(null);

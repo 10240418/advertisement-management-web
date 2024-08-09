@@ -13,6 +13,10 @@
       <h1 class="va-h5">Add Gateway</h1>
       <editGatewayForm v-model="gatewayToEdit" @close="doShowAddGatewayModal = false" @save="onSave(gatewayToEdit)" />
     </VaModal>
+    <VaModal v-model="doShowEditGatewayModal" size="small" mobile-fullscreen close-button hide-default-actions>
+      <h1 class="va-h5">Edit Gateway</h1>
+      <editGatewayForm v-model="gatewayToEdit" @close="doShowAddGatewayModal = false" @save="onSave(gatewayToEdit)" />
+    </VaModal>
   </VaCard>
 </template>
 
@@ -33,13 +37,14 @@ const gatewaysShowInTable = ref<gateway_type[]>([]);
 const gatewayToEdit = ref<gateway_type | null>(null);
 
 const showEditGatewayDialog = (gateway: gateway_type) => {
-  const newWindow = window.open(`/gatewayDetail?id=${gateway.id}`, '_blank', 'width=600,height=400,left=500,top=500');
+  const newWindow = window.open(`/gatewayDetail?id=${gateway.id}`, '_blank', 'width=900,height=600,left=500,top=500');
 };
 
 const showAddGatewayModal = () => {
   doShowAddGatewayModal.value = true;
   gatewayToEdit.value = null;
 };
+
 
 const onGatewayDelete = async (gateway: any) => {
   await gatewayApi.remove([gateway.id]);

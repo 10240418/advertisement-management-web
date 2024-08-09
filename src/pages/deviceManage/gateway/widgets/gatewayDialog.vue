@@ -1,53 +1,115 @@
 <template>
   <VaCard>
-    <div class="w-full h-full flex flex-col gap-4 justify-center items-center">
-      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-1 items-end">
-        <VaInput v-if="gateway" v-model="gateway.name" placeholder="name" label="Name" />
-        <VaInput v-if="gateway" v-model="gateway.id" placeholder="id" label="ID" />
-        <VaInput v-if="gateway" v-model="gateway.ipAddr" placeholder="ip_address" label="IP Address" />
-        <VaInput v-if="gateway" v-model="gateway.remark" placeholder="remark" label="Remark" />
+    <div class="w-full h-full flex flex-col  ml-1 ">
+      <!-- top part -->
+      <div class="flex flex-row gap-0">
+        <div class="grid grid-cols-[1fr_3fr_1fr_3fr]" :class="{ 'gap-y-[2.2px]': !editable }">
+          <VaListLabel class="flex justify-start">ID</VaListLabel>
+          <VaInput v-if="gateway" v-model="gateway.id" placeholder="ID" class="custom-input"
+            :class="{ 'read-only': !editable }" />
+          <VaListLabel class="flex justify-start">Name</VaListLabel>
+          <VaInput v-if="gateway" v-model="gateway.name" placeholder="Name" class="custom-input"
+            :class="{ 'read-only': !editable }" />
+          <VaListLabel class="flex justify-start">IpAddr</VaListLabel>
+          <VaInput v-if="gateway" v-model="gateway.ipAddr" placeholder="IPAddr" class="custom-input"
+            :class="{ 'read-only': !editable }" />
+          <VaListLabel class="flex justify-start">Remark</VaListLabel>
+          <VaInput v-if="gateway" v-model="gateway.remark" placeholder="Remark" class="custom-input"
+            :class="{ 'read-only': !editable }" />
+          <VaListLabel class="flex justify-start">CreatedAt</VaListLabel>
+          <VaInput v-if="gateway" v-model="gateway.createdAt" placeholder="CreatedAt" class="custom-input"
+            :class="{ 'read-only': !editable }" />
+        </div>
+        <div>
+          <VaChart :data="chartData" class="h-24" type="line" :options="options" />
+        </div>
       </div>
-      <div>
-        <VaChart :data="chartData" class="h-24" type="line" :options="options" />
-      </div>
-      <div class="dialog-footer">
+      
+      <!-- table part -->
+      <VaDataTable :items="meters" :columns="[
+          { label: 'ID', key: 'id', width: '5%' },
+          { label: 'Name', key: 'name', width: '20%' },
+          { label: 'Type', key: 'type', width: '5%' },
+          { label: 'ModbusAddr', key: 'modbusAddr', width: '15%' },
+          { label: 'UnitId', key: 'unitId', width: '5%' },
+          { label: 'Remark', key: 'remark', width: '30%' },
+          { label: 'Actions', key: 'actions', width: '5%' },
+        ]" class="mr-3 va-data-table" :style="{
+          '--va-data-table-height': '280px',
+          '--va-data-table-thead-background': '#ffffff',
+        }" sticky-header>
+        <template #cell(actions)="{ rowData }">
+          <VaPopover placement="bottom" trigger="click" color="backgroundSecondary">
+            <div class="flex justify-start items-center relative hover:bg-blue-200 rounded-[4px]"
+              @click.stop="showContent(rowData)">
+              <VaIcon name="more_horiz" size="20px" class="mr-2 cursor-pointer" />
+            </div>
+            <template #body>
+                <transition name="fade">
+                  <div v-show="showContentMeter?.id === rowData.id"
+                    class="tooltip-content flex flex-col justify-center z-999 items-center relative border  p-1 rounded-md">
+                    <VaButton preset="secondary" size="small" icon="mso-edit" aria-label="Edit Resident"
+                      @click="showEidtModal(rowData)" class="w-full justify-between">
+                      <span>编辑单位</span>
+                    </VaButton>
+                    <VaButton preset="secondary" size="small" icon="mso-not_started"  aria-label="Update Resident"
+                     @click="operateMeterStatus(MeterOperationType.WaterMeterValveOn)" class="w-full justify-between" >
+                      <span>设为使用</span>
+                    </VaButton>
+                    <VaButton preset="secondary" size="small" icon="mso-cancel" aria-label="Update Resident"
+                    @click="operateMeterStatus(MeterOperationType.WaterMeterValveOff)" class="w-full justify-between">
+                      <span>设为闲置</span>
+                    </VaButton>
+                   
+                  </div>
+                </transition>
+              </template>
+          </VaPopover>
+        </template>
+      </VaDataTable>
+      <div class="dialog-footer flex flex-row gap-2 justify-end items-center"> 
+        <VaButton @click="pingGatewayByID">Ping</VaButton>
         <VaButton @click="cancel">Cancel</VaButton>
-        <VaButton @click="save">Confirm</VaButton>
       </div>
+
+       <!-- edit modal -->
+       <VaModal v-model="showEditModal" size="small" mobile-fullscreen close-button hide-default-actions>
+                <h1>Edit Meter</h1>
+                <EditMeterForm :modelValue="showContentMeter" @update:modelValue="updateMeterData" @save="saveMeter"
+                    @close="closeEditModal" />
+            </VaModal>
     </div>
   </VaCard>
 </template>
 
 <script lang="ts" setup>
-import { ref ,onBeforeMount} from 'vue';
+import { ref, onBeforeMount } from 'vue';
 import { gateway_type } from '../../../../data/gateway';
 import VaChart from '../../../../components/va-charts/VaChart.vue';
 import { useChartData } from '../../../../data/charts/composables/useChartData';
 import { lineChartData } from '../../../../data/charts/lineChartData';
 import { ChartOptions } from 'chart.js';
 import { useRoute } from 'vue-router';
-import { getGateway } from '../../../../apis/gateway'; 
+import { useToast } from 'vuestic-ui';
+import { getGateway,pingGateway } from '../../../../apis/gateway';
+import EditMeterForm from '@/pages/deviceManage/meter/widgets/editMeterForm.vue';
+import { updateMeter,operateMeter } from '../../../../apis/meter';
+import { meter_type } from '../../../../data/meter';
+import {MeterOperationType} from '../../../../data/api_field_type/api_field_type';
 
+// State and Reactive Properties
 const gateway = ref<gateway_type | null>(null);
-const route =   useRoute();
+const route = useRoute();
 const gatewayId = ref(route.query.id);
-const fetchGateway = async () => {
-  if (gatewayId.value) {
-    
-    const res = await getGateway({params:gatewayId.value,data:{
-      email:localStorage.getItem('AdminEmail'),
-      password:localStorage.getItem('AdminPassword')
-    }});
-   
-    gateway.value = res.data. data;
-  }
-}; 
+const toast = useToast();
+const meters = ref<any[]>([]);
+const editable = ref(false);
 
-onBeforeMount(() => {
-  fetchGateway();
-});
+const showContentMeter = ref<meter_type | null>(null);
+const showEditModal = ref(false);
+const unitEditMeter = ref<meter_type>();
 
-
+// Chart Data and Options
 const chartData = useChartData(lineChartData);
 const options: ChartOptions<'line'> = {
   scales: {
@@ -61,13 +123,135 @@ const options: ChartOptions<'line'> = {
   },
 };
 
-const cancel = () => {
+// Lifecycle Hooks
+onBeforeMount(() => {
   fetchGateway();
+});
+
+// Methods
+const fetchGateway = async () => {
+  if (gatewayId.value) {
+    try {
+      const res = await getGateway({ params: gatewayId.value });
+      gateway.value = res.data.data;
+      meters.value = res.data.data.meters;
+    } catch (error) {
+      console.error(error);
+      toast.init({ color: 'danger', message: 'Failed to fetch data' });
+    }
+  }
 };
 
-const save = () => {
+//控制气泡弹窗框的显示
+const showContent = (rowData: any) => {
+  showContentMeter.value = rowData;
+};
+//操作开关表
+const operateMeterStatus = async (query: Number) => {
+  try {
+    await operateMeter({ id: Number(showContentMeter.value?.id), body: { type: query } });
+    toast.init({ message: 'operate successfully', color: 'success' });
+  } catch (error) {
+    toast.init({ message: 'operate Meter failed', color: 'danger' });
+    console.error(error);
+    return;
+  }
+  
+};
 
+//编辑Meter 
+const updateMeterData = (newMeter: meter_type) => {
+  unitEditMeter.value = newMeter;
+};
+const showEidtModal = (rowData: any) => {
+  showEditModal.value = true;
+  unitEditMeter.value = rowData;
+};
+const saveMeter = async (updatedMeter: any) => {
+  try {
+    await updateMeter({ id: Number(showContentMeter.value?.id), ...updatedMeter });
+    toast.init({ message: 'Edit Meter successfully', color: 'success' });
+  } catch (error) {
+    toast.init({ message: 'Edit Meter failed', color: 'danger' });
+    console.error(error);
+    return;
+  }
+  await fetchGateway(); // Refresh data
+  closeEditModal();
+};
+
+const closeEditModal = () => {
+  showEditModal.value = false;
+};
+
+//pingGateway
+const pingGatewayByID = async () => {
+  try {
+    await pingGateway({ id: Number(gatewayId.value) });
+    toast.init({ message: 'ping successfully', color: 'success' });
+  } catch (error) {
+    toast.init({ message: 'ping failed', color: 'danger' });
+    console.error(error);
+    return;
+  }
+};
+const cancel = () => {
   window.close();
 };
-</script>
+
+</script >
+
+
+<style lang="scss">
+.va-data-table__table-tr {
+  border-bottom: 1px solid var(--va-background-border);
+}
+
+.custom-input {
+  --va-input-line-height: 8px;
+  --va-input-wrapper-min-height: 20px;
+  --va-input-font-stretch: expanded;
+  --va-input-letter-spacing: 0.05em;
+  --va-input-disabled-opacity: 0.5;
+}
+
+.read-only .va-input-wrapper__field {
+  --va-form-element-border-width: 0px;
+  border-width: 0px;
+}
+
+.va-input-wrapper__field {
+  padding: 4px 12px;
+}
+
+.tooltip-content {
+  position: relative;
+  border: 1px solid #d1d5db;
+  padding: 6px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.tooltip-content::before {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 8px;
+  border-style: solid;
+  border-color: transparent transparent #d1d5db transparent;
+}
+
+.tooltip-content::after {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 7px;
+  border-style: solid;
+  border-color: transparent transparent white transparent; 
+}
+</style>
 <!-- gatewayDialog.vue -->
