@@ -1,59 +1,28 @@
 <template>
-  <VaDataTable :columns="columns" :items="currentPageData" :loading="props.loading"
-    v-model:sort-by="props.sorting.sortBy" v-model:sorting-order="props.sorting.sortingOrder">
-    <template #cell(actions)="{ rowData }">
-      <VaPopover placement="bottom" trigger="click" color="backgroundSecondary">
-        <div class="flex justify-start items-center relative hover:bg-blue-200 rounded-[4px]"
-          @click.stop="showContent(rowData)">
-          <VaIcon name="more_horiz" size="20px" class="mr-2 cursor-pointer" />
-        </div>
-        <template #body>
-          <transition name="fade">
-            <div v-show="showContentMeter?.id === rowData.id"
-              class="tooltip-content flex flex-col justify-center z-999 items-center relative border p-1 rounded-md">
-              <VaButton preset="secondary" id="detailMeter" size="small" icon="mso-info" aria-label="Info Resident"
-                @click="$emit('detail-meter', rowData as any)" class="w-full justify-between">
-                <span>Detail</span>
-              </VaButton>
-              <VaButton preset="secondary" size="small" icon="mso-edit" aria-label="Edit meter"
-                @click="$emit('edit-meter', rowData as any)" class="w-full justify-between">
-                <span>Edit</span>
-              </VaButton>
-              <VaButton preset="secondary" size="small" icon="mso-delete" color="danger" aria-label="Delete meter"
-                @click="onMeterDelete(rowData)" class="w-full justify-between">
-                <span>Delete</span>
-              </VaButton>
-            </div>
-          </transition>
-        </template>
-      </VaPopover>
-    </template>
-  </VaDataTable>
-  <div class="flex flex-col-reverse md:flex-row gap-2 justify-between items-center py-2">
-    <div>
-      <b>Total: {{ props.pagination.total }} </b>
-      Page Number:
-      <VaInput v-model="props.pagination.pageNum" class="!w-16" />
-      Page Size:
-      <VaSelect v-model="props.pagination.pageSize" class="!w-20" :options="[5, 10, 20, 50, 100]" />
+  <VaCard>
+    <div class="flex flex-col">
+      <!-- Display loading spinner or message while loading -->
+      <div v-if="!loading">Loading...</div>
+      
+      <!-- Display data table when not loading -->
+      <VaDataTable 
+        v-else
+        :items="meters" 
+        :columns="columns"
+        :loading="loading"
+        striped
+        hoverable
+      />
     </div>
-
-    <div v-if="totalPages > 1" class="flex">
-      <VaButton preset="secondary" icon="va-arrow-left" aria-label="Previous page"
-        :disabled="props.pagination.pageNum === 1" @click="props.pagination.pageNum--" />
-      <VaButton class="mr-2" preset="secondary" icon="va-arrow-right" aria-label="Next page"
-        :disabled="props.pagination.pageNum === totalPages" @click="props.pagination.pageNum++" />
-      <VaPagination v-model="props.pagination.pageNum" buttons-preset="secondary" :pages="totalPages" :visible-pages="5"
-        :boundary-links="false" :direction-links="false" />
-    </div>
-  </div>
+  </VaCard>
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits, computed, ref, watch, toRef, PropType } from 'vue';
-import { defineVaDataTableColumns, VaPopover, VaButton, VaIcon, VaInput, VaSelect, VaPagination } from 'vuestic-ui';
-import { meter_type } from '../../../../data/meter';
+import { defineProps, ref, onBeforeMount } from 'vue';
+import { useToast, defineVaDataTableColumns, VaDataTable } from 'vuestic-ui';
+import { getGateway } from '@/apis/gateway';
 
+// Define columns for VaDataTable
 const columns = defineVaDataTableColumns([
   { label: 'ID', key: 'id', sortable: true, width: '5%' },
   { label: 'Name', key: 'name', sortable: true, width: '20%' },
@@ -62,51 +31,28 @@ const columns = defineVaDataTableColumns([
   { label: 'ModbusAddr', key: 'modbusAddr', sortable: true, width: '15%' },
   { label: 'UnitId', key: 'unitId', sortable: true, width: '5%' },
   { label: 'GatewayId', key: 'gatewayId', sortable: true, width: '5%' },
-  { label: 'Actions', key: 'actions', sortable: false, width: '5%' },
 ]);
 
 const props = defineProps({
-  meters: { type: Array, default: () => [] },
-  loading: { type: Boolean, default: false },
-  pagination: { type: Object as PropType<any>, required: true },
-  sorting: { type: Object as PropType<any>, required: true },
+  gatewayId: { type: Number, required: true }
 });
 
-const totalPages = computed(() => Math.ceil(props.pagination.total / props.pagination.pageSize));
-const emit = defineEmits(['edit-meter', 'delete-meter', 'fetch-meter', 'detail-meter']);
+const loading = ref(false);
+const meters = ref<any[]>([]);
+const toast = useToast();
 
-const onMeterDelete = (meter: any) => {
-  emit('delete-meter', meter);
-};
-
-watch(
-  () => [props.pagination.pageNum, props.pagination.pageSize, props.sorting.sortBy, props.sorting.sortingOrder],
-  () => {
-    if (props.pagination.total < props.pagination.pageSize * (props.pagination.pageNum - 1)) {
-      props.pagination.pageNum = 1;
-    }
-    emit('fetch-meter', { pageNum: props.pagination.pageNum, pageSize: props.pagination.pageSize });
-  }
-);
-const currentPageData = computed(() => {
-  let metersArray: any = []
-
-  if (Array.isArray(props.meters)) {
-    metersArray = props.meters;
-  } else {
-    metersArray = [props.meters];
-  }
-  const startIndex = (props.pagination.pageNum - 1) * props.pagination.pageSize;
-  const endIndex = startIndex + props.pagination.pageSize;
-
-  if (metersArray.length <= props.pagination.pageSize) return metersArray;
-  else return metersArray.slice(startIndex, endIndex);
+onBeforeMount(() => {
+  loading.value = true;
+  getGateway({ params: props.gatewayId }).then(res => {
+    meters.value = res.data.data.meters;
+    console.log('Data fetched:', meters.value);
+    loading.value = false;
+  }).catch(err => {
+    console.error(err);
+    toast.init({ color: 'danger', message: 'Failed to fetch data' });
+    loading.value = false;
+  });
 });
-
-const showContentMeter = ref<meter_type | null>(null);
-const showContent = (meter: any) => {
-  showContentMeter.value = meter;
-};
 </script>
 
 <style lang="scss" scoped>
@@ -114,35 +60,5 @@ const showContent = (meter: any) => {
   ::v-deep(.va-data-table__table-tr) {
     border-bottom: 1px solid var(--va-background-border);
   }
-}
-
-.tooltip-content {
-  position: relative;
-  border: 1px solid #d1d5db;
-  padding: 6px;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.tooltip-content::before {
-  content: '';
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  border-width: 8px;
-  border-style: solid;
-  border-color: transparent transparent #d1d5db transparent;
-}
-
-.tooltip-content::after {
-  content: '';
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  border-width: 7px;
-  border-style: solid;
-  border-color: transparent transparent white transparent;
 }
 </style>

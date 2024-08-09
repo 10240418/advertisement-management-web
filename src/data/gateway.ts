@@ -4,6 +4,7 @@ export type gateway_type = {
   name: string,
   ipAddr: string,
   remark: string
+  
 }
 // {
 //   "id": 1,

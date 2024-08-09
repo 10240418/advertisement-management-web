@@ -3,6 +3,7 @@
 import { defineVaDataTableColumns, useModal } from 'vuestic-ui'
 import { PropType, computed, toRef, watch, ref } from 'vue'
 import { gateway_type } from '../../../../data/gateway'
+import infoMeterTable  from './infoMeterTable.vue'
 
 
 const columns = defineVaDataTableColumns([
@@ -103,35 +104,16 @@ const showContent = (rowData: any) => {
     <template #cell(ipAddr)="{ rowData }">
       <div class="ellipsis max-w-[230px]">{{ rowData.ipAddr }}</div>
     </template>
-
-
     <template #cell(device)="{ row, isExpanded }">
-      <VaButton :icon="isExpanded ? 'va-arrow-up' : 'va-arrow-down'" preset="secondary"
-        class=" flex justify-start  items-center relative fontsize-[8px]" @click="row.toggleRowDetails()">
+      <VaButton :icon="isExpanded ? 'va-arrow-up' : 'va-arrow-down'" preset="secondary" size="small"
+        class=" flex justify-start h-[20px] items-center relative fontsize-[3px]" @click="row.toggleRowDetails()">
         {{ isExpanded ? 'Hide' : 'More info' }}
       </VaButton>
     </template>
     <!-- 拓展出来的信息 -->
     <template #expandableRow="{ rowData }">
-      <div class="flex gap-2">
-        <!-- <VaAvatar :src="`https://randomuser.me/api/portraits/men/${rowData.id}.jpg`" /> -->
-        <div class="pl-2">
-          <div class="flex gap-1">
-            <span>{{ rowData.name }}</span>
-          </div>
-          <div class="flex items-center">
-            <VaIcon size="small" name="phone" color="secondary" class="mr-2" />
-            <span>{{ rowData.phone }}</span>
-          </div>
-          <div class="flex items-center">
-            <VaIcon size="small" name="email" color="secondary" class="mr-2" />
-            <span>{{ rowData.email }}</span>
-          </div>
-          <div class="flex items-center">
-            <VaIcon size="small" name="language" color="secondary" class="mr-2" />
-            <span class="va-link">{{ rowData.website }}</span>
-          </div>
-        </div>
+      <div class="flex w-full">
+       <infoMeterTable :gatewayId="rowData.id "></infoMeterTable>
       </div>
     </template>
 
@@ -183,12 +165,23 @@ const showContent = (rowData: any) => {
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss" >
 .va-data-table {
   ::v-deep(.va-data-table__table-tr) {
     border-bottom: 1px solid var(--va-background-border);
   }
+  ::v-deep(td.va-data-table__table-td){
+    padding: 8px 10px
+  }
+  
 }
+.va-data-table__table-tr--expanded td {
+    background: var(--va-background-border);
+  }
+
+  .va-data-table__table-expanded-content td {
+    background-color: var(--va-background-element);
+  }
 
 .tooltip-content {
   position: relative;

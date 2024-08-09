@@ -15,7 +15,7 @@
     <p class="font-bold w-[200px]">Email</p>
     <div class="flex-1">
       <div class="max-w-[748px]">
-        {{ store.email }}
+        {{ store.getEmail }}
       </div>
     </div>
   </div>
@@ -31,10 +31,7 @@
 </template>
 <script lang="ts" setup>
 import { useUserStore } from '../../../stores/user-store'
-
 import { buttonStyles } from '../styles'
-
 const store = useUserStore()
-
 const emits = defineEmits(['openNameModal', 'openResetPasswordModal'])
 </script>

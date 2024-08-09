@@ -1,23 +1,36 @@
 import { defineStore } from 'pinia'
 
+interface User {
+  userName: string
+  email: string
+  passWord: string
+}
+
 export const useUserStore = defineStore('user', {
-  state: () => {
-    return {
-      userName: 'Vasili Savitski',
-      email: 'vasili@gmail.com',
-      memberSince: '8/12/2020',
-      pfp: 'https://picsum.photos/id/22/200/300',
-      is2FAEnabled: false,
-    }
+  state: (): User => ({
+    userName: '',
+    email: '',
+    passWord: '',
+  }),
+  getters: {
+    getUserName: (state) => state.userName,
+    getEmail: (state) => state.email,
+    getPassWord: (state) => state.passWord,
   },
-
   actions: {
-    toggle2FA() {
-      this.is2FAEnabled = !this.is2FAEnabled
-    },
-
     changeUserName(userName: string) {
       this.userName = userName
+    },
+    changeEmail(email: string) {
+      this.email = email
+    },
+    changePassWord(passWord: string) {
+      this.passWord = passWord
+    },
+    reset() {
+      this.userName = ''
+      this.email = ''
+      this.passWord = ''
     },
   },
 })

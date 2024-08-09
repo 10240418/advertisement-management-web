@@ -26,10 +26,13 @@ import { useRouter } from 'vue-router'
 import { useForm, useToast } from 'vuestic-ui'
 import { validators } from '../../services/utils'
 import { login } from '../../apis/auth'
+import { useUserStore } from '@/stores/user-store'
+
 
 const { validate } = useForm('form')
 const router = useRouter()
 const toast = useToast()
+const useUsers = useUserStore();
 
 const formData = reactive({
   email: '',
@@ -43,8 +46,11 @@ const submit = () => {
       //保存賬號和密碼在localStorage
       localStorage.setItem('AdminEmail', formData.email)
       localStorage.setItem('AdminPassword', formData.password)
+      useUsers.changeEmail(formData.email)
+      useUsers.changePassWord(formData.password)
+
       toast.init({ message: res.data.message, color: "success" })
-      router.push({ name: 'adminUsers' })
+      router.push({ name: 'home' })
     }).catch(err => {
       toast.init({ message: err.response.data.message, color: "danger" })
     })

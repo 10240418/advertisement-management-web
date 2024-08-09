@@ -17,7 +17,6 @@ export const getGateway = (query:any) => {
     return request({
         url: `/admin/gateway/${query.params}`,
         method: 'get',
-        data:query.data
     });
 }
 
