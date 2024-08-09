@@ -38,7 +38,10 @@ const form = useForm('add-gateway-form')
 
 const onSave = () => {
   if (form.validate()) {
-    emit('update:modelValue', newGateway.value)
+    if(props.modelValue.id){
+      emit('update:modelValue', {id:props.modelValue.id,...newGateway.value})
+    }
+    else{emit('update:modelValue', newGateway.value)}
     emit('save', newGateway.value)
   }
 }

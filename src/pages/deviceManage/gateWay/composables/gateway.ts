@@ -9,6 +9,7 @@ import {
   getGateway
 } from '../../../../apis/gateway';
 import { useThrottle } from '../../../../data/dataControl';
+import { useToast } from 'vuestic-ui'; // Import Vuestic UI Toast
 
 const makePaginationRef = () => ref<Pagination>({ pageNum: 1, pageSize: 10, total: 30 });
 const makeSortingRef = () => ref<Sorting>({ sortBy: "id", sortingOrder: "asc" });
@@ -16,87 +17,101 @@ const makeSortingRef = () => ref<Sorting>({ sortBy: "id", sortingOrder: "asc" })
 let useGatewaysInstance: any = null;
 
 export const useGateways = (options?: {
-  // 初始化值的提交
   pagination?: Ref<Pagination>;
   sorting?: Ref<Sorting>;
 }) => {
-  // 缓存 避免重复创建
   if (useGatewaysInstance) {
     return useGatewaysInstance;
   }
 
   const isLoading = ref(false);
   const gateways = ref<gateway_type[]>([]);
+  const error = ref<string | null>(null); // Error state
+  const toast = useToast(); // Toast for notifications
   const { sorting = makeSortingRef(), pagination = makePaginationRef() } = options || {};
 
-  // fetch 获取数据, 并且赋值
   const fetch = async () => {
     isLoading.value = true;
+    error.value = null;
     try {
-      
-      const res = await fetchGateways(
-        {
-          data: { email: localStorage.getItem('AdminEmail'), password: localStorage.getItem('AdminPassword') },
-          params: { pageNum: pagination.value.pageNum, pageSize: pagination.value.pageSize}
-        });
+      const res = await fetchGateways({
+        data: { email: localStorage.getItem('AdminEmail'), password: localStorage.getItem('AdminPassword') },
+        params: { pageNum: pagination.value.pageNum, pageSize: pagination.value.pageSize }
+      });
       gateways.value = res.data.data;
-      
       pagination.value.total = res.data.pagination.total;
-
 
       if (pagination.value.pageSize <= 0) pagination.value.pageSize = 10;
       if (pagination.value.pageNum <= 0) pagination.value.pageNum = 1;
-    } catch (error) {
-      console.error(error);
+    } catch (err: any) {
+      console.error(err);
+      error.value = (err.message || 'Failed to fetch gateways') as string;
+      toast.init({ message: error.value, color: 'danger' });
     }
     isLoading.value = false;
   };
 
-  // 实现 CRUD
   const add = async (gateway: any) => {
     isLoading.value = true;
+    error.value = null;
     try {
       await addGateway(gateway);
       await fetch();
-    } catch (error) {
-      console.error(error);
+      toast.init({ message: 'Gateway added successfully', color: 'success' });
+    } catch (err: any) {
+      console.error(err);
+      error.value = (err.message || 'Failed to add gateway') as string;
+      toast.init({ message: error.value, color: 'danger' });
     }
     isLoading.value = false;
   };
 
   const remove = async (ids: number[]) => {
     isLoading.value = true;
+    error.value = null;
     try {
       await deleteGateway({ ids });
       await fetch();
-    } catch (error) {
-      console.error(error);
+      toast.init({ message: 'Gateway deleted successfully', color: 'success' });
+    } catch (err: any) {
+      console.error(err);
+      error.value = (err.message || 'Failed to delete gateway') as string;
+      toast.init({ message: error.value, color: 'danger' });
     }
     isLoading.value = false;
   };
 
   const update = async (gateway: any) => {
     isLoading.value = true;
+    error.value = null;
     try {
       await updateGateway(gateway);
       await fetch();
-    } catch (error) {
-      console.error(error);
+      toast.init({ message: 'Gateway updated successfully', color: 'success' });
+    } catch (err: any) {
+      console.error(err);
+      error.value = (err.message || 'Failed to update gateway') as string;
+      toast.init({ message: error.value, color: 'danger' });
     }
     isLoading.value = false;
   };
-  //节流实现搜索
+
   const searchGatewayByid = async (query: any) => {
     isLoading.value = true;
+    error.value = null;
     try {
       const res = await getGateway(query);
       gateways.value = res.data.data;
-    } catch (error) {
-      console.error(error);
+    } catch (err: any) {
+      console.error(err);
+      error.value = (err.message || 'Failed to fetch gateway by ID') as string;
+      toast.init({ message: error.value, color: 'danger' });
     }
     isLoading.value = false;
   };
+
   const searchGateway = useThrottle(searchGatewayByid, 500);
+
   onBeforeMount(() => {
     fetch();
   });
@@ -104,6 +119,7 @@ export const useGateways = (options?: {
   useGatewaysInstance = {
     isLoading,
     gateways,
+    error, // Expose error state
     sorting,
     pagination,
     fetch,
@@ -115,4 +131,3 @@ export const useGateways = (options?: {
 
   return useGatewaysInstance;
 };
-// gateway.ts

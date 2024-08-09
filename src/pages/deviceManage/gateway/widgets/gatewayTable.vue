@@ -1,4 +1,80 @@
 <!-- gatewayTable.vue -->
+
+<template>
+  <VaDataTable :columns="columns" :items="currentPageData" :loading="props.loading"
+    v-model:sort-by="props.sorting.sortBy" v-model:sorting-order="props.sorting.sortingOrder">
+    <template #cell(name)="{ rowData }">
+      <div class="max-w-[120px] ellipsis">{{ rowData.name }}</div>
+    </template>
+
+    <template #cell(ipAddr)="{ rowData }">
+      <div class="ellipsis max-w-[230px]">{{ rowData.ipAddr }}</div>
+    </template>
+    <template #cell(device)="{ row, isExpanded }">
+      <VaButton :icon="isExpanded ? 'va-arrow-up' : 'va-arrow-down'" preset="secondary" size="small"
+        class=" flex justify-start h-[20px] items-center relative fontsize-[3px]" @click="row.toggleRowDetails()">
+        {{ isExpanded ? 'Hide' : 'More info' }}
+      </VaButton>
+    </template>
+    <!-- 拓展出来的信息 -->
+    <template #expandableRow="{ rowData }">
+      <div class="flex w-full">
+       <infoMeterTable :gatewayId="rowData.id "></infoMeterTable>
+      </div>
+    </template>
+
+
+
+    <template #cell(actions)="{ rowData }" class=" overflow-y-scroll">
+      <VaPopover placement="bottom" trigger="click" color="backgroundSecondary">
+        <div class="flex  items-center relative hover:bg-blue-200 rounded-[4px] "
+          @click.stop="showContent(rowData)">
+          <VaIcon name="more_horiz" size="20px" class="mr-2 cursor-pointer">
+          </VaIcon>
+        </div>
+
+        <template #body>
+          <transition name="fade">
+            <div v-show="showContentGateway?.id === rowData.id"
+              class="tooltip-content flex flex-col  justify-start z-999 items-center relative  border border-solid p-2 rounded-md shadow-lg">
+              <VaButton preset="secondary" size="small" icon="mso-info" aria-label="Edit user"
+                @click="$emit('detail-gateway', rowData as any)" class="w-full justify-start">
+                <span>Detail</span>
+              </VaButton>
+              <VaButton preset="secondary" size="small" icon="mso-edit" aria-label="Edit user"
+                @click="$emit('edit-gateway', rowData as any)" class="w-full justify-start">
+                <span>Edit</span>
+              </VaButton>
+              <VaButton preset="secondary" size="small" icon="mso-delete" color="danger" aria-label="Delete user"
+                @click="onGatewayDelete(rowData)" class="w-full flex-start">
+                <span>Delete</span>
+              </VaButton>
+            </div>
+          </transition>
+        </template>
+      </VaPopover>
+    </template>
+  </VaDataTable>
+  <div class="flex flex-col-reverse md:flex-row gap-2 justify-between items-center py-2">
+    <div>
+      <b>Total: {{ props.pagination.total }} </b>
+      Page Number:
+      <VaInput v-model="props.pagination.pageNum" class="!w-16" />
+      Page Size:
+      <VaSelect v-model="props.pagination.pageSize" class="!w-20" :options="[5, 10, 20, 50, 100]" />
+    </div>
+
+    <div v-if="totalPages > 1" class="flex">
+      <VaButton preset="secondary" icon="va-arrow-left" aria-label="Previous page"
+        :disabled="props.pagination.pageNum === 1" @click="props.pagination.pageNum--" />
+      <VaButton class="mr-2" preset="secondary" icon="va-arrow-right" aria-label="Next page"
+        :disabled="props.pagination.pageNum === totalPages" @click="props.pagination.pageNum++" />
+      <VaPagination v-model="props.pagination.pageNum" buttons-preset="secondary" :pages="totalPages" :visible-pages="5"
+        :boundary-links="false" :direction-links="false" />
+    </div>
+
+  </div>
+</template>
 <script setup lang="ts">
 import { defineVaDataTableColumns, useModal } from 'vuestic-ui'
 import { PropType, computed, toRef, watch, ref } from 'vue'
@@ -26,6 +102,7 @@ const props = defineProps({
 })
 
 const emit = defineEmits<{
+  (event: 'detail-gateway', gateway: any): void
   (event: 'edit-gateway', gateway: any): void
   (event: 'delete-gateway', gateway: any): void
   (event: 'fetch-gateway', params: any): void
@@ -94,77 +171,7 @@ const showContent = (rowData: any) => {
 
 </script>
 
-<template>
-  <VaDataTable :columns="columns" :items="currentPageData" :loading="props.loading"
-    v-model:sort-by="props.sorting.sortBy" v-model:sorting-order="props.sorting.sortingOrder">
-    <template #cell(name)="{ rowData }">
-      <div class="max-w-[120px] ellipsis">{{ rowData.name }}</div>
-    </template>
 
-    <template #cell(ipAddr)="{ rowData }">
-      <div class="ellipsis max-w-[230px]">{{ rowData.ipAddr }}</div>
-    </template>
-    <template #cell(device)="{ row, isExpanded }">
-      <VaButton :icon="isExpanded ? 'va-arrow-up' : 'va-arrow-down'" preset="secondary" size="small"
-        class=" flex justify-start h-[20px] items-center relative fontsize-[3px]" @click="row.toggleRowDetails()">
-        {{ isExpanded ? 'Hide' : 'More info' }}
-      </VaButton>
-    </template>
-    <!-- 拓展出来的信息 -->
-    <template #expandableRow="{ rowData }">
-      <div class="flex w-full">
-       <infoMeterTable :gatewayId="rowData.id "></infoMeterTable>
-      </div>
-    </template>
-
-
-
-    <template #cell(actions)="{ rowData }" class=" overflow-y-scroll">
-      <VaPopover placement="bottom" trigger="click" color="backgroundSecondary">
-        <div class="flex  items-center relative hover:bg-blue-200 rounded-[4px] "
-          @click.stop="showContent(rowData)">
-          <VaIcon name="more_horiz" size="20px" class="mr-2 cursor-pointer">
-          </VaIcon>
-        </div>
-
-        <template #body>
-          <transition name="fade">
-            <div v-show="showContentGateway?.id === rowData.id"
-              class="tooltip-content flex flex-col  justify-start z-999 items-center relative  border border-solid p-2 rounded-md shadow-lg">
-              <VaButton preset="secondary" size="small" icon="mso-edit" aria-label="Edit user"
-                @click="$emit('edit-gateway', rowData as any)" class="w-full justify-start">
-                <span>Detail</span>
-              </VaButton>
-              <VaButton preset="secondary" size="small" icon="mso-delete" color="danger" aria-label="Delete user"
-                @click="onGatewayDelete(rowData)" class="w-full flex-start">
-                <span>Delete</span>
-              </VaButton>
-            </div>
-          </transition>
-        </template>
-      </VaPopover>
-    </template>
-  </VaDataTable>
-  <div class="flex flex-col-reverse md:flex-row gap-2 justify-between items-center py-2">
-    <div>
-      <b>Total: {{ props.pagination.total }} </b>
-      Page Number:
-      <VaInput v-model="props.pagination.pageNum" class="!w-16" />
-      Page Size:
-      <VaSelect v-model="props.pagination.pageSize" class="!w-20" :options="[5, 10, 20, 50, 100]" />
-    </div>
-
-    <div v-if="totalPages > 1" class="flex">
-      <VaButton preset="secondary" icon="va-arrow-left" aria-label="Previous page"
-        :disabled="props.pagination.pageNum === 1" @click="props.pagination.pageNum--" />
-      <VaButton class="mr-2" preset="secondary" icon="va-arrow-right" aria-label="Next page"
-        :disabled="props.pagination.pageNum === totalPages" @click="props.pagination.pageNum++" />
-      <VaPagination v-model="props.pagination.pageNum" buttons-preset="secondary" :pages="totalPages" :visible-pages="5"
-        :boundary-links="false" :direction-links="false" />
-    </div>
-
-  </div>
-</template>
 
 <style lang="scss" >
 .va-data-table {

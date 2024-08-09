@@ -7,7 +7,7 @@
       </div>
 
       <gatewayTable :pagination="pagination" :gateways="gatewaysShowInTable" :loading="isLoading" :sorting="sorting"
-        @edit-gateway="showEditGatewayDialog" @delete-gateway="onGatewayDelete" @fetch-gateway="fetchGateway" />
+      @edit-gateway="showEditGatewayModal"  @detail-gateway="showEditGatewayDialog" @delete-gateway="onGatewayDelete" @fetch-gateway="fetchGateway" />
     </VaCardContent>
     <VaModal v-model="doShowAddGatewayModal" size="small" mobile-fullscreen close-button hide-default-actions>
       <h1 class="va-h5">Add Gateway</h1>
@@ -15,7 +15,7 @@
     </VaModal>
     <VaModal v-model="doShowEditGatewayModal" size="small" mobile-fullscreen close-button hide-default-actions>
       <h1 class="va-h5">Edit Gateway</h1>
-      <editGatewayForm v-model="gatewayToEdit" @close="doShowAddGatewayModal = false" @save="onSave(gatewayToEdit)" />
+      <editGatewayForm v-model="gatewayToEdit" @close="doShowEditGatewayModal = false" @save="onSave(gatewayToEdit)" />
     </VaModal>
   </VaCard>
 </template>
@@ -32,6 +32,7 @@ import editGatewayForm from './widgets/editGatewayForm.vue';
 
 const { init: notify } = useToast();
 const doShowAddGatewayModal = ref(false);
+const doShowEditGatewayModal = ref(false);
 const { isLoading, gateways, sorting, pagination, ...gatewayApi } = useGateways();
 const gatewaysShowInTable = ref<gateway_type[]>([]);
 const gatewayToEdit = ref<gateway_type | null>(null);
@@ -44,6 +45,10 @@ const showAddGatewayModal = () => {
   doShowAddGatewayModal.value = true;
   gatewayToEdit.value = null;
 };
+const showEditGatewayModal=(newGateway:any) =>{
+  doShowEditGatewayModal.value = true;
+  gatewayToEdit.value = newGateway;
+}
 
 
 const onGatewayDelete = async (gateway: any) => {
@@ -64,11 +69,12 @@ const fetchGateway = async (fetch: any) => {
 const onSave = async (gateway: any) => {
   if (gateway.id) {
     await gatewayApi.update(gateway);
+    doShowEditGatewayModal.value = false;
   } else {
     await gatewayApi.add(gateway);
+    doShowAddGatewayModal.value = false;
   }
-  doShowAddGatewayModal.value = false;
-};
+}
 
 const searchValue = ref('');
 const onSearch = async (searchValue: any) => {
