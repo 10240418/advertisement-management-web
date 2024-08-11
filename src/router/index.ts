@@ -64,6 +64,21 @@ const routes: Array<RouteRecordRaw> = [
         ]
       },
       {
+        path:'/task',
+        children:[
+          {
+            name:'controlTask',
+            path:'controlTask',
+            component:()=>import('../../src/pages/task/controlTask/controlTaskPage.vue')
+          },
+          {
+            name:'systemTask',
+            path:'systemTask',
+            component:()=>import('../../src/pages/task/systemTask/systemTaskPage.vue')
+         }
+        ]
+      },
+      {
         name: 'adminUsers',
         path: 'adminUsers',
         component: () => import('../pages/adminUsers/adminUsersPage.vue'),
@@ -110,6 +125,12 @@ const routes: Array<RouteRecordRaw> = [
     name: 'residentDetail',
     path: '/residentDetail/:id?', // `?` 表示可选的
     component: () => import('../pages/residentManage/resident/widgets/residentDialog.vue'),
+  },
+  {
+    name: 'taskDetail',
+    path: '/taskDetail/:id?', // `?` 表示可选的
+    component: () => import('../pages/task/controlTask/widgets/controlTaskDialog.vue'),
+
   },
   {
     name: '404',

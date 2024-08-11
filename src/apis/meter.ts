@@ -92,7 +92,7 @@ export const operateMeter = (query: any) => {
   });
 };
 
-export const fetchMeterData = (query: any) => {
+export const fetchMeterLogsData = (query: any) => {
   return request({
     url: `/admin/meter/${query.id}/data`,
     method: 'get',

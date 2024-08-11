@@ -83,12 +83,11 @@
             <div class="dialog-footer">
                 <VaButton @click="cancel">Cancel</VaButton>
             </div>
-
             <!-- edit modal -->
             <VaModal v-model="showEditModal" size="small" mobile-fullscreen close-button hide-default-actions>
                 <h1>Edit Meter</h1>
                 <EditMeterForm :modelValue="meter" @update:modelValue="updateMeterData" @save="saveMeter"
-                    @close="closeEditModal" />
+                    @close="closeEditModal"/>
             </VaModal>
         </div>
     </VaCard>
@@ -108,6 +107,7 @@ import { useToast } from 'vuestic-ui';
 import { updateMeter, operateMeter } from '../../../../apis/meter';
 import { useMeters} from '../composables/meter'
 import {MeterOperationType} from '../../../../data/api_field_type/api_field_type';
+import { fetchMeterLogsData } from '../../../../apis/meter';
 
 const toast = useToast();
 const meter = ref<meter_type | null>(null);
@@ -117,13 +117,19 @@ const editable = ref(false);
 const isUnitCollapsed = ref(true);
 const isGatewayCollapsed = ref(true);
 const showEditModal = ref(false);
+const panigation = ref({
+    pageNum: 1,
+    pageSize: 30,
+    desc: false
+});
 const arrowDirection = (state: boolean) => (state ? 'va-arrow-up' : 'va-arrow-down');
-
 //初始化
 const fetch = async () => {
     if (meterId.value) {
         const res = await fetchMeter({ id: meterId.value });
         meter.value = res.data.data;
+        const reslog = await fetchMeterLogsData({ id: meterId.value ,...panigation});
+        console.log(reslog.data.data)
     }
 };
 onBeforeMount(() => {
@@ -187,7 +193,6 @@ const saveMeter = async (updatedMeter: any) => {
     await useMeters().fetch();
     closeEditModal();
 };
-
 const cancel = () => {
     window.close();
 };

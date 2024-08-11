@@ -72,6 +72,23 @@ export default {
       ]
 
     },
+    {
+      name:'task',
+      displayName:'menu.task',
+      meta:{
+        icon:'sort'
+      },
+      children:[
+        {
+          name:'controlTask',
+          displayName:'menu.controlTask',
+        },
+        {
+          name:'systemTask',
+          displayName:'menu.systemTask',
+        }
+      ]
+    },
     
     {
       name: 'auth',

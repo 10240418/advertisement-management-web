@@ -69,12 +69,11 @@
     "meter":"meter",
     "gateway": "Gateway",
     "settings": "Application settings",
-    "logs": "Logs"
-  },
-  "messages": {
-    "all": "See all messages",
-    "new": "New messages from {name}",
-    "mark_as_read": "Mark As Read"
+    "logs": "Logs",
+    "task": "Tasks",
+    "controlTask": "Control Task",
+    "scheduleTask": "Schedule Task",
+    "systemTask": "System Task"
   },
   "navbar": {
     "messageUs": "Web development inquiries:",
