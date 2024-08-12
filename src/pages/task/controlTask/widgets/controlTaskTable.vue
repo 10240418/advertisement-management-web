@@ -56,13 +56,13 @@
   
   const columns = defineVaDataTableColumns([
     { label: 'ID', key: 'id', sortable: true, width: '5%' },
-    { label: 'Name', key: 'name', sortable: true, width: '20%' },
+    { label: 'Name', key: 'name', sortable: true, width: '10%' },
     { label: 'Tag', key: 'tag', sortable: true, width: '10%' },
-    { label: 'Operation', key: 'operation', sortable: true, width: '10%' },
+    { label: 'Operation', key: 'operation', sortable: true, width: '5%' },
     { label: 'Active', key: 'active', sortable: true, width: '5%' },
     { label: 'Editable', key: 'editable', sortable: true, width: '5%' },
-    { label: 'Interval', key: 'interval', sortable: true, width: '10%' },
-    { label: 'Start At', key: 'startAt', sortable: true, width: '15%' },
+    { label: 'Interval', key: 'interval', sortable: true, width: '5%' },
+    { label: 'Start At', key: 'startAt', sortable: true, width: '10%' },
     { label: 'Gateway ID', key: 'gatewayId', sortable: true, width: '5%' },
     { label: 'Meter ID', key: 'meterId', sortable: true, width: '5%' },
     { label: 'Actions', key: 'actions', sortable: false, width: '5%' },

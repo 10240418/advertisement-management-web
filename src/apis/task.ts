@@ -46,8 +46,10 @@ export const deleteTask = (ids: number[]) => {
   return request({
     url: '/admin/task',
     method: 'delete',
-    data: ids
-  })
+    data: {
+      ids:ids
+  }
+})
 }
 
 export const updateTask = (data: any) => {
