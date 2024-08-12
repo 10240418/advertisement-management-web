@@ -87,15 +87,14 @@
             <VaModal v-model="showEditModal" size="small" mobile-fullscreen close-button hide-default-actions>
                 <h1>Edit Meter</h1>
                 <EditMeterForm :modelValue="meter" @update:modelValue="updateMeterData" @save="saveMeter"
-                    @close="closeEditModal"/>
+                    @close="closeEditModal" />
             </VaModal>
         </div>
     </VaCard>
 </template>
-
 <script lang="ts" setup>
-import { ref, onBeforeMount } from 'vue';
-import { meter_type } from '../../../../data/meter';
+import { ref, onBeforeMount, watch } from 'vue';
+import { meter_type, read_meter_log_type } from '../../../../data/meter';
 import VaChart from '../../../../components/va-charts/VaChart.vue';
 import { useChartData } from '../../../../data/charts/composables/useChartData';
 import { lineChartData } from '../../../../data/charts/lineChartData';
@@ -105,9 +104,9 @@ import { fetchMeter } from '../../../../apis/meter';
 import EditMeterForm from './editMeterForm.vue';
 import { useToast } from 'vuestic-ui';
 import { updateMeter, operateMeter } from '../../../../apis/meter';
-import { useMeters} from '../composables/meter'
-import {MeterOperationType} from '../../../../data/api_field_type/api_field_type';
-import { fetchMeterLogsData } from '../../../../apis/meter';
+import { useMeters } from '../composables/meter';
+import { MeterOperationType } from '../../../../data/api_field_type/api_field_type';
+import { fetchReadMeterLogsData } from '../../../../apis/meter';
 
 const toast = useToast();
 const meter = ref<meter_type | null>(null);
@@ -117,26 +116,69 @@ const editable = ref(false);
 const isUnitCollapsed = ref(true);
 const isGatewayCollapsed = ref(true);
 const showEditModal = ref(false);
-const panigation = ref({
+const pagination = ref({
     pageNum: 1,
     pageSize: 30,
     desc: false
 });
+
+const readLogsData = ref<read_meter_log_type[]>([]);
+const labelsReadMeterLogs = ref<string[]>([]);
+const dataReadMeterLogs = ref<number[]>([]);
+
 const arrowDirection = (state: boolean) => (state ? 'va-arrow-up' : 'va-arrow-down');
-//初始化
+
+const formattedDate = (isoDate: string): string => {
+    const date = new Date(isoDate);
+    return date.toLocaleString('en-US', {
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false // 24-hour format
+    }).replace(',', ''); // Remove the comma between date and time
+};
+
 const fetch = async () => {
     if (meterId.value) {
-        const res = await fetchMeter({ id: meterId.value });
-        meter.value = res.data.data;
-        const reslog = await fetchMeterLogsData({ id: meterId.value ,...panigation});
-        console.log(reslog.data.data)
+        try {
+            const res = await fetchMeter({ id: meterId.value });
+            meter.value = res.data.data;
+
+            const reslog = await fetchReadMeterLogsData({ id: meterId.value, ...pagination.value });
+            readLogsData.value = reslog.data.data;
+            labelsReadMeterLogs.value = reslog.data.data.map((log: read_meter_log_type) => formattedDate(log.createdAt));
+            dataReadMeterLogs.value = reslog.data.data.map((log: read_meter_log_type) => log.powerEnergy);
+            console.log(reslog.data.data);
+            console.log(labelsReadMeterLogs.value);
+        } catch (error: any) {
+            toast.init({ color: 'danger', message: error.message });
+        }
     }
 };
+
 onBeforeMount(() => {
     fetch();
 });
-//图表
-const chartData = useChartData(lineChartData);
+
+const lineChartMeterReadLogsData = ref({
+    datasets: [
+        {
+            label: 'Meter Read Logs',
+            backgroundColor: 'rgba(75,192,192,0.4)',
+            data: dataReadMeterLogs.value, // Random values
+        },
+    ],
+    labels: labelsReadMeterLogs.value
+});
+//侦听labelsReadMeterLogs.value变化时，更新lineChartMeterReadLogsData.value
+watch([labelsReadMeterLogs, dataReadMeterLogs], () => {
+    lineChartMeterReadLogsData.value.labels = labelsReadMeterLogs.value;
+    lineChartMeterReadLogsData.value.datasets[0].data = dataReadMeterLogs.value;
+});
+
+const chartData = useChartData(lineChartMeterReadLogsData.value);
+
 const options: ChartOptions<'line'> = {
     scales: {
         x: { display: true, grid: { display: true } },
@@ -162,42 +204,40 @@ const updateMeterData = (newMeter: meter_type) => {
     console.log(meter.value);
 };
 
-//开关阀门
-const meterStatus = ref(0)
+const meterStatus = ref(0);
+
 const operateMeterStatus = async () => {
     try {
-        //TODO: status 要根据实际数据来获取
         meterStatus.value = meterStatus.value === 0 ? 1 : 0;
         await operateMeter({ id: Number(meterId.value), body: { type: meterStatus.value } });
-        toast.init({ message: 'operate successfully', color: 'success' });
+        toast.init({ message: 'Operate successfully', color: 'success' });
     } catch (error) {
-        toast.init({ message: 'operate Meter failed', color: 'danger' });
+        toast.init({ message: 'Operate Meter failed', color: 'danger' });
         console.error(error);
-
     }
-    await fetch(); // 重新获取数据以刷新视图
-}
+    await fetch();
+};
+
 const saveMeter = async (updatedMeter: any) => {
-    // 调用API保存更新的meter
-    console.log(updatedMeter);
     try {
         await updateMeter({ id: Number(meterId.value), ...updatedMeter });
         toast.init({ message: 'Edit Meter successfully', color: 'success' });
     } catch (error) {
         toast.init({ message: 'Edit Meter failed', color: 'danger' });
         console.error(error);
-        return
+        return;
     }
-    await fetch(); // 重新获取数据以刷新视图
-    console.log(meter.value)
+    await fetch();
+    console.log(meter.value);
     await useMeters().fetch();
     closeEditModal();
 };
+
 const cancel = () => {
     window.close();
 };
-
 </script>
+
 
 <style lang="scss">
 .va-data-table {

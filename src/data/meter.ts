@@ -14,6 +14,7 @@ export  type meter_type = {
   gatewayId: number,
   gateway: gateway_type
   } 
+
   // {
   //   "data": {
   //     "id": 19,
@@ -36,3 +37,28 @@ export  type meter_type = {
   //   },
   //   "message": "get meter success"
   // }
+  export interface read_meter_log_type {
+    voltage: number,
+    current: number,
+    frequency: number,
+    power: number,
+    powerFactor: number,
+    
+    powerEnergy: number,
+    switch: boolean,
+    meterId: string,
+    meterName: string,
+    createdAt: string
+    }
+    // {
+    //   "voltage": 235.60000351071358,
+    //   "current": 0,
+    //   "frequency": 49.99999888241291,
+    //   "power": 0,
+    //   "powerFactor": 1.0000000474974513,
+    //   "powerEnergy": 0,
+    //   "switch": false,
+    //   "meterId": "10",
+    //   "meterName": "TestElectricMeter",
+    //   "createdAt": "2024-08-11T14:49:35.863625Z"
+    // },

@@ -1,3 +1,4 @@
+
 import request from '.';
 
 // 获取电表列表
@@ -92,17 +93,34 @@ export const operateMeter = (query: any) => {
   });
 };
 
-export const fetchMeterLogsData = (query: any) => {
+export const readMeter = (query: any) => {
+  return request({
+    url: `/admin/meter/${query.id}/realtime`,
+    method: 'get',
+  });
+};
+
+export const fetchReadMeterLogsData = (query: any) => {
   return request({
     url: `/admin/meter/${query.id}/data`,
     method: 'get',
     params: {
       pageSize: query.pageSize, 
       pageNum: query.pageNum,
-      desc:query.desc?query.desc:false,
-      asc:query.asc?query.asc:false,
     },
   });
 };
+export const fetchOperateMeterLogsData = (query: any) => {
+  return request({
+    url: `/admin/meter/${query.id}/operate`,
+    method: 'get',
+    params: {
+      pageSize: query.pageSize, 
+      pageNum: query.pageNum,
+     
+    }
+  })
+}
+
 
 
