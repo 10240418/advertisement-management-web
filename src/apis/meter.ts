@@ -99,6 +99,18 @@ export const readMeter = (query: any) => {
     method: 'get',
   });
 };
+// {
+//   "data": {
+//     "voltage": 235.2000035047531,
+//     "current": 0,
+//     "frequency": 49.99999888241291,
+//     "power": 0,
+//     "powerFactor": 1.0000000474974513,
+//     "powerEnergy": 0,
+//     "switch": true
+//   },
+//   "message": "operate meter success"
+// }
 
 export const fetchReadMeterLogsData = (query: any) => {
   return request({
@@ -112,7 +124,7 @@ export const fetchReadMeterLogsData = (query: any) => {
 };
 export const fetchOperateMeterLogsData = (query: any) => {
   return request({
-    url: `/admin/meter/${query.id}/operate`,
+    url: `/admin/meter/${query.id}/operating_log`,
     method: 'get',
     params: {
       pageSize: query.pageSize, 

@@ -43,7 +43,7 @@ export  type meter_type = {
     frequency: number,
     power: number,
     powerFactor: number,
-    
+
     powerEnergy: number,
     switch: boolean,
     meterId: string,
@@ -62,3 +62,15 @@ export  type meter_type = {
     //   "meterName": "TestElectricMeter",
     //   "createdAt": "2024-08-11T14:49:35.863625Z"
     // },
+    export interface operate_meter_log_type {
+      meterId: string,
+      meterName: string,
+      operation: number,
+      from: number,
+      createdAt: string
+      }
+      // "meterId": "10",
+      // "meterName": "TestElectricMeter",
+      // "operation": 1,
+      // "from": 0,
+      // "createdAt": "2024-08-11T14:38:31.634468Z"

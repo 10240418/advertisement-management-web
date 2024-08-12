@@ -30,27 +30,31 @@ defineProps({
 <style lang="scss" scoped>
 .va-timeline-item {
   display: table-row;
+  position: relative; /* Ensure the container has relative positioning */
 
   &__icon-cell {
     vertical-align: top;
-    height: 1px;
     padding-right: 1rem;
+    position: relative; /* Ensure cell has relative positioning */
   }
 
   &__icon {
-    width: 24px;
     position: relative;
+    width: 24px;
+    height: 100%;
     display: inline-flex;
     justify-content: center;
-    flex-direction: column;
     align-items: center;
-    height: 100%;
 
     &::after {
       content: '';
+      position: absolute;
       width: 2px;
-      height: 100%;
+      height: 100%; /* Ensure it spans the full height of the parent */
       background: var(--va-background-border);
+      left: 50%;
+      transform: translateX(-50%);
+      top: 0; /* Align the top of the line with the parent */
     }
   }
 
@@ -65,18 +69,23 @@ defineProps({
   &__date-cell {
     vertical-align: top;
     color: var(--va-secondary);
-    text-wrap: nowrap;
     white-space: nowrap;
     padding-left: 0.5rem;
     text-align: end;
   }
 
   &:last-child {
-    .va-timeline-item__icon {
-      &::after {
-        background: transparent;
-      }
+    .va-timeline-item__icon::after {
+      content: '';
+      position: absolute;
+      width: 2px;
+      height: 100%; /* Ensure it spans the full height of the parent */
+      background: var(--va-background-border);
+      left: 50%;
+      transform: translateX(-50%);
+      top: 100%; /* Align the top of the line with the parent */
     }
   }
 }
+
 </style>

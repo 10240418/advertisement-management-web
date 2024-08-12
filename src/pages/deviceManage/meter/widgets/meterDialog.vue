@@ -34,6 +34,9 @@
                             </template>
                         </VaPopover>
                     </div>
+                    
+                    <VaListLabel class="flex justify-start">ModbusAddr</VaListLabel>
+                    <span>{{ meter?.modbusAddr }}</span>
                     <VaListLabel class="flex justify-start">GatewayID</VaListLabel>
                     <div class="flex flex-row justify-between mr-3 items-center gap-3">
                         <span>{{ meter?.gatewayId }}</span>
@@ -57,30 +60,36 @@
                             </template>
                         </VaPopover>
                     </div>
-                    <VaListLabel class="flex justify-start">ModbusAddr</VaListLabel>
-                    <span>{{ meter?.modbusAddr }}</span>
                     <VaListLabel class="flex justify-start">Remark</VaListLabel>
                     <span>{{ meter?.remark }}</span>
                 </div>
-                <div class="flex flex-col justify-between items-end w-[120px] mt-[3px] ">
-                    <div class="flex flex-row items-center gap-5">
-                        <div class="w-[20px] h-[20px]  rounded-full"
-                            :class="{ 'bg-green-600': meterStatus === 1, 'bg-black': meterStatus === 0 }"></div>
-                        <VaButton color="primary" @click="operateMeterStatus" class="h-[30px] w-[72px]">
-                            Operate
-                        </VaButton>
-                    </div>
+                <div class="flex flex-col justify-between items-end w-[120px] mt-[3px] mr-1">
                     <VaButton color="primary" @click="openEditModal" icon="mso-edit" class="h-[30px] w-[72px]">
                         Edit
                     </VaButton>
                 </div>
             </div>
             <!-- chart -->
-            <div>
+            <div class="flex  min-h-[100px] h-[200px]">
                 <VaChart :data="chartData" class="h-24" type="line" :options="options" />
             </div>
+
+
+            <!-- operate timeling -->
+            <div class="flex flex-row *:">
+                <meterOperateLogsCard></meterOperateLogsCard>
+
+            </div>
             <!-- footer -->
-            <div class="dialog-footer">
+            <div class="dialog-footer flex flex-row gap-2">
+                <div class="flex flex-row items-center gap-5">
+                    <div class="w-[20px] h-[20px]  rounded-full border border-solid shadow-lg"
+                        :class="{ 'bg-green-600': meterStatus === true, 'bg-black': meterStatus === false }"></div>
+                    <VaButton color="primary" @click="operateMeterStatus" class="h-[30px] w-[72px]">
+                        Operate
+                    </VaButton>
+                </div>
+                <VaButton color="primary" @click="read" class="h-[30px] w-[72px]">Read</VaButton>
                 <VaButton @click="cancel">Cancel</VaButton>
             </div>
             <!-- edit modal -->
@@ -89,6 +98,21 @@
                 <EditMeterForm :modelValue="meter" @update:modelValue="updateMeterData" @save="saveMeter"
                     @close="closeEditModal" />
             </VaModal>
+            <VaModal v-model="showReadModal" size="small" mobile-fullscreen close-button hide-default-actions>
+                <div class="flex flex-col items-center justify-center p-4 bg-white rounded-lg shadow-lg">
+                    <h1 class="text-xl font-bold mb-4">Status</h1>
+                    <div class="space-y-2 text-center">
+                        <span class="text-gray-700">Voltage: <span class="font-semibold">{{ readMeterData.voltage}}</span></span>
+                        <span class="text-gray-700">Current: <span class="font-semibold">{{ readMeterData.current }}</span></span>
+                        <span class="text-gray-700">Frequency: <span class="font-semibold">{{ readMeterData.frequency }}</span></span>
+                        <span class="text-gray-700">Power: <span class="font-semibold">{{ readMeterData.power}}</span></span>
+                        <span class="text-gray-700">Power Factor: <span class="font-semibold">{{  readMeterData.powerFactor }}</span></span>
+                        <span class="text-gray-700">Switch: <span class="font-semibold">{{ readMeterData.switch }}</span></span>
+                        <span class="text-gray-700">Power Energy: <span class="font-semibold">{{ readMeterData.powerEnergy}}</span></span>
+                    </div>
+                </div>
+            </VaModal>
+
         </div>
     </VaCard>
 </template>
@@ -103,10 +127,11 @@ import { useRoute } from 'vue-router';
 import { fetchMeter } from '../../../../apis/meter';
 import EditMeterForm from './editMeterForm.vue';
 import { useToast } from 'vuestic-ui';
-import { updateMeter, operateMeter } from '../../../../apis/meter';
+import { updateMeter, operateMeter, readMeter } from '../../../../apis/meter';
 import { useMeters } from '../composables/meter';
 import { MeterOperationType } from '../../../../data/api_field_type/api_field_type';
 import { fetchReadMeterLogsData } from '../../../../apis/meter';
+import meterOperateLogsCard from './meterOperateLogsCard.vue';
 
 const toast = useToast();
 const meter = ref<meter_type | null>(null);
@@ -118,13 +143,14 @@ const isGatewayCollapsed = ref(true);
 const showEditModal = ref(false);
 const pagination = ref({
     pageNum: 1,
-    pageSize: 30,
+    pageSize: 15,
     desc: false
 });
 
 const readLogsData = ref<read_meter_log_type[]>([]);
 const labelsReadMeterLogs = ref<string[]>([]);
 const dataReadMeterLogs = ref<number[]>([]);
+
 
 const arrowDirection = (state: boolean) => (state ? 'va-arrow-up' : 'va-arrow-down');
 
@@ -144,19 +170,17 @@ const fetch = async () => {
         try {
             const res = await fetchMeter({ id: meterId.value });
             meter.value = res.data.data;
-
             const reslog = await fetchReadMeterLogsData({ id: meterId.value, ...pagination.value });
             readLogsData.value = reslog.data.data;
             labelsReadMeterLogs.value = reslog.data.data.map((log: read_meter_log_type) => formattedDate(log.createdAt));
             dataReadMeterLogs.value = reslog.data.data.map((log: read_meter_log_type) => log.powerEnergy);
-            console.log(reslog.data.data);
-            console.log(labelsReadMeterLogs.value);
+            const resStatus = await readMeter({ id: meterId.value });
+            meterStatus.value = resStatus.data.data.switch;
         } catch (error: any) {
             toast.init({ color: 'danger', message: error.message });
         }
     }
 };
-
 onBeforeMount(() => {
     fetch();
 });
@@ -164,7 +188,7 @@ onBeforeMount(() => {
 const lineChartMeterReadLogsData = ref({
     datasets: [
         {
-            label: 'Meter Read Logs',
+            label: 'PowerEnergy',
             backgroundColor: 'rgba(75,192,192,0.4)',
             data: dataReadMeterLogs.value, // Random values
         },
@@ -184,13 +208,26 @@ const options: ChartOptions<'line'> = {
         x: { display: true, grid: { display: true } },
         y: { display: true, grid: { display: true }, ticks: { display: true } },
     },
-    interaction: { intersect: true, mode: 'index' },
+    interaction: { intersect: false, mode: 'index' },
     plugins: {
         legend: { display: false },
         tooltip: { enabled: true },
     },
 };
-
+//读出来的弹窗
+const readMeterData = ref<any>()
+const showReadModal = ref(false)
+const read = async () => {
+    try {
+        const res = await readMeter({ id: meterId.value });
+        readMeterData.value = res.data.data
+        showReadModal.value = true
+        toast.init({ message: 'Read Meter successfully', color: 'success' });
+    }
+    catch (error) {
+        toast.init({ message: 'Read Meter failed', color: 'danger' });
+    }
+};
 const openEditModal = () => {
     showEditModal.value = true;
 };
@@ -201,23 +238,21 @@ const closeEditModal = () => {
 
 const updateMeterData = (newMeter: meter_type) => {
     meter.value = newMeter;
-    console.log(meter.value);
 };
 
-const meterStatus = ref(0);
+const meterStatus = ref(false);
 
 const operateMeterStatus = async () => {
     try {
-        meterStatus.value = meterStatus.value === 0 ? 1 : 0;
         await operateMeter({ id: Number(meterId.value), body: { type: meterStatus.value } });
         toast.init({ message: 'Operate successfully', color: 'success' });
+        meterStatus.value = meterStatus.value === true ? false : true;
     } catch (error) {
         toast.init({ message: 'Operate Meter failed', color: 'danger' });
         console.error(error);
     }
     await fetch();
 };
-
 const saveMeter = async (updatedMeter: any) => {
     try {
         await updateMeter({ id: Number(meterId.value), ...updatedMeter });
