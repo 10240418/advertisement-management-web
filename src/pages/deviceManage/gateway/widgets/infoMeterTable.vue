@@ -1,6 +1,6 @@
 <template>
   <VaCard>
-    <div class="flex flex-col">
+    <div class="flex flex-col ">
       <!-- Show loading spinner or message -->
       <div v-if="loading" class="text-center">Loading...</div>
       
@@ -19,7 +19,7 @@
             </div>
             <!-- Tooltip for full text on hover -->
             <div
-              class=" w-[150px] selection:absolute bottom-full left-0 p-2 text-white bg-black rounded-lg opacity-0 transition-opacity duration-300"
+              class=" w-[150px] selection:absolute bottom-full left-0 p-2 text-white  opacity-0 transition-opacity duration-300"
               :style="{ display: 'none', visibility: 'hidden' }"
               data-tooltip
             >
@@ -51,7 +51,7 @@
             </div>
             <!-- Tooltip for full text on hover -->
             <div
-              class="absolute bottom-full left-0 w-[150px] p-2 text-white bg-black rounded-lg opacity-0 transition-opacity duration-300"
+              class="absolute bottom-full left-0 w-[150px] p-2 text-white rounded-lg  transition-opacity duration-300"
               :style="{ display: 'none', visibility: 'hidden' }"
               data-tooltip
             >

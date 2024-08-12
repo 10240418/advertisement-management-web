@@ -32,8 +32,8 @@
                         </VaPopover>
                     </div>
                     <VaListLabel class="flex justify-start">type</VaListLabel>
-                    <span v-if="meter?.type === 0" class="flex justify-start">Electricity</span>
-                    <span v-if="meter?.type === 1" class="flex justify-start">Water</span>
+                    <span v-if="meter?.type === 1" class="flex justify-start">Electricity</span>
+                    <span v-if="meter?.type === 0" class="flex justify-start">Water</span>
                     <VaListLabel class="flex justify-start">GatewayID</VaListLabel>
                     <div class="flex flex-row justify-between mr-3 items-center gap-3">
                         <span>{{ meter?.gatewayId }}</span>
@@ -79,15 +79,15 @@
 
             <!-- operate timeling -->
             <div class="flex flex-row *:">
-                <meterOperateLogsCard></meterOperateLogsCard>
+                <meterOperateLogsCard ref="logsCardFetch"></meterOperateLogsCard>
 
             </div>
             <!-- footer -->
             <div class="dialog-footer flex flex-row gap-2">
                 <div class="flex flex-row items-center gap-5">
                     <div class="w-[20px] h-[20px]  rounded-full border border-solid shadow-lg"
-                        :class="{ 'bg-green-600': meterStatus === true, 'bg-black': meterStatus === false }"></div>
-                    <VaButton color="primary" @click="operateMeterStatus" class="h-[30px] w-[72px]">
+                        :class="{ 'bg-green-600': meterStatus === true, 'bg-red-500': meterStatus !== true }"></div>
+                    <VaButton color="primary" :loading="isOperating?true:false" @click="operateMeterStatus" class="h-[30px] w-[72px]">
                         Operate
                     </VaButton>
                 </div>
@@ -101,27 +101,60 @@
                     @close="closeEditModal" />
             </VaModal>
             <VaModal v-model="showReadModal" size="small" mobile-fullscreen close-button hide-default-actions>
-                <div class="flex flex-col items-center justify-center p-4 bg-white rounded-lg shadow-lg">
-                    <h1 class="text-xl font-bold mb-4">Status</h1>
-                    <div class="space-y-2 text-center">
-                        <span class="text-gray-700">Voltage: <span class="font-semibold">{{
-                    readMeterData.voltage }}</span></span>
-                        <span class="text-gray-700">Current: <span class="font-semibold">{{ readMeterData.current
-                                }}</span></span>
-                        <span class="text-gray-700">Frequency: <span class="font-semibold">{{ readMeterData.frequency
-                                }}</span></span>
-                        <span class="text-gray-700">Power: <span class="font-semibold">{{
-                                readMeterData.power}}</span></span>
-                        <span class="text-gray-700">Power Factor: <span class="font-semibold">{{
-                                readMeterData.powerFactor
-                                }}</span></span>
-                        <span class="text-gray-700">Switch: <span class="font-semibold">{{ readMeterData.switch
-                                }}</span></span>
-                        <span class="text-gray-700">Power Energy: <span class="font-semibold">{{
-                                readMeterData.powerEnergy}}</span></span>
+                <div v-if="meter?.type === 1"
+                    class="flex flex-col p-4">
+                    <h1 class="text-xl font-bold mb-4 flex flex-row items-start justify-start">Status</h1>
+                    <div class="space-y-2 w-full">
+                        <div class="flex justify-between">
+                            <VaListLabel class="flex justify-start">Voltage</VaListLabel>
+                            <span class="font-semibold">{{ readMeterData.voltage }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <VaListLabel class="flex justify-start">Current</VaListLabel>
+                            <span class="font-semibold">{{ readMeterData.current }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <VaListLabel class="flex justify-start">Frequency</VaListLabel>
+                            <span class="font-semibold">{{ readMeterData.frequency }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <VaListLabel class="flex justify-start">Power</VaListLabel>
+                            <span class="font-semibold">{{ readMeterData.power }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <VaListLabel class="flex justify-start">Power Factor</VaListLabel>
+                            <span class="font-semibold">{{ readMeterData.powerFactor }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <VaListLabel class="flex justify-start">Switch</VaListLabel>
+                            <span class="font-semibold">{{ readMeterData.switch }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <VaListLabel class="flex justify-start">Power Energy</VaListLabel>
+                            <span class="font-semibold">{{ readMeterData.powerEnergy }}</span>
+                        </div>
                     </div>
                 </div>
+
+                <div v-else class="flex flex-col p-4 ">
+                    <h1 class="text-xl font-bold mb-4 flex  justify-start items-start ml-[-2px]">Status</h1>
+                    <div class="space-y-2 w-full">
+                        <div class="flex justify-between">
+                            <VaListLabel class="flex justify-start">Volume</VaListLabel>
+                            <span class="font-semibold">{{ readMeterData.volume }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <VaListLabel class="flex justify-start">Switch</VaListLabel>
+                            <span class="font-semibold">{{ readMeterData.valve }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-row items-end justify-end mt-2">
+                   <VaButton   @click="showReadModal=false">Cancel</VaButton>
+                </div>
+               
             </VaModal>
+
 
         </div>
     </VaCard>
@@ -147,6 +180,7 @@ const toast = useToast();
 const meter = ref<meter_type | null>(null);
 const route = useRoute();
 const meterId = ref(route.query.id);
+
 const editable = ref(false);
 const isUnitCollapsed = ref(true);
 const isGatewayCollapsed = ref(true);
@@ -160,6 +194,8 @@ const pagination = ref({
 const readLogsData = ref<read_meter_log_type[]>([]);
 const labelsReadMeterLogs = ref<string[]>([]);
 const dataReadMeterLogs = ref<number[]>([]);
+const logsCardFetch = ref()
+const isOperating = ref(false);
 
 
 const arrowDirection = (state: boolean) => (state ? 'va-arrow-up' : 'va-arrow-down');
@@ -185,7 +221,16 @@ const fetch = async () => {
             labelsReadMeterLogs.value = reslog.data.data.map((log: read_meter_log_type) => formattedDate(log.createdAt));
             dataReadMeterLogs.value = reslog.data.data.map((log: read_meter_log_type) => log.powerEnergy);
             const resStatus = await readMeter({ id: meterId.value });
-            meterStatus.value = resStatus.data.data.switch;
+            if (meter.value?.type === 1) {
+                meterStatus.value = resStatus.data.data.switch;
+                console.log(meterStatus.value)
+            }
+            else {
+                meterStatus.value = resStatus.data.data.valve;
+                console.log(meterStatus.value)
+            }
+
+
         } catch (error: any) {
             toast.init({ color: 'danger', message: error.message });
         }
@@ -252,17 +297,33 @@ const updateMeterData = (newMeter: meter_type) => {
 
 const meterStatus = ref(false);
 
-const operateMeterStatus = async () => {
-    try {
-        await operateMeter({ id: Number(meterId.value), body: { type: meterStatus.value } });
-        toast.init({ message: 'Operate successfully', color: 'success' });
-        meterStatus.value = meterStatus.value === true ? false : true;
-    } catch (error) {
-        toast.init({ message: 'Operate Meter failed', color: 'danger' });
-        console.error(error);
-    }
-    await fetch();
+const operateMeterStatus = () => {
+    isOperating.value = true;
+    operateMeter({ id: Number(meterId.value), body: { type: meterStatus.value === true ? MeterOperationType.ElectricMeterOff : MeterOperationType.ElectricMeterOn } })
+        .then(() => {
+            toast.init({ message: 'Operate successfully', color: 'success' });
+            meterStatus.value = meterStatus.value === true ? false : true;
+            logsCardFetch.value = false;
+            isOperating.value = false;
+            fetch();
+        })
+        .catch((error) => {
+            toast.init({ message: 'Operate Meter failed', color: 'danger' });
+            console.error(error);
+        });
 };
+// const operateMeterStatus = async () => {
+//     try {
+//         await operateMeter({ id: Number(meterId.value), body: { type: meterStatus.value===true ? MeterOperationType.ElectricMeterOff : MeterOperationType.ElectricMeterOn } });
+//         toast.init({ message: 'Operate successfully', color: 'success' });
+//         meterStatus.value = meterStatus.value === true ? false : true;
+//         fetch()
+//     } catch (error) {
+//         toast.init({ message: 'Operate Meter failed', color: 'danger' });
+//         console.error(error);
+//     }
+
+// };
 const saveMeter = async (updatedMeter: any) => {
     try {
         await updateMeter({ id: Number(meterId.value), ...updatedMeter });

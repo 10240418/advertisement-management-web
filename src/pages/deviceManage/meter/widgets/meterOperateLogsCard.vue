@@ -16,15 +16,17 @@ const operateLogs = ref<operate_meter_log_type[]>([])
 const fetchOperateMeterLogs = async () => {
     try {
         const res = await fetchOperateMeterLogsData({ id: meterID.value, ...pagination.value })
-        console.log(res)
+        console.log(res.data.data)
         operateLogs.value = res.data.data
     } catch (error) {
 
     }
 }
+
 onBeforeMount(() => {
     fetchOperateMeterLogs()
 })
+
 const formattedDate = (isoDate: string): string => {
     const date = new Date(isoDate);
     return date.toLocaleString('en-US', {

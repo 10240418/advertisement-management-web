@@ -184,11 +184,11 @@ const showContent = (rowData: any) => {
   
 }
 .va-data-table__table-tr--expanded td {
-    background: var(--va-background-border);
+    background: #dce6f8;
   }
 
   .va-data-table__table-expanded-content td {
-    background-color: var(--va-background-element);
+    background-color: #dce6f6;
   }
 
 .tooltip-content {

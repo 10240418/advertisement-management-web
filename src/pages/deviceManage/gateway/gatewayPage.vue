@@ -54,10 +54,6 @@ const showEditGatewayModal=(newGateway:any) =>{
 
 const onGatewayDelete = async (gateway: any) => {
   await gatewayApi.remove([gateway.id]);
-  notify({
-    message: `${gateway.name} has been deleted`,
-    color: 'success',
-  });
 };
 
 

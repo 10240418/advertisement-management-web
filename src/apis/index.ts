@@ -1,7 +1,7 @@
 import axios, {AxiosInstance, AxiosError, AxiosResponse, AxiosRequestConfig, InternalAxiosRequestConfig} from 'axios';
 
 const service: AxiosInstance = axios.create({
-    timeout: 5000,
+    timeout: 15000,
     baseURL: import.meta.env.DEV ? '/api' : '/api'
 });
 // 请求拦截器 添加token

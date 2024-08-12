@@ -16,7 +16,7 @@
     />
   </div>
   
-  <div class="flex flex-col gap-4  shadow-md rounded-md p-4">
+  <div class="flex flex-col gap-4  rounded-md p-4">
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
       <meterCard 
         v-for="meter in dashboardMeters" 
