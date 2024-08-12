@@ -8,9 +8,6 @@
                     <span>{{ meter?.id }}</span>
                     <VaListLabel class="flex justify-start">Name</VaListLabel>
                     <span>{{ meter?.name }}</span>
-                    <VaListLabel class="flex justify-start">type</VaListLabel>
-                    <span v-if="meter?.type === 0" class="flex justify-start">Electricity</span>
-                    <span v-if="meter?.type === 1" class="flex justify-start">Water</span>
                     <VaListLabel class="flex justify-start">UnitID</VaListLabel>
                     <div class="flex flex-row justify-between mr-3 items-center gap-3">
                         <span>{{ meter?.unitId }}</span>
@@ -34,9 +31,9 @@
                             </template>
                         </VaPopover>
                     </div>
-                    
-                    <VaListLabel class="flex justify-start">ModbusAddr</VaListLabel>
-                    <span>{{ meter?.modbusAddr }}</span>
+                    <VaListLabel class="flex justify-start">type</VaListLabel>
+                    <span v-if="meter?.type === 0" class="flex justify-start">Electricity</span>
+                    <span v-if="meter?.type === 1" class="flex justify-start">Water</span>
                     <VaListLabel class="flex justify-start">GatewayID</VaListLabel>
                     <div class="flex flex-row justify-between mr-3 items-center gap-3">
                         <span>{{ meter?.gatewayId }}</span>
@@ -60,6 +57,11 @@
                             </template>
                         </VaPopover>
                     </div>
+
+
+                    <VaListLabel class="flex justify-start">ModbusAddr</VaListLabel>
+                    <span>{{ meter?.modbusAddr }}</span>
+
                     <VaListLabel class="flex justify-start">Remark</VaListLabel>
                     <span>{{ meter?.remark }}</span>
                 </div>
@@ -102,13 +104,21 @@
                 <div class="flex flex-col items-center justify-center p-4 bg-white rounded-lg shadow-lg">
                     <h1 class="text-xl font-bold mb-4">Status</h1>
                     <div class="space-y-2 text-center">
-                        <span class="text-gray-700">Voltage: <span class="font-semibold">{{ readMeterData.voltage}}</span></span>
-                        <span class="text-gray-700">Current: <span class="font-semibold">{{ readMeterData.current }}</span></span>
-                        <span class="text-gray-700">Frequency: <span class="font-semibold">{{ readMeterData.frequency }}</span></span>
-                        <span class="text-gray-700">Power: <span class="font-semibold">{{ readMeterData.power}}</span></span>
-                        <span class="text-gray-700">Power Factor: <span class="font-semibold">{{  readMeterData.powerFactor }}</span></span>
-                        <span class="text-gray-700">Switch: <span class="font-semibold">{{ readMeterData.switch }}</span></span>
-                        <span class="text-gray-700">Power Energy: <span class="font-semibold">{{ readMeterData.powerEnergy}}</span></span>
+                        <span class="text-gray-700">Voltage: <span class="font-semibold">{{
+                    readMeterData.voltage }}</span></span>
+                        <span class="text-gray-700">Current: <span class="font-semibold">{{ readMeterData.current
+                                }}</span></span>
+                        <span class="text-gray-700">Frequency: <span class="font-semibold">{{ readMeterData.frequency
+                                }}</span></span>
+                        <span class="text-gray-700">Power: <span class="font-semibold">{{
+                                readMeterData.power}}</span></span>
+                        <span class="text-gray-700">Power Factor: <span class="font-semibold">{{
+                                readMeterData.powerFactor
+                                }}</span></span>
+                        <span class="text-gray-700">Switch: <span class="font-semibold">{{ readMeterData.switch
+                                }}</span></span>
+                        <span class="text-gray-700">Power Energy: <span class="font-semibold">{{
+                                readMeterData.powerEnergy}}</span></span>
                     </div>
                 </div>
             </VaModal>

@@ -1,5 +1,5 @@
 <template>
-  <VaCard>
+  <VaCard class="border border-solid ">
     <VaCardContent>
       <div class="flex flex-row gap-4 mb-2 stretch-container">
         <!-- Total Page Component -->

@@ -22,7 +22,6 @@ const fetchOperateMeterLogs = async () => {
 
     }
 }
-
 onBeforeMount(() => {
     fetchOperateMeterLogs()
 })
@@ -36,9 +35,7 @@ const formattedDate = (isoDate: string): string => {
         hour12: false // 24-hour format
     }).replace(',', ''); // Remove the comma between date and time
 };
-
 </script>
-
 <template>
     <VaCard class=" h-[240px] min-w-[300px] w-full md overflow-y-scroll">
         <VaCardContent>
@@ -49,7 +46,6 @@ const formattedDate = (isoDate: string): string => {
                             <div class="flex flex-col sm:flex-row mr-2">
                                 <div>
                                     <span>{{ item.meterName }}({{ item.meterId }})</span>
-                                    
                                 </div>
                                 <div class="flex flex-row ml-2">
                                     <span class="text-slate-400">Operation:</span>
@@ -57,9 +53,6 @@ const formattedDate = (isoDate: string): string => {
                                     <span v-if="item.operation === 0">Close</span>
                                 </div>
                             </div>
-
-
-
                         </VaTimelineItem>
                     </tr>
                 </tbody>

@@ -1,33 +1,34 @@
 <template>
-  <div class="flex flex-row gap-4 items-center">
+  <div class="flex flex-wrap gap-4 mb-4">
     <VaButtonToggle 
       v-model="meterTypeValue" 
       preset="secondary" 
       border-color="primary" 
       :options="meterTypeOptions"
-      class="mb-2 border border-solid shadow-lg rounded" 
+      class="border border-primary shadow-md rounded-md" 
     />
     <VaButtonToggle 
       v-model="meterStatusValue" 
       preset="secondary" 
       border-color="primary" 
       :options="meterStatusOptions"
-      class="mb-2 border border-solid shadow-lg rounded" 
+      class="border border-primary shadow-md rounded-md" 
     />
   </div>
-  <div class="flex flex-col gap-4 border border-solid shadow-ls rounded">
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 border border-solid shadow-lg rounded">
+  
+  <div class="flex flex-col gap-4  shadow-md rounded-md p-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
       <meterCard 
         v-for="meter in dashboardMeters" 
         :key="meter.id" 
+        :id="meter.id"
         :name="meter.name" 
         :remark="meter.remark"
         :changeDirection="meter.changeDirection"
         :iconBackground="meter.iconBackground"
         :iconColor="meter.iconColor"
-        class="border border-solid shadow-lg rounded hover:bg-slate-200"
+        class="border border-gray-300 shadow-md rounded-md hover:bg-gray-100 cursor-pointer"
         @click="showEditMeterDialog(meter.id)"
-        
       >
         <template #icon>
           <VaIcon :name="meter.icon" size="small" />
@@ -36,6 +37,7 @@
     </div>
   </div>
 </template>
+
 
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
