@@ -1,6 +1,6 @@
 <template>
     <VaForm v-slot="{ isValid }" ref="edit-control-task-form" class="flex-col justify-start items-start gap-4 inline-flex w-full">
-      <div class="self-stretch flex-col justify-start items-start gap-1 flex">
+      <div class="self-stretch grid grid-cols-[1fr_1fr] justify-start items-start gap-1 ">
   
         <div class="flex gap-4 flex-col w-full">
           <VaInput v-model="newControlTask.name" label="Name" class="w-full" :rules="[validators.required]" name="name" />
@@ -23,10 +23,11 @@
         <div class="flex gap-4 flex-col w-full">
           <VaSelect v-model="selectMeterValue" label="Meter ID" class="w-full" :options="meterOptions" />
         </div>
-        <div class="flex gap-4 flex-col w-full">
+        <div class="flex gap-4 flex-col justify-center  w-full mt-[18px]">
           <VaSwitch v-model="newControlTask.editable" label="Editable" />
         </div>
-        <div class="flex gap-2 flex-col-reverse items-stretch justify-end w-full">
+        <div></div>
+        <div class="flex gap-2 flex-row-reverse items-stretch justify-start w-full">
           <VaButton preset="secondary" color="secondary" @click="onCancel">Cancel</VaButton>
           <VaButton :disabled="!isValid" @click="onSave">Save</VaButton>
         </div>
