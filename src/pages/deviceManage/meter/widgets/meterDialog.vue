@@ -79,7 +79,7 @@
 
             <!-- operate timeling -->
             <div class="flex flex-row *:">
-                <meterOperateLogsCard ref="logsCardFetch"></meterOperateLogsCard>
+                <meterOperateLogsCard :isfetch="logsCardFetch"></meterOperateLogsCard>
 
             </div>
             <!-- footer -->
@@ -194,7 +194,7 @@ const pagination = ref({
 const readLogsData = ref<read_meter_log_type[]>([]);
 const labelsReadMeterLogs = ref<string[]>([]);
 const dataReadMeterLogs = ref<number[]>([]);
-const logsCardFetch = ref()
+const logsCardFetch = ref(false)
 const isOperating = ref(false);
 
 
@@ -299,11 +299,12 @@ const meterStatus = ref(false);
 
 const operateMeterStatus = () => {
     isOperating.value = true;
+    logsCardFetch.value=false
     operateMeter({ id: Number(meterId.value), body: { type: meterStatus.value === true ? MeterOperationType.ElectricMeterOff : MeterOperationType.ElectricMeterOn } })
         .then(() => {
             toast.init({ message: 'Operate successfully', color: 'success' });
             meterStatus.value = meterStatus.value === true ? false : true;
-            logsCardFetch.value = false;
+            logsCardFetch.value = true;
             isOperating.value = false;
             fetch();
         })
@@ -312,18 +313,6 @@ const operateMeterStatus = () => {
             console.error(error);
         });
 };
-// const operateMeterStatus = async () => {
-//     try {
-//         await operateMeter({ id: Number(meterId.value), body: { type: meterStatus.value===true ? MeterOperationType.ElectricMeterOff : MeterOperationType.ElectricMeterOn } });
-//         toast.init({ message: 'Operate successfully', color: 'success' });
-//         meterStatus.value = meterStatus.value === true ? false : true;
-//         fetch()
-//     } catch (error) {
-//         toast.init({ message: 'Operate Meter failed', color: 'danger' });
-//         console.error(error);
-//     }
-
-// };
 const saveMeter = async (updatedMeter: any) => {
     try {
         await updateMeter({ id: Number(meterId.value), ...updatedMeter });

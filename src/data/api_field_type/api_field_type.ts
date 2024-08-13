@@ -30,6 +30,7 @@ export enum MeterType {
   // Task operations (Read/Switch)
   export enum TaskOperation {
     Read = "read",
-    Switch = "switch"
+    SwitchOn = "switchOn",
+    SwitchOff = "switchOff"
   }
   

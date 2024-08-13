@@ -1,13 +1,26 @@
 <script setup lang="ts">
-import { PropType, ref, onBeforeMount } from 'vue'
+import { PropType, ref, onBeforeMount ,watch } from 'vue'
 import { useRoute } from 'vue-router';
 import VaTimelineItem from '../../../../components/va-timeline-item.vue'
 import { fetchOperateMeterLogsData } from '../../../../apis/meter'
-import { operate_meter_log_type } from '../../../../data/meter'
+import { operate_meter_log_type } from '@/data/meter'
+import { useToast } from 'vuestic-ui';
+
+const toast = useToast()
 
 const pagination = ref({
     pageSize: 20,
     pageNum: 1
+})
+const props = defineProps({
+   isfetch: {
+      type: Boolean,
+      default: false
+  }
+})
+
+watch(() => props.isfetch, () => {
+    fetchOperateMeterLogs()
 })
 
 const route = useRoute();
@@ -19,10 +32,9 @@ const fetchOperateMeterLogs = async () => {
         console.log(res.data.data)
         operateLogs.value = res.data.data
     } catch (error) {
-
+        toast.init({ message: 'Fetch operate meter logs failed', color: 'danger' } )
     }
 }
-
 onBeforeMount(() => {
     fetchOperateMeterLogs()
 })
