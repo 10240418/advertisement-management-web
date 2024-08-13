@@ -44,6 +44,7 @@ export const useMeters = (options?: {
       });
       
       meters.value = res.data.data;
+      
       pagination.value.total = res.data.pagination.total;
       globalStore.setMetersTotal({abnormal:0,normal:res.data.pagination.total});
     } catch (err: any) {

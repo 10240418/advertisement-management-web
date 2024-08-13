@@ -7,8 +7,6 @@ import { fetchUnitList, bindUnitResident } from '@/apis/unit'
 import { unit_type } from '@/data/unit'
 import { fetchGateways } from '@/apis/gateway'
 import { MeterType, MeterModel, MeterOperationType, ResidentType, TaskOperation } from '@/data/api_field_type/api_field_type';
-
-
 const defaultNewMeter = {
   id: null,
   name: '',
@@ -21,7 +19,6 @@ const defaultNewMeter = {
   gateway: '',
   createAt: '',
 }
-
 const props = defineProps({
   modelValue: {
     type: Object as PropType<meter_type | null>,
@@ -53,41 +50,58 @@ const pagination = ref({
   pageSize: 50,
   desc: false,
 });
-const fetchUnits = async () => {
-  try {
-    const res = await fetchUnitList(pagination.value);
-    units.value = res.data.units;
-    unitOptions.value = units.value.map(unit => `${unit.id} Floor: ${unit.floor} Unit: ${unit.unit}`);
-    selectUnitValue.value = unitOptions.value.length > 0 ? unitOptions.value[0] : '';
-  } catch (err: any) {
-    console.error(err);
-    error.value = (err.message || 'Failed to fetch units') as string;
-    toast.init({ message: error.value, color: 'danger' });
-  }
+const fetchUnits = () => {
+  fetchUnitList(pagination.value)
+    .then(res => {
+      units.value = res.data.units;
+      unitOptions.value = units.value.map(unit =>{
+        if(newMeter.value.unitId==unit.id){
+          selectUnitValue.value = `${unit.id} Floor: ${unit.floor} Unit: ${unit.unit}`;
+        }
+        return `${unit.id} Floor: ${unit.floor} Unit: ${unit.unit}`;
+      } );
+    })
+    .catch(err => {
+      console.error(err);
+      error.value = (err.message || 'Failed to fetch units') as string;
+      toast.init({ message: error.value, color: 'danger' });
+    });
 };
-const fetchGateway = async () => {
-  try {
-    const res = await fetchGateways(pagination.value);
-    gateways.value = res.data.data;
-    gatewayOptions.value = gateways.value.map(gateway => `${gateway.id} Name: ${gateway.name} IP: ${gateway.ipAddr}`)
-    selectGatewayValue.value = gatewayOptions.value.length > 0 ? gatewayOptions.value[0] : '';
-    selectTypeValue.value = typeOptions.value[0]
-    selectModelValue.value = MeterModelOptions.value[0]
-  } catch (err: any) {
-    console.error(err);
-    error.value = (err.message || 'Failed to fetch gateways') as string;
-    toast.init({ message: error.value, color: 'danger' });
-  }
+
+const fetchGateway = () => {
+  fetchGateways(pagination.value)
+    .then(res => {
+      gateways.value = res.data.data;
+      gatewayOptions.value = gateways.value.map(gateway =>{
+        if(newMeter.value.gatewayId==gateway.id){
+          selectGatewayValue.value =  `${gateway.id} Name: ${gateway.name} IP: ${gateway.ipAddr}`;
+        }
+        return  `${gateway.id} Name: ${gateway.name} IP: ${gateway.ipAddr}`;
+      }); 
+    })
+    .catch(err => {
+      console.error(err);
+      error.value = (err.message || 'Failed to fetch gateways') as string;
+      toast.init({ message: error.value, color: 'danger' });
+    });
 };
+
 onBeforeMount(() => {
   fetchUnits();
   fetchGateway();
 });
 
+//如果传递的值不是null
 watch(
   () => props.modelValue,
   (meterToEdit) => {
     if (meterToEdit) {
+      console.log(meterToEdit)
+      if(meterToEdit.type===MeterType.Electric)selectTypeValue.value = 'Electric Meter'
+      else selectTypeValue.value = 'Water Meter'
+      if(meterToEdit.model===MeterModel.MeterModelWaterHDSB && meterToEdit.type===0) selectModelValue.value = 'MeterModelWaterHDSB'
+      else if(meterToEdit.model===MeterModel.MeterModelWaterHDSW) selectModelValue.value = 'MeterModelWaterHDSW'
+      else selectModelValue.value = 'ElectricMeterModelTEST'
       newMeter.value = { ...meterToEdit }
     } else {
       newMeter.value = { ...defaultNewMeter }
@@ -112,6 +126,7 @@ const onSave = () => {
   if (form.validate()) {
     emit('update:modelValue', newMeter.value)
     emit('save', {
+      id: newMeter.value.id,
       name: newMeter.value.name,
       type: Number(selectTypeValue.value === 'Water Meter' ? MeterType.Water : MeterType.Electric),
       model: Number(selectModelValue.value==='MeterModelWaterHDSB'?MeterModel.MeterModelWaterHDSB:selectModelValue.value==='MeterModelWaterHDSW'?MeterModel.MeterModelWaterHDSW:MeterModel.ElectricMeterModelTEST),
@@ -137,13 +152,13 @@ const onCancel = () => {
         <VaInput v-model="newMeter.name" label="Name" class="w-full" :rules="[validators.required]" name="name" />
       </div>
       <div class="flex gap-4 flex-col w-full">
-        <VaSelect v-model="selectGatewayValue" label="Gateway ID" class="w-full" :options="gatewayOptions" />
+        <VaSelect v-model="selectGatewayValue" label="Gateway" class="w-full" :options="gatewayOptions" />
       </div>
       <div class="flex gap-4 flex-col w-full">
-        <VaSelect v-model="selectTypeValue" label="Type" class="w-full" :options="typeOptions" name="type" />
+        <VaSelect v-model="selectTypeValue" label="Meter Type" class="w-full" :options="typeOptions" name="type" />
       </div>
       <div class="flex gap-4 flex-col w-full">
-        <VaSelect v-model="selectModelValue" label="Unit ID" class="w-full" :options="MeterModelOptions" />
+        <VaSelect v-model="selectModelValue" label="Model" class="w-full" :options="MeterModelOptions" />
       </div>
       <div class="flex gap-4 flex-col w-full">
         <VaInput v-model="newMeter.modbusAddr" label="Modbus Address" class="w-full" :rules="[validators.required]"

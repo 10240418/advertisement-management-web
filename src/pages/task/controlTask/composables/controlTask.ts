@@ -46,8 +46,8 @@ export const useTasks = (options?: {
       });
 
       tasks.value = res.data.data;
+      console.log(res.data.data)
       pagination.value.total = res.data.pagination.total;
-    //   globalStore.setTasksTotal({ abnormal: 0, normal: res.data.pagination.total });
     } catch (err: any) {
       console.error(err);
       error.value = (err.message || 'Failed to fetch tasks') as string;

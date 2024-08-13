@@ -60,7 +60,7 @@
     { label: 'Tag', key: 'tag', sortable: true, width: '10%' },
     { label: 'Operation', key: 'operation', sortable: true, width: '5%' },
     { label: 'Active', key: 'active', sortable: true, width: '5%' },
-    { label: 'Editable', key: 'editable', sortable: true, width: '5%' },
+    // { label: 'Editable', key: 'editable', sortable: true, width: '5%' },
     { label: 'Interval', key: 'interval', sortable: true, width: '5%' },
     { label: 'Start At', key: 'startAt', sortable: true, width: '10%' },
     { label: 'Gateway ID', key: 'gatewayId', sortable: true, width: '5%' },
