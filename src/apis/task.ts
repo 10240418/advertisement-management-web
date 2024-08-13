@@ -32,6 +32,13 @@ export const fetchTasks = (query: any) => {
     }
   })
 }
+export const fetchTaskTags = (tag:any) => {
+  return request({
+    url: `/admin/task/${tag}`,
+    method: 'get',
+    
+  })
+}
 
 
 export const fetchTask = (data: any) => {
