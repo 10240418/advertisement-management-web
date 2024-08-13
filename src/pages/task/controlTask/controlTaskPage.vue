@@ -80,6 +80,7 @@
   
   const onSave = async (newTask: any) => {
     if (newTask.id) {
+      console.log('newTask', newTask);
       await taskApi.update(newTask);
     } else {
       await taskApi.add(newTask);

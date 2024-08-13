@@ -11,7 +11,7 @@
         @edit-meter="showEditMeterModal" @detail-meter="showEditMeterDialog" @delete-meter="onMeterDelete"
         @fetch-meter="fetchMeter" />
     </VaCardContent>
-    <VaModal v-model="doShowAddMeterModal" size="small" mobile-fullscreen close-button hide-default-actions>
+    <VaModal v-model="doShowAddMeterModal" size="small" noOutsideDismiss mobile-fullscreen close-button hide-default-actions>
       <h1 class="va-h5">Add Meter</h1>
       <editMeterForm v-model="meterToEdit" @close="doShowAddMeterModal = false" @save="onSave" />
     </VaModal>

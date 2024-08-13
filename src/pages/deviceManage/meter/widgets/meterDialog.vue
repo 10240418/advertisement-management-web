@@ -75,12 +75,9 @@
             <div class="flex  min-h-[100px] h-[200px]">
                 <VaChart :data="chartData" class="h-24" type="line" :options="options" />
             </div>
-
-
             <!-- operate timeling -->
             <div class="flex flex-row *:">
                 <meterOperateLogsCard :isfetch="logsCardFetch"></meterOperateLogsCard>
-
             </div>
             <!-- footer -->
             <div class="dialog-footer flex flex-row gap-2">
@@ -135,7 +132,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div v-else class="flex flex-col p-4 ">
                     <h1 class="text-xl font-bold mb-4 flex  justify-start items-start ml-[-2px]">Status</h1>
                     <div class="space-y-2 w-full">
@@ -151,11 +147,8 @@
                 </div>
                 <div class="flex flex-row items-end justify-end mt-2">
                    <VaButton   @click="showReadModal=false">Cancel</VaButton>
-                </div>
-               
+                </div>          
             </VaModal>
-
-
         </div>
     </VaCard>
 </template>

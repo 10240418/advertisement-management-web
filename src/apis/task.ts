@@ -56,20 +56,7 @@ export const updateTask = (data: any) => {
   return request({
     url: '/admin/task',
     method: 'put',
-    data:{
-        id: data.id,
-        name: data.name,
-        tag: data.tag,
-        operation: data.operation,
-        editable: data.editable,
-
-        interval: data.interval,
-        startAt: data.startAt,
-
-        gatewayId: data.gatewayId,
-        meterId: data.meterId
-        
-    }
+    data:data
   })
 }
 
