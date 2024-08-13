@@ -4,12 +4,12 @@ import { PropType, computed, toRef, ref, watch, onMounted, onBeforeUnmount } fro
 import { unit_type } from '../../../../data/unit'
 
 const columns = defineVaDataTableColumns([
-  { label: 'ID', key: 'id', sortable: true,width:'5%' },
-  { label: 'Floor', key: 'floor', sortable: true ,width:'10%'},
-  { label: 'Unit ', key: 'unit', sortable: true ,width:'10%'},
-  { label: 'Created At', key: 'createdAt', sortable: false,width:'25%' },
-  { label: 'remark', key: 'remark', sortable: false ,width:'25%'},
-  { label: 'Actions', key: 'actions', sortable: false ,width:'5%'},
+  { label: 'ID', key: 'id', sortable: true, width: '5%' },
+  { label: 'Floor', key: 'floor', sortable: true, width: '10%' },
+  { label: 'Unit ', key: 'unit', sortable: true, width: '10%' },
+  { label: 'Created At', key: 'createdAt', sortable: false, width: '25%' },
+  { label: 'remark', key: 'remark', sortable: false, width: '25%' },
+  { label: 'Actions', key: 'actions', sortable: false, width: '5%' },
 ])
 
 const props = defineProps({
@@ -30,6 +30,13 @@ const emit = defineEmits<{
 
 const units = toRef(props, 'units')
 const totalPages = computed(() => Math.ceil(props.pagination.total / props.pagination.pageSize))
+const pagesOptions = computed(() => {
+  const options = []
+  for (let i = 1; i <= totalPages.value; i++) {
+    options.push(i)
+  }
+  return options
+})
 
 const { confirm } = useModal()
 
@@ -149,9 +156,9 @@ onBeforeUnmount(() => {
     <div>
       <b>total: {{ $props.pagination.total }} </b>
       pageNum:
-      <VaInput v-model="$props.pagination.pageNum" class="!w-16" />
+      <VaSelect v-model="$props.pagination.pageNum" class="!w-16" selected-top-shown :options="pagesOptions" />
       pageSize:
-      <VaSelect v-model="$props.pagination.pageSize" class="!w-20" :options="[5, 10, 20, 50, 100]" />
+      <VaSelect v-model="$props.pagination.pageSize" class="!w-20" selected-top-shown :options="[5, 10, 20, 50, 100]" />
     </div>
 
     <div v-if="totalPages > 1" class="flex">

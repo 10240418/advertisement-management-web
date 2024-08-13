@@ -27,6 +27,13 @@ const emit = defineEmits<{
 
 const residents = toRef(props, 'residents')
 const totalPages = computed(() => Math.ceil(props.pagination.total / props.pagination.pageSize))
+const pagesOptions = computed(() => {
+  const options = []
+  for (let i = 1; i <= totalPages.value; i++) {
+    options.push(i)
+  }
+  return options
+})
 
 const { confirm } = useModal()
 
@@ -127,11 +134,11 @@ watch(
 
   <div class="flex flex-col-reverse md:flex-row gap-2 justify-between items-center py-2">
     <div>
-      <b>Total: {{ props.pagination.total }}</b>
-      Page Number:
-      <VaInput v-model="props.pagination.pageNum" class="!w-16" />
-      Page Size:
-      <VaSelect v-model="props.pagination.pageSize" class="!w-20" :options="[5, 10, 20, 50, 100]" />
+      <b>total: {{ $props.pagination.total }} </b>
+      pageNum:
+      <VaSelect v-model="$props.pagination.pageNum" class="!w-16" selected-top-shown :options="pagesOptions" />
+      pageSize:
+      <VaSelect v-model="$props.pagination.pageSize" class="!w-20" selected-top-shown :options="[5, 10, 20, 50, 100]" />
     </div>
 
     <div v-if="totalPages > 1" class="flex">

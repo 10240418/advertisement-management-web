@@ -2,7 +2,6 @@
 import { defineVaDataTableColumns, useModal } from 'vuestic-ui'
 import { PropType, computed, toRef, watch, ref, onMounted, onBeforeUnmount } from 'vue'
 import { admin_user_type } from '../../../data/admin_user'
-import { debounce} from 'lodash'
 
 const columns = defineVaDataTableColumns([
   { label: 'ID', key: 'id', sortable: true ,width:'5%' },
@@ -30,6 +29,13 @@ const emit = defineEmits<{
 
 const users = toRef(props, 'users')
 const totalPages = computed(() => Math.ceil(props.pagination.total / props.pagination.pageSize))
+const pagesOptions = computed(() => {
+  const options = []
+  for (let i = 1; i <= totalPages.value; i++) {
+    options.push(i)
+  }
+  return options
+})
 
 const { confirm } = useModal()
 
@@ -154,9 +160,9 @@ onBeforeUnmount(() => {
     <div>
       <b>total: {{ $props.pagination.total }} </b>
       pageNum:
-      <VaInput v-model="$props.pagination.pageNum" class="!w-16" />
+      <VaSelect v-model="$props.pagination.pageNum" class="!w-16" selected-top-shown :options="pagesOptions" />
       pageSize:
-      <VaSelect v-model="$props.pagination.pageSize" class="!w-20" :options="[5, 10, 20, 50, 100]" />
+      <VaSelect v-model="$props.pagination.pageSize" class="!w-20" selected-top-shown :options="[5, 10, 20, 50, 100]" />
     </div>
 
     <div v-if="totalPages > 1" class="flex">
