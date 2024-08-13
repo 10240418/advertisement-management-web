@@ -32,10 +32,16 @@ export const fetchTasks = (query: any) => {
     }
   })
 }
-export const fetchTaskTags = (tag:any) => {
+export const fetchTaskTags = (query:any) => {
   return request({
-    url: `/admin/task/${tag}`,
+    url: `/admin/task`,
     method: 'get',
+    params: {
+      tag: query.tag,
+      pageSize: query.pageSize,
+      pageNum: query.pageNum,
+      desc: query.desc?query.desc:false,
+    }
     
   })
 }

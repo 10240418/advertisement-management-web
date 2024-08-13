@@ -4,21 +4,21 @@
         <div class="flex flex-col md:flex-row gap-2 mb-2 justify-between">
           <VaInput v-model="searchValue" placeholder="Search By ID" class="w-full md:w-2/3"
             @keyup.enter="onSearch(searchValue)" />
-          <VaButton @click="showAddControlTaskModal">Add Control Task</VaButton>
+          <!-- <VaButton @click="showAddControlTaskModal">Add Control Task</VaButton> -->
         </div>
   
         <systemTaskTable :pagination="pagination" :tasks="tasksShowInTable" :loading="isLoading" :sorting="sorting"
           @edit-task="showEditControlTaskModal" @detail-task="showEditControlTaskDialog" @delete-task="onTaskDelete"
           @fetch-task="fetchTask" />
       </VaCardContent>
-      <VaModal v-model="doShowAddControlTaskModal" size="small" mobile-fullscreen close-button hide-default-actions>
+      <!-- <VaModal v-model="doShowAddControlTaskModal" size="small" mobile-fullscreen close-button hide-default-actions>
         <h1 class="va-h5">Add Control Task</h1>
         <editSystemTaskForm v-model="taskToEdit" @close="doShowAddControlTaskModal = false" @save="onSave" />
       </VaModal>
       <VaModal v-model="doShowEditControlTaskModal" size="small" mobile-fullscreen close-button hide-default-actions>
         <h1 class="va-h5">Edit Control Task</h1>
         <editSystemTaskForm v-model="taskToEdit" @close="doShowEditControlTaskModal = false" @save="onSave" />
-      </VaModal>
+      </VaModal> -->
     </VaCard>
   </template>
   
@@ -41,7 +41,7 @@
   
   // Open new tab dialog
   const showEditControlTaskDialog = (task: task_type) => {
-    const newWindow = window.open(`/taskDetail?id=${task.id}`, '_blank', 'width=800,height=600,left=500,top=500');
+    const newWindow = window.open(`/sysTaskDetail?id=${task.id}`, '_blank', 'width=800,height=600,left=500,top=500');
   };
   
   // Add modal

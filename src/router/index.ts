@@ -130,7 +130,11 @@ const routes: Array<RouteRecordRaw> = [
     name: 'taskDetail',
     path: '/taskDetail/:id?', // `?` 表示可选的
     component: () => import('../pages/task/controlTask/widgets/controlTaskDialog.vue'),
-
+  },
+  {
+    name: 'sysTaskDetail',
+    path: '/sysTaskDetail/:id?', // `?` 表示可选的
+    component: () => import('../pages/task/systemTask/widgets/systemTaskDialog.vue'),
   },
   {
     name: '404',

@@ -15,14 +15,14 @@
                   @click="$emit('detail-task', rowData as any)" class="w-full justify-between">
                   <span>Detail</span>
                 </VaButton>
-                <VaButton preset="secondary" size="small" icon="mso-edit" aria-label="Edit task"
+                <!-- <VaButton preset="secondary" size="small" icon="mso-edit" aria-label="Edit task"
                   @click="$emit('edit-task', rowData as any)" class="w-full justify-between">
                   <span>Edit</span>
                 </VaButton>
                 <VaButton preset="secondary" size="small" icon="mso-delete" color="danger" aria-label="Delete task"
                   @click="onTaskDelete(rowData)" class="w-full justify-between">
                   <span>Delete</span>
-                </VaButton>
+                </VaButton> -->
               </div>
             </transition>
           </template>

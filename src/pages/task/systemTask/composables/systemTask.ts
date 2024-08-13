@@ -10,6 +10,7 @@ import {
   deleteTask,
   fetchScheduleTasks,
   fetchScheduleTask,
+  fetchTaskTags,
 } from '@/apis/task'; // Adjust the path as needed
 import { useThrottle } from '../../../../data/dataControl';
 import { useToast } from 'vuestic-ui';
@@ -39,10 +40,12 @@ export const useTasks = (options?: {
     isLoading.value = true;
     error.value = null;
     try {
-      const res = await fetchTasks({
+      const res = await fetchTaskTags({
+        tag:'sys',
         pageNum: pagination.value.pageNum,
         pageSize: pagination.value.pageSize,
         desc: sorting.value.sortingOrder === "asc" ? false : true,
+        
       });
 
       tasks.value = res.data.data;
