@@ -92,11 +92,7 @@ watch(
 //控制气泡下拉框
 const showContentUnit = ref<unit_type | null>(null)
 const showContent = (rowData: any) => {
-  if (showContentUnit.value === rowData) {
-    showContentUnit.value = null
-  } else {
-    showContentUnit.value = rowData
-  }
+  showContentUnit.value = rowData
 }
 const handleClickOutside = (event: MouseEvent) => {
   const target = event.target as HTMLElement

@@ -9,7 +9,7 @@ export const validators = {
     return pattern.test(v) || 'Please enter a valid email address'
   },
   required: (v: any) => !!v || 'This field is required',
-  minLength: (v: string, min: number) => (v && v.length >= min) || `Min ${min} characters`,
-  maxLength: (v: string, max: number) => (v && v.length <= max) || `Max ${max} characters`,
-  sameAs: (v: string, field: string) => (v === field) || 'Password does not match',
+  minLength: (v: any) => (v && v.length >= 8) || `Less than 8 characters`,
+  maxLength: (v: any, max: number) => (v && v.length <= max) || `Max ${max} characters`,
+  sameAs: (v: any, field: any) => (v === field) || 'Password does not match',
 }

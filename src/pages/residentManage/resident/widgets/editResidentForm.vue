@@ -12,14 +12,14 @@
         v-model="form.email"
         label="Email"
         placeholder="Enter email"
-        :rules="[validators.required]"
+        :rules="[validators.required,validators.email]"
         name="email"
       />
       <VaInput
         v-model="form.password"
         label="Password"
         placeholder="Enter password"
-        :rules="[validators.required]"
+        :rules="[validators.required,validators.minLength]"
         name="password"
         type="password"
       />

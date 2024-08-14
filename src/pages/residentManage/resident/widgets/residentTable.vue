@@ -39,10 +39,11 @@ const pagesOptions = computed(() => {
 const { confirm } = useModal()
 
 const onResidentUpdate = async (resident: any) => {
+  const temp = resident.active ? 'forbidden' : 'apply'
   const agreed = await confirm({
-    title: 'Update Resident',
-    message: `Are you sure you want to update ${resident.name}?`,
-    okText: 'Update',
+    title: 'Set Active',
+    message: `Are you sure you want to ${temp} ${resident.name}?`,
+    okText: temp,
     cancelText: 'Cancel',
     size: 'small',
     maxWidth: '380px',
@@ -128,10 +129,6 @@ watch(
                 @click="onResidentUpdate(rowData)" class="w-full justify-between">
                 <span>Update</span>
               </VaButton>
-              <!-- <VaButton preset="secondary" size="small" icon="mso-info" aria-label="Info Resident"
-                @click="$emit('detail-resident', rowData as any)" class="w-full justify-between">
-                <span>Detail</span>
-              </VaButton> -->
             </div>
           </transition>
         </template>

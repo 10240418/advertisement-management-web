@@ -19,7 +19,7 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(['close', 'save'])
+const emit = defineEmits(['update:modelValue','close', 'save'])
 
 const newUnit = ref<any>({ ...defaultNewUnit })
 
@@ -39,7 +39,7 @@ const form = useForm('edit-unit-form')
 
 const onSave = () => {
   if (form.validate()) {
-    // emit('update:modelValue', newUnit.value)
+    emit('update:modelValue', newUnit.value)
     emit('save', newUnit.value)
   }
 }
@@ -52,9 +52,6 @@ const onCancel = () => {
 <template>
   <VaForm v-slot="{ isValid }" ref="edit-unit-form" class="flex-col justify-start items-start gap-4 inline-flex w-full">
     <div class="self-stretch flex-col justify-start items-start gap-4 flex">
-      <div class="flex gap-4 flex-row w-full justify-center items-center">
-        <VaInput v-if="modelValue"  v-model="newUnit.id" label="ID"  class="w-full" :class="{ 'read-only': modelValue }" :rules="[validators.required]" name="id"/>
-      </div>
       <div class="flex gap-4 flex- w-full">
         <VaInput v-model="newUnit.floor" label="Floor" class="w-full " :rules="[validators.required]" name="floor" />
       </div>

@@ -61,7 +61,7 @@ const onCancel = () => {
       </div>
 
       <div class="flex gap-4 flex-col w-full">
-        <VaInput v-model="newAdminUser.password" label="Password" class="w-full" :rules="[validators.required]" name="password" />
+        <VaInput v-model="newAdminUser.password" label="Password" class="w-full" :rules="[validators.required,validators.minLength]" name="password" />
       </div>
       <div class="flex gap-2 flex-col-reverse items-stretch justify-end w-full">
         <VaButton preset="secondary" color="secondary" @click="onCancel">Cancel</VaButton>
