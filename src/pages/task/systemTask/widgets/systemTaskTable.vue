@@ -1,32 +1,11 @@
 <template>
     <VaDataTable :columns="columns" :items="currentPageData" :loading="props.loading"
       v-model:sort-by="props.sorting.sortBy" v-model:sorting-order="props.sorting.sortingOrder">
-      <template #cell(actions)="{ rowData }">
-        <VaPopover placement="bottom" trigger="click" color="backgroundSecondary">
-          <div class="flex justify-start items-center relative hover:bg-blue-200 rounded-[4px]"
-            @click.stop="showContent(rowData)">
-            <VaIcon name="more_horiz" size="20px" class="mr-2 cursor-pointer" />
-          </div>
-          <template #body>
-            <transition name="fade">
-              <div v-show="showContentTask?.id === rowData.id"
-                class="tooltip-content flex flex-col justify-center z-999 items-center relative border p-1 rounded-md">
-                <VaButton preset="secondary" id="detailTask" size="small" icon="mso-info" aria-label="Info Task"
-                  @click="$emit('detail-task', rowData as any)" class="w-full justify-between">
+      <template #cell(detail)="{ rowData }">
+        <VaButton preset="secondary" id="detailTask" size="small" icon="mso-info" aria-label="Info Task"
+                  @click="$emit('detail-task', rowData as any)" class="w-full justify-between ml-[-5px]">
                   <span>Detail</span>
-                </VaButton>
-                <!-- <VaButton preset="secondary" size="small" icon="mso-edit" aria-label="Edit task"
-                  @click="$emit('edit-task', rowData as any)" class="w-full justify-between">
-                  <span>Edit</span>
-                </VaButton>
-                <VaButton preset="secondary" size="small" icon="mso-delete" color="danger" aria-label="Delete task"
-                  @click="onTaskDelete(rowData)" class="w-full justify-between">
-                  <span>Delete</span>
-                </VaButton> -->
-              </div>
-            </transition>
-          </template>
-        </VaPopover>
+        </VaButton>
       </template>
     </VaDataTable>
     <div class="flex flex-col-reverse md:flex-row gap-2 justify-between items-center py-2">
@@ -65,7 +44,7 @@
     { label: 'Start At', key: 'startAt', sortable: true, width: '10%' },
     { label: 'Gateway ID', key: 'gatewayId', sortable: true, width: '5%' },
     { label: 'Meter ID', key: 'meterId', sortable: true, width: '5%' },
-    { label: 'Actions', key: 'actions', sortable: false, width: '5%' },
+    { label: 'Detail', key: 'detail', sortable: false, width: '5%' },
   ]);
   
   const props = defineProps({

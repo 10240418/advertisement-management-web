@@ -12,8 +12,8 @@
     </template>
     <template #cell(device)="{ row, isExpanded }">
       <VaButton :icon="isExpanded ? 'va-arrow-up' : 'va-arrow-down'" preset="secondary" size="small"
-        class=" flex justify-start h-[20px] items-center relative fontsize-[3px]" @click="row.toggleRowDetails()">
-        {{ isExpanded ? 'Hide' : 'More info' }}
+        class=" flex justify-start h-[20px] items-center relative fontsize-[3px] ml-[-8px]" @click="row.toggleRowDetails()">
+        {{ isExpanded ? 'Hide' : 'Info' }}
       </VaButton>
     </template>
     <!-- 拓展出来的信息 -->
@@ -23,11 +23,20 @@
       </div>
     </template>
 
+    <template #cell(Detail)="{ rowData }">
+      <VaButton preset="secondary" size="small" icon="mso-info" aria-label="Edit user"
+                @click="$emit('detail-gateway', rowData as any)" class="w-full justify-start ml-[-5px]">
+                <span>Detail</span>
+              </VaButton>
+    </template>
+
+
+
 
 
     <template #cell(actions)="{ rowData }" class=" overflow-y-scroll">
       <VaPopover placement="bottom" trigger="click" color="backgroundSecondary">
-        <div class="flex  items-center relative hover:bg-blue-200 rounded-[4px] "
+        <div class="flex justify-center  items-center relative hover:bg-blue-200 rounded-[4px] "
           @click.stop="showContent(rowData)">
           <VaIcon name="more_horiz" size="20px" class="mr-2 cursor-pointer">
           </VaIcon>
@@ -37,10 +46,6 @@
           <transition name="fade">
             <div v-show="showContentGateway?.id === rowData.id"
               class="tooltip-content flex flex-col  justify-start z-999 items-center relative  border border-solid p-2 rounded-md shadow-lg">
-              <VaButton preset="secondary" size="small" icon="mso-info" aria-label="Edit user"
-                @click="$emit('detail-gateway', rowData as any)" class="w-full justify-start">
-                <span>Detail</span>
-              </VaButton>
               <VaButton preset="secondary" size="small" icon="mso-edit" aria-label="Edit user"
                 @click="$emit('edit-gateway', rowData as any)" class="w-full justify-start">
                 <span>Edit</span>
@@ -86,10 +91,9 @@ const columns = defineVaDataTableColumns([
   { label: 'ID', key: 'id', sortable: true ,width:'5%'},
   { label: 'Name', key: 'name', sortable: true ,width:'10%'},
   { label: 'IP Address', key: 'ipAddr', sortable: true,width:'20%' },
-  { label: 'Remark', key: 'remark', sortable: false,width:'30%' },
-  // { label: 'Created At', key: 'created_at', sortable: true },
-  // { label: 'Updated At', key: 'updated_at', sortable: true },
-  { label: 'device', key: 'device', sortable: false ,width:'10%'},
+  { label: 'Remark', key: 'remark', sortable: false,width:'25%' },
+  { label: 'Device', key: 'device', sortable: false ,width:'10%'},
+  { label: 'Detail', key: 'Detail', sortable: false ,width:'5%'},
   { label: 'Actions', key: 'actions', sortable: false,width:'5%' },
 
 ])

@@ -15,7 +15,6 @@
       class="border  rounded-md" 
     />
   </div>
-  
   <div class="flex flex-col gap-4  rounded-md">
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
       <meterCard 
@@ -37,8 +36,6 @@
     </div>
   </div>
 </template>
-
-
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
 import { useColors } from 'vuestic-ui'
@@ -51,22 +48,17 @@ const { fetchMetersData, meters } = useHomes()
 const showEditMeterDialog = (meterId: number) => {
   const newWindow = window.open(`/meterDetail?id=${meterId}`, '_blank', 'width=800,height=600,left=500,top=500');
 };
-
-
 const meterTypeOptions = [
   { label: 'All', value: 'All' },
   { label: 'Electricity', value: 'Electricity' },
   { label: 'Water', value: 'Water' }
 ]
-
 const meterTypeValue = ref('All')
-
 const meterStatusOptions = [
   { label: 'All', value: 'All' },
   { label: 'On', value: 'On' },
   { label: 'Off', value: 'Off' }
 ]
-
 const meterStatusValue = ref('All')
 interface meterCardType {
   id: number
@@ -97,7 +89,6 @@ const dashboardMeters = computed<meterCardType[]>(() => {
       iconColor: meter.type === 1 ? getColor('on-success') : getColor('on-primary'),
     })
   })
-
   return meterCards
 })
 </script>

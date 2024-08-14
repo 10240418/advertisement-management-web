@@ -1,9 +1,16 @@
 <template>
     <VaDataTable :columns="columns" :items="currentPageData" :loading="props.loading"
       v-model:sort-by="props.sorting.sortBy" v-model:sorting-order="props.sorting.sortingOrder">
+
+      <template #cell(detail)="{ rowData }">
+        <VaButton preset="secondary" id="detailTask" size="small" icon="mso-info" aria-label="Info Task"
+                  @click="$emit('detail-task', rowData as any)" class="w-full justify-between ml-[-5px]">
+                  <span>Detail</span>
+                </VaButton>
+      </template>
       <template #cell(actions)="{ rowData }">
         <VaPopover placement="bottom" trigger="click" color="backgroundSecondary">
-          <div class="flex justify-start items-center relative hover:bg-blue-200 rounded-[4px]"
+          <div class="flex justify-center items-center relative hover:bg-blue-200 rounded-[4px]"
             @click.stop="showContent(rowData)">
             <VaIcon name="more_horiz" size="20px" class="mr-2 cursor-pointer" />
           </div>
@@ -11,10 +18,7 @@
             <transition name="fade">
               <div v-show="showContentTask?.id === rowData.id"
                 class="tooltip-content flex flex-col justify-center z-999 items-center relative border p-1 rounded-md">
-                <VaButton preset="secondary" id="detailTask" size="small" icon="mso-info" aria-label="Info Task"
-                  @click="$emit('detail-task', rowData as any)" class="w-full justify-between">
-                  <span>Detail</span>
-                </VaButton>
+
                 <VaButton preset="secondary" size="small" icon="mso-edit" aria-label="Edit task"
                   @click="$emit('edit-task', rowData as any)" class="w-full justify-between">
                   <span>Edit</span>
@@ -57,14 +61,14 @@
   const columns = defineVaDataTableColumns([
     { label: 'ID', key: 'id', sortable: true, width: '5%' },
     { label: 'Name', key: 'name', sortable: true, width: '10%' },
-    { label: 'Tag', key: 'tag', sortable: true, width: '10%' },
+    { label: 'Tag', key: 'tag', sortable: true, width: '5%' },
     { label: 'Operation', key: 'operation', sortable: true, width: '5%' },
     { label: 'Active', key: 'active', sortable: true, width: '5%' },
-    // { label: 'Editable', key: 'editable', sortable: true, width: '5%' },
     { label: 'Interval', key: 'interval', sortable: true, width: '5%' },
     { label: 'Start At', key: 'startAt', sortable: true, width: '10%' },
     { label: 'Gateway ID', key: 'gatewayId', sortable: true, width: '5%' },
     { label: 'Meter ID', key: 'meterId', sortable: true, width: '5%' },
+    { label: 'Detail', key: 'detail', sortable: false, width: '5%' },
     { label: 'Actions', key: 'actions', sortable: false, width: '5%' },
   ]);
   

@@ -130,7 +130,7 @@ onBeforeUnmount(() => {
 
     <template #cell(actions)="{ rowData }" class="overflow-y-scroll max-h[40px]">
       <VaPopover placement="bottom" trigger="click" color=" backgroundSecondary">
-        <div class="flex items-center relative hover:bg-slate-100 rounded-[4px]" @click.stop="showContent(rowData)">
+        <div class="flex items-center justify-center relative hover:bg-slate-100 rounded-[4px]" @click.stop="showContent(rowData)">
           <VaIcon name="more_horiz" size="20px" class="mr-2 cursor-pointer"></VaIcon>
         </div>
         <template #body>

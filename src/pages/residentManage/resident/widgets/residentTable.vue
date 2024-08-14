@@ -4,11 +4,12 @@ import { PropType, computed, toRef, ref, watch } from 'vue'
 import { resident_user_type } from '@/data/resident_user'
 
 const columns = defineVaDataTableColumns([
-  { label: 'ID', key: 'id', sortable: true , width: '5%'},
-  { label: 'Name', key: 'name', sortable: false, width: '20%'},
-  { label: 'Email', key: 'email', sortable: false, width: '35%'},
-  { label: 'Active', key: 'active', sortable: false , width: '15%'},
-  { label: 'Actions', key: 'actions', sortable: false , width: '5%'},
+  { label: 'ID', key: 'id', sortable: true, width: '5%' },
+  { label: 'Name', key: 'name', sortable: false, width: '20%' },
+  { label: 'Email', key: 'email', sortable: false, width: '35%' },
+  { label: 'Active', key: 'active', sortable: false, width: '10%' },
+  { label: 'Detail', key: 'detail', sortable: false, width: '5%' },
+  { label: 'Actions', key: 'actions', sortable: false, width: '5%' },
 ])
 
 const props = defineProps({
@@ -71,7 +72,7 @@ const showContent = (rowData: any) => {
 }
 
 watch(
-  () => [props.pagination.pageNum, props.pagination.pageSize,props.sorting.sortingOrder,props.sorting.sortBy],
+  () => [props.pagination.pageNum, props.pagination.pageSize, props.sorting.sortingOrder, props.sorting.sortBy],
   () => {
     console.log(props.sorting.sortingOrder)
     if (props.pagination.total < props.pagination.pageSize * (props.pagination.pageNum - 1)) {
@@ -98,14 +99,20 @@ watch(
     </template>
 
     <template #cell(active)="{ rowData }">
-      <VaChip class="ellipsis max-w-[120px]">
-        {{ rowData.active ? 'Yes' : 'No' }}
-      </VaChip>
+
+      <VaBadge :text="rowData.active ? 'Yes' : 'No'" :color="rowData.active ? 'success' : 'secondary' "/>
     </template>
 
-    <template #cell(actions)="{ rowData }">
+    <template #cell(detail)="{ rowData }" >
+      <VaButton preset="secondary" size="small" icon="mso-info" aria-label="Info Resident"
+        @click="$emit('detail-resident', rowData as any)" class="w-full justify-between ml-[-5px]">
+        <span>Detail</span>
+      </VaButton>
+    </template>
+
+    <template #cell(actions)="{ rowData }" class="flex felx-row">
       <VaPopover placement="bottom" trigger="click" color="backgroundSecondary">
-        <div class="flex justify-start items-center relative hover:bg-blue-200 rounded-[4px]"
+        <div class="flex justify-center items-center relative hover:bg-blue-200 rounded-[4px]"
           @click.stop="showContent(rowData)">
           <VaIcon name="more_horiz" size="20px" class="mr-2 cursor-pointer" />
         </div>
@@ -114,17 +121,17 @@ watch(
             <div v-show="showContentResident?.id === rowData.id"
               class="tooltip-content flex flex-col justify-center z-999 items-center relative border  p-1 rounded-md">
               <VaButton preset="secondary" size="small" icon="mso-edit" aria-label="Edit Resident"
-              @click="$emit('edit-resident',rowData as any)" class="w-full justify-between">
+                @click="$emit('edit-resident', rowData as any)" class="w-full justify-between">
                 <span>Edit</span>
               </VaButton>
-              <VaButton preset="secondary" size="small" icon="update"  aria-label="Update Resident"
+              <VaButton preset="secondary" size="small" icon="update" aria-label="Update Resident"
                 @click="onResidentUpdate(rowData)" class="w-full justify-between">
                 <span>Update</span>
               </VaButton>
-              <VaButton preset="secondary" size="small" icon="mso-info"  aria-label="Info Resident"
+              <!-- <VaButton preset="secondary" size="small" icon="mso-info" aria-label="Info Resident"
                 @click="$emit('detail-resident', rowData as any)" class="w-full justify-between">
                 <span>Detail</span>
-              </VaButton>
+              </VaButton> -->
             </div>
           </transition>
         </template>
@@ -153,12 +160,14 @@ watch(
 </template>
 
 <style lang="scss">
+
 .va-data-table {
   ::v-deep(.va-data-table__table-tr) {
     border-bottom: 1px solid var(--va-background-border);
   }
 }
-.va-data-table__table-td{
+
+.va-data-table__table-td {
   border-bottom: 1px solid var(--va-background-border);
 }
 

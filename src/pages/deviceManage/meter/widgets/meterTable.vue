@@ -1,9 +1,15 @@
 <template>
   <VaDataTable :columns="columns" :items="currentPageData" :loading="props.loading"
     v-model:sort-by="props.sorting.sortBy" v-model:sorting-order="props.sorting.sortingOrder">
+    <template #cell(detail)="{ rowData }">
+      <VaButton preset="secondary" id="detailMeter" size="small" icon="mso-info" aria-label="Info Resident"
+                @click="$emit('detail-meter', rowData as any)" class="w-full justify-between ml-[-5px]">
+                <span>Detail</span>
+      </VaButton>
+    </template>
     <template #cell(actions)="{ rowData }">
       <VaPopover placement="bottom" trigger="click" color="backgroundSecondary">
-        <div class="flex justify-start items-center relative hover:bg-blue-200 rounded-[4px]"
+        <div class="flex justify-center items-center relative hover:bg-blue-200 rounded-[4px]"
           @click.stop="showContent(rowData)">
           <VaIcon name="more_horiz" size="20px" class="mr-2 cursor-pointer" />
         </div>
@@ -11,10 +17,7 @@
           <transition name="fade">
             <div v-show="showContentMeter?.id === rowData.id"
               class="tooltip-content flex flex-col justify-center z-999 items-center relative border p-1 rounded-md">
-              <VaButton preset="secondary" id="detailMeter" size="small" icon="mso-info" aria-label="Info Resident"
-                @click="$emit('detail-meter', rowData as any)" class="w-full justify-between">
-                <span>Detail</span>
-              </VaButton>
+
               <VaButton preset="secondary" size="small" icon="mso-edit" aria-label="Edit meter"
                 @click="$emit('edit-meter', rowData as any)" class="w-full justify-between">
                 <span>Edit</span>
@@ -56,12 +59,13 @@ import { meter_type } from '../../../../data/meter';
 
 const columns = defineVaDataTableColumns([
   { label: 'ID', key: 'id', sortable: true, width: '5%' },
-  { label: 'Name', key: 'name', sortable: true, width: '20%' },
+  { label: 'Name', key: 'name', sortable: true, width: '15%' },
   { label: 'Remark', key: 'remark', sortable: false, width: '20%' },
   { label: 'Type', key: 'type', sortable: true, width: '5%' },
   { label: 'ModbusAddr', key: 'modbusAddr', sortable: true, width: '15%' },
   { label: 'UnitId', key: 'unitId', sortable: true, width: '5%' },
   { label: 'GatewayId', key: 'gatewayId', sortable: true, width: '5%' },
+  { label: 'Detail', key: 'detail', sortable: false, width: '5%'},
   { label: 'Actions', key: 'actions', sortable: false, width: '5%' },
 ]);
 
