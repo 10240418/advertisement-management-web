@@ -41,7 +41,7 @@
   
   // Open new tab dialog
   const showEditControlTaskDialog = (task: task_type) => {
-    const newWindow = window.open(`/taskDetail?id=${task.id}`, '_blank', 'width=800,height=600,left=500,top=500');
+    const newWindow = window.open(`/taskDetail?id=${task.id}`,`/taskDetail?id=${task.id}`, 'width=800,height=600,left=500,top=500');
   };
   
   // Add modal

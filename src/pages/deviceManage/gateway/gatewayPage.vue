@@ -38,7 +38,7 @@ const gatewaysShowInTable = ref<gateway_type[]>([]);
 const gatewayToEdit = ref<gateway_type | null>(null);
 
 const showEditGatewayDialog = (gateway: gateway_type) => {
-  const newWindow = window.open(`/gatewayDetail?id=${gateway.id}`, '_blank', 'width=900,height=600,left=500,top=500');
+  const newWindow = window.open(`/gatewayDetail?id=${gateway.id}`, `/gatewayDetail?id=${gateway.id}`, 'width=900,height=600,left=500,top=500');
 };
 
 const showAddGatewayModal = () => {

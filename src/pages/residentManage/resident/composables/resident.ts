@@ -43,10 +43,8 @@ export const useResidents = (options?: {
       });
       
       residents.value = res.data.data;
-      pagination.value.total = res.data.pagination.total;
-      // console.log(res.data.pagination.total);
+      pagination.value.total = res.data.pagination.total
       globalStore.setResidentsTotal(res.data.pagination.total); // 设置全局状态
-      // console.log(globalStore.getResidentsTotal);
     } catch (err: any) {
       console.error(err);
       error.value = (err.message || 'Failed to fetch residents') as string;

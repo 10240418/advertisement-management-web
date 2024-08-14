@@ -41,7 +41,7 @@ const meterToEdit = ref<meter_type | null>(null);
 
 //打开新的标签页弹窗
 const showEditMeterDialog = (meter: meter_type) => {
-  const newWindow = window.open(`/meterDetail?id=${meter.id}`, '_blank', 'width=800,height=600,left=500,top=500');
+  const newWindow = window.open(`/meterDetail?id=${meter.id}`,`/meterDetail?id=${meter.id}`, 'width=800,height=600,left=500,top=500');
 };
 
 //添加弹窗

@@ -49,7 +49,6 @@ export const useTasks = (options?: {
       });
 
       tasks.value = res.data.data;
-      console.log(res.data.data)
       pagination.value.total = res.data.pagination.total;
     } catch (err: any) {
       console.error(err);

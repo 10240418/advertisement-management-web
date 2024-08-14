@@ -28,9 +28,10 @@ import { ref, toRaw, watch, onBeforeMount, toRef } from 'vue';
 import { useResidents } from './composables/resident';
 import { useToast } from 'vuestic-ui';
 import { resident_user_type } from '@/data/resident_user';
-import _ from 'lodash';
+import _, { replace } from 'lodash';
 import ResidentTable from './widgets/residentTable.vue';
 import EditResidentForm from './widgets/editResidentForm.vue';
+import { usePopupStore } from '@/stores/popups';
 
 const { init: notify } = useToast();
 const { isLoading, residents, sorting, pagination, ...residentApi } = useResidents();
@@ -38,6 +39,7 @@ const residentsShowInTable = ref<resident_user_type[]>([]);
 const residentToEdit = ref<resident_user_type | null>(null);
 const doShowAddResidentModal = ref(false);
 const doShowEditResidentModal = ref(false);
+const popupStore = usePopupStore();
 //add
 const showAddResidentModal = () => {
   doShowAddResidentModal.value = true;
@@ -47,7 +49,7 @@ const showAddResidentModal = () => {
 //detail 
 const newWindow =ref<any>()
 const showEditResidentDialog = (resident: resident_user_type) => {
-  const newWindow = window.open(`/residentDetail?id=${resident.id}`, '_blank', 'width=900,height=500,left=500,top=500,menubar=no,location=no,status=no,titlebar=no,toolbar');
+    newWindow.value= window.open(`/residentDetail?id=${resident.id}`, `/residentDetail?id=${resident.id}`, 'width=900,height=500,left=500,top=500,menubar=no,location=no,status=no,titlebar=no,toolbar');
 };
 //edit
 const onResidentEdit = (resident: resident_user_type) => {
