@@ -7,7 +7,7 @@ import VaTimelineItem from '@/components/va-timeline-item.vue'
 <template>
   <VaCard class="borderw-62% border rounded-[1px]">
     
-      <h1 class="text-[10px] text-secondary font-bold uppercase">Timeline</h1>
+    <h1 class="text-[10px] text-secondary font-bold uppercase">Timeline</h1> 
   
       <table class="mt-4 ml-2 mb-1 mr-2 ">
         <tbody>

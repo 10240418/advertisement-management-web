@@ -1,60 +1,79 @@
 <template>
-  <VaCard class=" border rounded-[1px]  w-38%">
-    <h1 class="text-[10px] text-secondary font-bold uppercase mb-2">Abnormal Status</h1>
-    <div class="flex flex-col gap-4 ml-2 mr-2">
+  <VaCard class="border rounded-[1px] w-38% ">
+    <h1 class="text-[10px] text-secondary font-bold uppercase">Abnormal Status</h1>
+    <div class="grid grid-cols-[1fr_6fr_1fr] mt-4  ml-2 mr-2 gap-4">
       
-      <!-- 用户统计 -->
-      <div class="flex flex-row gap-4 items-center">
-        <span class="indicator bg-blue-300"></span>
-        <span class="text-[16px] font-bold">用户</span>
-        <span class="text-[16px]">{{ globalStore.residentsTotal }}</span>
-      </div>
+ 
+        <VaIcon name="mso-location_away" color="primary"></VaIcon>
+        <span class="text-[16px]">Users:</span>
+        <span class="text-[16px]">{{ globalStore?.totalResidents }}</span>
+    
+
       
-      <!-- 单元统计 -->
-      <div class="flex flex-row gap-4 items-center">
-        <span class="indicator bg-blue-400"></span>
-        <span class="text-[16px] font-bold">单元</span>
-        <span class="text-[16px] text-green-600">正常</span>
-        <span class="text-[16px]">{{ globalStore.unitsTotal.normal }}</span>
-        <span class="text-[16px] text-red-600">异常</span>
-        <span class="text-[16px] text-red-600">{{ globalStore.unitsTotal.abnormal }}</span>
-      </div>
-  
-      <!-- 设备统计 -->
-      <div class="flex flex-row gap-4 items-center">
-        <span class="indicator bg-blue-500"></span>
-        <span class="text-[16px] font-bold">设备</span>
-        <span class="text-[16px] text-green-600">正常</span>
-        <span class="text-[16px]">{{ globalStore.metersTotal.normal }}</span>
-        <span class="text-[16px] text-red-600">异常</span>
-        <span class="text-[16px] text-red-600">{{ globalStore.metersTotal.abnormal }}</span>
-      </div>
+        <VaIcon name="mso-home" color="primary"></VaIcon>
+        <span class="text-[16px]">Units:</span>
+        <span class="text-[16px]">{{ globalStore?.totalUnits }}</span>
+    
+
+     
+        <VaIcon name="mso-wifi" color="primary"></VaIcon>
+        <span class="text-[16px]">Gateways:</span>
+        <span class="text-[16px]">{{ globalStore?.totalGateways }}</span>
+     
+
+      
+        <VaIcon name="mso-keyboard_alt" color="primary"></VaIcon>
+        <span class="text-[16px]">Devices:</span>
+        <span class="text-[16px]">{{ globalStore?.totalMeters }}</span>
+ 
+
+      
+        <VaIcon name="mso-water_drop" color="primary"></VaIcon>
+        <span class="text-[16px]">Water Meters:</span>
+        <span class="text-[16px]">{{ globalStore?.totalWaterMeters }}</span>
+      
+
+      
+        <VaIcon name="mso-bolt" color="primary"></VaIcon>
+        <span class="text-[16px]">Electric Meters:</span>
+        <span class="text-[16px]">{{ globalStore?.totalElectricMeters }}</span>
+      
 
     </div>
   </VaCard>
 </template>
 
 <script lang="ts" setup>
-import { useGlobalStore } from '@/stores/global-store'
+import { fetchTotalStatus } from '@/apis/home';
+import { onBeforeMount, ref } from 'vue';
 
-const globalStore = useGlobalStore()
+type totalStatus = {
+  totalGateways: number,
+  totalResidents: number,
+  totalUnits: number,
+  totalMeters: number,
+  totalWaterMeters: number,
+  totalElectricMeters: number,
+}
+
+const globalStore = ref<totalStatus>();
+onBeforeMount(() => {
+  fetchTotalStatus().then((res) => {
+    globalStore.value = res.data;
+    console.log(res.data);
+  })
+})
 </script>
 
 <style scoped>
-.greek-card {
+/* Define card styles */
+.VaCard {
   background: #ffffff;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border: 1px solid #e0e0e0;
+  padding: 1rem;
 }
 
-.indicator {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-}
 
-.font-bold {
-  font-weight: bold;
-}
 </style>
