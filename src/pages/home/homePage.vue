@@ -1,5 +1,5 @@
 <template>
-  <VaCard class="border border-solid ">
+  <VaCard >
     <VaCardContent>
       <div class="flex flex-row gap-4 mb-2 stretch-container">
         <!-- Total Page Component -->
@@ -8,7 +8,8 @@
         <!-- Logs Card Component -->
         <logsCard class="stretch-item"></logsCard>
       </div>
-      <section>
+      <section class="flex flex-col border rounded-[1px]">
+        <h1 class="text-[10px] text-secondary font-bold uppercase mb-2">Meter Status</h1>
         <meterTable></meterTable>
       </section>
     </VaCardContent>
@@ -34,10 +35,10 @@ import meterTable from './widgets/meterTable.vue'
 }
 
 .stretch-item:first-child {
-  flex-grow: 1;
+  flex-grow: 1.2;
 }
 
 .stretch-item:last-child {
-  flex-grow: 3.918;
+  flex-grow: 3.818;
 }
 </style>

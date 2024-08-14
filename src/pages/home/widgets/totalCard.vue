@@ -1,6 +1,7 @@
 <template>
-  <VaCard class="p-4 shadow-lg border border-gray-200 rounded-md greek-card w-38%">
-    <div class="flex flex-col gap-4">
+  <VaCard class=" border rounded-[1px]  w-38%">
+    <h1 class="text-[10px] text-secondary font-bold uppercase mb-2">Abnormal Status</h1>
+    <div class="flex flex-col gap-4 ml-2 mr-2">
       
       <!-- 用户统计 -->
       <div class="flex flex-row gap-4 items-center">

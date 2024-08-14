@@ -43,14 +43,6 @@ export const useHomes = (options?: { sorting?: Ref<any>; pagination?: Ref<any> }
     fetchMetersData();
   });
 
-  
-
-
-  
-
-
-  
-
   return {
     isLoading,
     meters,
@@ -58,12 +50,5 @@ export const useHomes = (options?: { sorting?: Ref<any>; pagination?: Ref<any> }
     pagination,
     
     fetchMetersData,
-    
-
-
-   
-
-   
-  
   }
 }

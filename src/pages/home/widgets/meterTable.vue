@@ -1,22 +1,22 @@
 <template>
-  <div class="flex flex-wrap gap-4 mb-4">
+  <div class="flex flex-wrap gap-4 mb-2">
     <VaButtonToggle 
       v-model="meterTypeValue" 
       preset="secondary" 
       border-color="primary" 
       :options="meterTypeOptions"
-      class="border border-primary shadow-md rounded-md" 
+      class="border  rounded-md" 
     />
     <VaButtonToggle 
       v-model="meterStatusValue" 
       preset="secondary" 
       border-color="primary" 
       :options="meterStatusOptions"
-      class="border border-primary shadow-md rounded-md" 
+      class="border  rounded-md" 
     />
   </div>
   
-  <div class="flex flex-col gap-4  rounded-md p-4">
+  <div class="flex flex-col gap-4  rounded-md">
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
       <meterCard 
         v-for="meter in dashboardMeters" 
@@ -27,7 +27,7 @@
         :changeDirection="meter.changeDirection"
         :iconBackground="meter.iconBackground"
         :iconColor="meter.iconColor"
-        class="border border-gray-300 shadow-md rounded-md hover:bg-gray-100 cursor-pointer"
+        class="border-t border-gray-300 shadow-md rounded-md hover:bg-gray-100 cursor-pointer"
         @click="showEditMeterDialog(meter.id)"
       >
         <template #icon>
@@ -68,7 +68,6 @@ const meterStatusOptions = [
 ]
 
 const meterStatusValue = ref('All')
-
 interface meterCardType {
   id: number
   name: string
@@ -80,14 +79,11 @@ interface meterCardType {
   iconBackground: string
   iconColor: string
 }
-
 const { getColor } = useColors()
-
 const dashboardMeters = computed<meterCardType[]>(() => {
   const metersData = meters.value
   const meterCards: meterCardType[] = []
   console.log(metersData)
-
   metersData.forEach((meter: meter_type) => {
     meterCards.push({
       id: meter.id,

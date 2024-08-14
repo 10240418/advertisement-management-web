@@ -1,5 +1,5 @@
 <template>
-    <VaCard class="border border-solid ">
+    <VaCard>
       <VaCardContent>
         <section>
           <meterTable></meterTable>
