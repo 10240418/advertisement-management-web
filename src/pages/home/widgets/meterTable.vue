@@ -46,7 +46,7 @@ import { meter_type } from '@/data/meter'
 const { fetchMetersData, meters } = useHomes()
 
 const showEditMeterDialog = (meterId: number) => {
-  const newWindow = window.open(`/meterDetail?id=${meterId}`, '_blank', 'width=800,height=600,left=500,top=500');
+  const newWindow = window.open(`/meterDetail?id=${meterId}`,`/meterDetail?id=${meterId}`, 'width=800,height=600,left=500,top=500');
 };
 const meterTypeOptions = [
   { label: 'All', value: 'All' },
