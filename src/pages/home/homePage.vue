@@ -1,7 +1,7 @@
 <template>
   <VaCard >
     <VaCardContent>
-      <div class="flex flex-row gap-4 mb-2 stretch-container">
+      <div class="flex flex-row mb-2 stretch-container">
         <!-- Total Page Component -->
         <totalPage class="stretch-item"></totalPage>
 
@@ -25,7 +25,7 @@ import meterTable from './widgets/meterTable.vue'
 <style scoped>
 .stretch-container {
   display: flex;
-  gap: 16px;
+  gap: 8px;
   width: 100%;
 }
 
