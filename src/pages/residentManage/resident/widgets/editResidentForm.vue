@@ -72,7 +72,7 @@ watch(
   },
   { immediate: true }
 );
-console.log(form.value)
+
 const formInstance = useForm('edit-resident-form');
 
 const submit = () => {

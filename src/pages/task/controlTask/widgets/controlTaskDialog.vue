@@ -129,16 +129,13 @@
   const isMeterCollapsed = ref(true);
   const showEditModal = ref(false);
 
-
   const arrowDirection = (state: boolean) => (state ? 'va-arrow-up' : 'va-arrow-down');
-  
   const fetch = async () => {
     if (controlTaskId.value) {
       const res = await fetchTask({ id:controlTaskId.value})
       controlTask.value = res.data.data;
     }
   };
-  
   onBeforeMount(() => {
     fetch();
   });
@@ -155,8 +152,6 @@
     controlTask.value = newControlTask;
   };
   
-
-
   const saveControlTask = async (updatedControlTask: task_type_fetch) => {
     try {
       await updateTask({ ...updatedControlTask });

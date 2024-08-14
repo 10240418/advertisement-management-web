@@ -89,7 +89,7 @@
     <!-- Add Unit Modal -->
     <VaModal v-model="doShowAddUnitModal" size="small" mobile-fullscreen close-button hide-default-actions>
       <h1 class="va-h5">Add Unit</h1>
-      <addUnitForm :resident="residentToEdit" @close="onCloseAddUnitModal" @fetch="" />
+      <addUnitForm :resident="residentToEdit" @close="onCloseAddUnitModal" @fetch="fetch"/>
     </VaModal>
     
     <!-- Edit Unit Modal -->
@@ -220,7 +220,7 @@ const onSave = async (resident: any) => {
 };
 //关闭
 const onClose = () => {
-  //关闭弹窗
+  fetch();
   window.close();
 };
 

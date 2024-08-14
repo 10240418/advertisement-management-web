@@ -133,20 +133,21 @@ export const fetchOperateMeterLogsData = (query: any) => {
   })
 }
 
+export const fetchMeterStatus = ()=>{
+  return request({
+    url:`/admin/meter/status`,
+    method:'get',
+  })
+}
 
-export function fetchMeterStatus(query?: any): Promise<any> {
-  if (query) {
-    return request({
-      url: `/admin/meter/status`,
-      method: 'get',
-      params: query,
-    });
-  } else {
-    return request({
-      url: `/admin/meter/status`,
-      method: 'get',
-    });
-  }
+export const fetchMeterStatusByType = (query:any)=>{
+  return request({
+    url:`/admin/meter/status`,
+    method:`get`,
+    params:{
+      type:query
+    }
+  })
 }
 
 

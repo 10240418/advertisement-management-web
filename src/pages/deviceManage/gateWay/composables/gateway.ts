@@ -35,7 +35,6 @@ export const useGateways = (options?: {
     error.value = null;
     try {
       const res = await fetchGateways({
-        data: { email: localStorage.getItem('AdminEmail'), password: localStorage.getItem('AdminPassword') },
         params: { pageNum: pagination.value.pageNum, pageSize: pagination.value.pageSize }
       });
       gateways.value = res.data.data;
