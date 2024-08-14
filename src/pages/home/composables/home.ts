@@ -12,8 +12,8 @@ const makeSortingRef = () => ref<Sorting>({ sortBy: "id", sortingOrder: "asc" })
 export const useHomes = (options?: { sorting?: Ref<any>; pagination?: Ref<any> }) => {
   const isLoading = ref(false)
 
-  const error = ref<string | null>(null); // Error state
-  const toast = useToast(); // Toast for notifications
+  const error = ref<string | null>(null);
+  const toast = useToast();
   const { sorting = makeSortingRef(), pagination = makePaginationRef() } = options || {};
   
   const meters = ref<meter_type[]>([])

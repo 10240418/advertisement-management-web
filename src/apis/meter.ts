@@ -36,7 +36,7 @@ export const addMeter = (data: any) => {
 //   "remark": "測試水表",
 //   "unitId": 1,
 //   "gatewayId": 6
-// // }
+//  }
 
 export const fetchMeter = (data: any) => {
   return request({
@@ -129,9 +129,24 @@ export const fetchOperateMeterLogsData = (query: any) => {
     params: {
       pageSize: query.pageSize, 
       pageNum: query.pageNum,
-     
     }
   })
+}
+
+
+export function fetchMeterStatus(query?: any): Promise<any> {
+  if (query) {
+    return request({
+      url: `/admin/meter/status`,
+      method: 'get',
+      params: query,
+    });
+  } else {
+    return request({
+      url: `/admin/meter/status`,
+      method: 'get',
+    });
+  }
 }
 
 
