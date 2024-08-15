@@ -60,7 +60,7 @@ const onCancel = () => {
       </div>
 
       <div class="flex gap-4 flex-col w-full">
-        <VaInput v-model="newGateway.ipAddr" label="IP Address" class="w-full" :rules="[validators.required]" name="ip_address" />
+        <VaInput v-model="newGateway.ipAddr" label="IP Address" class="w-full" :rules="[validators.required,validators.ipAddress]" name="ip_address" />
       </div>
 
       <div class="flex gap-4 flex-col w-full">

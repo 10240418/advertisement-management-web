@@ -33,11 +33,13 @@ const error = ref<string | null>(null);
 //unitId GateId 选择框实现
 const units = ref<unit_type[]>([]);
 const unitOptions = ref<string[]>([])
-const selectUnitValue = ref('');
+const selectUnitValue = ref<any>();
+const selectUnit2Value = ref<any>();
 
 const gatewayOptions = ref<string[]>([])
 const gateways = ref<any[]>([]);
-const selectGatewayValue = ref('');
+const selectGatewayValue = ref<any>();
+const selectGateway2Value = ref<any>();
 
 const typeOptions = ref(['Water Meter', 'Electric Meter'])
 const selectTypeValue = ref('');
@@ -50,6 +52,8 @@ const pagination = ref({
   pageSize: 50,
   desc: false,
 });
+const unitsOptions  = ref<any>();
+const gatewaysOptions  = ref<any>();
 const fetchUnits = () => {
   fetchUnitList(pagination.value)
     .then(res => {
@@ -59,6 +63,12 @@ const fetchUnits = () => {
           selectUnitValue.value = `${unit.id} Floor: ${unit.floor} Unit: ${unit.unit}`;
         }
         return `${unit.id} Floor: ${unit.floor} Unit: ${unit.unit}`;
+      } );
+      unitsOptions.value = units.value.map(unit =>{
+        if(newMeter.value.unitId==unit.id){
+          selectUnit2Value.value = { value: unit.id, label: ` Floor:${unit.floor}  Unit: ${unit.unit}` };
+        }
+        return { value: unit.id, label: ` Floor:${unit.floor}  Unit: ${unit.unit}` };
       } );
     })
     .catch(err => {
@@ -78,6 +88,15 @@ const fetchGateway = () => {
         }
         return  `${gateway.id} Name: ${gateway.name} IP: ${gateway.ipAddr}`;
       }); 
+      
+      gatewaysOptions.value = gateways.value.map(gateway =>{
+        if(newMeter.value.gatewayId==gateway.id){
+          selectGateway2Value.value ={ value: gateway.id, label: `${gateway.name}(${gateway.ipAddr})` };
+        }
+        return { value: gateway.id, label: ` ${gateway.name}(${gateway.ipAddr})` };
+      })
+      console.log(gatewayOptions.value)
+      console.log(gatewaysOptions.value)
     })
     .catch(err => {
       console.error(err);
@@ -90,7 +109,14 @@ onBeforeMount(() => {
   fetchUnits();
   fetchGateway();
 });
-
+//监听selectTypeValue的变化
+watch(selectTypeValue,()=>{
+  if(selectTypeValue.value==='Water Meter'){
+    MeterModelOptions.value = ['MeterModelWaterHDSB', 'MeterModelWaterHDSW']
+  }else{
+    MeterModelOptions.value = ['ElectricMeterModelTEST']
+  }
+})
 //如果传递的值不是null
 watch(
   () => props.modelValue,
@@ -124,6 +150,7 @@ const form = useForm('add-meter-form')
 
 const onSave = () => {
   if (form.validate()) {
+    
     emit('update:modelValue', newMeter.value)
     emit('save', {
       id: newMeter.value.id,
@@ -132,8 +159,10 @@ const onSave = () => {
       model: Number(selectModelValue.value==='MeterModelWaterHDSB'?MeterModel.MeterModelWaterHDSB:selectModelValue.value==='MeterModelWaterHDSW'?MeterModel.MeterModelWaterHDSW:MeterModel.ElectricMeterModelTEST),
       modbusAddr:newMeter.value.modbusAddr ,
       remark: newMeter.value.remark,
-      unitId: Number(selectUnitValue.value.split(' ')[0]),
-      gatewayId: Number(selectGatewayValue.value.split(' ')[0]),
+      // unitId: Number(selectUnitValue.value.split(' ')[0]),
+      // gatewayId: Number(selectGatewayValue.value.split(' ')[0]),
+      unitId: Number(selectUnit2Value.value.value),
+      gatewayId: Number(selectGateway2Value.value.value),
     })
   }
   emit('close')
@@ -152,7 +181,7 @@ const onCancel = () => {
         <VaInput v-model="newMeter.name" label="Name" class="w-full" :rules="[validators.required]" name="name" />
       </div>
       <div class="flex gap-4 flex-col w-full">
-        <VaSelect v-model="selectGatewayValue" label="Gateway" class="w-full" :options="gatewayOptions" />
+        <VaSelect v-model="selectGateway2Value" track-by="value" text-by="label" label="Gateway" class="w-full" :options="gatewaysOptions" />
       </div>
       <div class="flex gap-4 flex-col w-full">
         <VaSelect v-model="selectTypeValue" label="Meter Type" class="w-full" :options="typeOptions" name="type" />
@@ -161,11 +190,11 @@ const onCancel = () => {
         <VaSelect v-model="selectModelValue" label="Model" class="w-full" :options="MeterModelOptions" />
       </div>
       <div class="flex gap-4 flex-col w-full">
-        <VaInput v-model="newMeter.modbusAddr" label="Modbus Address" class="w-full" :rules="[validators.required]"
+        <VaInput v-model="newMeter.modbusAddr" label="Modbus Address" class="w-full" :rules="[validators.required,validators.numberBetween0And60]"
           name="modbusAddr"  />
       </div>
       <div class="flex gap-4 flex-col w-full">
-        <VaSelect v-model="selectUnitValue" label="Unit" class="w-full" :options="unitOptions"/>
+        <VaSelect v-model="selectUnit2Value"  track-by="value" text-by="label" label="Unit" class="w-full" :options="unitsOptions"/>
       </div>
       <div class="flex gap-4 flex-col w-full">
         <VaInput v-model="newMeter.remark" label="Remark" class="w-full" name="remark" />
