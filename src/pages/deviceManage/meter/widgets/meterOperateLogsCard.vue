@@ -57,16 +57,19 @@ const formattedDate = (isoDate: string): string => {
                 <tbody>
                     <tr v-for="(item, index) in operateLogs" :key="index">
                         <VaTimelineItem :date="formattedDate(item.createdAt)">
-                            <div class="flex flex-col sm:flex-row mr-2">
-                                <div>
-                                    <span>{{ item.meterName }}({{ item.meterId }})</span>
-                                </div>
-                                <div class="flex flex-row ml-2">
-                                    <span class="text-slate-400">Operation:</span>
+
+                             <div class="flex flex-col gap-2">
+                                <div class="flex flex-row gap-2 mr-2">
+                                    <span>{{ item.meterName }}({{ item.meterId }})</span>                                    <span class="text-slate-400">Operation:</span>
                                     <span v-if="item.operation === 1" class="text-blue-500">Open</span>
                                     <span v-if="item.operation === 0">Close</span>
-                                </div>
+                                </div>  
+                                <div class="h-[2px]"></div>
                             </div>
+                        
+                          
+                             
+
                         </VaTimelineItem>
                     </tr>
                 </tbody>

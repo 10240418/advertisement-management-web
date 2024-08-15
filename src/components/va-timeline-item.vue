@@ -1,16 +1,21 @@
 <template>
-  <tr class="va-timeline-item">
-    <td class="va-timeline-item__icon-cell">
-      <div class="va-timeline-item__icon">
-        <VaIcon name="schedule" size="22px" color="backgroundBorder" />
-      </div>
-    </td>
-    <td class="va-timeline-item__content-cell">
-      <div class="va-timeline-item__content">
-        <slot />
-      </div>
-    </td>
-    <td class="va-timeline-item__date-cell">
+  <tr class="flex flex-row justify-between gap-1 ">
+    <div class="flex flex-row gap-2">
+      <td class="flex flex-col justify-center items-center">
+        <div>
+          <VaIcon name="schedule" size="22px" color="backgroundBorder" />
+        </div>
+        <div class="flex w-[2px] bg-slate-200 h-full"></div>
+      </td>
+
+      <td class="va-timeline-item__content-cell  justify-center items-center">
+        <div class="flex flex-row justify-center items-center gap-2">
+          <slot />
+        </div>
+      </td>
+    </div>
+
+    <td class="va-timeline-item__date-cell  ">
       <slot name="date">
         {{ $props.date }}
       </slot>
@@ -29,43 +34,6 @@ defineProps({
 
 <style lang="scss" scoped>
 .va-timeline-item {
-  display: table-row;
-  position: relative; /* Ensure the container has relative positioning */
-
-  &__icon-cell {
-    vertical-align: top;
-    padding-right: 1rem;
-    position: relative; /* Ensure cell has relative positioning */
-  }
-
-  &__icon {
-    position: relative;
-    width: 24px;
-    height: 100%;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-
-    &::after {
-      content: '';
-      position: absolute;
-      width: 2px;
-      height: 100%; /* Ensure it spans the full height of the parent */
-      background: var(--va-background-border);
-      left: 50%;
-      transform: translateX(-50%);
-      top: 0; /* Align the top of the line with the parent */
-    }
-  }
-
-  &__content {
-    margin-bottom: 1rem;
-  }
-
-  &__content-cell {
-    width: 100%;
-  }
-
   &__date-cell {
     vertical-align: top;
     color: var(--va-secondary);
@@ -74,18 +42,5 @@ defineProps({
     text-align: end;
   }
 
-  &:last-child {
-    .va-timeline-item__icon::after {
-      content: '';
-      position: absolute;
-      width: 2px;
-      height: 100%; /* Ensure it spans the full height of the parent */
-      background: var(--va-background-border);
-      left: 50%;
-      transform: translateX(-50%);
-      top: 100%; /* Align the top of the line with the parent */
-    }
-  }
 }
-
 </style>
