@@ -1,43 +1,66 @@
 <script setup lang="ts">
-import { PropType } from 'vue'
+import { onBeforeMount, PropType ,ref  } from 'vue'
 import router from '../../../router'
 import VaTimelineItem from '@/components/va-timeline-item.vue'
+import { fetchErrorLogs } from '@/apis/task';
+import { useToast } from 'vuestic-ui/web-components';
+
+const errorLogs = ref<any>([])
+const toast = useToast()
+const fetch = async() =>{
+  fetchErrorLogs().then(res =>{
+    errorLogs.value = res.data.data;
+  }).catch(err =>{
+  toast.init({message:`err`, color: 'danger'})
+  })
+}
+onBeforeMount(() => {
+  fetch()
+})
+const formattedDate = (isoDate: string): string => {
+    const date = new Date(isoDate);
+    return date.toLocaleString('en-US', {
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false // 24-hour format
+    }).replace(',', ''); // Remove the comma between date and time
+};
+
 </script>
 
 <template>
-  <VaCard class="borderw-62% border rounded-[1px]">
+  <VaCard class="border rounded-[1px] w-full bg-red-300">
     
-    <h1 class="text-[10px] text-secondary font-bold uppercase ml-1">Timeline</h1> 
+    <h1 class="text-[10px] text-secondary font-bold uppercase ml-1">Error Logs</h1> 
   
-      <table class="mt-4 ml-2 mb-1 mr-2 ">
-        <tbody>
-          <VaTimelineItem date="25m ago">
-            <RouterLink class="va-link font-semibold" to="/users">Donald</RouterLink> updated the status of
-            <RouterLink class="va-link font-semibold" to="/users">Refund #1234</RouterLink> to awaiting customer
-            response
-          </VaTimelineItem>
-          <VaTimelineItem date="1h ago">
-            <RouterLink class="va-link font-semibold" to="/users">Lycy Peterson</RouterLink> was added to the group,
-            group name is Overtake
-          </VaTimelineItem>
-          <VaTimelineItem date="2h ago">
-            <RouterLink class="va-link font-semibold" to="/users">Joseph Rust</RouterLink> opened new showcase
-            <RouterLink class="va-link font-semibold" to="/users">Mannat #112233</RouterLink> with theme market
-          </VaTimelineItem>
-          <VaTimelineItem date="3d ago">
-            <RouterLink class="va-link font-semibold" to="/users">Donald</RouterLink> updated the status to awaiting
-            customer response
-          </VaTimelineItem>
-          <VaTimelineItem date="Nov 14, 2023">
-            <RouterLink class="va-link font-semibold" to="/users">Lycy Peterson</RouterLink> was added to the group
-          </VaTimelineItem>
-          <VaTimelineItem date="Nov 14, 2023">
-            <RouterLink class="va-link font-semibold" to="/users">Dan Rya</RouterLink> was added to the group
-          </VaTimelineItem>
-          <VaTimelineItem date="Nov 15, 2023">
-            Project <RouterLink class="va-link font-semibold" to="/projects">Vuestic 2023</RouterLink> was created
-          </VaTimelineItem>
-        </tbody>
-      </table>
+
+          <VaCard class="h-[260px]  w-full  overflow-y-scroll">
+        
+            <table class="mt-1 ml-2">
+                <tbody>
+                    <tr v-for="(item, index) in errorLogs" :key="index">
+                        <VaTimelineItem :date="formattedDate(item.taskInstance.startAt)">
+                            <div class="flex flex-col sm:flex-row mr-2">
+                                <div class="flex flex-row gap-2">
+                                    <span>{{ item.taskInstance.name }}</span>
+                                    <span class="text-slate-400">Operation:</span>
+                                    <span class="text-blue-500">{{item.taskInstance.operation}}</span>
+                                </div>
+                                <div class="flex flex-row ml-2">
+                                </div>
+                            </div>
+                            <div class="flex flex-col sm:flex-row mr-2">
+                                <div class="flex flex-row">
+                                    <span class="text-red-500 ">{{ item.error}}</span>
+                                </div>
+
+                            </div>
+                        </VaTimelineItem>
+                    </tr>
+                </tbody>
+            </table>
+    </VaCard>
   </VaCard>
 </template>

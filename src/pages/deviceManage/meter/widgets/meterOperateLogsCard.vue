@@ -51,7 +51,7 @@ const formattedDate = (isoDate: string): string => {
 };
 </script>
 <template>
-    <VaCard class=" h-[240px] min-w-[300px] w-full md overflow-y-scroll">
+    <VaCard class="h-[160px] min-w-[300px] w-full md overflow-y-scroll">
         <VaCardContent>
             <table class="mt-0">
                 <tbody>

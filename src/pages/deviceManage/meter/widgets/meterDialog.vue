@@ -1,16 +1,39 @@
 <template>
     <VaCard class="w-full h-full flex">
         <div class="w-full h-full flex flex-col ml-3">
+            <!-- chart -->
+            <!-- <span class="text-[20px] font-bold">Read Meter Logs</span> -->
+            <div class="flex  min-h-[100px] h-[200px]">
+                <VaChart :data="chartData" class="h-24" type="line" :options="options" />
+            </div>
             <!-- top -->
+            <div class="flex flex-row justify-between items-center">
+                <span class="mt-2 ml-2  text-[18px] font-bold">{{ meter?.name }}</span>
+                <div class="flex flex-row justify-center mr-2 gap-3">
+                    <div class="w-[20px] h-[20px]  rounded-full border border-solid shadow-lg"
+                        :class="{ 'bg-green-600': meterStatus === true, 'bg-red-500': meterStatus !== true }"></div>
+                    <span class="text-[15px] font-bold" v-if="meterStatus === true">开启</span>
+                    <span class="text-[15px] font-bold" v-if="meterStatus !== true">关闭</span>
+                </div>
+
+            </div>
             <div class="flex flex-row justify-between">
-                <div class="grid grid-cols-[1fr_3fr_1fr_3fr]" :class="{ 'gap-y-[2.2px]': !editable }">
+                <div class="grid grid-cols-[1fr_3fr] ml-2" :class="{ 'gap-y-[2.2px]': !editable }">
                     <VaListLabel class="flex justify-start">ID</VaListLabel>
-                    <span>{{ meter?.id }}</span>
-                    <VaListLabel class="flex justify-start">Name</VaListLabel>
-                    <span>{{ meter?.name }}</span>
-                    <VaListLabel class="flex justify-start">UnitID</VaListLabel>
-                    <div class="flex flex-row justify-between mr-3 items-center gap-3">
-                        <span>{{ meter?.unitId }}</span>
+                    <div><span class="text-[15px] font-bold">{{ meter?.id }}</span>
+                    </div>
+                    <!-- <VaListLabel class="flex justify-start">Name</VaListLabel> -->
+                    <VaListLabel class="flex justify-start">ModbusAddr</VaListLabel>
+                    <span class="text-[15px] font-bold">{{ meter?.modbusAddr }}</span>
+                    <VaListLabel class="flex justify-start">type</VaListLabel>
+                    <span v-if="meter?.type === 1" class="flex justify-start text-[15px] font-bold">PowerMeter</span>
+                    <span v-if="meter?.type === 0" class="flex justify-start text-[15px] font-bold">WaterMeter</span>
+                    <VaListLabel class="flex justify-start">Remark</VaListLabel>
+                    <span class="text-[15px]">{{ meter?.remark }}</span>
+
+                    <VaListLabel class="flex justify-start">Unit</VaListLabel>
+                    <div class="flex flex-row justify-between mr-12 items-center gap-3">
+                        <span class="text-[15px]">{{ meter?.unit?.unit }}</span>
                         <VaPopover color="backgroundSecondary" trigger="click"
                             :style="{ '--va-popover-content-background-color': '#ffffff', }">
                             <VaIcon :name="arrowDirection(isUnitCollapsed)" size="20px"
@@ -31,12 +54,10 @@
                             </template>
                         </VaPopover>
                     </div>
-                    <VaListLabel class="flex justify-start">type</VaListLabel>
-                    <span v-if="meter?.type === 1" class="flex justify-start">Electricity</span>
-                    <span v-if="meter?.type === 0" class="flex justify-start">Water</span>
-                    <VaListLabel class="flex justify-start">GatewayID</VaListLabel>
-                    <div class="flex flex-row justify-between mr-3 items-center gap-3">
-                        <span>{{ meter?.gatewayId }}</span>
+
+                    <VaListLabel class="flex justify-start">Gateway</VaListLabel>
+                    <div class="flex flex-row justify-between mr-12 items-center gap-3">
+                        <span>{{ meter?.gateway.name }}</span>
                         <VaPopover color="backgroundSecondary" trigger="click"
                             :style="{ '--va-popover-content-background-color': '#ffffff', }">
                             <VaIcon :name="arrowDirection(isGatewayCollapsed)" size="20px"
@@ -58,23 +79,15 @@
                         </VaPopover>
                     </div>
 
-
-                    <VaListLabel class="flex justify-start">ModbusAddr</VaListLabel>
-                    <span>{{ meter?.modbusAddr }}</span>
-
-                    <VaListLabel class="flex justify-start">Remark</VaListLabel>
-                    <span>{{ meter?.remark }}</span>
                 </div>
-                <div class="flex flex-col justify-between items-end w-[120px] mt-[3px] mr-1">
-                    <VaButton color="primary" @click="openEditModal" icon="mso-edit" class="h-[30px] w-[72px]">
+                <div class="flex flex-col justify-end items-end mt-[3px] mr-1">
+                    <VaButton preset="secondary" border-color="primary" @click="openEditModal"
+                        class="h-[24px] w-[82px]">
                         Edit
                     </VaButton>
                 </div>
             </div>
-            <!-- chart -->
-            <div class="flex  min-h-[100px] h-[200px]">
-                <VaChart :data="chartData" class="h-24" type="line" :options="options" />
-            </div>
+
             <!-- operate timeling -->
             <div class="flex flex-row *:">
                 <meterOperateLogsCard :isfetch="logsCardFetch"></meterOperateLogsCard>
@@ -82,13 +95,17 @@
             <!-- footer -->
             <div class="dialog-footer flex flex-row gap-2">
                 <div class="flex flex-row items-center gap-5">
-                    <div class="w-[20px] h-[20px]  rounded-full border border-solid shadow-lg"
-                        :class="{ 'bg-green-600': meterStatus === true, 'bg-red-500': meterStatus !== true }"></div>
-                    <VaButton color="primary" :loading="isOperating?true:false" @click="operateMeterStatus" class="h-[30px] w-[72px]">
-                        Operate
+
+                    <VaButton v-if="meterStatus===true" color="primary" :loading="isOperating ? true : false" @click="operateMeterStatus" class="h-[30px] w-[92px] text-nowrap">
+                          Turn ON
+                    </VaButton>
+                    <VaButton v-if="meterStatus===false" color="primary" :loading="isOperating ? true : false" @click="operateMeterStatus" class="h-[30px] w-[92px] text-nowrap">
+                          Turn OFF
                     </VaButton>
                 </div>
-                <VaButton color="primary" :loading="isOperating?true:false" @click="read" class="h-[30px] w-[72px]">Read</VaButton>
+                <VaButton color="primary" :loading="isOperating ? true : false" @click="read" class="h-[30px] w-[82px]">
+                        <span>Realtime</span>
+                </VaButton>
                 <VaButton @click="cancel">Cancel</VaButton>
             </div>
             <!-- edit modal -->
@@ -98,8 +115,7 @@
                     @close="closeEditModal" />
             </VaModal>
             <VaModal v-model="showReadModal" size="small" mobile-fullscreen close-button hide-default-actions>
-                <div v-if="meter?.type === 1"
-                    class="flex flex-col p-4">
+                <div v-if="meter?.type === 1" class="flex flex-col p-4">
                     <h1 class="text-xl font-bold mb-4 flex flex-row items-start justify-start">Status</h1>
                     <div class="space-y-2 w-full">
                         <div class="flex justify-between">
@@ -145,9 +161,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="flex flex-row items-end justify-end mt-2">
-                   <VaButton   @click="showReadModal=false">Cancel</VaButton>
-                </div>          
+                <div class="flex flex-row items-end justify-end ">
+                    <VaButton @click="showReadModal = false">Cancel</VaButton>
+                </div>
             </VaModal>
         </div>
     </VaCard>
@@ -209,6 +225,7 @@ const fetch = async () => {
         try {
             const res = await fetchMeter({ id: meterId.value });
             meter.value = res.data.data;
+            console.log(meter.value)
             const reslog = await fetchReadMeterLogsData({ id: meterId.value, ...pagination.value });
             readLogsData.value = reslog.data.data;
             labelsReadMeterLogs.value = reslog.data.data.map((log: read_meter_log_type) => formattedDate(log.createdAt));
@@ -290,7 +307,7 @@ const meterStatus = ref(false);
 
 const operateMeterStatus = () => {
     isOperating.value = true;
-    logsCardFetch.value=false
+    logsCardFetch.value = false
     operateMeter({ id: Number(meterId.value), body: { type: meterStatus.value === true ? MeterOperationType.ElectricMeterOff : MeterOperationType.ElectricMeterOn } })
         .then(() => {
             toast.init({ message: 'Operate successfully', color: 'success' });
