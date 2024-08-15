@@ -222,8 +222,6 @@ const fetch = async () => {
                 meterStatus.value = resStatus.data.data.valve;
                 console.log(meterStatus.value)
             }
-
-
         } catch (error: any) {
             toast.init({ color: 'danger', message: error.message });
         }

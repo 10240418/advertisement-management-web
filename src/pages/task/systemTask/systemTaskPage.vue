@@ -3,8 +3,15 @@
       <VaCardContent>
         <div class="flex flex-col md:flex-row gap-2 mb-2 justify-between">
           <VaInput v-model="searchValue" placeholder="Search By ID" class="w-full md:w-2/3"
-            @keyup.enter="onSearch(searchValue)" />
+            @keyup.enter="onSearch(searchValue)" :rules="[validators.required,validators.number]" >
           <!-- <VaButton @click="showAddControlTaskModal">Add Control Task</VaButton> -->
+          <template #appendInner>
+            <div class="search-icon-wrapper bg-white hover:bg-slate-300 z-10">
+              <VaIcon name="mso-search" color="secondary" @click="onSearch(searchValue)" />
+            </div>
+          </template>
+          </VaInput>  
+
         </div>
   
         <systemTaskTable :pagination="pagination" :tasks="tasksShowInTable" :loading="isLoading" :sorting="sorting"
@@ -31,6 +38,7 @@
   import systemTaskTable from './widgets/systemTaskTable.vue';
   import editSystemTaskForm from './widgets/editSystemTaskForm.vue';
   import {useTasks} from './composables/systemTask'
+  import { validators } from '../../../services/utils';
   
   const { init: notify } = useToast();
   const doShowAddControlTaskModal = ref(false);
@@ -109,6 +117,25 @@
   </script>
   
   <style scoped>
-  /* Add any specific styles here */
+.search-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px; /* Adjust size as needed */
+  height: 36px; /* Adjust size as needed */
+  cursor: pointer;
+}
+
+.va-input-wrapper__append-inner {
+  position: relative;
+}
+
+.va-input-wrapper__append-inner .search-icon-wrapper {
+  position: absolute;
+  right: -12px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10; /* Ensure it's on top of other elements */
+}
   </style>
   

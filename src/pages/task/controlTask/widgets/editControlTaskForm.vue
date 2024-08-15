@@ -1,28 +1,31 @@
 <template>
   <VaForm v-slot="{ isValid }" ref="edit-control-task-form"
     class="flex-col justify-start items-start gap-4 inline-flex w-full">
-    <div class="self-stretch grid grid-cols-[1fr_1fr] justify-start items-start gap-1  ">
+    <div class="self-stretch flex flex-col ">
+
       <div class="flex gap-4 flex-col w-full">
-        <VaSelect v-model="selectTaskType" label="Type" class="w-full" :options="taskTypeOptions" />
+        <VaInput :disabled="newControlTask.id"   v-model="newControlTask.name" label="Name" class="w-full" :rules="[validators.required]" name="name" />
       </div>
-      <div class="flex gap-4 flex-col w-full">
+
+      <div class="flex flex-row gap-2 w-full">
+        <VaSelect v-model="selectTaskType" label="Type" class="w-full" :options="taskTypeOptions" />
+
         <VaSelect v-if="selectTaskType === 'Gateway Task'" v-model="selectGatewayValue" label="Gateway ID"
           class="w-full  truncate" :options="gatewayOptions" />
         <VaSelect v-else v-model="selectMeterValue" label="Meter ID" class="w-full  truncate" :options="meterOptions" />
       </div>
-      <div class="flex gap-4 flex-col w-full">
-        <VaInput v-model="newControlTask.name" label="Name" class="w-full" :rules="[validators.required]" name="name" />
-      </div>
-      <div class="flex gap-4 flex-col w-full">
+      <!-- <div class="flex gap-4 flex-col w-full">
         <VaSelect v-model="selectTagValue" label="Tag" class="w-full" :options="tagOptions" />
-      </div>
+      </div> -->
 
       <div class="flex gap-4 flex-col w-full">
         <VaSelect v-model="selectOperationValue" label="Operation" class="w-full" :options="operationOptions" />
       </div>
-      <div class="flex gap-4 flex-col w-full">
+      <div class="flex gap-4 flex-row justify-center items-center w-full">
         <VaInput v-model="newControlTask.interval" label="Interval" class="w-full" type="number"
-          :rules="[validators.required]" name="interval" />
+          :rules="[validators.required]" name="interval" :disabled="!isRepeatable" />
+          <VaSwitch class="mt-[18px]" v-model="isRepeatable" label="Repeatable" />
+          
       </div>
       <div class="flex gap-4 flex-col w-full">
         <VaInput v-model="newControlTask.startAt" label="Start Time" class="w-full" type="datetime-local"
@@ -32,7 +35,6 @@
       <div class="flex gap-4 flex-col w-full mt-[18px]">
         <VaSwitch v-model="newControlTask.active" label="Active" />
       </div>
-      <div></div> <div></div><div></div>
       <div class="flex gap-2 flex-row items-stretch justify-end w-full">
         <VaButton preset="secondary" color="secondary" @click="onCancel">Cancel</VaButton>
         <VaButton :disabled="!isValid" @click="onSave">Save</VaButton>
@@ -54,7 +56,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, defineProps, defineEmits, onBeforeMount, PropType } from 'vue'
+import { ref, watch, defineProps, defineEmits, onBeforeMount, PropType, isReactive } from 'vue'
 import { useForm, useToast, VaModal } from 'vuestic-ui'
 import { validators } from '../../../../services/utils'
 import { task_type } from '../../../../data/task'
@@ -91,13 +93,20 @@ const error = ref<string | null>(null);
 
 const gatewayOptions = ref<any[]>([]);
 const meterOptions = ref<any[]>([]);
-const selectTagValue = ref('');
+const selectTagValue = ref('user');
 const selectOperationValue = ref('');
 const selectGatewayValue = ref('');
 const selectMeterValue = ref('');
 const selectTaskType = ref('');
 const showConfirmModal = ref(false);
 const form = useForm('edit-control-task-form');
+
+const isRepeatable = ref(true);
+watch(()=>isRepeatable.value,()=>{
+  if(isRepeatable.value===false){
+    newControlTask.value.interval=0;
+  }
+})
 
 const pagination = ref({
   pageNum: 1,
@@ -142,7 +151,7 @@ watch(
 
     } else {
       newControlTask.value = { ...defaultNewControlTask }
-      selectTagValue.value = '';
+      selectTagValue.value = 'user';
       selectOperationValue.value = '';
       selectGatewayValue.value = '';
       selectMeterValue.value = '';
