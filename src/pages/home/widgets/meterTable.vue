@@ -104,9 +104,9 @@ const dashboardMeters = computed<meterCardType[]>(() => {
       iconBackground: meter.meter.type === 1 ? getColor('success') : getColor('primary'),
       iconColor: meter.meter.type === 1 ? getColor('on-success') : getColor('on-primary'),
 
-      amount:meter.meter.type === 0 ? meter.status.volume : meter.status.powerEnergy,
-      switch:meter.meter.type === 0 ? meter.status.valve : meter.status.switch,
-      updatedAt:meter.status.updatedAt
+      amount:meter.meter.type === 0 ? meter.status?.volume : meter.status?.powerEnergy,
+      switch:meter.meter.type === 0 ? meter.status?.valve : meter.status?.switch,
+      updatedAt:meter.status?.updatedAt
     })
   })
   return meterCards

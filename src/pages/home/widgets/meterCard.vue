@@ -27,7 +27,8 @@
           </div>
           <p class="text-xs text-secondary flex flex-row  ">
             since last 
-            <span>{{ undatedAtShowInCard }}</span>
+            <span v-if="undatedAtShowInCard===''">:{{ undatedAtShowInCard }}</span>
+            <span v-else>:</span>
           </p>
         </div>
       </section>
@@ -76,7 +77,7 @@ const formattedDate = (isoDate: string): string => {
 //amount 保留两位小数
 const amountShowInCard = computed(() => {
   const num = props.amount;
-  const numStr = num.toFixed(2);
+  const numStr = num?.toFixed(2);
   return numStr;
 });
 
