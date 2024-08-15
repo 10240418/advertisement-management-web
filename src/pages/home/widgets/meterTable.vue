@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-wrap gap-4 mb-2">
+  <div class="flex flex-wrap gap-4 mb-2 ml-3">
     <VaButtonToggle 
       v-model="meterTypeValue" 
       preset="secondary" 
@@ -16,7 +16,7 @@
     />
   </div>
   <div class="flex flex-col gap-4  rounded-md">
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 ml-3 mb-4">
       <meterCard 
         v-for="meter in dashboardMeters" 
         :key="meter.id" 

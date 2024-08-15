@@ -9,7 +9,7 @@
         <logsCard class="stretch-item"></logsCard>
       </div>
       <section class="flex flex-col border rounded-[1px]">
-        <h1 class="text-[10px] text-secondary font-bold uppercase mb-2">Meter Status</h1>
+        <h1 class="text-[10px] text-secondary font-bold uppercase mb-2 ml-1">Meter Status</h1>
         <meterTable></meterTable>
       </section>
     </VaCardContent>

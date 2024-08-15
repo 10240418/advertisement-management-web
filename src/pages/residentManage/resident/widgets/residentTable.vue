@@ -39,7 +39,7 @@ const pagesOptions = computed(() => {
 const { confirm } = useModal()
 
 const onResidentUpdate = async (resident: any) => {
-  const temp = resident.active ? 'forbidden' : 'apply'
+  const temp = resident.active ? 'Block' : 'Unblock'
   const agreed = await confirm({
     title: 'Set Active',
     message: `Are you sure you want to ${temp} ${resident.name}?`,
@@ -127,7 +127,8 @@ watch(
               </VaButton>
               <VaButton preset="secondary" size="small" icon="update" aria-label="Update Resident"
                 @click="onResidentUpdate(rowData)" class="w-full justify-between">
-                <span>Update</span>
+                <span v-if="rowData.active">Block</span>
+                <span v-else>Unblock</span>
               </VaButton>
             </div>
           </transition>

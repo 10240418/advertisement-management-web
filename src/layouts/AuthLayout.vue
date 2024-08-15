@@ -7,7 +7,7 @@
         to="/"
         aria-label="Visit homepage"
       >
-        Smart Toilet Admin
+        Smart Meter Admin
       </RouterLink>
     </template>
     <template #content>

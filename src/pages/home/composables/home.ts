@@ -27,6 +27,7 @@ export const useHomes = (options?: { sorting?: Ref<any>; pagination?: Ref<any> }
       error.value = (err.message || 'Failed to fetch meters') as string;
       toast.init({ message: error.value, color: 'danger' });
     }
+
     isLoading.value = false;
   };
   const fetchMetersStatusByType = async(type:string) =>{
@@ -38,6 +39,9 @@ export const useHomes = (options?: { sorting?: Ref<any>; pagination?: Ref<any> }
       console.log(error);
       toast.init({message:error.value,color:'danger'})
     })
+    setTimeout(() => {
+      pagination.value.total = meters.value.length;
+    }, 10000);
     isLoading.value = false;
 
   }

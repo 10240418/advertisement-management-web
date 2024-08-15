@@ -28,6 +28,7 @@ watch(
   (userToEdit) => {
     if (userToEdit) {
       newAdminUser.value = { ...userToEdit }
+      console.log(newAdminUser.value.id)
     } else {
       newAdminUser.value = { ...defaultNewAdminUser }
     }
@@ -53,11 +54,11 @@ const onCancel = () => {
   <VaForm v-slot="{ isValid }" ref="add-user-form" class="flex-col justify-start items-start gap-4 inline-flex w-full">
     <div class="self-stretch flex-col justify-start items-start gap-4 flex">
       <div class="flex gap-4 flex-col w-full">
-        <VaInput v-model="newAdminUser.name" label="Name" class="w-full" :rules="[validators.required]" name="name" />
+        <VaInput v-if="!newAdminUser.id" v-model="newAdminUser.name" label="Name" class="w-full" :rules="[validators.required]" name="name" />
       </div>
 
       <div class="flex gap-4 flex-col w-full">
-        <VaInput v-model="newAdminUser.email" label="Email" class="w-full" :rules="[validators.required, validators.email]" name="email" />
+        <VaInput v-if="!newAdminUser.id" v-model="newAdminUser.email" label="Email" class="w-full" :rules="[validators.required, validators.email]" name="email" />
       </div>
 
       <div class="flex gap-4 flex-col w-full">

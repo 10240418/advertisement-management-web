@@ -51,14 +51,6 @@ const onSave = (user: any) => {
   doShowEditUserModal.value = false
   doShowAddUserModal.value = false
 }
-
-const filterData = (search: any) => {
-  const rawUsers = toRaw(adminusers.value)
-  const filteredUsers = rawUsers.filter((item: admin_user_type) => item.name.includes(search))
-  adminUsersShowInTable.value = _.cloneDeep(filteredUsers)
-}
-
-
 watch(
   adminusers,
   () => {

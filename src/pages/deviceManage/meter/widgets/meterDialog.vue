@@ -88,7 +88,7 @@
                         Operate
                     </VaButton>
                 </div>
-                <VaButton color="primary" @click="read" class="h-[30px] w-[72px]">Read</VaButton>
+                <VaButton color="primary" :loading="isOperating?true:false" @click="read" class="h-[30px] w-[72px]">Read</VaButton>
                 <VaButton @click="cancel">Cancel</VaButton>
             </div>
             <!-- edit modal -->
@@ -298,18 +298,12 @@ const operateMeterStatus = () => {
             toast.init({ message: 'Operate successfully', color: 'success' });
             meterStatus.value = meterStatus.value === true ? false : true;
             logsCardFetch.value = true;
-            setTimeout(() => {
             isOperating.value = false;
-            }, 4000);
-            fetch();
         })
         .catch((error) => {
             toast.init({ message: 'Operate Meter failed', color: 'danger' });
             console.error(error);
-            setTimeout(() => {
             isOperating.value = false;
-            }, 4000);
-            
         });
 };
 const saveMeter = async (updatedMeter: any) => {
