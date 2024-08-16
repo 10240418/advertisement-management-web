@@ -136,15 +136,7 @@ watch(
   { immediate: true }
 )
 
-// 确保会是number类型
-watch(newMeter, (value) => {
-  if (value) {
-    value.type = Number(value.type)
-    value.modbusAddr = Number(value.modbusAddr)
-    value.unitId = Number(value.unitId)
-    value.gatewayId = Number(value.gatewayId)
-  }
-}, { deep: true })
+
 
 const form = useForm('add-meter-form')
 
