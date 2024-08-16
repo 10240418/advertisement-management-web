@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { onBeforeMount, ref } from 'vue'
 import VaTimelineItem from '@/components/va-timeline-item.vue'
+import { onBeforeMount, ref } from 'vue'
 import { fetchErrorLogs } from '@/apis/task'
 import { useToast } from 'vuestic-ui/web-components'
 
