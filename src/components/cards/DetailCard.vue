@@ -8,7 +8,7 @@
                 <VaListLabel class="flex flex-start">{{ label }}</VaListLabel>
               </div>
               <div class="flex absolute ml-20"> <!-- Adjusted margin for better alignment -->
-                <span :class="[indexWeight > index ? fontWeight : '', 'flex flex-start text-[16px]']">
+                <span :class="[indexWeight > index ? fontWeight : '', 'flex flex-start text-[16px] truncate']">
                   {{ datas[index] }}
                 </span>
               </div>

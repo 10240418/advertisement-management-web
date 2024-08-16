@@ -2,71 +2,6 @@
   <VaCard class="w-full h-full flex">
     <div class="w-full h-full flex flex-col ml-3">
       <!-- Top Section -->
-      <!-- <div class="flex flex-row justify-between">
-        <div class="grid grid-cols-[1fr_3fr]" :class="{ 'gap-y-[2.2px]': !editable }">
-          <VaListLabel class="flex justify-start">ID</VaListLabel>
-          <span>{{ controlTask?.id }}</span>
-          <VaListLabel class="flex justify-start">Name</VaListLabel>
-          <span>{{ controlTask?.name }}</span>
-          <VaListLabel class="flex justify-start">Tag</VaListLabel>
-          <span>{{ controlTask?.tag }}</span>
-          <VaListLabel class="flex justify-start">Operation</VaListLabel>
-          <span>{{ controlTask?.operation }}</span>
-          <VaListLabel class="flex justify-start">Interval</VaListLabel>
-          <span>{{ controlTask?.interval }}</span>
-          <VaListLabel class="flex justify-start">Start Time</VaListLabel>
-          <span>{{ controlTask?.startAt }}</span>
-          <VaListLabel class="flex justify-start">Gateway ID</VaListLabel>
-          <div class="flex flex-row justify-between mr-3 items-center gap-3">
-            <span>{{ controlTask?.gatewayId }}</span>
-            <VaPopover color="backgroundSecondary" trigger="click"
-              :style="{ '--va-popover-content-background-color': '#ffffff' }">
-              <VaIcon :name="arrowDirection(isGatewayCollapsed)" size="20px"
-                @click="isGatewayCollapsed = !isGatewayCollapsed" />
-              <template #body>
-                <div class="grid grid-cols-[1fr_3fr] border border-solid p-2 rounded-md shadow-lg">
-                  <VaListLabel class="flex justify-start">ID</VaListLabel>
-                  <span>{{ controlTask?.gateway.id }}</span>
-                  <VaListLabel class="flex justify-start">Name</VaListLabel>
-                  <span>{{ controlTask?.gateway.name }}</span>
-                  <VaListLabel class="flex justify-start">IP Address</VaListLabel>
-                  <span>{{ controlTask?.gateway.ipAddr }}</span>
-                  <VaListLabel class="flex justify-start">Remark</VaListLabel>
-                  <span>{{ controlTask?.gateway.remark }}</span>
-                  <VaListLabel class="flex justify-start">Created At</VaListLabel>
-                  <span>{{ controlTask?.gateway.createdAt }}</span>
-                </div>
-              </template>
-            </VaPopover>
-          </div>
-          <VaListLabel class="flex justify-start">Meter ID</VaListLabel>
-          <div class="flex flex-row justify-between mr-3 items-center gap-3">
-            <span>{{ controlTask?.meterId }}</span>
-            <VaPopover color="backgroundSecondary" trigger="click"
-              :style="{ '--va-popover-content-background-color': '#ffffff' }">
-              <VaIcon :name="arrowDirection(isMeterCollapsed)" size="20px"
-                @click="isMeterCollapsed = !isMeterCollapsed" />
-              <template #body>
-                <div class="grid grid-cols-[1fr_3fr] border border-solid p-2 rounded-md shadow-lg">
-                  <VaListLabel class="flex justify-start">ID</VaListLabel>
-                  <span>{{ controlTask?.meter.id }}</span>
-                  <VaListLabel class="flex justify-start">Name</VaListLabel>
-                  <span>{{ controlTask?.meter.name }}</span>
-                  <VaListLabel class="flex justify-start">Type</VaListLabel>
-                  <span>{{ controlTask?.meter.type === 0 ? 'Electricity' : 'Water' }}</span>
-                  <VaListLabel class="flex justify-start">UnitID</VaListLabel>
-                  <span>{{ controlTask?.meter.unitId }}</span>
-                  <VaListLabel class="flex justify-start">Remark</VaListLabel>
-                  <span>{{ controlTask?.meter.remark }}</span>
-                  <VaListLabel class="flex justify-start">Created At</VaListLabel>
-                  <span>{{ controlTask?.meter.createdAt }}</span>
-                </div>
-              </template>
-            </VaPopover>
-          </div>
-        </div>
-      </div> -->
-
       <detailCard :labels="labelsProp" :datas="datasProp" :fontWeight="`font-bold`" :indexWeight="3" >
         <div class="flex flex-col relative">
           <!-- Gateway Section -->
@@ -94,7 +29,6 @@
               </template>
             </VaPopover>
           </div>
-
           <!-- Meter Section -->
           <div class="flex flex-row mr-3 items-center gap-3">
             <VaListLabel class="flex justify-start">Meter</VaListLabel>
@@ -108,19 +42,14 @@
                 <div class="grid grid-cols-[1fr_4fr] border border-solid rounded-md shadow-lg p-2">
                   <VaListLabel class="flex justify-start">ID</VaListLabel>
                   <span>{{ controlTask?.meter.id }}</span>
-
                   <VaListLabel class="flex justify-start">Name</VaListLabel>
                   <span>{{ controlTask?.meter.name }}</span>
-
                   <VaListLabel class="flex justify-start">Type</VaListLabel>
                   <span>{{ controlTask?.meter.type === 0 ? 'Electricity' : 'Water' }}</span>
-
                   <VaListLabel class="flex justify-start">UnitID</VaListLabel>
                   <span>{{ controlTask?.meter.unitId }}</span>
-
                   <VaListLabel class="flex justify-start">Remark</VaListLabel>
                   <span>{{ controlTask?.meter.remark }}</span>
-
                   <VaListLabel class="flex justify-start">Created At</VaListLabel>
                   <span>{{ controlTask?.meter.createdAt }}</span>
 

@@ -3,26 +3,9 @@
     <div class="w-full h-full flex flex-col  ml-1 ">
       <!-- top part -->
       <div class="flex flex-row gap-0">
-        <div class="grid grid-cols-[1fr_3fr_1fr_3fr]" :class="{ 'gap-y-[2.2px]': !editable }">
-          <VaListLabel class="flex justify-start">ID</VaListLabel>
-          <VaInput v-if="gateway" v-model="gateway.id" placeholder="ID" class="custom-input"
-            :class="{ 'read-only': !editable }" />
-          <VaListLabel class="flex justify-start">Name</VaListLabel>
-          <VaInput v-if="gateway" v-model="gateway.name" placeholder="Name" class="custom-input"
-            :class="{ 'read-only': !editable }" />
-          <VaListLabel class="flex justify-start">IpAddr</VaListLabel>
-          <VaInput v-if="gateway" v-model="gateway.ipAddr" placeholder="IPAddr" class="custom-input"
-            :class="{ 'read-only': !editable }" />
-          <VaListLabel class="flex justify-start">Remark</VaListLabel>
-          <VaInput v-if="gateway" v-model="gateway.remark" placeholder="Remark" class="custom-input"
-            :class="{ 'read-only': !editable }" />
-          <VaListLabel class="flex justify-start">CreatedAt</VaListLabel>
-          <VaInput v-if="gateway" v-model="gateway.createdAt" placeholder="CreatedAt" class="custom-input"
-            :class="{ 'read-only': !editable }" />
-        </div>
-        <div>
-          <VaChart :data="chartData" class="h-24" type="line" :options="options" />
-        </div>
+
+        <detailCard :labels="labelsProp" :datas="datasProp" />
+
       </div>
 
       <!-- table part -->
@@ -90,12 +73,8 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onBeforeMount } from 'vue';
+import { ref, onBeforeMount,computed } from 'vue';
 import { gateway_type } from '../../../../data/gateway';
-import VaChart from '../../../../components/va-charts/VaChart.vue';
-import { useChartData } from '../../../../data/charts/composables/useChartData';
-import { lineChartData } from '../../../../data/charts/lineChartData';
-import { ChartOptions } from 'chart.js';
 import { useRoute } from 'vue-router';
 import { useToast } from 'vuestic-ui';
 import { getGateway, pingGateway ,updateGateway} from '../../../../apis/gateway';
@@ -104,9 +83,21 @@ import { updateMeter, operateMeter } from '../../../../apis/meter';
 import { meter_type } from '../../../../data/meter';
 import { MeterOperationType } from '../../../../data/api_field_type/api_field_type';
 import editGatewayForm from '@/pages/deviceManage/gateway/widgets/editGatewayForm.vue';
+import detailCard from '@/components/cards/detailCard.vue';
 
 // State and Reactive Properties
 const gateway = ref<gateway_type | null>(null);
+const labelsProp = ref<string[]>(['ID','Name','IPAddr','Remark','CreatedAt'])
+const datasProp = computed(() => {
+    return [
+      gateway.value?.id,
+      gateway.value?.name,
+      gateway.value?.ipAddr,
+      gateway.value?.remark,
+      gateway.value?.createdAt
+    ];
+ 
+});
 const route = useRoute();
 const gatewayId = ref(route.query.id);
 const toast = useToast();
@@ -117,19 +108,6 @@ const showContentMeter = ref<meter_type | null>(null);
 const showEditModal = ref(false);
 const unitEditMeter = ref<meter_type>();
 
-// Chart Data and Options
-const chartData = useChartData(lineChartData);
-const options: ChartOptions<'line'> = {
-  scales: {
-    x: { display: false, grid: { display: false } },
-    y: { display: false, grid: { display: false }, ticks: { display: false } },
-  },
-  interaction: { intersect: false, mode: 'index' },
-  plugins: {
-    legend: { display: false },
-    tooltip: { enabled: true },
-  },
-};
 
 // Lifecycle Hooks
 onBeforeMount(() => {

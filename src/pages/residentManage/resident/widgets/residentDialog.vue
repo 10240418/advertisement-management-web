@@ -4,17 +4,7 @@
       <div class="w-full h-full flex flex-col ml-3">
         <!-- Top section -->
         <div class="flex flex-row justify-between">
-          <div class="grid grid-cols-[1fr_3fr]" :class="{ 'gap-y-[2.2px]': !editable }">
-            <VaListLabel class="flex justify-start">ID</VaListLabel>
-            <VaInput v-if="resident" v-model="resident.id" placeholder="ID" class="custom-input"
-              :class="{ 'read-only': !editable }" />
-            <VaListLabel class="flex justify-start">Name</VaListLabel>
-            <VaInput v-if="resident" v-model="resident.name" placeholder="Name" class="custom-input"
-              :class="{ 'read-only': !editable }" />
-            <VaListLabel class="flex justify-start">Email</VaListLabel>
-            <VaInput v-if="resident" v-model="resident.email" placeholder="Email" class="custom-input"
-              :class="{ 'read-only': !editable }" />
-          </div>
+          <detailCard  :labels="labelsProp" :datas="datasProp" class="ml-[-14px] mt-[-8px]"/>
           <div class="flex flex-col justify-between w-[72px] mt-[3px] mr-4">
             <VaButton color="primary" @click="doShowEditResidentModal = true" icon="mso-edit" class="h-[30px] w-[72px]">
               Edit</VaButton>
@@ -33,9 +23,7 @@
           ]" class="mr-3 va-data-table"
            :style="{
             '--va-data-table-height': '320px',
-            '--va-data-table-thead-background': 'var(--va-background-element)',
             '--va-data-table-tfoot-background': 'var(--va-background-element)',
-            '--va-data-table-thead-color': '#2C82E0',
           }" sticky-header footer-clone sticky-footer>
 
 
@@ -112,10 +100,22 @@ import { useToast } from 'vuestic-ui';
 import editUnitForm from '../../unit/widgets/editUnitForm.vue';
 import { useModal } from 'vuestic-ui';
 import {unbindUnitResident,updateUnit} from '@/apis/unit';
+import detailCard from '@/components/cards/detailCard.vue';
 
 
 const route = useRoute();
 const residentId = ref(route.query.id);
+const labelsProp = ref<string[]>(['ID', 'NAME', 'EMAIL']);
+const datasProp = computed(() => {
+  if (resident.value) {
+    return [
+      resident.value.id,
+      resident.value.name,
+      resident.value.email,
+    ];
+  }
+  return [];
+});
 const resident = ref<resident_user_type | null>(null);
 const residentToEdit = ref<resident_user_type | null>(null);
 const editable = ref(false);

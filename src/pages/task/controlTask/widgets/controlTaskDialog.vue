@@ -2,24 +2,12 @@
     <VaCard class="w-full h-full flex">
       <div class="w-full h-full flex flex-col ml-3">
         <!-- Top Section -->
-        <div class="flex flex-row justify-between">
-          <div class="grid grid-cols-[1fr_3fr]" :class="{ 'gap-y-[2.2px]': !editable }">
-            <VaListLabel class="flex justify-start">ID</VaListLabel>
-            <span>{{ controlTask?.id }}</span>
-            <VaListLabel class="flex justify-start">Name</VaListLabel>
-            <span>{{ controlTask?.name }}</span>
-            <VaListLabel class="flex justify-start">Tag</VaListLabel>
-            <span>{{ controlTask?.tag }}</span>
-            <VaListLabel class="flex justify-start">Operation</VaListLabel>
-            <span>{{ controlTask?.operation }}</span>
-            <VaListLabel class="flex justify-start">Interval</VaListLabel>
-            <span>{{ controlTask?.interval }}</span>
-            <VaListLabel class="flex justify-start">Start Time</VaListLabel>
-            <span>{{ controlTask?.startAt }}</span>
-            <VaListLabel class="flex justify-start">Gateway ID</VaListLabel>
-            <div class="flex flex-row justify-between mr-3 items-center gap-3">
-              <span>{{ controlTask?.gatewayId }}</span>
-              <VaPopover color="backgroundSecondary" trigger="click" :style="{ '--va-popover-content-background-color': '#ffffff' }">
+        <detailCard :labels="labelsProp" :datas="datasProp" :fontWeight="`font-bold`" :indexWeight="3" >
+          <div class="flex flex-col relative">
+            <div class="flex flex-row  mr-3 items-center gap-3">
+              <VaListLabel class="flex justify-start">Gateway</VaListLabel>
+              <span class="absolute ml-20 truncate text-[16px]">{{ controlTask?.gatewayId }}</span>
+              <VaPopover class="absolute ml-52" color="backgroundSecondary" trigger="click" :style="{ '--va-popover-content-background-color': '#ffffff' }">
                 <VaIcon :name="arrowDirection(isGatewayCollapsed)" size="20px" @click="isGatewayCollapsed = !isGatewayCollapsed" />
                 <template #body>
                   <div class="grid grid-cols-[1fr_3fr] border border-solid p-2 rounded-md shadow-lg">
@@ -37,10 +25,11 @@
                 </template>
               </VaPopover>
             </div>
-            <VaListLabel class="flex justify-start">Meter ID</VaListLabel>
-            <div class="flex flex-row justify-between mr-3 items-center gap-3">
-              <span>{{ controlTask?.meterId }}</span>
-              <VaPopover color="backgroundSecondary" trigger="click" :style="{ '--va-popover-content-background-color': '#ffffff' }">
+            
+            <div class="flex flex-row mr-3 items-center gap-3">
+              <VaListLabel class="flex justify-start">Meter</VaListLabel>
+              <span class="absolute ml-20 truncate text-[16px]">{{ controlTask?.meter?.name }}</span>
+              <VaPopover class="absolute ml-52" color="backgroundSecondary" trigger="click" :style="{ '--va-popover-content-background-color': '#ffffff' }">
                 <VaIcon :name="arrowDirection(isMeterCollapsed)" size="20px" @click="isMeterCollapsed = !isMeterCollapsed" />
                 <template #body>
                   <div class="grid grid-cols-[1fr_3fr] border border-solid p-2 rounded-md shadow-lg">
@@ -61,7 +50,8 @@
               </VaPopover>
             </div>
           </div>
-        </div>
+
+        </detailCard>
             
         <!-- Footer Section -->
         <div class="dialog-footer">
@@ -79,12 +69,13 @@
   </template>
   
   <script lang="ts" setup>
-  import { ref, onBeforeMount } from 'vue';
+  import { ref, onBeforeMount , computed} from 'vue';
   import { task_type } from '../../../../data/task';
   import { useRoute } from 'vue-router';
   import { fetchTask, updateTask} from '../../../../apis/task';
   import EditControlTaskForm from './editControlTaskForm.vue';
   import { useToast } from 'vuestic-ui';
+  import detailCard from '@/components/cards/detailCard.vue';
   interface task_type_fetch {
     id: number,
     name: string,
@@ -122,6 +113,20 @@
   }
   const toast = useToast();
   const controlTask = ref<task_type_fetch| null>(null);
+  const labelsProp = ref<string[]>(['ID', 'TAG', 'Operation', 'Interval', 'Start Time', 'Active', 'editable', 'CreatedAt', 'UUID'])
+  const datasProp = computed(() => {
+  return [
+    controlTask.value?.id,
+    controlTask.value?.tag,
+    controlTask.value?.operation,
+    controlTask.value?.interval,
+    controlTask.value?.startAt,
+    controlTask.value?.active,
+    controlTask.value?.editable,
+    controlTask.value?.createdAt,
+    controlTask.value?.uuid
+  ]
+})
   const route = useRoute();
   const controlTaskId = ref(route.query.id);
   const editable = ref(false);
