@@ -7,3 +7,10 @@ export const login = (data: any) => {
     data,
   })
 }
+
+export const fetchPreferences = () => {
+  return request({
+    url: '/admin/preferences',
+    method: 'get',
+  })
+}
