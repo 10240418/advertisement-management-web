@@ -8,8 +8,8 @@
         <!-- Logs Card Component -->
         <LogsCard class="stretch-item"></LogsCard>
       </div>
-      <section class="flex flex-col border rounded-[1px]">
-        <h1 class="text-[14px] font-bold text-secondary uppercase ml-2 mt-1">Meter Status</h1>
+      <section class="flex flex-col border rounded-[3px]">
+        <h1 class="text-[14px] font-bold text-secondary uppercase ml-2 my-3">Meter Status</h1>
         <MeterTable></MeterTable>
       </section>
     </VaCardContent>

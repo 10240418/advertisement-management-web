@@ -31,7 +31,7 @@
         :amount="meter.amount"
         :switch="meter.switch"
         :updated-at="meter.updatedAt"
-        class="border-t border-gray-300 shadow-md rounded-md bg-red-50 w-full h-full hover:bg-gray-100 cursor-pointer"
+        class="border-t border-l border-gray-300 shadow-md rounded-md bg-red-50 w-full h-full hover:bg-gray-100 cursor-pointer"
         @click="showEditMeterDialog(meter.id)"
       >
         <template #icon>

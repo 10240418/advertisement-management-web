@@ -35,7 +35,6 @@
         </div>
       </section>
     </VaCardContent>
-
     <VaCardTitle class="flex justify-end">{{ id }}</VaCardTitle>
   </VaCard>
 </template>

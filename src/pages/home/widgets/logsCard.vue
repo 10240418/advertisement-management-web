@@ -40,8 +40,8 @@ const showTaskWindow = (taskId: number) => {
 </script>
 
 <template>
-  <VaCard class="border rounded-[1px] w-full">
-    <h1 class="text-[14px] font-bold text-secondary uppercase ml-2 mt-1">Error Logs</h1>
+  <VaCard class="border rounded-[3px] w-full">
+    <h1 class="text-[14px] font-bold text-secondary uppercase ml-2 my-3">Error Logs</h1>
     <VaCard class="h-[260px] w-full overflow-y-scroll">
       <table class="mt-1 ml-2">
         <tbody>
