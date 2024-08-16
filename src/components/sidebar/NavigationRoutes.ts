@@ -101,10 +101,10 @@ export default {
           name: 'login',
           displayName: 'menu.login',
         },
-        {
-          name: 'preferences',
-          displayName: 'menu.preferences',
-        }
+        // {
+        //   name: 'preferences',
+        //   displayName: 'menu.preferences',
+        // }
       
       ],
     },
