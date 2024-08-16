@@ -1,6 +1,6 @@
 <template>
   <VaCard class="border rounded-[3px] w-38% flex flex-col">
-    <h1 class="text-[14px] text-secondary font-bold uppercase ml-2 mt-1">Abnormal Status</h1>
+    <h1 class="text-[14px] font-bold text-secondary uppercase ml-2 my-3">Abnormal Status</h1>
     <div class="flex flex-col justify-around px-4 pt-1 pb-3 gap-4 grow">
       <div class="w-full flex justify-between">
         <div class="flex content-center gap-1">
