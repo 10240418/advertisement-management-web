@@ -120,7 +120,7 @@ onBeforeUnmount(() => {
 
     <template #cell(createdAt)="{ rowData }">
       <div >
-        {{ moment(rowData.createdAt).format('YYYY-MM-DD HH:mm')}}
+        {{ moment(rowData.createdAt).format('YYYY-MM-DD HH:mm:ss')}}
       </div>
     </template>
     <template #cell(name)="{ rowData }">

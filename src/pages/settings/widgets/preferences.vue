@@ -168,9 +168,10 @@ const savePreferences = async () => {
       language: selectLanguage.value.value,
       timezone: selectTimeZone.value.value,
     })
-    preferences.value = { ...formData.value }
+    await fetch()
     showModal.value = false
     toast.init({ message: 'Preferences saved successfully', color: 'success' })
+    
   } catch (error) {
     toast.init({ message: `${error}`, color: 'danger' })
     console.error('Error saving preferences:', error)

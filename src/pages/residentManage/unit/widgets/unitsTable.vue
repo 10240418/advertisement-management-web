@@ -120,7 +120,7 @@ onBeforeUnmount(() => {
     v-model:sort-by="props.sorting.sortBy" v-model:sorting-order="props.sorting.sortingOrder">
 
     <template #cell(createdAt)="{ rowData }">
-      <div class="max-w-[120px] ">{{ moment(rowData.createdAt).format('YYYY-MM-DD HH:mm')}}</div>
+      <div class="max-w-[120px] ">{{ moment(rowData.createdAt).format('YYYY-MM-DD HH:mm:ss')}}</div>
     </template>
     <template #cell(floor)="{ rowData }">
       <div class="max-w-[120px] ellipsis">{{ rowData.floor }}</div>

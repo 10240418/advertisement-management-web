@@ -3,7 +3,7 @@
       v-model:sort-by="props.sorting.sortBy" v-model:sorting-order="props.sorting.sortingOrder">
 
       <template #cell(startAt)="{ rowData }">
-        <div class="flex flex-col">{{ moment(rowData.startAt).format('YYYY-MM-DD HH:mm') }}</div>
+        <div class="flex flex-col">{{ moment(rowData.startAt).format('YYYY-MM-DD HH:mm:ss') }}</div>
       </template>
       <template #cell(detail)="{ rowData }">
         <VaButton preset="secondary" id="detailTask" size="small" icon="mso-info" aria-label="Info Task"

@@ -270,7 +270,10 @@ const fetch = async () => {
             const reslog = await fetchReadMeterLogsData({ id: meterId.value, ...pagination.value });
             readLogsData.value = reslog.data.data;
             labelsReadMeterLogs.value = reslog.data.data.map((log: read_meter_log_type) => formattedDate(log.createdAt));
-            dataReadMeterLogs.value = reslog.data.data.map((log: read_meter_log_type) => log.powerEnergy);
+            dataReadMeterLogs.value = reslog.data.data.map((log: any) => {
+                if(log.powerEnergy===0)return log.powerEnergy;
+                else return log.volume;
+        });
             const resStatus = await readMeter({ id: meterId.value });
             if (meter.value?.type === 1) {
                 meterStatus.value = resStatus.data.data.switch;
