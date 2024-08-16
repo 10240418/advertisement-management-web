@@ -90,24 +90,24 @@ export default {
       ]
     },
     
-    {
-      name: 'auth',
-      displayName: 'menu.auth',
-      meta: {
-        icon: 'login',
-      },
-      children: [
-        {
-          name: 'login',
-          displayName: 'menu.login',
-        },
-        // {
-        //   name: 'preferences',
-        //   displayName: 'menu.preferences',
-        // }
+    // {
+    //   name: 'auth',
+    //   displayName: 'menu.auth',
+    //   meta: {
+    //     icon: 'login',
+    //   },
+    //   children: [
+    //     {
+    //       name: 'login',
+    //       displayName: 'menu.login',
+    //     },
+    //     {
+    //       name: 'preferences',
+    //       displayName: 'menu.preferences',
+    //     }
       
-      ],
-    },
+    //   ],
+    // },
     {
       name: 'adminUsers',
       displayName: 'menu.adminUser',
