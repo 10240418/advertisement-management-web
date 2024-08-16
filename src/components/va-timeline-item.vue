@@ -1,5 +1,5 @@
 <template>
-  <tr class="flex flex-row justify-between gap-1 ">
+  <tr class="flex flex-row justify-between gap-1">
     <div class="flex flex-row gap-2">
       <td class="flex flex-col justify-center items-center">
         <div>
@@ -8,14 +8,14 @@
         <div class="flex w-[2px] bg-slate-200 h-full"></div>
       </td>
 
-      <td class="va-timeline-item__content-cell  justify-center items-center">
+      <td class="va-timeline-item__content-cell justify-center items-center">
         <div class="flex flex-row justify-center items-center gap-2">
           <slot />
         </div>
       </td>
     </div>
 
-    <td class="va-timeline-item__date-cell  ">
+    <td class="va-timeline-item__date-cell">
       <slot name="date">
         {{ $props.date }}
       </slot>
@@ -41,6 +41,5 @@ defineProps({
     padding-left: 0.5rem;
     text-align: end;
   }
-
 }
 </style>

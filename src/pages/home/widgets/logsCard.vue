@@ -1,60 +1,70 @@
 <script setup lang="ts">
-import { onBeforeMount, PropType, ref } from 'vue'
-import router from '../../../router'
+import { onBeforeMount, ref } from 'vue'
 import VaTimelineItem from '@/components/va-timeline-item.vue'
-import { fetchErrorLogs } from '@/apis/task';
-import { useToast } from 'vuestic-ui/web-components';
+import { fetchErrorLogs } from '@/apis/task'
+import { useToast } from 'vuestic-ui/web-components'
 
 const errorLogs = ref<any>([])
 const toast = useToast()
 const fetch = async () => {
-  fetchErrorLogs().then(res => {
-    errorLogs.value = res.data.data;
-  }).catch(err => {
-    toast.init({ message: `err`, color: 'danger' })
-  })
+  fetchErrorLogs()
+    .then((res) => {
+      errorLogs.value = res.data.data
+    })
+    .catch((err) => {
+      console.log(123, err.response.data)
+      toast.init({ message: `err`, color: 'danger' })
+    })
 }
+
 onBeforeMount(() => {
   fetch()
 })
-const formattedDate = (isoDate: string): string => {
-  const date = new Date(isoDate);
-  return date.toLocaleString('en-US', {
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false // 24-hour format
-  }).replace(',', ''); // Remove the comma between date and time
-};
 
+const formattedDate = (isoDate: string): string => {
+  const date = new Date(isoDate)
+  return date
+    .toLocaleString('en-US', {
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false, // 24-hour format
+    })
+    .replace(',', '') // Remove the comma between date and time
+}
+
+const showTaskWindow = (taskId: number) => {
+  window.open(`/taskDetail?id=${taskId}`, `/taskDetail?id=${taskId}`, 'width=800,height=600,left=500,top=500')
+}
 </script>
 
 <template>
-  <VaCard class="border rounded-[1px] w-full ">
-    <h1 class="text-[10px] text-secondary font-bold uppercase ml-1">Error Logs</h1>
-    <VaCard class="h-[260px]  w-full overflow-y-scroll">
+  <VaCard class="border rounded-[1px] w-full">
+    <h1 class="text-[14px] font-bold text-secondary uppercase ml-2 mt-1">Error Logs</h1>
+    <VaCard class="h-[260px] w-full overflow-y-scroll">
       <table class="mt-1 ml-2">
         <tbody>
           <tr v-for="(item, index) in errorLogs" :key="index">
             <VaTimelineItem :date="formattedDate(item.taskInstance.startAt)">
-              <VaPopover color="backgroundSecondary" trigger="click"
-                :style="{ '--va-popover-content-background-color': '#ffffff', }">
-
-                <div class="flex flex-col  mr-2  hover:bg-blue-50  " @click="">
+              <VaPopover
+                color="backgroundSecondary"
+                trigger="click"
+                :style="{ '--va-popover-content-background-color': '#ffffff' }"
+              >
+                <div class="flex flex-col mr-2 hover:bg-blue-50 mb-3">
                   <div class="flex flex-row gap-2">
-                    <span>{{ item.taskInstance.name }}</span>
-                    <span class="text-slate-400">Operation:</span> 
-                    <span >{{ item.taskInstance.operation }}</span>
-                    <span class="text-slate-400">Meter:</span>
-
-                    <span >{{ item.taskInstance.meterId }}</span>
+                    <span class="flex-none text-slate-400 text-[18px]">Error while executing task: </span>
+                    <span class="flex-none text-primary text-[18px]" @click="showTaskWindow(item.taskInstance.Id)">{{
+                      item.taskInstance.name
+                    }}</span>
+                    <span class="flex-none text-slate-400 text-[18px]">Err: </span>
+                    <div>
+                      <span class="flex-none text-red-300 text-[18px]">{{ item.error }}</span>
+                    </div>
                   </div>
-                  <div class="flex flex-row">
-                    <span class="text-red-500 max-w-[100%] ">{{ item.error }}</span>
-                  </div>
-                  <div class="h-[3px]"></div>
                 </div>
+
                 <template #body>
                   <div class="border border-solid flex flex-col justify-start rounded-md shadow-lg p-4">
                     <div class="flex items-start mb-2">
@@ -111,9 +121,11 @@ const formattedDate = (isoDate: string): string => {
                     </div>
                   </div>
                 </template>
-
-
               </VaPopover>
+
+              <template #date>
+                <span class="text-[18px]"> {{ formattedDate(item.taskInstance.startAt) }}</span>
+              </template>
             </VaTimelineItem>
           </tr>
         </tbody>

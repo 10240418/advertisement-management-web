@@ -1,25 +1,25 @@
 <template>
-  <VaCard >
+  <VaCard>
     <VaCardContent>
       <div class="flex flex-row mb-2 stretch-container">
         <!-- Total Page Component -->
-        <totalPage class="stretch-item"></totalPage>
+        <TotalPage class="stretch-item"></TotalPage>
 
         <!-- Logs Card Component -->
-        <logsCard class="stretch-item"></logsCard>
+        <LogsCard class="stretch-item"></LogsCard>
       </div>
       <section class="flex flex-col border rounded-[1px]">
-        <h1 class="text-[10px] text-secondary font-bold uppercase mb-2 ml-1">Meter Status</h1>
-        <meterTable></meterTable>
+        <h1 class="text-[14px] font-bold text-secondary uppercase ml-2 mt-1">Meter Status</h1>
+        <MeterTable></MeterTable>
       </section>
     </VaCardContent>
   </VaCard>
 </template>
 
 <script lang="ts" setup>
-import totalPage from './widgets/totalCard.vue'
-import logsCard from './widgets/logsCard.vue'
-import meterTable from './widgets/meterTable.vue'
+import TotalPage from './widgets/TotalCard.vue'
+import LogsCard from './widgets/LogsCard.vue'
+import MeterTable from './widgets/MeterTable.vue'
 </script>
 
 <style scoped>

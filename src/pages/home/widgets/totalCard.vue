@@ -1,49 +1,76 @@
 <template>
-  <VaCard class="border rounded-[1px] w-38% ">
-    <h1 class="text-[10px] text-secondary font-bold uppercase ml-1">Abnormal Status</h1>
-    <div class="grid grid-cols-[1fr_7fr_3fr] mt-2  ml-3 mr-2 gap-4">
-      <VaIcon name="mso-location_away" color="primary"></VaIcon>
-      <span class="text-[16px]">Users:</span>
-      <span class="text-[16px]">{{ globalStore?.totalResidents }}</span>
-      <VaIcon name="mso-home" color="primary"></VaIcon>
-      <span class="text-[16px]">Units:</span>
-      <span class="text-[16px]">{{ globalStore?.totalUnits }}</span>
-      <VaIcon name="mso-wifi" color="primary"></VaIcon>
-      <span class="text-[16px]">Gateways:</span>
-      <span class="text-[16px]">{{ globalStore?.totalGateways }}</span>
-      <VaIcon name="mso-keyboard_alt" color="primary"></VaIcon>
-      <span class="text-[16px]">Devices:</span>
-      <span class="text-[16px]">{{ globalStore?.totalMeters }}</span>
-      <VaIcon name="mso-water_drop" color="primary"></VaIcon>
-      <span class="text-[16px]">Water Meters:</span>
-      <span class="text-[16px]">{{ globalStore?.totalWaterMeters }}</span>
-      <VaIcon name="mso-bolt" color="primary"></VaIcon>
-      <span class="text-[16px]">Electric Meters:</span>
-      <span class="text-[16px]">{{ globalStore?.totalElectricMeters }}</span>
+  <VaCard class="border rounded-[3px] w-38% flex flex-col">
+    <h1 class="text-[14px] text-secondary font-bold uppercase ml-2 mt-1">Abnormal Status</h1>
+    <div class="flex flex-col justify-around px-4 pt-1 pb-3 gap-4 grow">
+      <div class="w-full flex justify-between">
+        <div class="flex content-center gap-1">
+          <VaIcon name="mso-location_away" color="primary"></VaIcon>
+          <span :class="fontClass">Users:</span>
+        </div>
+        <span :class="valueClass">{{ globalStore?.totalResidents }}</span>
+      </div>
+      <div class="w-full flex justify-between">
+        <div class="flex content-center gap-1">
+          <VaIcon name="mso-home" color="primary"></VaIcon>
+          <span :class="fontClass">Units:</span>
+        </div>
+        <span :class="valueClass">{{ globalStore?.totalUnits }}</span>
+      </div>
+      <div class="w-full flex justify-between">
+        <div class="flex content-center gap-1">
+          <VaIcon name="mso-wifi" color="primary"></VaIcon>
+          <span :class="fontClass">Gateways:</span>
+        </div>
+        <span :class="valueClass">{{ globalStore?.totalGateways }}</span>
+      </div>
+      <div class="w-full flex justify-between">
+        <div class="flex content-center gap-1">
+          <VaIcon name="mso-keyboard_alt" color="primary"></VaIcon>
+          <span :class="fontClass">Devices:</span>
+        </div>
+        <span :class="valueClass">{{ globalStore?.totalMeters }}</span>
+      </div>
+      <div class="w-full flex justify-between">
+        <div class="flex content-center gap-1">
+          <VaIcon name="mso-water_drop" color="primary"></VaIcon>
+          <span :class="fontClass">Water Meters:</span>
+        </div>
+        <span :class="valueClass">{{ globalStore?.totalWaterMeters }}</span>
+      </div>
+      <div class="w-full flex justify-between">
+        <div class="flex content-center gap-1">
+          <VaIcon name="mso-bolt" color="primary"></VaIcon>
+          <span :class="fontClass">Electric Meters:</span>
+        </div>
+        <span :class="valueClass">{{ globalStore?.totalElectricMeters }}</span>
+      </div>
     </div>
   </VaCard>
 </template>
 
 <script lang="ts" setup>
-import { fetchTotalStatus } from '@/apis/home';
-import { onBeforeMount, ref } from 'vue';
+import { fetchTotalStatus } from '@/apis/home'
+import { onBeforeMount, ref } from 'vue'
 
 type totalStatus = {
-  totalGateways: number,
-  totalResidents: number,
-  totalUnits: number,
-  totalMeters: number,
-  totalWaterMeters: number,
-  totalElectricMeters: number,
+  totalGateways: number
+  totalResidents: number
+  totalUnits: number
+  totalMeters: number
+  totalWaterMeters: number
+  totalElectricMeters: number
 }
 
-const globalStore = ref<totalStatus>();
+const globalStore = ref<totalStatus>()
 onBeforeMount(() => {
   fetchTotalStatus().then((res) => {
-    globalStore.value = res.data;
-    console.log(res.data);
+    globalStore.value = res.data
+    console.log(res.data)
   })
 })
+
+const fontClass = 'text-[18px] text-primary font-bold'
+const valueClass = 'text-[18px] font-bold'
 </script>
 
 <style scoped>
