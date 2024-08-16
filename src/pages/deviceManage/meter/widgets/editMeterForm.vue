@@ -151,8 +151,6 @@ const onSave = () => {
       model: Number(selectModelValue.value==='MeterModelWaterHDSB'?MeterModel.MeterModelWaterHDSB:selectModelValue.value==='MeterModelWaterHDSW'?MeterModel.MeterModelWaterHDSW:MeterModel.ElectricMeterModelTEST),
       modbusAddr:newMeter.value.modbusAddr ,
       remark: newMeter.value.remark,
-      // unitId: Number(selectUnitValue.value.split(' ')[0]),
-      // gatewayId: Number(selectGatewayValue.value.split(' ')[0]),
       unitId: Number(selectUnit2Value.value.value),
       gatewayId: Number(selectGateway2Value.value.value),
     })

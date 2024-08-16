@@ -2,6 +2,7 @@
 import { defineVaDataTableColumns, useModal } from 'vuestic-ui'
 import { PropType, computed, toRef, ref, watch, onMounted, onBeforeUnmount } from 'vue'
 import { unit_type } from '../../../../data/unit'
+import moment from 'moment'
 
 const columns = defineVaDataTableColumns([
   { label: 'ID', key: 'id', sortable: true, width: '5%' },
@@ -111,11 +112,16 @@ onMounted(() => {
 onBeforeUnmount(() => {
   document.removeEventListener('click', handleClickOutside)
 })
+
 </script>
 
 <template>
   <VaDataTable :columns="columns" :items="currentPageData" :loading="$props.loading"
     v-model:sort-by="props.sorting.sortBy" v-model:sorting-order="props.sorting.sortingOrder">
+
+    <template #cell(createdAt)="{ rowData }">
+      <div class="max-w-[120px] ">{{ moment(rowData.createdAt).format('YYYY-MM-DD HH:mm')}}</div>
+    </template>
     <template #cell(floor)="{ rowData }">
       <div class="max-w-[120px] ellipsis">{{ rowData.floor }}</div>
     </template>

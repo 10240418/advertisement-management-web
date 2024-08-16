@@ -14,3 +14,11 @@ export const fetchPreferences = () => {
     method: 'get',
   })
 }
+
+export const updatePreferences = (data: any) => {
+  return request({
+    url: '/admin/preferences',
+    method: 'put',
+    data:data,
+  })
+}

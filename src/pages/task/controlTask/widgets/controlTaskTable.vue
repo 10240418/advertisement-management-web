@@ -2,6 +2,10 @@
     <VaDataTable :columns="columns" :items="currentPageData" :loading="props.loading"
       v-model:sort-by="props.sorting.sortBy" v-model:sorting-order="props.sorting.sortingOrder">
 
+      <template #cell(startAt)="{ rowData }">
+        <span>{{moment(rowData.startAt).format('YYYY-MM-DD HH:mm')}}</span>
+      </template>
+
       <template #cell(detail)="{ rowData }">
         <VaButton preset="secondary" id="detailTask" size="small" icon="mso-info" aria-label="Info Task"
                   @click="$emit('detail-task', rowData as any)" class="w-full justify-between ml-[-5px]">
@@ -57,6 +61,7 @@
   import { defineProps, defineEmits, computed, ref, watch, toRef, PropType } from 'vue';
   import { defineVaDataTableColumns, VaPopover, VaButton, VaIcon, VaInput, VaSelect, VaPagination } from 'vuestic-ui';
   import { task_type } from '../../../../data/task';
+  import moment from 'moment';
   
   const columns = defineVaDataTableColumns([
     { label: 'ID', key: 'id', sortable: true, width: '5%' },
@@ -122,6 +127,7 @@
   const showContent = (task: any) => {
     showContentTask.value = task;
   };
+ 
   </script>
   
   <style lang="scss" scoped>

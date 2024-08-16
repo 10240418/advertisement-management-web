@@ -14,10 +14,6 @@
           class="w-full  truncate" :options="gatewayOptions" />
         <VaSelect v-else v-model="selectMeterValue" label="Meter ID" class="w-full  truncate" :options="meterOptions" />
       </div>
-      <!-- <div class="flex gap-4 flex-col w-full">
-        <VaSelect v-model="selectTagValue" label="Tag" class="w-full" :options="tagOptions" />
-      </div> -->
-
       <div class="flex gap-4 flex-col w-full">
         <VaSelect v-model="selectOperationValue" label="Operation" class="w-full" :options="operationOptions" />
       </div>
