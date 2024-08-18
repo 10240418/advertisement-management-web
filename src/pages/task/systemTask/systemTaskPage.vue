@@ -50,6 +50,7 @@ import systemTaskTable from './widgets/systemTaskTable.vue'
 import editSystemTaskForm from './widgets/editSystemTaskForm.vue'
 import { useTasks } from './composables/systemTask'
 import { validators } from '../../../services/utils'
+import { openWindow } from '@/utils/openWindow'
 
 const { init: notify } = useToast()
 const doShowAddControlTaskModal = ref(false)
@@ -60,11 +61,7 @@ const taskToEdit = ref<task_type | null>(null)
 
 // Open new tab dialog
 const showEditControlTaskDialog = (task: task_type) => {
-  const newWindow = window.open(
-    `/sysTaskDetail?id=${task.id}`,
-    `/sysTaskDetail?id=${task.id}`,
-    'width=800,height=600,left=500,top=500',
-  )
+  openWindow({path: '/sysTaskDetail', query: {id: task.id}})
 }
 
 // Add modal

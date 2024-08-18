@@ -49,6 +49,7 @@ import _ from 'lodash'
 import meterTable from './widgets/meterTable.vue'
 import meterDialog from './widgets/meterDialog.vue'
 import editMeterForm from './widgets/editMeterForm.vue'
+import { openWindow } from '@/utils/openWindow'
 
 const { init: notify } = useToast()
 const doShowAddMeterModal = ref(false)
@@ -59,11 +60,7 @@ const meterToEdit = ref<meter_type | null>(null)
 
 //打开新的标签页弹窗
 const showEditMeterDialog = (meter: meter_type) => {
-  const newWindow = window.open(
-    `/meterDetail?id=${meter.id}`,
-    `/meterDetail?id=${meter.id}`,
-    'width=800,height=600,left=500,top=500',
-  )
+  openWindow({path: '/meterDetail', query: {id: meter.id}})
 }
 
 //添加弹窗

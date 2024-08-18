@@ -3,6 +3,7 @@ import VaTimelineItem from '@/components/va-timeline-item.vue'
 import { onBeforeMount, ref } from 'vue'
 import { fetchErrorLogs } from '@/apis/task'
 import { useToast } from 'vuestic-ui/web-components'
+import { openWindow } from '@/utils/openWindow';
 
 const errorLogs = ref<any>([])
 const toast = useToast()
@@ -35,7 +36,7 @@ const formattedDate = (isoDate: string): string => {
 }
 
 const showTaskWindow = (taskId: number) => {
-  window.open(`/taskDetail?id=${taskId}`, `/taskDetail?id=${taskId}`, 'width=800,height=600,left=500,top=500')
+  openWindow({path: '/taskDetail', query: {id: taskId}})
 }
 </script>
 

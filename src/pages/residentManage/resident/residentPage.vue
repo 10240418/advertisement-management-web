@@ -6,16 +6,9 @@
         <VaButton @click="showAddResidentModal">Add Resident</VaButton>
       </div>
 
-      <ResidentTable
-        :pagination="pagination"
-        :residents="residentsShowInTable"
-        :loading="isLoading"
-        :sorting="sorting"
-        @detail-resident="showEditResidentDialog"
-        @update-resident="onResidentUpdateActive"
-        @fetch-resident="fetchResidents"
-        @edit-resident="onResidentEdit"
-      />
+      <ResidentTable :pagination="pagination" :residents="residentsShowInTable" :loading="isLoading" :sorting="sorting"
+        @detail-resident="showEditResidentDialog" @update-resident="onResidentUpdateActive"
+        @fetch-resident="fetchResidents" @edit-resident="onResidentEdit" />
     </VaCardContent>
     <VaModal v-model="doShowAddResidentModal" size="small" mobile-fullscreen close-button hide-default-actions>
       <h1 class="va-h5">Add Resident</h1>
@@ -37,6 +30,7 @@ import _, { replace } from 'lodash'
 import ResidentTable from './widgets/residentTable.vue'
 import EditResidentForm from './widgets/editResidentForm.vue'
 import { usePopupStore } from '@/stores/popups'
+import { openWindow } from '@/utils/openWindow'
 
 const { init: notify } = useToast()
 const { isLoading, residents, sorting, pagination, ...residentApi } = useResidents()
@@ -54,11 +48,7 @@ const showAddResidentModal = () => {
 //detail
 const newWindow = ref<any>()
 const showEditResidentDialog = (resident: resident_user_type) => {
-  newWindow.value = window.open(
-    `/residentDetail?id=${resident.id}`,
-    `/residentDetail?id=${resident.id}`,
-    'width=900,height=500,left=500,top=500,menubar=no,location=no,status=no,titlebar=no,toolbar',
-  )
+  openWindow({ path: '/residentDetail', query: { id: resident.id }, width: 900, height: 500 })
 }
 //edit
 const onResidentEdit = (resident: resident_user_type) => {

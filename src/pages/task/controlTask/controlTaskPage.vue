@@ -49,6 +49,7 @@ import controlTaskTable from './widgets/controlTaskTable.vue'
 import editControlTaskForm from './widgets/editControlTaskForm.vue'
 import { useTasks } from './composables/controlTask'
 import { validators } from '@/services/utils'
+import { openWindow } from '@/utils/openWindow'
 
 const { init: notify } = useToast()
 const doShowAddControlTaskModal = ref(false)
@@ -59,11 +60,7 @@ const taskToEdit = ref<task_type | null>(null)
 
 // Open new tab dialog
 const showEditControlTaskDialog = (task: task_type) => {
-  const newWindow = window.open(
-    `/taskDetail?id=${task.id}`,
-    `/taskDetail?id=${task.id}`,
-    'width=800,height=600,left=500,top=500',
-  )
+  openWindow({path: '/taskDetail', query: {id: task.id}})
 }
 
 // Add modal

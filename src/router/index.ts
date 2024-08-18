@@ -93,6 +93,7 @@ const routes: Array<RouteRecordRaw> = [
       },
     ],
   },
+
   {
     path: '/auth',
     component: AuthLayout,
@@ -104,6 +105,7 @@ const routes: Array<RouteRecordRaw> = [
       },
     ],
   },
+  
   {
     name: 'gatewayDetail',
     path: '/gatewayDetail/:id?', // `?` 表示可选的

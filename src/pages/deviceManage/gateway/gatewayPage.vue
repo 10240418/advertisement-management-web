@@ -41,6 +41,7 @@ import { gateway_type } from '../../../data/gateway'
 import _ from 'lodash'
 import gatewayTable from './widgets/gatewayTable.vue'
 import editGatewayForm from './widgets/editGatewayForm.vue'
+import { openWindow } from '@/utils/openWindow'
 
 const { init: notify } = useToast()
 const doShowAddGatewayModal = ref(false)
@@ -50,11 +51,7 @@ const gatewaysShowInTable = ref<gateway_type[]>([])
 const gatewayToEdit = ref<gateway_type | null>(null)
 
 const showEditGatewayDialog = (gateway: gateway_type) => {
-  const newWindow = window.open(
-    `/gatewayDetail?id=${gateway.id}`,
-    `/gatewayDetail?id=${gateway.id}`,
-    'width=900,height=600,left=500,top=500',
-  )
+  openWindow({path: '/gatewayDetail', query: {id: gateway.id}, width: 900})
 }
 
 const showAddGatewayModal = () => {
