@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { defineVaDataTableColumns, useModal } from 'vuestic-ui'
+import { defineVaDataTableColumns, useModal, useToast } from 'vuestic-ui'
 import { PropType, computed, toRef, ref, watch, onMounted, onBeforeUnmount } from 'vue'
 import { unit_type } from '../../../../data/unit'
 import moment from 'moment'
 import { exportUsageReport } from '@/apis/unit'
-import { start } from 'repl'
 // import { saveToFile } from '@/utils/saveFile';
+const toast = useToast()
 
 const columns = defineVaDataTableColumns([
   { label: 'ID', key: 'id', sortable: true, width: '5%' },
@@ -86,6 +86,11 @@ const pickupRange = (id: string) => {
 }
 
 const doExport = () => {
+  if (range.value['start'] == range.value['end']) {
+    toast.init({ message: 'Please select a range', color: 'danger' })
+    return
+  }
+
   isExportButtonLoading.value = true
   exportUsageReport(pickingRangeFor.value, {
     start: range.value['start'],
@@ -95,13 +100,13 @@ const doExport = () => {
       showRangePicker.value = false
       pickingRangeFor.value = ''
       isExportButtonLoading.value = false
-
       window.open(res.request.responseURL)
     })
     .catch((err) => {
       showRangePicker.value = false
       pickingRangeFor.value = ''
       isExportButtonLoading.value = false
+      toast.init({ message: err.response.data.error, color: 'danger' })
     })
 }
 
