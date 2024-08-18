@@ -82,18 +82,11 @@ export default defineComponent({
 
     const isActiveChildRoute = (child: INavigationRoute) => {
       // Special case for toilet section
-      if (route.name === 'toiletDetail' && child.name === 'toilet') {
-        return true
-      } else {
         return route.name === child.name
-      }
     }
 
     const routeHasActiveChild = (section: INavigationRoute) => {
       // Special case for management section
-      if (route.name === 'toiletDetail' && section.name === 'management') {
-        return true
-      }
 
       if (!section.children) {
         return route.path.endsWith(`${section.name}`)

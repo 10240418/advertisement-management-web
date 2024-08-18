@@ -2,25 +2,18 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 
 import AuthLayout from '../layouts/AuthLayout.vue'
 import AppLayout from '../layouts/AppLayout.vue'
-import RouteViewComponent from '../layouts/RouterBypass.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/:pathMatch(.*)*',
     redirect: { name: 'home' },
   },
-
   {
     name: 'admin',
     path: '/',
     component: AppLayout,
     redirect: { name: 'home' },
     children: [
-      {
-        name: 'dashboard',
-        path: 'dashboard',
-        component: () => import('../pages/dashboard/Dashboard.vue'),
-      },
       {
         name: 'home',
         path: 'home',
@@ -47,17 +40,17 @@ const routes: Array<RouteRecordRaw> = [
           {
             name: 'status',
             path: 'status',
-            component: () => import('../../src/pages/deviceManage/status/devicesStatus.vue'),
+            component: () => import('@/pages/deviceManage/status/devicesStatus.vue'),
           },
           {
             name: 'meter',
             path: 'meter',
-            component: () => import('../../src/pages/deviceManage/meter/meterPage.vue'),
+            component: () => import('@/pages/deviceManage/meter/meterPage.vue'),
           },
           {
             name: 'gateway',
             path: 'gateway',
-            component: () => import('../../src/pages/deviceManage/gateway/gatewayPage.vue'),
+            component: () => import('@/pages/deviceManage/gateway/gatewayPage.vue'),
           },
         ],
       },
@@ -67,29 +60,29 @@ const routes: Array<RouteRecordRaw> = [
           {
             name: 'controlTask',
             path: 'controlTask',
-            component: () => import('../../src/pages/task/controlTask/controlTaskPage.vue'),
+            component: () => import('@/pages/task/controlTask/controlTaskPage.vue'),
           },
           {
             name: 'systemTask',
             path: 'systemTask',
-            component: () => import('../../src/pages/task/systemTask/systemTaskPage.vue'),
+            component: () => import('@/pages/task/systemTask/systemTaskPage.vue'),
           },
         ],
       },
       {
         name: 'adminUsers',
         path: 'adminUsers',
-        component: () => import('../pages/adminUsers/adminUsersPage.vue'),
+        component: () => import('@/pages/adminUsers/adminUsersPage.vue'),
       },
       {
         name: 'settings',
         path: 'settings',
-        component: () => import('../pages/settings/Settings.vue'),
+        component: () => import('@/pages/settings/Settings.vue'),
       },
       {
         name: 'preferences',
         path: 'preferences',
-        component: () => import('../pages/auth/preferences/Preferences.vue'),
+        component: () => import('@/pages/auth/preferences/Preferences.vue'),
       },
     ],
   },
@@ -101,20 +94,20 @@ const routes: Array<RouteRecordRaw> = [
       {
         name: 'login',
         path: 'login',
-        component: () => import('../pages/auth/Login.vue'),
+        component: () => import('@/pages/auth/Login.vue'),
       },
     ],
   },
-  
+
   {
     name: 'gatewayDetail',
     path: '/gatewayDetail/:id?', // `?` 表示可选的
-    component: () => import('../pages/deviceManage/gateway/widgets/gatewayDialog.vue'),
+    component: () => import('@/pages/deviceManage/gateway/widgets/gatewayDialog.vue'),
   },
   {
     name: 'meterDetail',
     path: '/meterDetail/:id?', // `?` 表示可选的
-    component: () => import('../pages/deviceManage/meter/widgets/meterDialog.vue'),
+    component: () => import('@/pages/deviceManage/meter/widgets/meterDialog.vue'),
   },
   // {
   //   name: 'unitDetail',
@@ -124,17 +117,17 @@ const routes: Array<RouteRecordRaw> = [
   {
     name: 'residentDetail',
     path: '/residentDetail/:id?', // `?` 表示可选的
-    component: () => import('../pages/residentManage/resident/widgets/residentDialog.vue'),
+    component: () => import('@/pages/residentManage/resident/widgets/residentDialog.vue'),
   },
   {
     name: 'taskDetail',
     path: '/taskDetail/:id?', // `?` 表示可选的
-    component: () => import('../pages/task/controlTask/widgets/controlTaskDialog.vue'),
+    component: () => import('@/pages/task/controlTask/widgets/controlTaskDialog.vue'),
   },
   {
     name: 'sysTaskDetail',
     path: '/sysTaskDetail/:id?', // `?` 表示可选的
-    component: () => import('../pages/task/systemTask/widgets/systemTaskDialog.vue'),
+    component: () => import('@/pages/task/systemTask/widgets/systemTaskDialog.vue'),
   },
   {
     name: '404',

@@ -34,7 +34,7 @@ import { storeToRefs } from 'pinia'
 import { onBeforeRouteUpdate } from 'vue-router'
 import { useBreakpoint } from 'vuestic-ui'
 
-import { useGlobalStore } from '../stores/global-store'
+import { useGlobalStore } from '@/stores/global-store'
 
 import AppLayoutNavigation from '../components/app-layout-navigation/AppLayoutNavigation.vue'
 import AppNavbar from '../components/navbar/AppNavbar.vue'

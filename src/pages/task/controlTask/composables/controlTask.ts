@@ -8,12 +8,9 @@ import {
   addTask,
   updateTask,
   deleteTask,
-  fetchScheduleTasks,
-  fetchScheduleTask,
 } from '@/apis/task' // Adjust the path as needed
 import { useThrottle } from '../../../../data/dataControl'
 import { useToast } from 'vuestic-ui'
-import { useGlobalStore } from '@/stores/global-store'
 
 const makePaginationRef = () => ref<Pagination>({ pageNum: 1, pageSize: 10, total: 30 })
 const makeSortingRef = () => ref<Sorting>({ sortBy: 'id', sortingOrder: 'asc' })
@@ -30,7 +27,6 @@ export const useTasks = (options?: { pagination?: Ref<Pagination>; sorting?: Ref
   const error = ref<string | null>(null) // Error state
   const toast = useToast() // Toast for notifications
   const { sorting = makeSortingRef(), pagination = makePaginationRef() } = options || {}
-  const globalStore = useGlobalStore()
 
   const fetch = async () => {
     isLoading.value = true

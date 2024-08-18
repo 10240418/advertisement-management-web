@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts" setup>
-import meterTable from '../../home/widgets/meterTable.vue'
+import meterTable from '@/pages/home/widgets/MeterTable.vue'
 </script>
 
 <style scoped></style>

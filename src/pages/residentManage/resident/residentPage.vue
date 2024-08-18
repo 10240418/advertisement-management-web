@@ -29,7 +29,6 @@ import { resident_user_type } from '@/data/resident_user'
 import _, { replace } from 'lodash'
 import ResidentTable from './widgets/residentTable.vue'
 import EditResidentForm from './widgets/editResidentForm.vue'
-import { usePopupStore } from '@/stores/popups'
 import { openWindow } from '@/utils/openWindow'
 
 const { init: notify } = useToast()
@@ -38,7 +37,7 @@ const residentsShowInTable = ref<resident_user_type[]>([])
 const residentToEdit = ref<resident_user_type | null>(null)
 const doShowAddResidentModal = ref(false)
 const doShowEditResidentModal = ref(false)
-const popupStore = usePopupStore()
+
 //add
 const showAddResidentModal = () => {
   doShowAddResidentModal.value = true
