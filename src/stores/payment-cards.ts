@@ -2,7 +2,7 @@
 
 import { defineStore } from 'pinia'
 import { sleep } from '../services/utils'
-import { PaymentSystemType, PaymentCard } from '../pages/cubicle/types' 
+import { PaymentSystemType, PaymentCard } from '../pages/cubicle/types'
 
 // Simulated fetch function
 const fetchPaymentCards = async () => {

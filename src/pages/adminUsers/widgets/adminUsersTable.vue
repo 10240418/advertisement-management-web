@@ -5,11 +5,11 @@ import { admin_user_type } from '../../../data/admin_user'
 import moment from 'moment'
 
 const columns = defineVaDataTableColumns([
-  { label: 'ID', key: 'id', sortable: true ,width:'5%' },
-  { label: 'Name', key: 'name', sortable: true,width:'20%'},
-  { label: 'Email', key: 'email', sortable: false ,width:'25%'},
-  { label: 'create_at', key: 'createdAt', sortable: false ,width:'25%'},
-  { label: 'Actions', key: 'actions', sortable: false ,width:'5%'},
+  { label: 'ID', key: 'id', sortable: true, width: '5%' },
+  { label: 'Name', key: 'name', sortable: true, width: '20%' },
+  { label: 'Email', key: 'email', sortable: false, width: '25%' },
+  { label: 'create_at', key: 'createdAt', sortable: false, width: '25%' },
+  { label: 'Actions', key: 'actions', sortable: false, width: '5%' },
 ])
 
 const props = defineProps({
@@ -56,12 +56,11 @@ const onUserDelete = async (user: any) => {
 }
 
 const currentPageData = computed(() => {
-
-  let usersArray: any = [];
+  let usersArray: any = []
   if (Array.isArray(users.value)) {
-    usersArray = users.value;
-  }else if (users.value && typeof users.value === 'object'){
-    usersArray = [users.value];
+    usersArray = users.value
+  } else if (users.value && typeof users.value === 'object') {
+    usersArray = [users.value]
   }
   const startIndex = (props.pagination.pageNum - 1) * props.pagination.pageSize
   const endIndex = startIndex + props.pagination.pageSize
@@ -71,24 +70,25 @@ const currentPageData = computed(() => {
 })
 
 watch(
-  () => [props.pagination.pageNum, props.pagination.pageSize,props.sorting.sortingOrder,props.sorting.sortBy],
+  () => [props.pagination.pageNum, props.pagination.pageSize, props.sorting.sortingOrder, props.sorting.sortBy],
   () => {
     console.log(props.sorting.sortingOrder)
     console.log(props.sorting.sortBy)
-    if(props.pagination.total < props.pagination.pageSize * (props.pagination.pageNum - 1)){
-      props.pagination.pageNum = 1;
+    if (props.pagination.total < props.pagination.pageSize * (props.pagination.pageNum - 1)) {
+      props.pagination.pageNum = 1
     }
-      emit('fectch-user', { pageNum: props.pagination.pageNum, pageSize: props.pagination.pageSize,desc: props.sorting.sortOrder==="desc"? true:false})
-    
-
-  }
+    emit('fectch-user', {
+      pageNum: props.pagination.pageNum,
+      pageSize: props.pagination.pageSize,
+      desc: props.sorting.sortOrder === 'desc' ? true : false,
+    })
+  },
 )
 
 console.log(props.sorting.sortingOrder)
 //气泡提示框
 const showContentUser = ref<admin_user_type | null>(null)
 const showContent = (rowData: any) => {
-  
   if (showContentUser.value === rowData) {
     showContentUser.value = null
   } else {
@@ -98,7 +98,7 @@ const showContent = (rowData: any) => {
 const handleClickOutside = (event: MouseEvent) => {
   const target = event.target as HTMLElement
   const dropdowns = document.querySelectorAll('.dropdown-content')
-  dropdowns.forEach(dropdown => {
+  dropdowns.forEach((dropdown) => {
     if (!dropdown.contains(target)) {
       showContentUser.value = null
     }
@@ -115,12 +115,16 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <VaDataTable :columns="columns" :items="currentPageData" :loading="$props.loading"
-  v-model:sort-by="props.sorting.sortBy" v-model:sorting-order="props.sorting.sortingOrder">
-
+  <VaDataTable
+    :columns="columns"
+    :items="currentPageData"
+    :loading="$props.loading"
+    v-model:sort-by="props.sorting.sortBy"
+    v-model:sorting-order="props.sorting.sortingOrder"
+  >
     <template #cell(createdAt)="{ rowData }">
-      <div >
-        {{ moment(rowData.createdAt).format('YYYY-MM-DD HH:mm:ss')}}
+      <div>
+        {{ moment(rowData.createdAt).format('YYYY-MM-DD HH:mm:ss') }}
       </div>
     </template>
     <template #cell(name)="{ rowData }">
@@ -135,31 +139,45 @@ onBeforeUnmount(() => {
       </div>
     </template>
 
-    <template #cell(actions)="{ rowData }" class=" overflow-y-scroll max-h[40px]">
+    <template #cell(actions)="{ rowData }" class="overflow-y-scroll max-h[40px]">
       <VaPopover placement="bottom" trigger="click" color=" backgroundSecondary">
-        <div class="flex  items-center justify-center  relative  hover:bg-slate-100  rounded-[4px]"
-          @click.stop="showContent(rowData)">
-          <VaIcon name="more_horiz" size="20px" class="mr-2 cursor-pointer">
-          </VaIcon>
+        <div
+          class="flex items-center justify-center relative hover:bg-slate-100 rounded-[4px]"
+          @click.stop="showContent(rowData)"
+        >
+          <VaIcon name="more_horiz" size="20px" class="mr-2 cursor-pointer"> </VaIcon>
         </div>
         <template #body>
           <transition name="fade">
-        <div v-show="showContentUser?.id === rowData.id"
-          class="tooltip-content flex flex-col  justify-center z-999 items-center relative  border border-solid border-gray-300 p-2 rounded-md shadow-lg">
-          <VaButton preset="secondary" size="small" icon="mso-edit" aria-label="Edit user"
-            @click="$emit('edit-user', rowData as any)" class="w-full justify-between">
-            <span>Edit</span>
-          </VaButton>
-          <VaButton preset="secondary" size="small" icon="mso-delete" color="danger" aria-label="Delete user"
-            @click="onUserDelete(rowData)" class="w-full">
-            <span>Delete</span>
-          </VaButton>
-        </div>
-      </transition>
+            <div
+              v-show="showContentUser?.id === rowData.id"
+              class="tooltip-content flex flex-col justify-center z-999 items-center relative border border-solid border-gray-300 p-2 rounded-md shadow-lg"
+            >
+              <VaButton
+                preset="secondary"
+                size="small"
+                icon="mso-edit"
+                aria-label="Edit user"
+                @click="$emit('edit-user', rowData as any)"
+                class="w-full justify-between"
+              >
+                <span>Edit</span>
+              </VaButton>
+              <VaButton
+                preset="secondary"
+                size="small"
+                icon="mso-delete"
+                color="danger"
+                aria-label="Delete user"
+                @click="onUserDelete(rowData)"
+                class="w-full"
+              >
+                <span>Delete</span>
+              </VaButton>
+            </div>
+          </transition>
         </template>
       </VaPopover>
-
-      
     </template>
   </VaDataTable>
 
@@ -173,12 +191,29 @@ onBeforeUnmount(() => {
     </div>
 
     <div v-if="totalPages > 1" class="flex">
-      <VaButton preset="secondary" icon="va-arrow-left" aria-label="Previous page"
-        :disabled="$props.pagination.pageNum === 1" @click="$props.pagination.pageNum--" />
-      <VaButton class="mr-2" preset="secondary" icon="va-arrow-right" aria-label="Next page"
-        :disabled="$props.pagination.pageNum === totalPages" @click="$props.pagination.pageNum++" />
-      <VaPagination v-model="$props.pagination.pageNum" buttons-preset="secondary" :pages="totalPages"
-        :visible-pages="5" :boundary-links="false" :direction-links="false" />
+      <VaButton
+        preset="secondary"
+        icon="va-arrow-left"
+        aria-label="Previous page"
+        :disabled="$props.pagination.pageNum === 1"
+        @click="$props.pagination.pageNum--"
+      />
+      <VaButton
+        class="mr-2"
+        preset="secondary"
+        icon="va-arrow-right"
+        aria-label="Next page"
+        :disabled="$props.pagination.pageNum === totalPages"
+        @click="$props.pagination.pageNum++"
+      />
+      <VaPagination
+        v-model="$props.pagination.pageNum"
+        buttons-preset="secondary"
+        :pages="totalPages"
+        :visible-pages="5"
+        :boundary-links="false"
+        :direction-links="false"
+      />
     </div>
   </div>
 </template>
@@ -198,17 +233,14 @@ onBeforeUnmount(() => {
   // box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.dropdown-content>* {
+.dropdown-content > * {
   margin-bottom: 0%;
-
 }
 
 .fade-enter-active,
 .fade-leave-active {
   transition: 0s;
 }
-
-
 
 .tooltip-content {
   position: relative;
@@ -238,6 +270,6 @@ onBeforeUnmount(() => {
   transform: translateX(-50%);
   border-width: 7px;
   border-style: solid;
-  border-color: transparent transparent white transparent; // 
+  border-color: transparent transparent white transparent; //
 }
 </style>

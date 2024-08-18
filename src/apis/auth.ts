@@ -19,6 +19,6 @@ export const updatePreferences = (data: any) => {
   return request({
     url: '/admin/preferences',
     method: 'put',
-    data:data,
+    data: data,
   })
 }

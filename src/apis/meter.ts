@@ -1,5 +1,4 @@
-
-import request from '.';
+import request from '.'
 
 // 获取电表列表
 export const fetchMeters = (query: any) => {
@@ -7,28 +6,29 @@ export const fetchMeters = (query: any) => {
     url: '/admin/meter',
     method: 'get',
     params: {
-      pageSize: query.pageSize, 
+      pageSize: query.pageSize,
       pageNum: query.pageNum,
-      desc:query.desc?query.desc:false,},
-  });
-};
+      desc: query.desc ? query.desc : false,
+    },
+  })
+}
 
 // 添加电表
 export const addMeter = (data: any) => {
   return request({
     url: '/admin/meter',
     method: 'post',
-    data:{
-      name:data.name,
-      type:data.type as number,
-      model:data.model as number,
-      modbusAddr:data.modbusAddr as number,
-      gatewayId:data.gatewayId as number,
-      remark:data.remark,
-      unitId:data.unitId as number,
+    data: {
+      name: data.name,
+      type: data.type as number,
+      model: data.model as number,
+      modbusAddr: data.modbusAddr as number,
+      gatewayId: data.gatewayId as number,
+      remark: data.remark,
+      unitId: data.unitId as number,
     },
-  });
-};
+  })
+}
 // {
 //   "name": "Test2Mete2r 02201223",
 //   "type": 1,
@@ -43,38 +43,38 @@ export const fetchMeter = (data: any) => {
     url: `/admin/meter/${data.id}`,
     method: 'get',
   })
-};
+}
 // 删除电表
 export const deleteMeter = (ids: number[]) => {
   return request({
     url: `/admin/meter`,
     method: 'delete',
-    data:{
-      ids:ids
-    }
-  });
-};
+    data: {
+      ids: ids,
+    },
+  })
+}
 // {
 //   ids:[]
 // }
 
 // 更新电表信息
-export const updateMeter = ( data: any) => {
+export const updateMeter = (data: any) => {
   return request({
     url: `/admin/meter`,
     method: 'put',
-    data:{
-      id:data.id,
-      name:data.name,
-      type:data.type,
-      model:data.model,
-      modbusAddr:data.modbusAddr,
-      remark:data.remark,
-      unitId:data.unitId,
-      gatewayId:data.gatewayId,
+    data: {
+      id: data.id,
+      name: data.name,
+      type: data.type,
+      model: data.model,
+      modbusAddr: data.modbusAddr,
+      remark: data.remark,
+      unitId: data.unitId,
+      gatewayId: data.gatewayId,
     },
-  });
-};
+  })
+}
 // {
 //   "id": 7,
 //   "name": "TestMeter 003",
@@ -89,16 +89,16 @@ export const operateMeter = (query: any) => {
   return request({
     url: `/admin/meter/${query.id}/operate`,
     method: 'post',
-    data:query.body
-  });
-};
+    data: query.body,
+  })
+}
 
 export const readMeter = (query: any) => {
   return request({
     url: `/admin/meter/${query.id}/realtime`,
     method: 'get',
-  });
-};
+  })
+}
 // {
 //   "data": {
 //     "voltage": 235.2000035047531,
@@ -117,38 +117,35 @@ export const fetchReadMeterLogsData = (query: any) => {
     url: `/admin/meter/${query.id}/data`,
     method: 'get',
     params: {
-      pageSize: query.pageSize, 
+      pageSize: query.pageSize,
       pageNum: query.pageNum,
     },
-  });
-};
+  })
+}
 export const fetchOperateMeterLogsData = (query: any) => {
   return request({
     url: `/admin/meter/${query.id}/operating_log`,
     method: 'get',
     params: {
-      pageSize: query.pageSize, 
+      pageSize: query.pageSize,
       pageNum: query.pageNum,
-    }
+    },
   })
 }
 
-export const fetchMeterStatus = ()=>{
+export const fetchMeterStatus = () => {
   return request({
-    url:`/admin/meter/status`,
-    method:'get',
+    url: `/admin/meter/status`,
+    method: 'get',
   })
 }
 
-export const fetchMeterStatusByType = (query:any)=>{
+export const fetchMeterStatusByType = (query: any) => {
   return request({
-    url:`/admin/meter/status`,
-    method:`get`,
-    params:{
-      type:query
-    }
+    url: `/admin/meter/status`,
+    method: `get`,
+    params: {
+      type: query,
+    },
   })
 }
-
-
-

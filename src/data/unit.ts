@@ -1,8 +1,8 @@
 export type unit_type = {
-  id: number,
-  createdAt: string,
-  floor: string,
-  unit: string,
+  id: number
+  createdAt: string
+  floor: string
+  unit: string
   remark: string
 }
 // {

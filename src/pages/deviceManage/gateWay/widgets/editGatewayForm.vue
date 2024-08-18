@@ -32,17 +32,18 @@ watch(
       console.log('newGateway', newGateway.value)
     }
   },
-  { immediate: true }
+  { immediate: true },
 )
 
 const form = useForm('add-gateway-form')
 
 const onSave = () => {
   if (form.validate()) {
-    if(props.modelValue?.id){
-      emit('update:modelValue', {id:props.modelValue.id,...newGateway.value})
+    if (props.modelValue?.id) {
+      emit('update:modelValue', { id: props.modelValue.id, ...newGateway.value })
+    } else {
+      emit('update:modelValue', newGateway.value)
     }
-    else{emit('update:modelValue', newGateway.value)}
     emit('save', newGateway.value)
   }
 }
@@ -53,14 +54,24 @@ const onCancel = () => {
 </script>
 
 <template>
-  <VaForm v-slot="{ isValid }" ref="add-gateway-form" class="flex-col justify-start items-start gap-4 inline-flex w-full">
+  <VaForm
+    v-slot="{ isValid }"
+    ref="add-gateway-form"
+    class="flex-col justify-start items-start gap-4 inline-flex w-full"
+  >
     <div class="self-stretch flex-col justify-start items-start gap-4 flex">
       <div class="flex gap-4 flex-col w-full">
         <VaInput v-model="newGateway.name" label="Name" class="w-full" :rules="[validators.required]" name="name" />
       </div>
 
       <div class="flex gap-4 flex-col w-full">
-        <VaInput v-model="newGateway.ipAddr" label="IP Address" class="w-full" :rules="[validators.required,validators.ipAddress]" name="ip_address" />
+        <VaInput
+          v-model="newGateway.ipAddr"
+          label="IP Address"
+          class="w-full"
+          :rules="[validators.required, validators.ipAddress]"
+          name="ip_address"
+        />
       </div>
 
       <div class="flex gap-4 flex-col w-full">

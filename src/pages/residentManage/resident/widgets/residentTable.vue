@@ -1,5 +1,15 @@
 <script setup lang="ts">
-import { defineVaDataTableColumns, useModal, VaPopover, VaButton, VaIcon, VaChip, VaSelect, VaPagination, VaInput } from 'vuestic-ui'
+import {
+  defineVaDataTableColumns,
+  useModal,
+  VaPopover,
+  VaButton,
+  VaIcon,
+  VaChip,
+  VaSelect,
+  VaPagination,
+  VaInput,
+} from 'vuestic-ui'
 import { PropType, computed, toRef, ref, watch } from 'vue'
 import { resident_user_type } from '@/data/resident_user'
 
@@ -54,7 +64,6 @@ const onResidentUpdate = async (resident: any) => {
   }
 }
 
-
 const currentPageData = computed(() => {
   let residentsArray: any = []
   if (Array.isArray(residents.value)) {
@@ -79,14 +88,19 @@ watch(
     if (props.pagination.total < props.pagination.pageSize * (props.pagination.pageNum - 1)) {
       props.pagination.pageNum = 1
     }
-    (emit('fetch-resident'))
-  }
+    emit('fetch-resident')
+  },
 )
 </script>
 
 <template>
-  <VaDataTable :columns="columns" :items="currentPageData" :loading="props.loading"
-    v-model:sort-by="props.sorting.sortBy" v-model:sorting-order="props.sorting.sortingOrder">
+  <VaDataTable
+    :columns="columns"
+    :items="currentPageData"
+    :loading="props.loading"
+    v-model:sort-by="props.sorting.sortBy"
+    v-model:sorting-order="props.sorting.sortingOrder"
+  >
     <template #cell(name)="{ rowData }">
       <div class="max-w-[120px] ellipsis">{{ rowData.name }}</div>
     </template>
@@ -100,33 +114,54 @@ watch(
     </template>
 
     <template #cell(active)="{ rowData }">
-
-      <VaBadge :text="rowData.active ? 'Yes' : 'No'" :color="rowData.active ? 'success' : 'secondary' "/>
+      <VaBadge :text="rowData.active ? 'Yes' : 'No'" :color="rowData.active ? 'success' : 'secondary'" />
     </template>
 
-    <template #cell(detail)="{ rowData }" >
-      <VaButton preset="secondary" size="small" icon="mso-info" aria-label="Info Resident"
-        @click="$emit('detail-resident', rowData as any)" class="w-full justify-between ml-[-5px]">
+    <template #cell(detail)="{ rowData }">
+      <VaButton
+        preset="secondary"
+        size="small"
+        icon="mso-info"
+        aria-label="Info Resident"
+        @click="$emit('detail-resident', rowData as any)"
+        class="w-full justify-between ml-[-5px]"
+      >
         <span>Detail</span>
       </VaButton>
     </template>
 
     <template #cell(actions)="{ rowData }" class="flex felx-row">
       <VaPopover placement="bottom" trigger="click" color="backgroundSecondary">
-        <div class="flex justify-center items-center relative hover:bg-blue-200 rounded-[4px]"
-          @click.stop="showContent(rowData)">
+        <div
+          class="flex justify-center items-center relative hover:bg-blue-200 rounded-[4px]"
+          @click.stop="showContent(rowData)"
+        >
           <VaIcon name="more_horiz" size="20px" class="mr-2 cursor-pointer" />
         </div>
         <template #body>
           <transition name="fade">
-            <div v-show="showContentResident?.id === rowData.id"
-              class="tooltip-content flex flex-col justify-center z-999 items-center relative border  p-1 rounded-md">
-              <VaButton preset="secondary" size="small" icon="mso-edit" aria-label="Edit Resident"
-                @click="$emit('edit-resident', rowData as any)" class="w-full justify-between">
+            <div
+              v-show="showContentResident?.id === rowData.id"
+              class="tooltip-content flex flex-col justify-center z-999 items-center relative border p-1 rounded-md"
+            >
+              <VaButton
+                preset="secondary"
+                size="small"
+                icon="mso-edit"
+                aria-label="Edit Resident"
+                @click="$emit('edit-resident', rowData as any)"
+                class="w-full justify-between"
+              >
                 <span>Edit</span>
               </VaButton>
-              <VaButton preset="secondary" size="small" icon="update" aria-label="Update Resident"
-                @click="onResidentUpdate(rowData)" class="w-full justify-between">
+              <VaButton
+                preset="secondary"
+                size="small"
+                icon="update"
+                aria-label="Update Resident"
+                @click="onResidentUpdate(rowData)"
+                class="w-full justify-between"
+              >
                 <span v-if="rowData.active">Block</span>
                 <span v-else>Unblock</span>
               </VaButton>
@@ -147,18 +182,34 @@ watch(
     </div>
 
     <div v-if="totalPages > 1" class="flex">
-      <VaButton preset="secondary" icon="va-arrow-left" aria-label="Previous page"
-        :disabled="props.pagination.pageNum === 1" @click="props.pagination.pageNum--" />
-      <VaButton class="mr-2" preset="secondary" icon="va-arrow-right" aria-label="Next page"
-        :disabled="props.pagination.pageNum === totalPages" @click="props.pagination.pageNum++" />
-      <VaPagination v-model="props.pagination.pageNum" buttons-preset="secondary" :pages="totalPages" :visible-pages="5"
-        :boundary-links="false" :direction-links="false" />
+      <VaButton
+        preset="secondary"
+        icon="va-arrow-left"
+        aria-label="Previous page"
+        :disabled="props.pagination.pageNum === 1"
+        @click="props.pagination.pageNum--"
+      />
+      <VaButton
+        class="mr-2"
+        preset="secondary"
+        icon="va-arrow-right"
+        aria-label="Next page"
+        :disabled="props.pagination.pageNum === totalPages"
+        @click="props.pagination.pageNum++"
+      />
+      <VaPagination
+        v-model="props.pagination.pageNum"
+        buttons-preset="secondary"
+        :pages="totalPages"
+        :visible-pages="5"
+        :boundary-links="false"
+        :direction-links="false"
+      />
     </div>
   </div>
 </template>
 
 <style lang="scss">
-
 .va-data-table {
   ::v-deep(.va-data-table__table-tr) {
     border-bottom: 1px solid var(--va-background-border);

@@ -1,122 +1,119 @@
-import { onBeforeMount, Ref, ref } from 'vue';
-import { resident_user_type } from '@/data/resident_user';
-import { type Filters, Pagination, Sorting } from '../../../../data/page';
+import { onBeforeMount, Ref, ref } from 'vue'
+import { resident_user_type } from '@/data/resident_user'
+import { type Filters, Pagination, Sorting } from '../../../../data/page'
 import {
   fetchResidents,
   addResident,
   fetchResident,
   resetResidentPassword,
-  updateResidentActive
-} from '../../../../apis/resident';
-import { useThrottle } from '../../../../data/dataControl';
-import { useToast } from 'vuestic-ui';
-import { useGlobalStore } from '@/stores/global-store';
+  updateResidentActive,
+} from '../../../../apis/resident'
+import { useThrottle } from '../../../../data/dataControl'
+import { useToast } from 'vuestic-ui'
+import { useGlobalStore } from '@/stores/global-store'
 
-const makePaginationRef = () => ref<Pagination>({ pageNum: 1, pageSize: 10, total: 30 });
-const makeSortingRef = () => ref<Sorting>({ sortBy: "id", sortingOrder: "asc" });
+const makePaginationRef = () => ref<Pagination>({ pageNum: 1, pageSize: 10, total: 30 })
+const makeSortingRef = () => ref<Sorting>({ sortBy: 'id', sortingOrder: 'asc' })
 
-let useResidentsInstance: any = null;
+let useResidentsInstance: any = null
 
-export const useResidents = (options?: {
-  pagination?: Ref<Pagination>;
-  sorting?: Ref<Sorting>;
-}) => {
+export const useResidents = (options?: { pagination?: Ref<Pagination>; sorting?: Ref<Sorting> }) => {
   if (useResidentsInstance) {
-    return useResidentsInstance;
+    return useResidentsInstance
   }
 
-  const isLoading = ref(false);
-  const residents = ref<resident_user_type[]>([]);
-  const error = ref<string | null>(null); // Error state
-  const toast = useToast(); // Toast for notifications
-  const { sorting = makeSortingRef(), pagination = makePaginationRef() } = options || {};
-  const globalStore = useGlobalStore(); // 正确实例化
+  const isLoading = ref(false)
+  const residents = ref<resident_user_type[]>([])
+  const error = ref<string | null>(null) // Error state
+  const toast = useToast() // Toast for notifications
+  const { sorting = makeSortingRef(), pagination = makePaginationRef() } = options || {}
+  const globalStore = useGlobalStore() // 正确实例化
 
   const fetch = async () => {
-    isLoading.value = true;
-    error.value = null;
+    isLoading.value = true
+    error.value = null
     try {
       const res = await fetchResidents({
         pageNum: pagination.value.pageNum,
         pageSize: pagination.value.pageSize,
-        desc: sorting.value.sortingOrder === "asc" ? false : true,
-      });
-      
-      residents.value = res.data.data;
+        desc: sorting.value.sortingOrder === 'asc' ? false : true,
+      })
+
+      residents.value = res.data.data
       pagination.value.total = res.data.pagination.total
-      globalStore.setResidentsTotal(res.data.pagination.total); // 设置全局状态
+      globalStore.setResidentsTotal(res.data.pagination.total) // 设置全局状态
     } catch (err: any) {
-      console.error(err);
-      error.value = (err.message || 'Failed to fetch residents') as string;
-      toast.init({ message: error.value, color: 'danger' });
+      console.error(err)
+      error.value = (err.message || 'Failed to fetch residents') as string
+      toast.init({ message: error.value, color: 'danger' })
     }
-    isLoading.value = false;
-  };
-  
+    isLoading.value = false
+  }
+
   const add = async (resident: any) => {
-    isLoading.value = true;
-    error.value = null;
+    isLoading.value = true
+    error.value = null
     try {
-      await addResident(resident);
-      await fetch();
-      toast.init({ message: 'Resident added successfully', color: 'success' });
+      await addResident(resident)
+      await fetch()
+      toast.init({ message: 'Resident added successfully', color: 'success' })
     } catch (err: any) {
-      console.error(err);
-      error.value = (err.message || 'Failed to add resident') as string;
-      toast.init({ message: error.value, color: 'danger' });
+      console.error(err)
+      error.value = (err.message || 'Failed to add resident') as string
+      toast.init({ message: error.value, color: 'danger' })
     }
-    isLoading.value = false;
-  };
-  
+    isLoading.value = false
+  }
+
   const updateActive = async (data: any) => {
-    isLoading.value = true;
-    error.value = null;
+    isLoading.value = true
+    error.value = null
     try {
-      await updateResidentActive(data);
-      await fetch();
-      toast.init({ message: 'Resident status updated successfully', color: 'success' });
+      await updateResidentActive(data)
+      await fetch()
+      toast.init({ message: 'Resident status updated successfully', color: 'success' })
     } catch (err: any) {
-      console.error(err);
-      error.value = (err.message || 'Failed to update resident status') as string;
-      toast.init({ message: error.value, color: 'danger' });
+      console.error(err)
+      error.value = (err.message || 'Failed to update resident status') as string
+      toast.init({ message: error.value, color: 'danger' })
     }
-    isLoading.value = false;
-  };
-  
+    isLoading.value = false
+  }
+
   const resetP = async (resident: any) => {
-    isLoading.value = true;
-    error.value = null;
+    isLoading.value = true
+    error.value = null
     try {
-      await resetResidentPassword(resident);
-      await fetch();
-      toast.init({ message: 'Password reset successfully', color: 'success' });
+      await resetResidentPassword(resident)
+      await fetch()
+      toast.init({ message: 'Password reset successfully', color: 'success' })
     } catch (err: any) {
-      console.error(err);
-      error.value = (err.message || 'Failed to reset password') as string;
-      toast.init({ message: error.value, color: 'danger' });
+      console.error(err)
+      error.value = (err.message || 'Failed to reset password') as string
+      toast.init({ message: error.value, color: 'danger' })
     }
-    isLoading.value = false;
-  };
-  
+    isLoading.value = false
+  }
+
   const searchResidentByid = async (query: any) => {
-    isLoading.value = true;
-    error.value = null;
+    isLoading.value = true
+    error.value = null
     try {
-      const res = await fetchResidents(query);
-      residents.value = res.data.data;
+      const res = await fetchResidents(query)
+      residents.value = res.data.data
     } catch (err: any) {
-      console.error(err);
-      error.value = (err.message || 'Failed to search resident') as string;
-      toast.init({ message: error.value, color: 'danger' });
+      console.error(err)
+      error.value = (err.message || 'Failed to search resident') as string
+      toast.init({ message: error.value, color: 'danger' })
     }
-    isLoading.value = false;
-  };
-  
-  const searchResident = useThrottle(searchResidentByid, 500);
+    isLoading.value = false
+  }
+
+  const searchResident = useThrottle(searchResidentByid, 500)
 
   onBeforeMount(() => {
-    fetch();
-  });
+    fetch()
+  })
 
   useResidentsInstance = {
     isLoading,
@@ -129,7 +126,7 @@ export const useResidents = (options?: {
     resetP,
     updateActive,
     searchResident,
-  };
+  }
 
-  return useResidentsInstance;
-};
+  return useResidentsInstance
+}

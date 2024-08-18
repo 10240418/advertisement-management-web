@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, PropType, defineProps, defineEmits,onBeforeMount } from 'vue'
+import { ref, watch, PropType, defineProps, defineEmits, onBeforeMount } from 'vue'
 import { useForm } from 'vuestic-ui'
 import { validators } from '../../../../services/utils'
 import { unit_type } from '../../../../data/unit'
@@ -19,7 +19,7 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(['update:modelValue','close', 'save'])
+const emit = defineEmits(['update:modelValue', 'close', 'save'])
 
 const newUnit = ref<any>({ ...defaultNewUnit })
 
@@ -32,7 +32,7 @@ watch(
       newUnit.value = { ...defaultNewUnit }
     }
   },
-  { immediate: true }
+  { immediate: true },
 )
 
 const form = useForm('edit-unit-form')
@@ -53,7 +53,7 @@ const onCancel = () => {
   <VaForm v-slot="{ isValid }" ref="edit-unit-form" class="flex-col justify-start items-start gap-4 inline-flex w-full">
     <div class="self-stretch flex-col justify-start items-start gap-4 flex">
       <div class="flex gap-4 flex- w-full">
-        <VaInput v-model="newUnit.floor" label="Floor" class="w-full " :rules="[validators.required]" name="floor" />
+        <VaInput v-model="newUnit.floor" label="Floor" class="w-full" :rules="[validators.required]" name="floor" />
       </div>
 
       <div class="flex gap-4 flex-col w-full">
@@ -61,7 +61,7 @@ const onCancel = () => {
       </div>
 
       <div class="flex gap-4 flex-col w-full">
-        <VaInput v-model="newUnit.remark" label="Remark" class="w-full"  name="remark"  placeholder="Remark"/>
+        <VaInput v-model="newUnit.remark" label="Remark" class="w-full" name="remark" placeholder="Remark" />
       </div>
 
       <div class="flex gap-2 flex-col-reverse items-stretch justify-end w-full">
@@ -77,4 +77,3 @@ const onCancel = () => {
   border-width: 0px;
 }
 </style>
-

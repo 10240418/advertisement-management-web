@@ -66,7 +66,7 @@
     "management": "Management",
     "deviceManage": "Device Manage",
     "status": "Status",
-    "meter":"Meter",
+    "meter": "Meter",
     "gateway": "Gateway",
     "settings": "Application settings",
     "logs": "Logs",
@@ -187,5 +187,9 @@
   "buttonSelect": {
     "dark": "Dark",
     "light": "Light"
+  },
+  "vuestic": {
+    "toggleDropdown": "Toggle dropdown",
+    "select": "Select"
   }
 }

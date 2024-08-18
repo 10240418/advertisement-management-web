@@ -12,11 +12,11 @@ export default {
   },
   routes: [
     {
-      name:'home',
-      displayName:'menu.home',
-      meta:{
-        icon:'home'
-      }
+      name: 'home',
+      displayName: 'menu.home',
+      meta: {
+        icon: 'home',
+      },
     },
     {
       name: 'resident',
@@ -42,54 +42,53 @@ export default {
       ],
     },
     {
-      name:'deviceManage',
-      displayName:'menu.deviceManage',
-      meta:{
-        icon:'dvr'
+      name: 'deviceManage',
+      displayName: 'menu.deviceManage',
+      meta: {
+        icon: 'dvr',
       },
-      children:[
+      children: [
         {
-          name:'status',
-          displayName:'menu.status',
-          meta:{
-            icon:'browse_activity'
-          }
+          name: 'status',
+          displayName: 'menu.status',
+          meta: {
+            icon: 'browse_activity',
+          },
         },
         {
-          name:'meter',
-          displayName:'menu.meter',
-          meta:{
-            icon:'browse_activity'
-          }
+          name: 'meter',
+          displayName: 'menu.meter',
+          meta: {
+            icon: 'browse_activity',
+          },
         },
         {
-          name:'gateway',
-          displayName:'menu.gateway',
-          meta:{
-            icon:'browse_activity'
-          }
-        }
-      ]
-
+          name: 'gateway',
+          displayName: 'menu.gateway',
+          meta: {
+            icon: 'browse_activity',
+          },
+        },
+      ],
     },
     {
-      name:'task',
-      displayName:'menu.task',
-      meta:{
-        icon:'sort'
+      name: 'task',
+      displayName: 'menu.task',
+      meta: {
+        icon: 'sort',
       },
-      children:[
+      children: [
         {
-          name:'controlTask',
-          displayName:'menu.controlTask',
+          name: 'controlTask',
+          displayName: 'menu.controlTask',
         },
         {
-          name:'systemTask',
-          displayName:'menu.systemTask',
-        }
-      ]
+          name: 'systemTask',
+          displayName: 'menu.systemTask',
+        },
+      ],
     },
-    
+
     // {
     //   name: 'auth',
     //   displayName: 'menu.auth',
@@ -105,7 +104,7 @@ export default {
     //       name: 'preferences',
     //       displayName: 'menu.preferences',
     //     }
-      
+
     //   ],
     // },
     {
@@ -115,7 +114,7 @@ export default {
         icon: 'manage_accounts',
       },
     },
-    
+
     {
       name: 'settings',
       displayName: 'menu.settings',

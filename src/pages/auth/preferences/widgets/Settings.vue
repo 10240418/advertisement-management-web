@@ -3,12 +3,10 @@
     <p class="font-bold w-[200px]">ReadingInterval</p>
     <div class="flex-1">
       <div class="max-w-[748px]">
-        {{ preferences?.readingInterval}}
+        {{ preferences?.readingInterval }}
       </div>
     </div>
-    <VaButton :style="buttonStyles" class="w-fit h-fit" preset="primary" @click="">
-      Edit
-    </VaButton>
+    <VaButton :style="buttonStyles" class="w-fit h-fit" preset="primary" @click=""> Edit </VaButton>
   </div>
 
   <div class="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-6 min-h-[36px] leading-5">
@@ -38,33 +36,29 @@
   <div class="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-6 min-h-[36px] leading-5">
     <p class="font-bold w-[200px]">TimeZone</p>
     <div class="max-w-[748px]">
-        {{ preferences?.timezone }}
-      </div>
+      {{ preferences?.timezone }}
+    </div>
   </div>
 </template>
 <script lang="ts" setup>
-
 import { buttonStyles } from '../styles'
 import { fetchPreferences } from '@/apis/auth'
-import { ref ,onBeforeMount} from 'vue'
+import { ref, onBeforeMount } from 'vue'
 type preferences_type = {
-  readingInterval: number,
-  mobile: string,
-  location: string,
-  language: string,
-  timezone: string,
+  readingInterval: number
+  mobile: string
+  location: string
+  language: string
+  timezone: string
 }
 
 const preferences = ref<preferences_type>()
 const fetch = async () => {
-  fetchPreferences().then(res => {
-  preferences.value = res.data.data;
+  fetchPreferences().then((res) => {
+    preferences.value = res.data.data
   })
-
 }
 onBeforeMount(() => {
-  fetch();
-});
-
-
+  fetch()
+})
 </script>

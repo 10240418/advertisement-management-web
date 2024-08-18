@@ -13,86 +13,87 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, defineProps, defineEmits, onBeforeMount, watch, PropType } from 'vue';
-import { useForm, useToast } from 'vuestic-ui';
-import { resident_user_type } from '@/data/resident_user';
-import { unit_type } from '@/data/unit';
-import { fetchUnitList, bindUnitResident } from '@/apis/unit';
+import { ref, defineProps, defineEmits, onBeforeMount, watch, PropType } from 'vue'
+import { useForm, useToast } from 'vuestic-ui'
+import { resident_user_type } from '@/data/resident_user'
+import { unit_type } from '@/data/unit'
+import { fetchUnitList, bindUnitResident } from '@/apis/unit'
 
-const toast = useToast();
-const error = ref<string | null>(null);
+const toast = useToast()
+const error = ref<string | null>(null)
 
 const props = defineProps({
   resident: { type: Object as PropType<resident_user_type | null>, required: true },
   onClose: Function,
-});
+})
 
 const pagination = ref({
   pageNum: 1,
   pageSize: 50,
   desc: false,
-});
+})
 //type
-const typeOptions = ref(['owner', 'tenant']);
-const selectTypeValue = ref<any>() 
+const typeOptions = ref(['owner', 'tenant'])
+const selectTypeValue = ref<any>()
 
-//unit 
-const units = ref<unit_type[]>([]);
-const unitOptions = ref<string[]>([]); // 修改为字符串数组
-const selectValue = ref<string>(''); // 修改为字符串
-const unitNeedRemove = ref<any>([]);
+//unit
+const units = ref<unit_type[]>([])
+const unitOptions = ref<string[]>([]) // 修改为字符串数组
+const selectValue = ref<string>('') // 修改为字符串
+const unitNeedRemove = ref<any>([])
 
 const fetchUnits = async () => {
   try {
-    const res = await fetchUnitList(pagination.value);
-    units.value = res.data.units;
+    const res = await fetchUnitList(pagination.value)
+    units.value = res.data.units
 
-    unitOptions.value = units.value.map(unit => `${unit.id} Floor: ${unit.floor} Unit: ${unit.unit}`);
-    
+    unitOptions.value = units.value.map((unit) => `${unit.id} Floor: ${unit.floor} Unit: ${unit.unit}`)
+
     //去掉 resident.units
-    unitNeedRemove.value = props.resident?.units.map((unit: any) => `${unit.id} Floor: ${unit.floor} Unit: ${unit.unit}`);
+    unitNeedRemove.value = props.resident?.units.map(
+      (unit: any) => `${unit.id} Floor: ${unit.floor} Unit: ${unit.unit}`,
+    )
     // 过滤掉已绑定的单位
-    unitOptions.value = unitOptions.value.filter(option => !unitNeedRemove.value.includes(option));
-    selectValue.value = unitOptions.value.length > 0 ? unitOptions.value[0] : '';
+    unitOptions.value = unitOptions.value.filter((option) => !unitNeedRemove.value.includes(option))
+    selectValue.value = unitOptions.value.length > 0 ? unitOptions.value[0] : ''
   } catch (err: any) {
-    console.error(err);
-    error.value = (err.message || 'Failed to fetch units') as string;
-    toast.init({ message: error.value, color: 'danger' });
+    console.error(err)
+    error.value = (err.message || 'Failed to fetch units') as string
+    toast.init({ message: error.value, color: 'danger' })
   }
-};
-
+}
 
 onBeforeMount(() => {
-  fetchUnits();
-});
+  fetchUnits()
+})
 
-const emit = defineEmits(['close','fetch']);
-const formInstance = useForm('edit-resident-form');
+const emit = defineEmits(['close', 'fetch'])
+const formInstance = useForm('edit-resident-form')
 
 const submit = () => {
   if (selectValue.value) {
-    const unitId =Number(selectValue.value.split(' ')[0]) ;
-    bindUnitResident({ residentUserId: props.resident?.id, unitId: unitId ,type:selectTypeValue.value}).then(() => {
-      toast.init({ message: 'Successfully bind unit', color: 'success' });
-      emit('fetch');
-      onClose();
-    })
-      .catch((err: any) => {
-        toast.init({ message: err.message, color: 'danger' });
-        console.log(err);
-        onClose();
+    const unitId = Number(selectValue.value.split(' ')[0])
+    bindUnitResident({ residentUserId: props.resident?.id, unitId: unitId, type: selectTypeValue.value })
+      .then(() => {
+        toast.init({ message: 'Successfully bind unit', color: 'success' })
+        emit('fetch')
+        onClose()
       })
-
+      .catch((err: any) => {
+        toast.init({ message: err.message, color: 'danger' })
+        console.log(err)
+        onClose()
+      })
   }
-};
+}
 
 watch(selectValue, (newValue) => {
-  console.log('Selected value changed:', newValue);
-});
+  console.log('Selected value changed:', newValue)
+})
 
 const onClose = () => {
-  emit('close');
-};
+  emit('close')
+}
 </script>
 
 <style scoped>

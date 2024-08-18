@@ -7,15 +7,13 @@ import _ from 'lodash'
 import adminUsersTable from './widgets/adminUsersTable.vue'
 import editAdminUserForm from './widgets/editAdminUserForm.vue'
 
-
 const doShowEditUserModal = ref(false)
 const doShowAddUserModal = ref(false)
 
-const { isLoading, adminusers,  sorting, pagination, ...userApi } = useAdminUsers()
+const { isLoading, adminusers, sorting, pagination, ...userApi } = useAdminUsers()
 
 const adminUsersShowInTable = ref<admin_user_type[]>([])
 const userToEdit = ref<admin_user_type | null>(null)
-
 
 const showEditUserModal = (user: admin_user_type) => {
   userToEdit.value = user
@@ -35,14 +33,12 @@ const onUserDelete = async (user: any) => {
     message: `${user.username} has been deleted`,
     color: 'success',
   })
-} 
+}
 const fectchUserByPa = async (pagination: any) => {
   await userApi.fetch()
-  adminUsersShowInTable.value  = adminusers.value
-  
+  adminUsersShowInTable.value = adminusers.value
 }
 const onSave = (user: any) => {
-  
   if (user.id) {
     userApi.update(user)
   } else {
@@ -56,24 +52,27 @@ watch(
   () => {
     adminUsersShowInTable.value = _.cloneDeep(toRaw(adminusers.value))
   },
-  { deep: true }
+  { deep: true },
 )
-
 </script>
 
 <template>
   <VaCard>
     <VaCardContent>
       <div class="flex flex-col md:flex-row gap-2 mb-2 justify-between">
-        <div class="flex flex-col md:flex-row gap-2 justify-start">
-        </div>
+        <div class="flex flex-col md:flex-row gap-2 justify-start"></div>
         <VaButton @click="showAddUserModal">Add User</VaButton>
       </div>
 
-      <adminUsersTable 
-        :pagination="pagination" :sorting="sorting" :users="adminUsersShowInTable" :loading="isLoading" @edit-user="showEditUserModal"
+      <adminUsersTable
+        :pagination="pagination"
+        :sorting="sorting"
+        :users="adminUsersShowInTable"
+        :loading="isLoading"
+        @edit-user="showEditUserModal"
         @delete-user="onUserDelete"
-        @fectch-user="fectchUserByPa" />
+        @fectch-user="fectchUserByPa"
+      />
     </VaCardContent>
   </VaCard>
 

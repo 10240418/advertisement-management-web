@@ -9,14 +9,13 @@ const routes: Array<RouteRecordRaw> = [
     path: '/:pathMatch(.*)*',
     redirect: { name: 'home' },
   },
-  
+
   {
     name: 'admin',
     path: '/',
     component: AppLayout,
     redirect: { name: 'home' },
     children: [
-    
       {
         name: 'dashboard',
         path: 'dashboard',
@@ -28,55 +27,54 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('../pages/home/homePage.vue'),
       },
       {
-        
         path: '/',
-        children:[
+        children: [
           {
-            name:'resident',
-            path:'resident',
-            component:()=>import('@/pages/residentManage/resident/residentPage.vue')
+            name: 'resident',
+            path: 'resident',
+            component: () => import('@/pages/residentManage/resident/residentPage.vue'),
           },
           {
-            name:'unit',
-            path:'unit',
-            component:()=>import('@/pages/residentManage/unit/unitPage.vue')
+            name: 'unit',
+            path: 'unit',
+            component: () => import('@/pages/residentManage/unit/unitPage.vue'),
           },
-        ]
+        ],
       },
       {
-        path:'/deviceMange',
-        children:[
+        path: '/deviceMange',
+        children: [
           {
-            name:'status',
-            path:'status',
-            component:()=>import('../../src/pages/deviceManage/status/devicesStatus.vue')
+            name: 'status',
+            path: 'status',
+            component: () => import('../../src/pages/deviceManage/status/devicesStatus.vue'),
           },
           {
-            name:'meter',
-            path:'meter',
-            component:()=>import('../../src/pages/deviceManage/meter/meterPage.vue')
+            name: 'meter',
+            path: 'meter',
+            component: () => import('../../src/pages/deviceManage/meter/meterPage.vue'),
           },
           {
-            name:'gateway',
-            path:'gateway',
-            component:()=>import('../../src/pages/deviceManage/gateway/gatewayPage.vue')
-          }
-        ]
+            name: 'gateway',
+            path: 'gateway',
+            component: () => import('../../src/pages/deviceManage/gateway/gatewayPage.vue'),
+          },
+        ],
       },
       {
-        path:'/task',
-        children:[
+        path: '/task',
+        children: [
           {
-            name:'controlTask',
-            path:'controlTask',
-            component:()=>import('../../src/pages/task/controlTask/controlTaskPage.vue')
+            name: 'controlTask',
+            path: 'controlTask',
+            component: () => import('../../src/pages/task/controlTask/controlTaskPage.vue'),
           },
           {
-            name:'systemTask',
-            path:'systemTask',
-            component:()=>import('../../src/pages/task/systemTask/systemTaskPage.vue')
-         }
-        ]
+            name: 'systemTask',
+            path: 'systemTask',
+            component: () => import('../../src/pages/task/systemTask/systemTaskPage.vue'),
+          },
+        ],
       },
       {
         name: 'adminUsers',
@@ -103,7 +101,7 @@ const routes: Array<RouteRecordRaw> = [
         name: 'login',
         path: 'login',
         component: () => import('../pages/auth/Login.vue'),
-      }
+      },
     ],
   },
   {
@@ -163,13 +161,11 @@ router.beforeResolve((to, from, next) => {
   let token = localStorage.getItem('AdminToken')
   let hasLogin = token != null && token != ''
 
-  if ((to.name !== 'login') && !hasLogin) {
-      next({ name: 'login' })
-  }
-  else{
+  if (to.name !== 'login' && !hasLogin) {
+    next({ name: 'login' })
+  } else {
     next()
   }
-});
-
+})
 
 export default router

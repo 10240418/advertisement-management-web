@@ -49,14 +49,12 @@ const onSave = (unit: any) => {
   doShowAddUnitModal.value = false
 }
 
-
-
 watch(
   units,
   () => {
     unitsShowInTable.value = _.cloneDeep(toRaw(units.value))
   },
-  { deep: true }
+  { deep: true },
 )
 </script>
 
@@ -64,13 +62,19 @@ watch(
   <VaCard>
     <VaCardContent>
       <div class="flex flex-col md:flex-row gap-2 mb-2 justify-between">
-        <div class="flex flex-col md:flex-row gap-2 justify-start">
-        </div>
+        <div class="flex flex-col md:flex-row gap-2 justify-start"></div>
         <VaButton @click="showAddUnitModal">Add Unit</VaButton>
       </div>
 
-      <unitsTable :pagination="pagination" :sorting="sorting" :units="unitsShowInTable" :loading="isLoading"
-        @edit-unit="showEditUnitModal" @delete-unit="onUnitDelete" @fetch-units="fetchUnits" />
+      <unitsTable
+        :pagination="pagination"
+        :sorting="sorting"
+        :units="unitsShowInTable"
+        :loading="isLoading"
+        @edit-unit="showEditUnitModal"
+        @delete-unit="onUnitDelete"
+        @fetch-units="fetchUnits"
+      />
     </VaCardContent>
   </VaCard>
 

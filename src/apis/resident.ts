@@ -1,7 +1,5 @@
 import request from '.'
 
-
-
 export const fetchResidents = (query: any) => {
   return request({
     url: `/admin/resident_user`,

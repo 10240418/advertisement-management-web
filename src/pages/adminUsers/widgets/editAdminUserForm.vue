@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, PropType,defineProps, defineEmits } from 'vue'
+import { ref, watch, PropType, defineProps, defineEmits } from 'vue'
 import { useForm } from 'vuestic-ui'
 import { validators } from '../../../services/utils'
 import { admin_user_type } from '../../../data/admin_user'
@@ -33,7 +33,7 @@ watch(
       newAdminUser.value = { ...defaultNewAdminUser }
     }
   },
-  { immediate: true }
+  { immediate: true },
 )
 
 const form = useForm('add-user-form')
@@ -51,19 +51,30 @@ const onCancel = () => {
 </script>
 
 <template>
-  <VaForm v-slot="{ isValid }" ref="add-user-form" class="flex-col justify-start items-start  inline-flex w-full">
+  <VaForm v-slot="{ isValid }" ref="add-user-form" class="flex-col justify-start items-start inline-flex w-full">
     <div class="self-stretch flex-col justify-start items-start gap-2 flex">
-      <div  v-if="!newAdminUser.id" class="flex gap-4 flex-col w-full">
+      <div v-if="!newAdminUser.id" class="flex gap-4 flex-col w-full">
         <VaInput v-model="newAdminUser.name" label="Name" class="w-full" :rules="[validators.required]" name="name" />
       </div>
 
       <div v-if="!newAdminUser.id" class="flex gap-4 flex-col w-full">
-        <VaInput  v-model="newAdminUser.email" label="Email" class="w-full" :rules="[validators.required, validators.email]" name="email" />
+        <VaInput
+          v-model="newAdminUser.email"
+          label="Email"
+          class="w-full"
+          :rules="[validators.required, validators.email]"
+          name="email"
+        />
       </div>
 
-
       <div class="flex gap-4 flex-col w-full">
-        <VaInput v-model="newAdminUser.password" label="Password" class="w-full" :rules="[validators.required,validators.minLength]" name="password" />
+        <VaInput
+          v-model="newAdminUser.password"
+          label="Password"
+          class="w-full"
+          :rules="[validators.required, validators.minLength]"
+          name="password"
+        />
       </div>
       <div class="flex gap-2 flex-col-reverse items-stretch justify-end w-full">
         <VaButton preset="secondary" color="secondary" @click="onCancel">Cancel</VaButton>

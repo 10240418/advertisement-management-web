@@ -22,9 +22,7 @@
       <div class="p-4">
         <main class="h-full flex flex-row items-center justify-start mx-auto max-w-[420px]">
           <div class="flex flex-col items-start">
-            <RouterLink class="py-4 logo" to="/" aria-label="Visit homepage">
-              Smart Toilet Admin
-            </RouterLink>
+            <RouterLink class="py-4 logo" to="/" aria-label="Visit homepage"> Smart Toilet Admin </RouterLink>
             <RouterView />
           </div>
         </main>
@@ -41,7 +39,7 @@ const breakpoint = useBreakpoint()
 
 <style lang="scss">
 .logo {
-  color:white;
+  color: white;
   font-size: 32px;
   font-weight: 900;
 }

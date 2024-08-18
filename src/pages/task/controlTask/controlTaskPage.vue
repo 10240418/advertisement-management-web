@@ -2,8 +2,13 @@
   <VaCard>
     <VaCardContent>
       <div class="flex flex-col md:flex-row gap-2 mb-2 justify-between">
-        <VaInput v-model="searchValue" placeholder="Search By ID" class="w-full md:w-2/3"
-          @keyup.enter="onSearch(searchValue)" :rules="[validators.required,validators.number]">
+        <VaInput
+          v-model="searchValue"
+          placeholder="Search By ID"
+          class="w-full md:w-2/3"
+          @keyup.enter="onSearch(searchValue)"
+          :rules="[validators.required, validators.number]"
+        >
           <template #appendInner>
             <div class="search-icon-wrapper bg-white hover:bg-slate-300 z-10">
               <VaIcon name="mso-search" color="secondary" @click="onSearch(searchValue)" />
@@ -13,9 +18,16 @@
         <VaButton @click="showAddControlTaskModal">Add Control Task</VaButton>
       </div>
 
-      <controlTaskTable :pagination="pagination" :tasks="tasksShowInTable" :loading="isLoading" :sorting="sorting"
-        @edit-task="showEditControlTaskModal" @detail-task="showEditControlTaskDialog" @delete-task="onTaskDelete"
-        @fetch-task="fetchTask" />
+      <controlTaskTable
+        :pagination="pagination"
+        :tasks="tasksShowInTable"
+        :loading="isLoading"
+        :sorting="sorting"
+        @edit-task="showEditControlTaskModal"
+        @detail-task="showEditControlTaskDialog"
+        @delete-task="onTaskDelete"
+        @fetch-task="fetchTask"
+      />
     </VaCardContent>
     <VaModal v-model="doShowAddControlTaskModal" size="small" mobile-fullscreen close-button hide-default-actions>
       <h1 class="va-h5">Add Control Task</h1>
@@ -29,40 +41,44 @@
 </template>
 
 <script setup lang="ts">
-import { ref, toRaw, watch, onBeforeMount } from 'vue';
-import { useToast, useModal } from 'vuestic-ui';
-import { task_type } from '../../../data/task';
-import _ from 'lodash';
-import controlTaskTable from './widgets/controlTaskTable.vue';
-import editControlTaskForm from './widgets/editControlTaskForm.vue';
-import { useTasks } from './composables/controlTask';
-import { validators } from '@/services/utils';
+import { ref, toRaw, watch, onBeforeMount } from 'vue'
+import { useToast, useModal } from 'vuestic-ui'
+import { task_type } from '../../../data/task'
+import _ from 'lodash'
+import controlTaskTable from './widgets/controlTaskTable.vue'
+import editControlTaskForm from './widgets/editControlTaskForm.vue'
+import { useTasks } from './composables/controlTask'
+import { validators } from '@/services/utils'
 
-const { init: notify } = useToast();
-const doShowAddControlTaskModal = ref(false);
-const doShowEditControlTaskModal = ref(false);
-const { isLoading, tasks, sorting, pagination, ...taskApi } = useTasks();
-const tasksShowInTable = ref<task_type[]>([]);
-const taskToEdit = ref<task_type | null>(null);
+const { init: notify } = useToast()
+const doShowAddControlTaskModal = ref(false)
+const doShowEditControlTaskModal = ref(false)
+const { isLoading, tasks, sorting, pagination, ...taskApi } = useTasks()
+const tasksShowInTable = ref<task_type[]>([])
+const taskToEdit = ref<task_type | null>(null)
 
 // Open new tab dialog
 const showEditControlTaskDialog = (task: task_type) => {
-  const newWindow = window.open(`/taskDetail?id=${task.id}`, `/taskDetail?id=${task.id}`, 'width=800,height=600,left=500,top=500');
-};
+  const newWindow = window.open(
+    `/taskDetail?id=${task.id}`,
+    `/taskDetail?id=${task.id}`,
+    'width=800,height=600,left=500,top=500',
+  )
+}
 
 // Add modal
 const showAddControlTaskModal = () => {
-  doShowAddControlTaskModal.value = true;
-  taskToEdit.value = null;
-};
+  doShowAddControlTaskModal.value = true
+  taskToEdit.value = null
+}
 
 // Edit modal
 const showEditControlTaskModal = (task: task_type) => {
-  doShowEditControlTaskModal.value = true;
-  taskToEdit.value = task;
-};
+  doShowEditControlTaskModal.value = true
+  taskToEdit.value = task
+}
 
-const { confirm } = useModal();
+const { confirm } = useModal()
 
 const onTaskDelete = async (task: task_type) => {
   const agreed = await confirm({
@@ -72,47 +88,47 @@ const onTaskDelete = async (task: task_type) => {
     cancelText: 'Cancel',
     size: 'small',
     maxWidth: '380px',
-  });
+  })
 
   if (agreed) {
-    await taskApi.remove([task.id]);
+    await taskApi.remove([task.id])
   }
-};
+}
 
 const fetchTask = async (fetch: any) => {
-  await taskApi.fetch({ ...fetch });
-  tasksShowInTable.value = tasks.value;
-};
+  await taskApi.fetch({ ...fetch })
+  tasksShowInTable.value = tasks.value
+}
 
 const onSave = async (newTask: any) => {
   if (newTask.id) {
-    console.log('newTask', newTask);
-    await taskApi.update(newTask);
+    console.log('newTask', newTask)
+    await taskApi.update(newTask)
   } else {
-    await taskApi.add(newTask);
+    await taskApi.add(newTask)
   }
-  doShowAddControlTaskModal.value = false;
-};
+  doShowAddControlTaskModal.value = false
+}
 
-const searchValue = ref('');
+const searchValue = ref('')
 const onSearch = async (searchValue: any) => {
-  if(!searchValue)return
+  if (!searchValue) return
   const res = await taskApi.search({
     id: Number(searchValue),
-  });
-};
+  })
+}
 
 watch(
   tasks,
   () => {
-    tasksShowInTable.value = _.cloneDeep(toRaw(tasks.value));
+    tasksShowInTable.value = _.cloneDeep(toRaw(tasks.value))
   },
-  { deep: true }
-);
+  { deep: true },
+)
 
 onBeforeMount(() => {
-  fetchTask({});
-});
+  fetchTask({})
+})
 </script>
 
 <style lang="scss">

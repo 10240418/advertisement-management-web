@@ -1,33 +1,61 @@
 <template>
-  <VaDataTable :columns="columns" :items="currentPageData" :loading="props.loading"
-    v-model:sort-by="props.sorting.sortBy" v-model:sorting-order="props.sorting.sortingOrder">
-
+  <VaDataTable
+    :columns="columns"
+    :items="currentPageData"
+    :loading="props.loading"
+    v-model:sort-by="props.sorting.sortBy"
+    v-model:sorting-order="props.sorting.sortingOrder"
+  >
     <template #cell(type)="{ rowData }">
       <div v-if="rowData.type === 0">WaterMeter</div>
       <div v-else-if="rowData.type === 1">PowerMeter</div>
     </template>
     <template #cell(detail)="{ rowData }">
-      <VaButton preset="secondary" id="detailMeter" size="small" icon="mso-info" aria-label="Info Resident"
-                @click="$emit('detail-meter', rowData as any)" class="w-full justify-between ml-[-5px]">
-                <span>Detail</span>
+      <VaButton
+        preset="secondary"
+        id="detailMeter"
+        size="small"
+        icon="mso-info"
+        aria-label="Info Resident"
+        @click="$emit('detail-meter', rowData as any)"
+        class="w-full justify-between ml-[-5px]"
+      >
+        <span>Detail</span>
       </VaButton>
     </template>
     <template #cell(actions)="{ rowData }">
       <VaPopover placement="bottom" trigger="click" color="backgroundSecondary">
-        <div class="flex justify-center items-center relative hover:bg-blue-200 rounded-[4px]"
-          @click.stop="showContent(rowData)">
+        <div
+          class="flex justify-center items-center relative hover:bg-blue-200 rounded-[4px]"
+          @click.stop="showContent(rowData)"
+        >
           <VaIcon name="more_horiz" size="20px" class="mr-2 cursor-pointer" />
         </div>
         <template #body>
           <transition name="fade">
-            <div v-show="showContentMeter?.id === rowData.id"
-              class="tooltip-content flex flex-col justify-center z-999 items-center relative border p-1 rounded-md">
-              <VaButton preset="secondary" size="small" icon="mso-edit" aria-label="Edit meter"
-                @click="$emit('edit-meter', rowData as any)" class="w-full justify-between">
+            <div
+              v-show="showContentMeter?.id === rowData.id"
+              class="tooltip-content flex flex-col justify-center z-999 items-center relative border p-1 rounded-md"
+            >
+              <VaButton
+                preset="secondary"
+                size="small"
+                icon="mso-edit"
+                aria-label="Edit meter"
+                @click="$emit('edit-meter', rowData as any)"
+                class="w-full justify-between"
+              >
                 <span>Edit</span>
               </VaButton>
-              <VaButton preset="secondary" size="small" icon="mso-delete" color="danger" aria-label="Delete meter"
-                @click="onMeterDelete(rowData)" class="w-full justify-between">
+              <VaButton
+                preset="secondary"
+                size="small"
+                icon="mso-delete"
+                color="danger"
+                aria-label="Delete meter"
+                @click="onMeterDelete(rowData)"
+                class="w-full justify-between"
+              >
                 <span>Delete</span>
               </VaButton>
             </div>
@@ -46,20 +74,37 @@
     </div>
 
     <div v-if="totalPages > 1" class="flex">
-      <VaButton preset="secondary" icon="va-arrow-left" aria-label="Previous page"
-        :disabled="props.pagination.pageNum === 1" @click="props.pagination.pageNum--" />
-      <VaButton class="mr-2" preset="secondary" icon="va-arrow-right" aria-label="Next page"
-        :disabled="props.pagination.pageNum === totalPages" @click="props.pagination.pageNum++" />
-      <VaPagination v-model="props.pagination.pageNum" buttons-preset="secondary" :pages="totalPages" :visible-pages="5"
-        :boundary-links="false" :direction-links="false" />
+      <VaButton
+        preset="secondary"
+        icon="va-arrow-left"
+        aria-label="Previous page"
+        :disabled="props.pagination.pageNum === 1"
+        @click="props.pagination.pageNum--"
+      />
+      <VaButton
+        class="mr-2"
+        preset="secondary"
+        icon="va-arrow-right"
+        aria-label="Next page"
+        :disabled="props.pagination.pageNum === totalPages"
+        @click="props.pagination.pageNum++"
+      />
+      <VaPagination
+        v-model="props.pagination.pageNum"
+        buttons-preset="secondary"
+        :pages="totalPages"
+        :visible-pages="5"
+        :boundary-links="false"
+        :direction-links="false"
+      />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits, computed, ref, watch, toRef, PropType } from 'vue';
-import { defineVaDataTableColumns, VaPopover, VaButton, VaIcon, VaInput, VaSelect, VaPagination } from 'vuestic-ui';
-import { meter_type } from '../../../../data/meter';
+import { defineProps, defineEmits, computed, ref, watch, toRef, PropType } from 'vue'
+import { defineVaDataTableColumns, VaPopover, VaButton, VaIcon, VaInput, VaSelect, VaPagination } from 'vuestic-ui'
+import { meter_type } from '../../../../data/meter'
 
 const columns = defineVaDataTableColumns([
   { label: 'ID', key: 'id', sortable: true, width: '5%' },
@@ -67,61 +112,60 @@ const columns = defineVaDataTableColumns([
   { label: 'Remark', key: 'remark', sortable: false, width: '20%' },
   { label: 'Type', key: 'type', sortable: true, width: '10%' },
   { label: 'ModbusAddr', key: 'modbusAddr', sortable: true, width: '15%' },
-  { label: 'Detail', key: 'detail', sortable: false, width: '5%'},
+  { label: 'Detail', key: 'detail', sortable: false, width: '5%' },
   { label: 'Actions', key: 'actions', sortable: false, width: '5%' },
-]);
+])
 
 const props = defineProps({
   meters: { type: Array, default: () => [] },
   loading: { type: Boolean, default: false },
   pagination: { type: Object as PropType<any>, required: true },
   sorting: { type: Object as PropType<any>, required: true },
-});
+})
 
-const totalPages = computed(() => Math.ceil(props.pagination.total / props.pagination.pageSize));
+const totalPages = computed(() => Math.ceil(props.pagination.total / props.pagination.pageSize))
 const pagesOptions = computed(() => {
   const options = []
   for (let i = 1; i <= totalPages.value; i++) {
     options.push(i)
   }
-return options
-
+  return options
 })
 
-const emit = defineEmits(['edit-meter', 'delete-meter', 'fetch-meter', 'detail-meter']);
+const emit = defineEmits(['edit-meter', 'delete-meter', 'fetch-meter', 'detail-meter'])
 
 const onMeterDelete = (meter: any) => {
-  emit('delete-meter', meter);
-};
+  emit('delete-meter', meter)
+}
 
 watch(
   () => [props.pagination.pageNum, props.pagination.pageSize, props.sorting.sortBy, props.sorting.sortingOrder],
   () => {
     if (props.pagination.total < props.pagination.pageSize * (props.pagination.pageNum - 1)) {
-      props.pagination.pageNum = 1;
+      props.pagination.pageNum = 1
     }
-    emit('fetch-meter', { pageNum: props.pagination.pageNum, pageSize: props.pagination.pageSize });
-  }
-);
+    emit('fetch-meter', { pageNum: props.pagination.pageNum, pageSize: props.pagination.pageSize })
+  },
+)
 const currentPageData = computed(() => {
   let metersArray: any = []
 
   if (Array.isArray(props.meters)) {
-    metersArray = props.meters;
+    metersArray = props.meters
   } else {
-    metersArray = [props.meters];
+    metersArray = [props.meters]
   }
-  const startIndex = (props.pagination.pageNum - 1) * props.pagination.pageSize;
-  const endIndex = startIndex + props.pagination.pageSize;
+  const startIndex = (props.pagination.pageNum - 1) * props.pagination.pageSize
+  const endIndex = startIndex + props.pagination.pageSize
 
-  if (metersArray.length <= props.pagination.pageSize) return metersArray;
-  else return metersArray.slice(startIndex, endIndex);
-});
+  if (metersArray.length <= props.pagination.pageSize) return metersArray
+  else return metersArray.slice(startIndex, endIndex)
+})
 
-const showContentMeter = ref<meter_type | null>(null);
+const showContentMeter = ref<meter_type | null>(null)
 const showContent = (meter: any) => {
-  showContentMeter.value = meter;
-};
+  showContentMeter.value = meter
+}
 </script>
 
 <style lang="scss" scoped>

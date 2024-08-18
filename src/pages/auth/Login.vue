@@ -1,15 +1,28 @@
 <template>
   <VaForm ref="form" @submit.prevent="submit">
     <h1 class="font-semibold text-4xl mb-4">Log in</h1>
-    <VaInput v-model="formData.email" :rules="[validators.required, validators.email]" class="mb-4" label="Email"
-      type="email" />
+    <VaInput
+      v-model="formData.email"
+      :rules="[validators.required, validators.email]"
+      class="mb-4"
+      label="Email"
+      type="email"
+    />
     <VaValue v-slot="isPasswordVisible" :default-value="false">
-      <VaInput v-model="formData.password" :rules="[validators.required]"
-        :type="isPasswordVisible.value ? 'text' : 'password'" class="mb-4" label="Password"
-        @clickAppendInner.stop="isPasswordVisible.value = !isPasswordVisible.value">
+      <VaInput
+        v-model="formData.password"
+        :rules="[validators.required]"
+        :type="isPasswordVisible.value ? 'text' : 'password'"
+        class="mb-4"
+        label="Password"
+        @clickAppendInner.stop="isPasswordVisible.value = !isPasswordVisible.value"
+      >
         <template #appendInner>
-          <VaIcon :name="isPasswordVisible.value ? 'mso-visibility_off' : 'mso-visibility'" class="cursor-pointer"
-            color="secondary" />
+          <VaIcon
+            :name="isPasswordVisible.value ? 'mso-visibility_off' : 'mso-visibility'"
+            class="cursor-pointer"
+            color="secondary"
+          />
         </template>
       </VaInput>
     </VaValue>
@@ -28,11 +41,10 @@ import { validators } from '../../services/utils'
 import { login } from '../../apis/auth'
 import { useUserStore } from '@/stores/user-store'
 
-
 const { validate } = useForm('form')
 const router = useRouter()
 const toast = useToast()
-const useUsers = useUserStore();
+const useUsers = useUserStore()
 
 const formData = reactive({
   email: '',
@@ -41,20 +53,21 @@ const formData = reactive({
 
 const submit = () => {
   if (validate()) {
-    login({ ...formData }).then(res => {
-      localStorage.setItem('AdminToken', res.data.token)
-      //保存賬號和密碼在localStorage
-      localStorage.setItem('AdminEmail', formData.email)
-      localStorage.setItem('AdminPassword', formData.password)
-      useUsers.changeEmail(formData.email)
-      useUsers.changePassWord(formData.password)
+    login({ ...formData })
+      .then((res) => {
+        localStorage.setItem('AdminToken', res.data.token)
+        //保存賬號和密碼在localStorage
+        localStorage.setItem('AdminEmail', formData.email)
+        localStorage.setItem('AdminPassword', formData.password)
+        useUsers.changeEmail(formData.email)
+        useUsers.changePassWord(formData.password)
 
-      toast.init({ message: res.data.message, color: "success" })
-      router.push({ name: 'home' })
-    }).catch(err => {
-      toast.init({ message: err.response.data.message, color: "danger" })
-    })
-
+        toast.init({ message: res.data.message, color: 'success' })
+        router.push({ name: 'home' })
+      })
+      .catch((err) => {
+        toast.init({ message: err.response.data.message, color: 'danger' })
+      })
   }
 }
 </script>

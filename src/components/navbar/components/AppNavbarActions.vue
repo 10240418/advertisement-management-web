@@ -12,7 +12,6 @@ import NotificationDropdown from './dropdowns/NotificationDropdown.vue'
 defineProps({
   isMobile: { type: Boolean, default: false },
 })
-
 </script>
 
 <style lang="scss">

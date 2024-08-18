@@ -1,8 +1,8 @@
 import request from '@/apis/index'
 
 export const fetchTotalStatus = () => {
-    return request({
-        url: `/admin/statistics/home`,
-        method: 'get',
-    });
-};
+  return request({
+    url: `/admin/statistics/home`,
+    method: 'get',
+  })
+}

@@ -16,7 +16,7 @@ module.exports = antfu({
     'array-callback-return': 'off',
     'antfu/if-newline': 'off',
     // 必须使用大括号
-    'curly': ['error', 'all'],
+    curly: ['error', 'all'],
     // else、catch、finally ... 大括号显示在同一行
     'style/brace-style': ['error', '1tbs', { allowSingleLine: false }],
     // typescript
