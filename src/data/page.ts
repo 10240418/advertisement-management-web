@@ -5,8 +5,8 @@ export type Pagination = {
 }
 
 export type Sorting = {
-  sortBy: keyof any | undefined
-  sortingOrder: 'asc' | ' desc' | null | string
+  sortBy: any
+  sortingOrder: any
 }
 
 export type Filters = {

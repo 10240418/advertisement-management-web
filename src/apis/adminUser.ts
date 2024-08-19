@@ -24,10 +24,23 @@ export const deleteAdminUser = (data: any) => {
   })
 }
 
-export const updateAdminUser = (data: any) => {
+export const changePasswordAdminUser = (data: any) => {
+  return request({
+    url: '/admin/admin_user/change_password',
+    method: 'post',
+    data: {
+      oldPassword: data.oldPassword,
+      newPassword: data.newPassword,
+    },
+  })
+}
+
+export const resetPasswordAdminUser = (query: any) => {
   return request({
     url: '/admin/admin_user/reset_password',
     method: 'post',
-    data,
+    data: {
+      id: query.id,
+    },
   })
 }

@@ -1,10 +1,16 @@
-import { Ref, ref, unref, watch } from 'vue'
+import { Ref, ref } from 'vue'
 import { admin_user_type } from '../../../data/admin_user'
 import { type Filters, Pagination, Sorting } from '../../../data/page'
-import { fetchAdminUsers, addAdminUser, deleteAdminUser, updateAdminUser } from '../../../apis/adminUser'
+import {
+  fetchAdminUsers,
+  addAdminUser,
+  deleteAdminUser,
+  resetPasswordAdminUser,
+  changePasswordAdminUser,
+} from '../../../apis/adminUser'
 import { useToast } from 'vuestic-ui/web-components'
 
-const makePaginationRef = () => ref<Pagination>({ pageNum: 1, pageSize: 10, total: 30 })
+const makePaginationRef = () => ref<Pagination>({ pageNum: 1, pageSize: 5, total: 30 })
 const makeSortingRef = () => ref<Sorting>({ sortBy: undefined, sortingOrder: 'desc' })
 const makeFiltersRef = () => ref<Filters>({ isActive: true, search: '' })
 
@@ -14,74 +20,104 @@ export const useAdminUsers = (options?: {
   filters?: Ref<Partial<Partial<Filters>>>
 }) => {
   const isLoading = ref(false)
-  const adminusers = ref<admin_user_type[]>([])
+  const adminUsers = ref<admin_user_type[]>([])
   const { filters = makeFiltersRef(), sorting = makeSortingRef(), pagination = makePaginationRef() } = options || {}
   const toast = useToast()
 
-  const fetch = async () => {
+  const fetch = () => {
     isLoading.value = true
-    try {
-      const res = await fetchAdminUsers({
-        g: 2,
-        pageNum: pagination.value.pageNum,
-        pageSize: pagination.value.pageSize,
-        desc: sorting.value.sortingOrder === 'desc' ? true : false,
+    fetchAdminUsers({
+      pageNum: pagination.value.pageNum,
+      pageSize: pagination.value.pageSize,
+      desc: sorting.value.sortingOrder === 'desc' ? true : false,
+    })
+      .then((res) => {
+        adminUsers.value = res.data.data
+        pagination.value.total = res.data.pagination.total
       })
-      adminusers.value = res.data.data
-      pagination.value.total = res.data.pagination.total
-    } catch (error) {
-      toast.init({ message: `faid to fetch ${error} `, color: 'danger' })
+      .catch((error) => {
+        toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
+        console.error(error)
+      })
+      .finally(() => {
+        isLoading.value = false
+      })
+  }
 
-      console.error(error)
-    }
-    isLoading.value = false
-  }
-  const add = async (user: Omit<any, 'id'>) => {
+  const add = (user: Omit<any, 'id'>) => {
     isLoading.value = true
-    try {
-      await addAdminUser(user)
-      await fetch()
-      toast.init({ message: `${user.name} add success`, color: 'success' })
-    } catch (error) {
-      toast.init({ message: `faid to fetch ${error} `, color: 'danger' })
-      console.error(error)
-    }
-    isLoading.value = false
+    addAdminUser(user)
+      .then(() => {
+        fetch()
+        toast.init({ message: `${user.name} added successfully`, color: 'success' })
+      })
+      .catch((error) => {
+        toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
+        console.error(error)
+      })
+      .finally(() => {
+        isLoading.value = false
+      })
   }
-  const remove = async (ids: number[]) => {
+
+  const remove = (ids: number[]) => {
     isLoading.value = true
-    try {
-      await deleteAdminUser({ ids })
-      await fetch()
-    } catch (error) {
-      toast.init({ message: `faid to fetch ${error} `, color: 'danger' })
-      console.error(error)
-    }
-    isLoading.value = false
+    deleteAdminUser({ ids })
+      .then(() => {
+        fetch()
+        toast.init({ message: `${ids.length} users deleted successfully`, color: 'success' })
+      })
+      .catch((error) => {
+        toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
+        console.error(error)
+      })
+      .finally(() => {
+        isLoading.value = false
+      })
   }
-  const update = async (user: admin_user_type) => {
+
+  const reset = (user: any) => {
     isLoading.value = true
-    try {
-      if (user.password) {
-        await updateAdminUser({ id: user.id, password: user.password })
-      }
-      await fetch()
-    } catch (error) {
-      toast.init({ message: `faid to fetch ${error} `, color: 'danger' })
-      console.error(error)
-    }
-    isLoading.value = false
+    resetPasswordAdminUser({ id: user.id })
+      .then(() => {
+        toast.init({ message: `${user.name} reset successfully`, color: 'success' })
+      })
+      .catch((error) => {
+        toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
+        console.error(error)
+      })
+      .finally(() => {
+        isLoading.value = false
+      })
   }
+
+  const change = (user: any) => {
+    isLoading.value = true
+    changePasswordAdminUser({ oldPassword: user.oldPassword, newPassword: user.newPassword })
+      .then(() => {
+        toast.init({ message: `${user.name} password changed successfully`, color: 'success' })
+      })
+      .catch((error) => {
+        toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
+        console.error(error)
+      })
+      .finally(() => {
+        isLoading.value = false
+      })
+  }
+
   fetch()
+
   return {
     isLoading,
-    adminusers,
+    adminUsers,
     filters,
     sorting,
     pagination,
     fetch,
     add,
     remove,
-    update,
+    reset,
+    change,
   }
 }

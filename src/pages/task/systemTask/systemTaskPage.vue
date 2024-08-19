@@ -6,27 +6,31 @@
           v-model="searchValue"
           placeholder="Search By ID"
           class="w-full md:w-2/3"
-          @keyup.enter="onSearch(searchValue)"
           :rules="[validators.required, validators.number]"
+          @keyup.enter="onSearch(searchValue)"
         >
           <!-- <VaButton @click="showAddControlTaskModal">Add Control Task</VaButton> -->
           <template #appendInner>
             <div class="search-icon-wrapper bg-white hover:bg-slate-300 z-10">
-              <VaIcon name="mso-search" color="secondary" @click="onSearch(searchValue)" />
+              <VaIcon
+                name="mso-search"
+                color="secondary"
+                @click="onSearch(searchValue)"
+              />
             </div>
           </template>
         </VaInput>
       </div>
 
-      <systemTaskTable
+      <SystemTaskTable
         :pagination="pagination"
         :tasks="tasksShowInTable"
         :loading="isLoading"
         :sorting="sorting"
-        @edit-task="showEditControlTaskModal"
-        @detail-task="showEditControlTaskDialog"
-        @delete-task="onTaskDelete"
-        @fetch-task="fetchTask"
+        @editTask="showEditControlTaskModal"
+        @detailTask="showEditControlTaskDialog"
+        @deleteTask="onTaskDelete"
+        @fetchTask="fetchTask"
       />
     </VaCardContent>
     <!-- <VaModal v-model="doShowAddControlTaskModal" size="small" mobile-fullscreen close-button hide-default-actions>
@@ -42,17 +46,14 @@
 
 <script setup lang="ts">
 import { ref, toRaw, watch, onBeforeMount } from 'vue'
-//   import { useControlTasks } from './composables/controlTask';
-import { useToast, useModal } from 'vuestic-ui'
+import { useModal } from 'vuestic-ui'
 import { task_type } from '../../../data/task'
 import _ from 'lodash'
-import systemTaskTable from './widgets/systemTaskTable.vue'
-import editSystemTaskForm from './widgets/editSystemTaskForm.vue'
+import SystemTaskTable from './widgets/systemTaskTable.vue'
 import { useTasks } from './composables/systemTask'
 import { validators } from '../../../services/utils'
 import { openWindow } from '@/utils/openWindow'
 
-const { init: notify } = useToast()
 const doShowAddControlTaskModal = ref(false)
 const doShowEditControlTaskModal = ref(false)
 const { isLoading, tasks, sorting, pagination, ...taskApi } = useTasks()
@@ -61,13 +62,7 @@ const taskToEdit = ref<task_type | null>(null)
 
 // Open new tab dialog
 const showEditControlTaskDialog = (task: task_type) => {
-  openWindow({path: '/sysTaskDetail', query: {id: task.id}})
-}
-
-// Add modal
-const showAddControlTaskModal = () => {
-  doShowAddControlTaskModal.value = true
-  taskToEdit.value = null
+  openWindow({ path: '/sysTaskDetail', query: { id: task.id } })
 }
 
 // Edit modal
@@ -96,16 +91,6 @@ const onTaskDelete = async (task: task_type) => {
 const fetchTask = async (fetch: any) => {
   await taskApi.fetch({ ...fetch })
   tasksShowInTable.value = tasks.value
-}
-
-const onSave = async (newTask: any) => {
-  if (newTask.id) {
-    console.log('newTask', newTask)
-    await taskApi.update(newTask)
-  } else {
-    await taskApi.add(newTask)
-  }
-  doShowAddControlTaskModal.value = false
 }
 
 const searchValue = ref('')

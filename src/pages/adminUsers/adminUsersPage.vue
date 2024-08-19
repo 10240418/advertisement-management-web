@@ -1,18 +1,14 @@
 <script setup lang="ts">
-import { ref, reactive, toRaw, watch } from 'vue'
+import { ref } from 'vue'
 import { useAdminUsers } from './composables/adminUsers'
-import { useModal, useToast } from 'vuestic-ui'
 import { admin_user_type } from '../../data/admin_user'
-import _ from 'lodash'
-import adminUsersTable from './widgets/adminUsersTable.vue'
-import editAdminUserForm from './widgets/editAdminUserForm.vue'
+import AdminUsersTable from './widgets/AdminUsersTable.vue'
+import EditAdminUserForm from './widgets/EditAdminUserForm.vue'
 
 const doShowEditUserModal = ref(false)
 const doShowAddUserModal = ref(false)
 
-const { isLoading, adminusers, sorting, pagination, ...userApi } = useAdminUsers()
-
-const adminUsersShowInTable = ref<admin_user_type[]>([])
+const { ...userApi } = useAdminUsers()
 const userToEdit = ref<admin_user_type | null>(null)
 
 const showEditUserModal = (user: admin_user_type) => {
@@ -25,35 +21,11 @@ const showAddUserModal = () => {
   userToEdit.value = null
 }
 
-const { init: notify } = useToast()
-
-const onUserDelete = async (user: any) => {
-  await userApi.remove([user.id])
-  notify({
-    message: `${user.username} has been deleted`,
-    color: 'success',
-  })
-}
-const fectchUserByPa = async (pagination: any) => {
-  await userApi.fetch()
-  adminUsersShowInTable.value = adminusers.value
-}
 const onSave = (user: any) => {
-  if (user.id) {
-    userApi.update(user)
-  } else {
-    userApi.add(user)
-  }
+  userApi.add(user)
   doShowEditUserModal.value = false
   doShowAddUserModal.value = false
 }
-watch(
-  adminusers,
-  () => {
-    adminUsersShowInTable.value = _.cloneDeep(toRaw(adminusers.value))
-  },
-  { deep: true },
-)
 </script>
 
 <template>
@@ -64,27 +36,14 @@ watch(
         <VaButton @click="showAddUserModal">Add User</VaButton>
       </div>
 
-      <adminUsersTable
-        :pagination="pagination"
-        :sorting="sorting"
-        :users="adminUsersShowInTable"
-        :loading="isLoading"
-        @edit-user="showEditUserModal"
-        @delete-user="onUserDelete"
-        @fectch-user="fectchUserByPa"
-      />
+      <AdminUsersTable @editUser="showEditUserModal" />
     </VaCardContent>
   </VaCard>
 
   <VaModal v-model="doShowAddUserModal" size="small" mobile-fullscreen close-button hide-default-actions>
     <h1 class="va-h5">Add AdminUser</h1>
-    <editAdminUserForm v-model="userToEdit" @close="doShowAddUserModal = false" @save="onSave(userToEdit)" />
+    <EditAdminUserForm v-model="userToEdit" @close="doShowAddUserModal = false" @save="onSave(userToEdit)" />
   </VaModal>
-  <VaModal v-model="doShowEditUserModal" size="small" mobile-fullscreen close-button hide-default-actions>
-    <h1 class="va-h5">Edit AdminUser</h1>
-    <editAdminUserForm v-model="userToEdit" @close="doShowEditUserModal = false" @save="onSave" />
-  </VaModal>
-  <!-- <draggableDialog></draggableDialog> -->
 </template>
 <style scoped>
 .span-filter {

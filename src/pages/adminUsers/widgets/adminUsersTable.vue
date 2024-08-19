@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { defineVaDataTableColumns, useModal } from 'vuestic-ui'
-import { PropType, computed, toRef, watch, ref, onMounted, onBeforeUnmount } from 'vue'
+import { defineVaDataTableColumns, useModal, useToast } from 'vuestic-ui'
+import { computed, watch, ref, onMounted, onBeforeUnmount } from 'vue'
 import { admin_user_type } from '../../../data/admin_user'
 import moment from 'moment'
+import { useAdminUsers } from '../composables/adminUsers'
 
 const columns = defineVaDataTableColumns([
   { label: 'ID', key: 'id', sortable: true, width: '5%' },
@@ -11,25 +12,11 @@ const columns = defineVaDataTableColumns([
   { label: 'create_at', key: 'createdAt', sortable: false, width: '25%' },
   { label: 'Actions', key: 'actions', sortable: false, width: '5%' },
 ])
-
-const props = defineProps({
-  users: {
-    type: Array as PropType<admin_user_type[]>,
-    required: true,
-  },
-  loading: { type: Boolean, default: false },
-  pagination: { type: Object as PropType<any>, required: true },
-  sorting: { type: Object as PropType<any>, required: true },
+const { sorting, pagination, adminUsers, isLoading, fetch, remove, reset } = useAdminUsers()
+const users = computed(() => {
+  return adminUsers.value
 })
-
-const emit = defineEmits<{
-  (event: 'edit-user', user: any): void
-  (event: 'delete-user', user: any): void
-  (event: 'fectch-user', params: any): void
-}>()
-
-const users = toRef(props, 'users')
-const totalPages = computed(() => Math.ceil(props.pagination.total / props.pagination.pageSize))
+const totalPages = computed(() => Math.ceil(pagination.value.total / pagination.value.pageSize))
 const pagesOptions = computed(() => {
   const options = []
   for (let i = 1; i <= totalPages.value; i++) {
@@ -39,7 +26,8 @@ const pagesOptions = computed(() => {
 })
 
 const { confirm } = useModal()
-
+const { init: notify } = useToast()
+const toast = useToast()
 const onUserDelete = async (user: any) => {
   const agreed = await confirm({
     title: 'Delete user',
@@ -51,7 +39,42 @@ const onUserDelete = async (user: any) => {
   })
 
   if (agreed) {
-    emit('delete-user', user)
+    remove([user.id])
+      .then(() => {
+        notify({
+          message: `${user.username} has been deleted`,
+          color: 'success',
+        })
+      })
+      .catch((error) => {
+        toast.init({ message: `Error: ${error}`, color: 'danger' })
+        console.log(error)
+      })
+  }
+}
+
+const onAdminUserReset = async (user: any) => {
+  const agreed = await confirm({
+    title: 'Reset password',
+    message: `Are you sure you want to reset password for ${user.name}?`,
+    okText: 'Reset',
+    cancelText: 'Cancel',
+    size: 'small',
+    maxWidth: '380px',
+  })
+
+  if (agreed) {
+    reset({ id: user.id })
+      .then(() => {
+        notify({
+          message: `${user.username} has been reset password`,
+          color: 'success',
+        })
+      })
+      .catch((error) => {
+        toast.init({ message: `Error: ${error}`, color: 'danger' })
+        console.log(error)
+      })
   }
 }
 
@@ -62,38 +85,27 @@ const currentPageData = computed(() => {
   } else if (users.value && typeof users.value === 'object') {
     usersArray = [users.value]
   }
-  const startIndex = (props.pagination.pageNum - 1) * props.pagination.pageSize
-  const endIndex = startIndex + props.pagination.pageSize
+  const startIndex = (pagination.value.pageNum - 1) * pagination.value.pageSize
+  const endIndex = startIndex + pagination.value.pageSize
 
-  if (usersArray.length <= props.pagination.pageSize) return users.value
+  if (usersArray.length <= pagination.value.pageSize) return users.value
   else return usersArray.value.slice(startIndex, endIndex)
 })
 
 watch(
-  () => [props.pagination.pageNum, props.pagination.pageSize, props.sorting.sortingOrder, props.sorting.sortBy],
+  () => [pagination.value.pageNum, pagination.value.pageSize, sorting.value.sortingOrder, sorting.value.sortBy],
   () => {
-    console.log(props.sorting.sortingOrder)
-    console.log(props.sorting.sortBy)
-    if (props.pagination.total < props.pagination.pageSize * (props.pagination.pageNum - 1)) {
-      props.pagination.pageNum = 1
+    if (pagination.value.total < pagination.value.pageSize * (pagination.value.pageNum - 1)) {
+      pagination.value.pageNum = 1
     }
-    emit('fectch-user', {
-      pageNum: props.pagination.pageNum,
-      pageSize: props.pagination.pageSize,
-      desc: props.sorting.sortOrder === 'desc' ? true : false,
-    })
+    fetch()
   },
 )
 
-console.log(props.sorting.sortingOrder)
 //气泡提示框
 const showContentUser = ref<admin_user_type | null>(null)
 const showContent = (rowData: any) => {
-  if (showContentUser.value === rowData) {
-    showContentUser.value = null
-  } else {
-    showContentUser.value = rowData
-  }
+  showContentUser.value = rowData
 }
 const handleClickOutside = (event: MouseEvent) => {
   const target = event.target as HTMLElement
@@ -110,17 +122,18 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
+  fetch()
   document.removeEventListener('click', handleClickOutside)
 })
 </script>
 
 <template>
   <VaDataTable
+    v-model:sort-by="sorting.sortBy"
+    v-model:sorting-order="sorting.sortingOrder"
     :columns="columns"
     :items="currentPageData"
-    :loading="$props.loading"
-    v-model:sort-by="props.sorting.sortBy"
-    v-model:sorting-order="props.sorting.sortingOrder"
+    :loading="isLoading"
   >
     <template #cell(createdAt)="{ rowData }">
       <div>
@@ -139,8 +152,9 @@ onBeforeUnmount(() => {
       </div>
     </template>
 
-    <template #cell(actions)="{ rowData }" class="overflow-y-scroll max-h[40px]">
-      <VaPopover placement="bottom" trigger="click" color=" backgroundSecondary">
+    <!-- eslint-disable-next-line vue/no-useless-template-attributes -->
+    <template #cell(actions)="{ rowData }">
+      <VaPopover placement="bottom" trigger="click" color=" backgroundSecondary" class="max-h[40px]">
         <div
           class="flex items-center justify-center relative hover:bg-slate-100 rounded-[4px]"
           @click.stop="showContent(rowData)"
@@ -148,7 +162,7 @@ onBeforeUnmount(() => {
           <VaIcon name="more_horiz" size="20px" class="mr-2 cursor-pointer"> </VaIcon>
         </div>
         <template #body>
-          <transition name="fade">
+          <Transition name="fade">
             <div
               v-show="showContentUser?.id === rowData.id"
               class="tooltip-content flex flex-col justify-center z-999 items-center relative border border-solid border-gray-300 p-2 rounded-md shadow-lg"
@@ -156,12 +170,12 @@ onBeforeUnmount(() => {
               <VaButton
                 preset="secondary"
                 size="small"
-                icon="mso-edit"
+                icon="mso-restart_alt"
                 aria-label="Edit user"
-                @click="$emit('edit-user', rowData as any)"
                 class="w-full justify-between"
+                @click="onAdminUserReset(rowData)"
               >
-                <span>Edit</span>
+                <span>Reset</span>
               </VaButton>
               <VaButton
                 preset="secondary"
@@ -169,13 +183,13 @@ onBeforeUnmount(() => {
                 icon="mso-delete"
                 color="danger"
                 aria-label="Delete user"
-                @click="onUserDelete(rowData)"
                 class="w-full"
+                @click="onUserDelete(rowData)"
               >
                 <span>Delete</span>
               </VaButton>
             </div>
-          </transition>
+          </Transition>
         </template>
       </VaPopover>
     </template>
@@ -183,11 +197,11 @@ onBeforeUnmount(() => {
 
   <div class="flex flex-col-reverse md:flex-row gap-2 justify-between items-center py-2">
     <div>
-      <b>total: {{ $props.pagination.total }} </b>
+      <b>total: {{ pagination.total }} </b>
       pageNum:
-      <VaSelect v-model="$props.pagination.pageNum" class="!w-16" selected-top-shown :options="pagesOptions" />
+      <VaSelect v-model="pagination.pageNum" class="!w-16" selected-top-shown :options="pagesOptions" />
       pageSize:
-      <VaSelect v-model="$props.pagination.pageSize" class="!w-20" selected-top-shown :options="[5, 10, 20, 50, 100]" />
+      <VaSelect v-model="pagination.pageSize" class="!w-20" selected-top-shown :options="[1, 2, 5, 10, 20, 50, 100]" />
     </div>
 
     <div v-if="totalPages > 1" class="flex">
@@ -195,19 +209,19 @@ onBeforeUnmount(() => {
         preset="secondary"
         icon="va-arrow-left"
         aria-label="Previous page"
-        :disabled="$props.pagination.pageNum === 1"
-        @click="$props.pagination.pageNum--"
+        :disabled="pagination.pageNum === 1"
+        @click="pagination.pageNum--"
       />
       <VaButton
         class="mr-2"
         preset="secondary"
         icon="va-arrow-right"
         aria-label="Next page"
-        :disabled="$props.pagination.pageNum === totalPages"
-        @click="$props.pagination.pageNum++"
+        :disabled="pagination.pageNum === totalPages"
+        @click="pagination.pageNum++"
       />
       <VaPagination
-        v-model="$props.pagination.pageNum"
+        v-model="pagination.pageNum"
         buttons-preset="secondary"
         :pages="totalPages"
         :visible-pages="5"
