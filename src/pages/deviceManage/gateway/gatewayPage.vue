@@ -11,24 +11,24 @@
         <VaButton @click="showAddGatewayModal">Add Gateway</VaButton>
       </div>
 
-      <gatewayTable
+      <GatewayTable
         :pagination="pagination"
         :gateways="gatewaysShowInTable"
         :loading="isLoading"
         :sorting="sorting"
-        @edit-gateway="showEditGatewayModal"
-        @detail-gateway="showEditGatewayDialog"
-        @delete-gateway="onGatewayDelete"
-        @fetch-gateway="fetchGateway"
+        @editGateway="showEditGatewayModal"
+        @detailGateway="showEditGatewayDialog"
+        @deleteGateway="onGatewayDelete"
+        @fetchGateway="fetchGateway"
       />
     </VaCardContent>
     <VaModal v-model="doShowAddGatewayModal" size="small" mobile-fullscreen close-button hide-default-actions>
       <h1 class="va-h5">Add Gateway</h1>
-      <editGatewayForm v-model="gatewayToEdit" @close="doShowAddGatewayModal = false" @save="onSave(gatewayToEdit)" />
+      <EditGatewayForm v-model="gatewayToEdit" @close="doShowAddGatewayModal = false" @save="onSave(gatewayToEdit)" />
     </VaModal>
     <VaModal v-model="doShowEditGatewayModal" size="small" mobile-fullscreen close-button hide-default-actions>
       <h1 class="va-h5">Edit Gateway</h1>
-      <editGatewayForm v-model="gatewayToEdit" @close="doShowEditGatewayModal = false" @save="onSave(gatewayToEdit)" />
+      <EditGatewayForm v-model="gatewayToEdit" @close="doShowEditGatewayModal = false" @save="onSave(gatewayToEdit)" />
     </VaModal>
   </VaCard>
 </template>
@@ -51,7 +51,7 @@ const gatewaysShowInTable = ref<gateway_type[]>([])
 const gatewayToEdit = ref<gateway_type | null>(null)
 
 const showEditGatewayDialog = (gateway: gateway_type) => {
-  openWindow({path: '/gatewayDetail', query: {id: gateway.id}, width: 900})
+  openWindow({ path: '/gatewayDetail', query: { id: gateway.id }, width: 900 })
 }
 
 const showAddGatewayModal = () => {
