@@ -2,13 +2,19 @@
   <VaCard class="w-full h-full flex">
     <div class="w-full h-full flex flex-col ml-3">
       <!-- Top Section -->
-      <detailCard :labels="labelsProp" :datas="datasProp" :fontWeight="`font-bold`" :indexWeight="3">
+      <DetailCard
+        :labels="labelsProp"
+        :datas="datasProp"
+        :font-weight="`font-bold`"
+        :index-weight="3"
+      >
         <div class="flex flex-col relative">
           <!-- Gateway Section -->
           <div class="flex flex-row w-full items-center">
             <VaListLabel class="flex justify-start">Gateway</VaListLabel>
             <div class="absolute ml-20">
-              <span class="truncate w-[72px]">{{ controlTask?.gateway?.name }}</span>
+              <span
+                class="truncate w-[72px]">{{ controlTask?.gateway?.name }}</span>
             </div>
             <VaPopover
               class="absolute ml-52"
@@ -22,16 +28,20 @@
                 @click="isGatewayCollapsed = !isGatewayCollapsed"
               />
               <template #body>
-                <div class="grid grid-cols-2 gap-2 border border-solid p-2 rounded-md shadow-lg">
+                <div
+                  class="grid grid-cols-2 gap-2 border border-solid p-2 rounded-md shadow-lg"
+                >
                   <VaListLabel class="flex justify-start">ID</VaListLabel>
                   <span>{{ controlTask?.gateway.id }}</span>
                   <VaListLabel class="flex justify-start">Name</VaListLabel>
                   <span>{{ controlTask?.gateway.name }}</span>
-                  <VaListLabel class="flex justify-start">IP Address</VaListLabel>
+                  <VaListLabel class="flex justify-start">IP Address
+                  </VaListLabel>
                   <span>{{ controlTask?.gateway.ipAddr }}</span>
                   <VaListLabel class="flex justify-start">Remark</VaListLabel>
                   <span>{{ controlTask?.gateway.remark }}</span>
-                  <VaListLabel class="flex justify-start">Created At</VaListLabel>
+                  <VaListLabel class="flex justify-start">Created At
+                  </VaListLabel>
                   <span>{{ controlTask?.gateway.createdAt }}</span>
                 </div>
               </template>
@@ -41,7 +51,8 @@
           <div class="flex flex-row mr-3 items-center gap-3">
             <VaListLabel class="flex justify-start">Meter</VaListLabel>
             <div class="absolute ml-20">
-              <span class="truncate w-[72px]">{{ controlTask?.meter?.name }}</span>
+              <span
+                class="truncate w-[72px]">{{ controlTask?.meter?.name }}</span>
             </div>
 
             <VaPopover
@@ -56,7 +67,9 @@
                 @click="isMeterCollapsed = !isMeterCollapsed"
               />
               <template #body>
-                <div class="grid grid-cols-[1fr_4fr] border border-solid rounded-md shadow-lg p-2">
+                <div
+                  class="grid grid-cols-[1fr_4fr] border border-solid rounded-md shadow-lg p-2"
+                >
                   <VaListLabel class="flex justify-start">ID</VaListLabel>
                   <span>{{ controlTask?.meter.id }}</span>
                   <VaListLabel class="flex justify-start">Name</VaListLabel>
@@ -67,14 +80,15 @@
                   <span>{{ controlTask?.meter.unitId }}</span>
                   <VaListLabel class="flex justify-start">Remark</VaListLabel>
                   <span>{{ controlTask?.meter.remark }}</span>
-                  <VaListLabel class="flex justify-start">Created At</VaListLabel>
+                  <VaListLabel class="flex justify-start">Created At
+                  </VaListLabel>
                   <span>{{ controlTask?.meter.createdAt }}</span>
                 </div>
               </template>
             </VaPopover>
           </div>
         </div>
-      </detailCard>
+      </DetailCard>
 
       <!-- Footer Section -->
       <div class="dialog-footer">
@@ -91,7 +105,7 @@ import { useRoute } from 'vue-router'
 import { fetchTask, updateTask } from '../../../../apis/task'
 import editSystemTaskForm from './editSystemTaskForm.vue'
 import { useToast } from 'vuestic-ui'
-import detailCard from '../../../../components/cards/detailCard.vue'
+import DetailCard from '../../../../components/cards/DetailCard.vue'
 interface task_type_fetch {
   id: number
   name: string

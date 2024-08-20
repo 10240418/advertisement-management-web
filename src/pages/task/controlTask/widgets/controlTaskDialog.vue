@@ -2,11 +2,17 @@
   <VaCard class="w-full h-full flex">
     <div class="w-full h-full flex flex-col ml-3">
       <!-- Top Section -->
-      <detailCard :labels="labelsProp" :datas="datasProp" :fontWeight="`font-bold`" :indexWeight="3">
+      <DetailCard
+        :labels="labelsProp"
+        :datas="datasProp"
+        :font-weight="`font-bold`"
+        :index-weight="3"
+      >
         <div class="flex flex-col relative">
           <div class="flex flex-row mr-3 items-center gap-3">
             <VaListLabel class="flex justify-start">Gateway</VaListLabel>
-            <span class="absolute ml-20 truncate text-[16px]">{{ controlTask?.gatewayId }}</span>
+            <span
+              class="absolute ml-20 truncate text-[16px]">{{ controlTask?.gatewayId }}</span>
             <VaPopover
               class="absolute ml-52"
               color="backgroundSecondary"
@@ -19,16 +25,20 @@
                 @click="isGatewayCollapsed = !isGatewayCollapsed"
               />
               <template #body>
-                <div class="grid grid-cols-[1fr_3fr] border border-solid p-2 rounded-md shadow-lg">
+                <div
+                  class="grid grid-cols-[1fr_3fr] border border-solid p-2 rounded-md shadow-lg"
+                >
                   <VaListLabel class="flex justify-start">ID</VaListLabel>
                   <span>{{ controlTask?.gateway.id }}</span>
                   <VaListLabel class="flex justify-start">Name</VaListLabel>
                   <span>{{ controlTask?.gateway.name }}</span>
-                  <VaListLabel class="flex justify-start">IP Address</VaListLabel>
+                  <VaListLabel class="flex justify-start">IP Address
+                  </VaListLabel>
                   <span>{{ controlTask?.gateway.ipAddr }}</span>
                   <VaListLabel class="flex justify-start">Remark</VaListLabel>
                   <span>{{ controlTask?.gateway.remark }}</span>
-                  <VaListLabel class="flex justify-start">Created At</VaListLabel>
+                  <VaListLabel class="flex justify-start">Created At
+                  </VaListLabel>
                   <span>{{ controlTask?.gateway.createdAt }}</span>
                 </div>
               </template>
@@ -37,7 +47,8 @@
 
           <div class="flex flex-row mr-3 items-center gap-3">
             <VaListLabel class="flex justify-start">Meter</VaListLabel>
-            <span class="absolute ml-20 truncate text-[16px]">{{ controlTask?.meter?.name }}</span>
+            <span
+              class="absolute ml-20 truncate text-[16px]">{{ controlTask?.meter?.name }}</span>
             <VaPopover
               class="absolute ml-52"
               color="backgroundSecondary"
@@ -50,7 +61,9 @@
                 @click="isMeterCollapsed = !isMeterCollapsed"
               />
               <template #body>
-                <div class="grid grid-cols-[1fr_3fr] border border-solid p-2 rounded-md shadow-lg">
+                <div
+                  class="grid grid-cols-[1fr_3fr] border border-solid p-2 rounded-md shadow-lg"
+                >
                   <VaListLabel class="flex justify-start">ID</VaListLabel>
                   <span>{{ controlTask?.meter.id }}</span>
                   <VaListLabel class="flex justify-start">Name</VaListLabel>
@@ -61,26 +74,38 @@
                   <span>{{ controlTask?.meter.unitId }}</span>
                   <VaListLabel class="flex justify-start">Remark</VaListLabel>
                   <span>{{ controlTask?.meter.remark }}</span>
-                  <VaListLabel class="flex justify-start">Created At</VaListLabel>
+                  <VaListLabel class="flex justify-start">Created At
+                  </VaListLabel>
                   <span>{{ controlTask?.meter.createdAt }}</span>
                 </div>
               </template>
             </VaPopover>
           </div>
         </div>
-      </detailCard>
+      </DetailCard>
 
       <!-- Footer Section -->
       <div class="dialog-footer">
         <VaButton @click="cancel">Cancel</VaButton>
-        <VaButton color="primary" @click="openEditModal" icon="mso-edit" class="ml-2 h-[30px] w-[72px]">Edit</VaButton>
+        <VaButton
+          color="primary"
+          icon="mso-edit"
+          class="ml-2 h-[30px] w-[72px]"
+          @click="openEditModal"
+        >Edit</VaButton>
       </div>
 
       <!-- Edit Modal -->
-      <VaModal v-model="showEditModal" size="small" mobile-fullscreen close-button hide-default-actions>
+      <VaModal
+        v-model="showEditModal"
+        size="small"
+        mobile-fullscreen
+        close-button
+        hide-default-actions
+      >
         <h1>Edit Control Task</h1>
         <EditControlTaskForm
-          :modelValue="controlTask"
+          :model-value="controlTask"
           @update:modelValue="updateControlTaskData"
           @save="saveControlTask"
           @close="closeEditModal"
@@ -97,7 +122,7 @@ import { useRoute } from 'vue-router'
 import { fetchTask, updateTask } from '../../../../apis/task'
 import EditControlTaskForm from './editControlTaskForm.vue'
 import { useToast } from 'vuestic-ui'
-import detailCard from '@/components/cards/detailCard.vue'
+import DetailCard from '@/components/cards/DetailCard.vue'
 interface task_type_fetch {
   id: number
   name: string
