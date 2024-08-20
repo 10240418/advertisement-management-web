@@ -19,6 +19,7 @@ const columns = defineVaDataTableColumns([
   { label: 'Actions', key: 'actions', sortable: false, width: '5%' },
 ])
 
+const emit = defineEmits(['detailUnit', 'editUnit'])
 const totalPages = computed(() => Math.ceil(pagination.value.total / pagination.value.pageSize))
 const pagesOptions = computed(() => {
   const options = []
@@ -152,10 +153,7 @@ onBeforeUnmount(() => {
     </template>
 
     <template #cell(export)="{ rowData }">
-      <div
-        class="text-primary"
-        @click="pickupRange(rowData.id)"
-      >Export</div>
+      <div class="text-primary" @click="pickupRange(rowData.id)">Export</div>
     </template>
 
     <template #cell(detail)="{ rowData }">
@@ -164,29 +162,20 @@ onBeforeUnmount(() => {
         size="small"
         icon="mso-info"
         aria-label="Info Resident"
-        @click="$emit('detailUnit', rowData as any)"
         class="w-full justify-between ml-[-5px]"
+        @click="emit('detailUnit', rowData as any)"
       >
         <span>Detail</span>
       </VaButton>
     </template>
 
     <template #cell(actions)="{ rowData }">
-      <VaPopover
-        placement="bottom"
-        trigger="click"
-        color=" backgroundSecondary"
-        class="max-h[40px]"
-      >
+      <VaPopover placement="bottom" trigger="click" color=" backgroundSecondary" class="max-h[40px]">
         <div
           class="flex items-center justify-center relative hover:bg-slate-100 rounded-[4px]"
           @click.stop="showContent(rowData)"
         >
-          <VaIcon
-            name="more_horiz"
-            size="20px"
-            class="mr-2 cursor-pointer"
-          ></VaIcon>
+          <VaIcon name="more_horiz" size="20px" class="mr-2 cursor-pointer"></VaIcon>
         </div>
         <template #body>
           <Transition name="fade">
@@ -200,7 +189,7 @@ onBeforeUnmount(() => {
                 icon="mso-edit"
                 aria-label="Edit unit"
                 class="w-full justify-between"
-                @click="$emit('edit-unit', rowData as any)"
+                @click="emit('editUnit', rowData as any)"
               >
                 <span>Edit</span>
               </VaButton>
@@ -222,31 +211,16 @@ onBeforeUnmount(() => {
     </template>
   </VaDataTable>
 
-  <div
-    class="flex flex-col-reverse md:flex-row gap-2 justify-between items-center py-2"
-  >
+  <div class="flex flex-col-reverse md:flex-row gap-2 justify-between items-center py-2">
     <div>
       <b>total: {{ pagination.total }} </b>
       pageNum:
-      <VaSelect
-        v-model="pagination.pageNum"
-        class="!w-16"
-        selected-top-shown
-        :options="pagesOptions"
-      />
+      <VaSelect v-model="pagination.pageNum" class="!w-16" selected-top-shown :options="pagesOptions" />
       pageSize:
-      <VaSelect
-        v-model="pagination.pageSize"
-        class="!w-20"
-        selected-top-shown
-        :options="[5, 10, 20, 50, 100]"
-      />
+      <VaSelect v-model="pagination.pageSize" class="!w-20" selected-top-shown :options="[5, 10, 20, 50, 100]" />
     </div>
 
-    <div
-      v-if="totalPages > 1"
-      class="flex"
-    >
+    <div v-if="totalPages > 1" class="flex">
       <VaButton
         preset="secondary"
         icon="va-arrow-left"
@@ -273,26 +247,13 @@ onBeforeUnmount(() => {
     </div>
   </div>
 
-  <VaModal
-    v-model="showRangePicker"
-    size="small"
-    mobile-fullscreen
-    close-button
-    hide-default-actions
-  >
+  <VaModal v-model="showRangePicker" size="small" mobile-fullscreen close-button hide-default-actions>
     <h5 class="va-h6">Pickup Range</h5>
     <div class="w-full flex justify-center">
-      <VaDatePicker
-        v-model="range"
-        mode="range"
-      />
+      <VaDatePicker v-model="range" mode="range" />
     </div>
     <div class="w-full flex justify-end">
-      <VaButton
-        preset="primary"
-        :loading="isExportButtonLoading"
-        @click="doExport"
-      >Export</VaButton>
+      <VaButton preset="primary" :loading="isExportButtonLoading" @click="doExport">Export</VaButton>
     </div>
   </VaModal>
 </template>

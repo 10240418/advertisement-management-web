@@ -84,33 +84,13 @@ const showEditUnitDialog = (unit: unit_type) => {
     </VaCardContent>
   </VaCard>
 
-  <VaModal
-    v-model="doShowAddUnitModal"
-    size="small"
-    mobile-fullscreen
-    close-button
-    hide-default-actions
-  >
+  <VaModal v-model="doShowAddUnitModal" size="small" mobile-fullscreen close-button hide-default-actions>
     <h1 class="va-h5">Add Unit</h1>
-    <EditUnitForm
-      v-model="unitToEdit"
-      @close="doShowAddUnitModal = false"
-      @save="onSave(unitToEdit)"
-    />
+    <EditUnitForm v-model="unitToEdit" @close="doShowAddUnitModal = false" @save="onSave(unitToEdit)" />
   </VaModal>
-  <VaModal
-    v-model="doShowEditUnitModal"
-    size="small"
-    mobile-fullscreen
-    close-button
-    hide-default-actions
-  >
+  <VaModal v-model="doShowEditUnitModal" size="small" mobile-fullscreen close-button hide-default-actions>
     <h1 class="va-h5">Edit Unit</h1>
-    <EditUnitForm
-      v-model="unitToEdit"
-      @close="doShowEditUnitModal = false"
-      @save="onSave"
-    />
+    <EditUnitForm v-model="unitToEdit" @close="doShowEditUnitModal = false" @save="onSave" />
   </VaModal>
 </template>
 
