@@ -153,8 +153,8 @@ const router = createRouter({
 })
 
 router.beforeResolve((to, from, next) => {
-  let token = localStorage.getItem('AdminToken')
-  let hasLogin = token != null && token != ''
+  const token = localStorage.getItem('AdminToken')
+  const hasLogin = token != null && token != ''
 
   if (to.name !== 'login' && !hasLogin) {
     next({ name: 'login' })

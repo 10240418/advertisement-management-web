@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineVaDataTableColumns, useModal, useToast } from 'vuestic-ui'
+import { defineVaDataTableColumns, useModal } from 'vuestic-ui'
 import { computed, watch, ref, onMounted, onBeforeUnmount } from 'vue'
 import { admin_user_type } from '../../../data/admin_user'
 import moment from 'moment'
@@ -16,6 +16,7 @@ const { sorting, pagination, adminUsers, isLoading, fetch, remove, reset } = use
 const users = computed(() => {
   return adminUsers.value
 })
+const Loading = computed(() => isLoading.value)
 const totalPages = computed(() => Math.ceil(pagination.value.total / pagination.value.pageSize))
 const pagesOptions = computed(() => {
   const options = []
@@ -26,8 +27,6 @@ const pagesOptions = computed(() => {
 })
 
 const { confirm } = useModal()
-const { init: notify } = useToast()
-const toast = useToast()
 const onUserDelete = async (user: any) => {
   const agreed = await confirm({
     title: 'Delete user',
@@ -40,16 +39,6 @@ const onUserDelete = async (user: any) => {
 
   if (agreed) {
     remove([user.id])
-      .then(() => {
-        notify({
-          message: `${user.username} has been deleted`,
-          color: 'success',
-        })
-      })
-      .catch((error) => {
-        toast.init({ message: `Error: ${error}`, color: 'danger' })
-        console.log(error)
-      })
   }
 }
 
@@ -65,16 +54,6 @@ const onAdminUserReset = async (user: any) => {
 
   if (agreed) {
     reset({ id: user.id })
-      .then(() => {
-        notify({
-          message: `${user.username} has been reset password`,
-          color: 'success',
-        })
-      })
-      .catch((error) => {
-        toast.init({ message: `Error: ${error}`, color: 'danger' })
-        console.log(error)
-      })
   }
 }
 
@@ -93,8 +72,15 @@ const currentPageData = computed(() => {
 })
 
 watch(
-  () => [pagination.value.pageNum, pagination.value.pageSize, sorting.value.sortingOrder, sorting.value.sortBy],
+  () => [
+    Loading,
+    pagination.value.pageNum,
+    pagination.value.pageSize,
+    sorting.value.sortingOrder,
+    sorting.value.sortBy,
+  ],
   () => {
+    console.log(Loading)
     if (pagination.value.total < pagination.value.pageSize * (pagination.value.pageNum - 1)) {
       pagination.value.pageNum = 1
     }
@@ -133,7 +119,7 @@ onBeforeUnmount(() => {
     v-model:sorting-order="sorting.sortingOrder"
     :columns="columns"
     :items="currentPageData"
-    :loading="isLoading"
+    :loading="Loading"
   >
     <template #cell(createdAt)="{ rowData }">
       <div>
@@ -201,7 +187,7 @@ onBeforeUnmount(() => {
       pageNum:
       <VaSelect v-model="pagination.pageNum" class="!w-16" selected-top-shown :options="pagesOptions" />
       pageSize:
-      <VaSelect v-model="pagination.pageSize" class="!w-20" selected-top-shown :options="[1, 2, 5, 10, 20, 50, 100]" />
+      <VaSelect v-model="pagination.pageSize" class="!w-20" selected-top-shown :options="[5, 10, 20, 50, 100]" />
     </div>
 
     <div v-if="totalPages > 1" class="flex">

@@ -44,7 +44,7 @@ export const useAdminUsers = (options?: {
       })
   }
 
-  const add = (user: Omit<any, 'id'>) => {
+  const add = (user: any) => {
     isLoading.value = true
     addAdminUser(user)
       .then(() => {

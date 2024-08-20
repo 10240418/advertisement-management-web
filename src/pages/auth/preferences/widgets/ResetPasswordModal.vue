@@ -8,7 +8,11 @@
     @update:modelValue="emits('cancel')"
   >
     <h1 class="va-h5 mb-4">Reset password</h1>
-    <VaForm ref="form" class="space-y-6" @submit.prevent="submit">
+    <VaForm
+      ref="form"
+      class="space-y-6"
+      @submit.prevent="submit"
+    >
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <VaInput
           v-model="oldPassowrd"
@@ -39,20 +43,39 @@
       <div class="flex flex-col space-y-2">
         <div class="flex space-x-2 items-center">
           <div>
-            <VaIcon :name="newPassword?.length! >= 8 ? 'mso-check' : 'mso-close'" color="secondary" size="20px" />
+            <VaIcon
+              :name="newPassword?.length! >= 8 ? 'mso-check' : 'mso-close'"
+              color="secondary"
+              size="20px"
+            />
           </div>
           <p>Must be at least 8 characters long</p>
         </div>
         <div class="flex space-x-2 items-center">
           <div>
-            <VaIcon :name="new Set(newPassword).size >= 6 ? 'mso-check' : 'mso-close'" color="secondary" size="20px" />
+            <VaIcon
+              :name="new Set(newPassword).size >= 6 ? 'mso-check' : 'mso-close'"
+              color="secondary"
+              size="20px"
+            />
           </div>
           <p>Must contain at least 6 unique characters</p>
         </div>
       </div>
-      <div class="flex flex-col-reverse md:justify-end md:flex-row md:space-x-4">
-        <VaButton :style="buttonStyles" preset="secondary" color="secondary" @click="emits('cancel')"> Cancel</VaButton>
-        <VaButton :style="buttonStyles" class="mb-4 md:mb-0" type="submit" @click="submit"> Update Password</VaButton>
+      <div
+        class="flex flex-col-reverse md:justify-end md:flex-row md:space-x-4">
+        <VaButton
+          :style="buttonStyles"
+          preset="secondary"
+          color="secondary"
+          @click="emits('cancel')"
+        > Cancel</VaButton>
+        <VaButton
+          :style="buttonStyles"
+          class="mb-4 md:mb-0"
+          type="submit"
+          @click="submit"
+        > Update Password</VaButton>
       </div>
     </VaForm>
   </VaModal>
@@ -94,9 +117,4 @@ const repeatNewPasswordRules = [
 ]
 </script>
 
-<style lang="scss">
-// TODO temporary before https://github.com/epicmaxco/vuestic-ui/issues/4020 fix
-.va-modal__inner {
-  min-width: 326px;
-}
-</style>
+<style lang="scss"></style>

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useAdminUsers } from './composables/adminUsers'
 import { admin_user_type } from '../../data/admin_user'
 import AdminUsersTable from './widgets/AdminUsersTable.vue'
 import EditAdminUserForm from './widgets/EditAdminUserForm.vue'
@@ -8,7 +7,6 @@ import EditAdminUserForm from './widgets/EditAdminUserForm.vue'
 const doShowEditUserModal = ref(false)
 const doShowAddUserModal = ref(false)
 
-const { ...userApi } = useAdminUsers()
 const userToEdit = ref<admin_user_type | null>(null)
 
 const showEditUserModal = (user: admin_user_type) => {
@@ -21,11 +19,6 @@ const showAddUserModal = () => {
   userToEdit.value = null
 }
 
-const onSave = (user: any) => {
-  userApi.add(user)
-  doShowEditUserModal.value = false
-  doShowAddUserModal.value = false
-}
 </script>
 
 <template>
@@ -40,9 +33,18 @@ const onSave = (user: any) => {
     </VaCardContent>
   </VaCard>
 
-  <VaModal v-model="doShowAddUserModal" size="small" mobile-fullscreen close-button hide-default-actions>
+  <VaModal
+    v-model="doShowAddUserModal"
+    size="small"
+    mobile-fullscreen
+    close-button
+    hide-default-actions
+  >
     <h1 class="va-h5">Add AdminUser</h1>
-    <EditAdminUserForm v-model="userToEdit" @close="doShowAddUserModal = false" @save="onSave(userToEdit)" />
+    <EditAdminUserForm
+      v-model="userToEdit"
+      @close="doShowAddUserModal = false"
+    />
   </VaModal>
 </template>
 <style scoped>

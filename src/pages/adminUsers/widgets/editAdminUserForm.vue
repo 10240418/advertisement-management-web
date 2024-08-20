@@ -3,7 +3,9 @@ import { ref, watch, PropType, defineProps, defineEmits } from 'vue'
 import { useForm } from 'vuestic-ui'
 import { validators } from '../../../services/utils'
 import { admin_user_type } from '../../../data/admin_user'
+import { useAdminUsers } from '../composables/adminUsers'
 
+const { add, fetch } = useAdminUsers()
 const defaultNewAdminUser = {
   name: '',
   email: '',
@@ -40,8 +42,9 @@ const form = useForm('add-user-form')
 
 const onSave = () => {
   if (form.validate()) {
-    emit('update:modelValue', newAdminUser.value)
-    emit('save', newAdminUser.value)
+    add(newAdminUser.value)
+    fetch()
+    emit('close')
   }
 }
 

@@ -61,12 +61,15 @@ const submit = () => {
         localStorage.setItem('AdminPassword', formData.password)
         useUsers.changeEmail(formData.email)
         useUsers.changePassWord(formData.password)
+        console.log(useUsers.getEmail)
+        console.log(useUsers.getPassWord)
 
         toast.init({ message: res.data.message, color: 'success' })
         router.push({ name: 'home' })
       })
       .catch((err) => {
-        toast.init({ message: err.response.data.message, color: 'danger' })
+        toast.init({ message: err.response.data.error, color: 'danger' })
+        console.log(err)
       })
   }
 }
