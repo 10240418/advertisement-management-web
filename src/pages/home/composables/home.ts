@@ -18,9 +18,9 @@ export const useHomes = (options?: { sorting?: Ref<any>; pagination?: Ref<any> }
     try {
       const res = await fetchMeterStatus()
       meters.value = res.data.data
-    } catch (err: any) {
-      error.value = (err.message || 'Failed to fetch meters') as string
-      toast.init({ message: error.value, color: 'danger' })
+    } catch (error: any) {
+      toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
+      console.error(error)
     }
 
     isLoading.value = false
@@ -32,8 +32,9 @@ export const useHomes = (options?: { sorting?: Ref<any>; pagination?: Ref<any> }
       .then((res) => {
         meters.value = res.data.data ?? []
       })
-      .catch((error) => {
-        toast.init({ message: error.value, color: 'danger' })
+      .catch((error:any) => {
+        toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
+        console.error(error)
       })
     setTimeout(() => {
       pagination.value.total = meters.value.length

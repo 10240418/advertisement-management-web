@@ -2,13 +2,25 @@
   <VaCard>
     <div class="flex flex-col">
       <!-- Show loading spinner or message -->
-      <div v-if="loading" class="text-center">Loading...</div>
+      <div
+        v-if="loading"
+        class="text-center"
+      >Loading...</div>
 
       <!-- Show data table when not loading -->
-      <VaDataTable v-else :columns="columns" :items="meters" :loading="loading" class="flex flex-grow w-[700px]">
+      <VaDataTable
+        v-else
+        :columns="columns"
+        :items="meters"
+        :loading="loading"
+        class="flex flex-grow w-[700px]"
+      >
         <template #cell(name)="{ rowData }">
           <div class="relative">
-            <div class="truncate max-w-[150px] w-[150px]" :title="rowData.name">
+            <div
+              class="truncate max-w-[150px] w-[150px]"
+              :title="rowData.name"
+            >
               {{ rowData.name }}
             </div>
             <!-- Tooltip for full text on hover -->
@@ -24,7 +36,10 @@
 
         <template #cell(ipAddr)="{ rowData }">
           <div class="relative">
-            <div class="truncate max-w-[230px] w-[150px]" :title="rowData.ipAddr">
+            <div
+              class="truncate max-w-[230px] w-[150px]"
+              :title="rowData.ipAddr"
+            >
               {{ rowData.ipAddr }}
             </div>
             <!-- Tooltip for full text on hover -->
@@ -40,7 +55,10 @@
 
         <template #cell(remark)="{ rowData }">
           <div class="relative">
-            <div class="truncate w-[150px] max-w-[300px]" :title="rowData.remark">
+            <div
+              class="truncate w-[150px] max-w-[300px]"
+              :title="rowData.remark"
+            >
               {{ rowData.remark }}
             </div>
             <!-- Tooltip for full text on hover -->
@@ -90,10 +108,9 @@ onBeforeMount(() => {
       console.log('Data fetched:', meters.value)
       loading.value = false
     })
-    .catch((err) => {
-      console.error(err)
-      toast.init({ color: 'danger', message: 'Failed to fetch data' })
-      loading.value = false
+    .catch((error: any) => {
+      toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
+      console.error(error)
     })
 })
 </script>

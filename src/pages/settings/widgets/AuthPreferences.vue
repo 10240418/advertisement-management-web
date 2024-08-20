@@ -1,5 +1,7 @@
 <template>
-  <div class="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-6 min-h-[36px] leading-5">
+  <div
+    class="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-6 min-h-[36px] leading-5"
+  >
     <p class="font-bold w-[200px]">Email</p>
     <div class="flex-1">
       <div class="max-w-[748px]">
@@ -7,14 +9,26 @@
       </div>
     </div>
   </div>
-  <div class="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-6 min-h-[36px]">
+  <div
+    class="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-6 min-h-[36px]"
+  >
     <p class="font-bold w-[200px]">Password</p>
     <div class="flex-1">
       <div class="max-w-[748px]">•••••••••••••</div>
     </div>
-    <VaButton class="w-fit h-fit" preset="primary" @click="showChangePasswordModal = true"> Reset Password </VaButton>
+    <VaButton
+      class="w-fit h-fit"
+      preset="primary"
+      @click="showChangePasswordModal = true"
+    > Reset Password </VaButton>
   </div>
-  <VaModal v-model="showChangePasswordModal" width="500px" mobile-fullscreen close-button hide-default-actions>
+  <VaModal
+    v-model="showChangePasswordModal"
+    width="500px"
+    mobile-fullscreen
+    close-button
+    hide-default-actions
+  >
     <h1 class="va-h5">Change Password</h1>
     <div class="flex flex-col">
       <VaListLabel class="flex justify-start">Old Password</VaListLabel>
@@ -48,7 +62,11 @@
     </div>
     <!-- Buttons -->
     <div class="flex justify-end space-x-2">
-      <VaButton preset="secondary" color="secondary" @click="showChangePasswordModal = false">Cancel</VaButton>
+      <VaButton
+        preset="secondary"
+        color="secondary"
+        @click="showChangePasswordModal = false"
+      >Cancel</VaButton>
       <VaButton @click="onChangePassword">Save</VaButton>
     </div>
   </VaModal>
@@ -77,7 +95,7 @@ const onChangePassword = async () => {
   }
   console.log(newPassword.value)
   console.log(oldPassowrd.value)
-  changePasswordAdminUser({newPassword: newPassword.value ,oldPassowrd: oldPassowrd.value})
+  changePasswordAdminUser({ newPassword: newPassword.value, oldPassowrd: oldPassowrd.value })
     .then(() => {
       toast.init({
         message: 'You have successfully changed your password',
@@ -85,7 +103,7 @@ const onChangePassword = async () => {
       })
       showChangePasswordModal.value = false
     })
-    .catch((error) => {
+    .catch((error: any) => {
       toast.init({
         message: `Error: ${error.response.data.error}`,
         color: 'danger',

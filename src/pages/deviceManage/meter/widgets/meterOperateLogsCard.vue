@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { PropType, ref, onBeforeMount, watch } from 'vue'
+import { ref, onBeforeMount, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import VaTimelineItem from '../../../../components/va-timeline-item.vue'
 import { fetchOperateMeterLogsData } from '../../../../apis/meter'
@@ -34,8 +34,9 @@ const fetchOperateMeterLogs = async () => {
     const res = await fetchOperateMeterLogsData({ id: meterID.value, ...pagination.value })
     console.log(res.data.data)
     operateLogs.value = res.data.data
-  } catch (error) {
-    toast.init({ message: 'Fetch operate meter logs failed', color: 'danger' })
+  } catch (error: any) {
+    toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
+    console.error(error)
   }
 }
 onBeforeMount(() => {
@@ -60,12 +61,20 @@ const formattedDate = (isoDate: string): string => {
     <VaCardContent>
       <table class="mt-0">
         <tbody>
-          <tr v-for="(item, index) in operateLogs" :key="index">
+          <tr
+            v-for="(item, index) in operateLogs"
+            :key="index"
+          >
             <VaTimelineItem :date="formattedDate(item.createdAt)">
               <div class="flex flex-col gap-2">
                 <div class="flex flex-row gap-2 mr-2">
-                  <span>{{ item.meterName }}({{ item.meterId }})</span> <span class="text-slate-400">Operation:</span>
-                  <span v-if="item.operation === 1" class="text-blue-500">Open</span>
+                  <span>{{ item.meterName }}({{ item.meterId }})</span> <span
+                    class="text-slate-400"
+                  >Operation:</span>
+                  <span
+                    v-if="item.operation === 1"
+                    class="text-blue-500"
+                  >Open</span>
                   <span v-if="item.operation === 0">Close</span>
                 </div>
                 <div class="h-[2px]"></div>

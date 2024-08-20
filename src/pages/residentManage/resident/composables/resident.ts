@@ -1,10 +1,9 @@
 import { onBeforeMount, Ref, ref } from 'vue'
 import { resident_user_type } from '@/data/resident_user'
-import { type Filters, Pagination, Sorting } from '../../../../data/page'
+import { Pagination, Sorting } from '../../../../data/page'
 import {
   fetchResidents,
   addResident,
-  fetchResident,
   resetResidentPassword,
   updateResidentActive,
 } from '../../../../apis/resident'
@@ -39,10 +38,9 @@ export const useResidents = (options?: { pagination?: Ref<Pagination>; sorting?:
 
       residents.value = res.data.data
       pagination.value.total = res.data.pagination.total
-    } catch (err: any) {
-      console.error(err)
-      error.value = (err.message || 'Failed to fetch residents') as string
-      toast.init({ message: error.value, color: 'danger' })
+    } catch (error: any) {
+      toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
+      console.error(error)
     }
     isLoading.value = false
   }
@@ -54,10 +52,9 @@ export const useResidents = (options?: { pagination?: Ref<Pagination>; sorting?:
       await addResident(resident)
       await fetch()
       toast.init({ message: 'Resident added successfully', color: 'success' })
-    } catch (err: any) {
-      console.error(err)
-      error.value = (err.message || 'Failed to add resident') as string
-      toast.init({ message: error.value, color: 'danger' })
+    } catch (error: any) {
+      toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
+      console.error(error)
     }
     isLoading.value = false
   }
@@ -69,10 +66,9 @@ export const useResidents = (options?: { pagination?: Ref<Pagination>; sorting?:
       await updateResidentActive(data)
       await fetch()
       toast.init({ message: 'Resident status updated successfully', color: 'success' })
-    } catch (err: any) {
-      console.error(err)
-      error.value = (err.message || 'Failed to update resident status') as string
-      toast.init({ message: error.value, color: 'danger' })
+    } catch (error: any) {
+      toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
+      console.error(error)
     }
     isLoading.value = false
   }
@@ -84,10 +80,9 @@ export const useResidents = (options?: { pagination?: Ref<Pagination>; sorting?:
       await resetResidentPassword(resident)
       await fetch()
       toast.init({ message: 'Password reset successfully', color: 'success' })
-    } catch (err: any) {
-      console.error(err)
-      error.value = (err.message || 'Failed to reset password') as string
-      toast.init({ message: error.value, color: 'danger' })
+    } catch (error: any) {
+      toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
+      console.error(error)
     }
     isLoading.value = false
   }
@@ -98,10 +93,9 @@ export const useResidents = (options?: { pagination?: Ref<Pagination>; sorting?:
     try {
       const res = await fetchResidents(query)
       residents.value = res.data.data
-    } catch (err: any) {
-      console.error(err)
-      error.value = (err.message || 'Failed to search resident') as string
-      toast.init({ message: error.value, color: 'danger' })
+    } catch (error: any) {
+      toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
+      console.error(error)
     }
     isLoading.value = false
   }

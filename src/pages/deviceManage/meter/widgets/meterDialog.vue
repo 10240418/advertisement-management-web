@@ -285,7 +285,7 @@ import { ref, onBeforeMount, watch, computed } from 'vue'
 import { meter_type, read_meter_log_type } from '../../../../data/meter'
 import VaChart from '../../../../components/va-charts/VaChart.vue'
 import { useChartData } from '../../../../data/charts/composables/useChartData'
-import { lineChartData } from '../../../../data/charts/lineChartData'
+// import { lineChartData } from '../../../../data/charts/lineChartData'
 import { ChartOptions } from 'chart.js'
 import { useRoute } from 'vue-router'
 import { fetchMeter } from '../../../../apis/meter'
@@ -295,7 +295,7 @@ import { updateMeter, operateMeter, readMeter } from '../../../../apis/meter'
 import { useMeters } from '../composables/meter'
 import { MeterOperationType } from '../../../../data/api_field_type/api_field_type'
 import { fetchReadMeterLogsData } from '../../../../apis/meter'
-import meterOperateLogsCard from './meterOperateLogsCard.vue'
+// import meterOperateLogsCard from './meterOperateLogsCard.vue'
 import DetailCard from '@/components/cards/DetailCard.vue'
 
 const toast = useToast()
@@ -306,8 +306,6 @@ const datasProp = computed(() => {
 })
 const route = useRoute()
 const meterId = ref(route.query.id)
-
-const editable = ref(false)
 const isUnitCollapsed = ref(true)
 const isGatewayCollapsed = ref(true)
 const showEditModal = ref(false)
@@ -322,8 +320,6 @@ const labelsReadMeterLogs = ref<string[]>([])
 const dataReadMeterLogs = ref<number[]>([])
 const logsCardFetch = ref(false)
 const isOperating = ref(false)
-
-const isTaskCollapsed = ref(false)
 const arrowDirection = (state: boolean) => (state ? 'va-arrow-up' : 'va-arrow-down')
 
 const formattedDate = (isoDate: string): string => {
@@ -362,7 +358,8 @@ const fetch = async () => {
         console.log(meterStatus.value)
       }
     } catch (error: any) {
-      toast.init({ color: 'danger', message: error.message })
+      toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
+      console.error(error)
     }
   }
 }
@@ -408,8 +405,9 @@ const read = async () => {
     readMeterData.value = res.data.data
     showReadModal.value = true
     toast.init({ message: 'Read Meter successfully', color: 'success' })
-  } catch (error) {
-    toast.init({ message: 'Read Meter failed', color: 'danger' })
+  } catch (error: any) {
+    toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
+    console.error(error)
   }
 }
 const openEditModal = () => {
@@ -441,8 +439,8 @@ const operateMeterStatus = () => {
       logsCardFetch.value = true
       isOperating.value = false
     })
-    .catch((error) => {
-      toast.init({ message: 'Operate Meter failed', color: 'danger' })
+    .catch((error: any) => {
+      toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
       console.error(error)
       isOperating.value = false
     })
@@ -451,8 +449,8 @@ const saveMeter = async (updatedMeter: any) => {
   try {
     await updateMeter({ id: Number(meterId.value), ...updatedMeter })
     toast.init({ message: 'Edit Meter successfully', color: 'success' })
-  } catch (error) {
-    toast.init({ message: 'Edit Meter failed', color: 'danger' })
+  } catch (error: any) {
+    toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
     console.error(error)
     return
   }

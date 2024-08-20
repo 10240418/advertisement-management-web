@@ -1,7 +1,7 @@
 import { onBeforeMount, Ref, ref } from 'vue'
 import { meter_type } from '../../../../data/meter'
-import { type Filters, Pagination, Sorting } from '../../../../data/page'
-import { fetchMeters, fetchMeter, addMeter, updateMeter, deleteMeter, operateMeter } from '../../../../apis/meter'
+import { Pagination, Sorting } from '../../../../data/page'
+import { fetchMeters, fetchMeter, addMeter, updateMeter, deleteMeter} from '../../../../apis/meter'
 import { useThrottle } from '../../../../data/dataControl'
 import { useToast } from 'vuestic-ui'
 
@@ -34,10 +34,9 @@ export const useMeters = (options?: { pagination?: Ref<Pagination>; sorting?: Re
       meters.value = res.data.data
 
       pagination.value.total = res.data.pagination.total
-    } catch (err: any) {
-      console.error(err)
-      error.value = (err.message || 'Failed to fetch meters') as string
-      toast.init({ message: error.value, color: 'danger' })
+    } catch (error: any) {
+      toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
+      console.error(error)
     }
     isLoading.value = false
   }
@@ -49,10 +48,9 @@ export const useMeters = (options?: { pagination?: Ref<Pagination>; sorting?: Re
       await addMeter(meter)
       await fetch()
       toast.init({ message: 'Meter added successfully', color: 'success' })
-    } catch (err: any) {
-      console.error(err)
-      error.value = (err.message || 'Failed to add meter') as string
-      toast.init({ message: error.value, color: 'danger' })
+    } catch (error: any) {
+      toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
+      console.error(error)
     }
     isLoading.value = false
   }
@@ -64,10 +62,9 @@ export const useMeters = (options?: { pagination?: Ref<Pagination>; sorting?: Re
       await deleteMeter(ids)
       await fetch()
       toast.init({ message: 'Meter deleted successfully', color: 'success' })
-    } catch (err: any) {
-      console.error(err)
-      error.value = (err.message || 'Failed to delete meter') as string
-      toast.init({ message: error.value, color: 'danger' })
+    } catch (error: any) {
+      toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
+      console.error(error)
     }
     isLoading.value = false
   }
@@ -79,10 +76,9 @@ export const useMeters = (options?: { pagination?: Ref<Pagination>; sorting?: Re
       await updateMeter(meter)
       await fetch()
       toast.init({ message: 'Meter updated successfully', color: 'success' })
-    } catch (err: any) {
-      console.error(err)
-      error.value = (err.message || 'Failed to update meter') as string
-      toast.init({ message: error.value, color: 'danger' })
+    } catch (error: any) {
+      toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
+      console.error(error)
     }
     isLoading.value = false
   }
@@ -95,10 +91,9 @@ export const useMeters = (options?: { pagination?: Ref<Pagination>; sorting?: Re
       const res = await fetchMeter({ id: searchValue.id })
       meters.value = res.data.data
       pagination.value.total = 1
-    } catch (err: any) {
-      console.error(err)
-      error.value = (err.message || 'Failed to fetch meter by ID') as string
-      toast.init({ message: error.value, color: 'danger' })
+    } catch (error: any) {
+      toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
+      console.error(error)
     }
     isLoading.value = false
   }

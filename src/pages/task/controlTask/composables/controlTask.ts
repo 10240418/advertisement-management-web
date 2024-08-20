@@ -40,10 +40,9 @@ export const useTasks = (options?: { pagination?: Ref<Pagination>; sorting?: Ref
 
       tasks.value = res.data.data
       pagination.value.total = res.data.pagination.total
-    } catch (err: any) {
-      console.error(err)
-      error.value = (err.message || 'Failed to fetch tasks') as string
-      toast.init({ message: error.value, color: 'danger' })
+    } catch (error: any) {
+      toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
+      console.error(error)
     }
     isLoading.value = false
   }
@@ -55,10 +54,9 @@ export const useTasks = (options?: { pagination?: Ref<Pagination>; sorting?: Ref
       await addTask(task)
       await fetch()
       toast.init({ message: 'Task added successfully', color: 'success' })
-    } catch (err: any) {
-      console.error(err)
-      error.value = (err.message || 'Failed to add task') as string
-      toast.init({ message: error.value, color: 'danger' })
+    } catch (error: any) {
+      toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
+      console.error(error)
     }
     isLoading.value = false
   }
@@ -71,9 +69,8 @@ export const useTasks = (options?: { pagination?: Ref<Pagination>; sorting?: Ref
       await fetch()
       toast.init({ message: 'Task deleted successfully', color: 'success' })
     } catch (err: any) {
-      console.error(err)
-      error.value = (err.message || 'Failed to delete task') as string
-      toast.init({ message: error.value, color: 'danger' })
+      toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
+      console.error(error)
     }
     isLoading.value = false
   }

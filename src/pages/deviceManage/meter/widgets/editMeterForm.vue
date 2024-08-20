@@ -29,7 +29,6 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue', 'close', 'save'])
 const newMeter = ref<any>({ ...defaultNewMeter })
 const toast = useToast()
-const error = ref<string | null>(null)
 //unitId GateId 选择框实现
 const units = ref<unit_type[]>([])
 const unitOptions = ref<string[]>([])
@@ -71,10 +70,9 @@ const fetchUnits = () => {
         return { value: unit.id, label: ` Floor:${unit.floor}  Unit: ${unit.unit}` }
       })
     })
-    .catch((err) => {
-      console.error(err)
-      error.value = (err.message || 'Failed to fetch units') as string
-      toast.init({ message: error.value, color: 'danger' })
+    .catch((error: any) => {
+      toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
+      console.error(error)
     })
 }
 
@@ -98,10 +96,9 @@ const fetchGateway = () => {
       console.log(gatewayOptions.value)
       console.log(gatewaysOptions.value)
     })
-    .catch((err) => {
-      console.error(err)
-      error.value = (err.message || 'Failed to fetch gateways') as string
-      toast.init({ message: error.value, color: 'danger' })
+    .catch((error: any) => {
+      toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
+      console.error(error)
     })
 }
 
@@ -150,8 +147,8 @@ const onSave = () => {
         selectModelValue.value === 'MeterModelWaterHDSB'
           ? MeterModel.MeterModelWaterHDSB
           : selectModelValue.value === 'MeterModelWaterHDSW'
-            ? MeterModel.MeterModelWaterHDSW
-            : MeterModel.ElectricMeterModelTEST,
+          ? MeterModel.MeterModelWaterHDSW
+          : MeterModel.ElectricMeterModelTEST,
       ),
       modbusAddr: Number(newMeter.value.modbusAddr),
       remark: newMeter.value.remark,
@@ -168,10 +165,20 @@ const onCancel = () => {
 </script>
 
 <template>
-  <VaForm v-slot="{ isValid }" ref="add-meter-form" class="flex-col justify-start items-start gap-4 inline-flex w-full">
+  <VaForm
+    v-slot="{ isValid }"
+    ref="add-meter-form"
+    class="flex-col justify-start items-start gap-4 inline-flex w-full"
+  >
     <div class="self-stretch flex-col justify-start items-start gap-1 flex">
       <div class="flex gap-4 flex-col w-full">
-        <VaInput v-model="newMeter.name" label="Name" class="w-full" :rules="[validators.required]" name="name" />
+        <VaInput
+          v-model="newMeter.name"
+          label="Name"
+          class="w-full"
+          :rules="[validators.required]"
+          name="name"
+        />
       </div>
       <div class="flex gap-4 flex-col w-full">
         <VaSelect
@@ -184,10 +191,21 @@ const onCancel = () => {
         />
       </div>
       <div class="flex gap-4 flex-col w-full">
-        <VaSelect v-model="selectTypeValue" label="Meter Type" class="w-full" :options="typeOptions" name="type" />
+        <VaSelect
+          v-model="selectTypeValue"
+          label="Meter Type"
+          class="w-full"
+          :options="typeOptions"
+          name="type"
+        />
       </div>
       <div class="flex gap-4 flex-col w-full">
-        <VaSelect v-model="selectModelValue" label="Model" class="w-full" :options="MeterModelOptions" />
+        <VaSelect
+          v-model="selectModelValue"
+          label="Model"
+          class="w-full"
+          :options="MeterModelOptions"
+        />
       </div>
       <div class="flex gap-4 flex-col w-full">
         <VaInput
@@ -209,11 +227,23 @@ const onCancel = () => {
         />
       </div>
       <div class="flex gap-4 flex-col w-full">
-        <VaInput v-model="newMeter.remark" label="Remark" class="w-full" name="remark" />
+        <VaInput
+          v-model="newMeter.remark"
+          label="Remark"
+          class="w-full"
+          name="remark"
+        />
       </div>
       <div class="flex gap-2 flex-col-reverse items-stretch justify-end w-full">
-        <VaButton preset="secondary" color="secondary" @click="onCancel">Cancel</VaButton>
-        <VaButton :disabled="!isValid" @click="onSave">Save</VaButton>
+        <VaButton
+          preset="secondary"
+          color="secondary"
+          @click="onCancel"
+        >Cancel</VaButton>
+        <VaButton
+          :disabled="!isValid"
+          @click="onSave"
+        >Save</VaButton>
       </div>
     </div>
   </VaForm>

@@ -1,12 +1,36 @@
 <template>
-  <VaForm v-slot="{ isValid }" ref="edit-resident-form" class="edit-resident-form">
+  <VaForm
+    v-slot="{ isValid }"
+    ref="edit-resident-form"
+    class="edit-resident-form"
+  >
     <div class="flex flex-col gap-4">
-      <VaSelect v-model="selectValue" label="Add Unit" :options="unitOptions" placeholder="Select a unit" />
-      <VaSelect v-model="selectTypeValue" label="Select Type" :options="typeOptions" placeholder="Select a type" />
-      <div v-if="error" class="text-red-500">{{ error }}</div>
+      <VaSelect
+        v-model="selectValue"
+        label="Add Unit"
+        :options="unitOptions"
+        placeholder="Select a unit"
+      />
+      <VaSelect
+        v-model="selectTypeValue"
+        label="Select Type"
+        :options="typeOptions"
+        placeholder="Select a type"
+      />
+      <div
+        v-if="error"
+        class="text-red-500"
+      >{{ error }}</div>
       <div class="flex gap-2 justify-end mt-4">
-        <VaButton preset="secondary" color="secondary" @click="onClose">Cancel</VaButton>
-        <VaButton :disabled="!isValid" @click="submit">Save</VaButton>
+        <VaButton
+          preset="secondary"
+          color="secondary"
+          @click="onClose"
+        >Cancel</VaButton>
+        <VaButton
+          :disabled="!isValid"
+          @click="submit"
+        >Save</VaButton>
       </div>
     </div>
   </VaForm>
@@ -14,7 +38,7 @@
 
 <script lang="ts" setup>
 import { ref, defineProps, defineEmits, onBeforeMount, watch, PropType } from 'vue'
-import { useForm, useToast } from 'vuestic-ui'
+import { useToast } from 'vuestic-ui'
 import { resident_user_type } from '@/data/resident_user'
 import { unit_type } from '@/data/unit'
 import { fetchUnitList, bindUnitResident } from '@/apis/unit'
@@ -56,10 +80,9 @@ const fetchUnits = async () => {
     // 过滤掉已绑定的单位
     unitOptions.value = unitOptions.value.filter((option) => !unitNeedRemove.value.includes(option))
     selectValue.value = unitOptions.value.length > 0 ? unitOptions.value[0] : ''
-  } catch (err: any) {
-    console.error(err)
-    error.value = (err.message || 'Failed to fetch units') as string
-    toast.init({ message: error.value, color: 'danger' })
+  } catch (error: any) {
+    toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
+    console.error(error)
   }
 }
 
@@ -68,7 +91,6 @@ onBeforeMount(() => {
 })
 
 const emit = defineEmits(['close', 'fetch'])
-const formInstance = useForm('edit-resident-form')
 
 const submit = () => {
   if (selectValue.value) {
@@ -79,9 +101,9 @@ const submit = () => {
         emit('fetch')
         onClose()
       })
-      .catch((err: any) => {
-        toast.init({ message: err.message, color: 'danger' })
-        console.log(err)
+      .catch((error: any) => {
+        toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
+        console.error(error)
         onClose()
       })
   }
@@ -91,6 +113,7 @@ watch(selectValue, (newValue) => {
   console.log('Selected value changed:', newValue)
 })
 
+// eslint-disable-next-line vue/no-dupe-keys
 const onClose = () => {
   emit('close')
 }

@@ -17,7 +17,12 @@
       </div>
 
       <div class="flex flex-row gap-2 w-full">
-        <VaSelect v-model="selectTaskType" label="Type" class="w-full" :options="taskTypeOptions" />
+        <VaSelect
+          v-model="selectTaskType"
+          label="Type"
+          class="w-full"
+          :options="taskTypeOptions"
+        />
 
         <VaSelect
           v-if="selectTaskType === 'Gateway Task'"
@@ -26,10 +31,21 @@
           class="w-full truncate"
           :options="gatewayOptions"
         />
-        <VaSelect v-else v-model="selectMeterValue" label="Meter ID" class="w-full truncate" :options="meterOptions" />
+        <VaSelect
+          v-else
+          v-model="selectMeterValue"
+          label="Meter ID"
+          class="w-full truncate"
+          :options="meterOptions"
+        />
       </div>
       <div class="flex gap-4 flex-col w-full">
-        <VaSelect v-model="selectOperationValue" label="Operation" class="w-full" :options="operationOptions" />
+        <VaSelect
+          v-model="selectOperationValue"
+          label="Operation"
+          class="w-full"
+          :options="operationOptions"
+        />
       </div>
       <div class="flex gap-4 flex-row justify-center items-center w-full">
         <VaInput
@@ -41,7 +57,11 @@
           name="interval"
           :disabled="!isRepeatable"
         />
-        <VaSwitch class="mt-[18px]" v-model="isRepeatable" label="Repeatable" />
+        <VaSwitch
+          class="mt-[18px]"
+          v-model="isRepeatable"
+          label="Repeatable"
+        />
       </div>
       <div class="flex gap-4 flex-col w-full">
         <VaInput
@@ -55,22 +75,45 @@
       </div>
 
       <div class="flex gap-4 flex-col w-full mt-[18px]">
-        <VaSwitch v-model="newControlTask.active" label="Active" />
+        <VaSwitch
+          v-model="newControlTask.active"
+          label="Active"
+        />
       </div>
       <div class="flex gap-2 flex-row items-stretch justify-end w-full">
-        <VaButton preset="secondary" color="secondary" @click="onCancel">Cancel</VaButton>
-        <VaButton :disabled="!isValid" @click="onSave">Save</VaButton>
+        <VaButton
+          preset="secondary"
+          color="secondary"
+          @click="onCancel"
+        >Cancel</VaButton>
+        <VaButton
+          :disabled="!isValid"
+          @click="onSave"
+        >Save</VaButton>
       </div>
     </div>
 
     <!-- Confirmation Modal -->
-    <VaModal v-model="showConfirmModal" mobile-fullscreen close-button hide-default-actions>
+    <VaModal
+      v-model="showConfirmModal"
+      mobile-fullscreen
+      close-button
+      hide-default-actions
+    >
       <div class="p-4">
         <h3 class="text-lg font-semibold mb-2">Confirm Action</h3>
-        <p class="text-red-500 text-[18px]">Your interval is less than 30 seconds, do you want to continue?</p>
+        <p class="text-red-500 text-[18px]">Your interval is less than 30
+          seconds, do you want to continue?</p>
         <div class="flex justify-end mt-4">
-          <VaButton preset="secondary" color="secondary" @click="onCancelConfirm">Cancel</VaButton>
-          <VaButton color="primary" @click="onConfirm">Continue</VaButton>
+          <VaButton
+            preset="secondary"
+            color="secondary"
+            @click="onCancelConfirm"
+          >Cancel</VaButton>
+          <VaButton
+            color="primary"
+            @click="onConfirm"
+          >Continue</VaButton>
         </div>
       </div>
     </VaModal>
@@ -221,10 +264,9 @@ const fetchGatewaysList = () => {
         return `${gateway.id} Name: ${gateway.name} IP: ${gateway.ipAddr}`
       })
     })
-    .catch((err) => {
-      console.error(err)
-      error.value = (err.message || 'Failed to fetch gateways') as string
-      toast.init({ message: error.value, color: 'danger' })
+    .catch((error: any) => {
+      toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
+      console.error(error)
     })
 }
 
@@ -239,9 +281,8 @@ const fetchMetersList = () => {
       })
     })
     .catch((err) => {
-      console.error(err)
-      error.value = (err.message || 'Failed to fetch meters') as string
-      toast.init({ message: error.value, color: 'danger' })
+      toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
+      console.error(error)
     })
 }
 
@@ -269,8 +310,8 @@ const saveTask = () => {
         selectOperationValue.value === 'Read Data'
           ? TaskOperation.Read
           : selectOperationValue.value === 'Turn On'
-            ? TaskOperation.SwitchOn
-            : TaskOperation.SwitchOff,
+          ? TaskOperation.SwitchOn
+          : TaskOperation.SwitchOff,
       interval: Number(newControlTask.value.interval),
       startAt: new Date(newControlTask.value.startAt).toISOString(),
     }

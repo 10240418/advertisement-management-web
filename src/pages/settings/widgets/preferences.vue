@@ -216,9 +216,9 @@ const savePreferences = async () => {
     await fetch()
     showModal.value = false
     toast.init({ message: 'Preferences saved successfully', color: 'success' })
-  } catch (error) {
-    toast.init({ message: `${error}`, color: 'danger' })
-    console.error('Error saving preferences:', error)
+  } catch (error: any) {
+    toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
+    console.error(error)
   }
 }
 

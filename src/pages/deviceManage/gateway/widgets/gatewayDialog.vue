@@ -138,7 +138,6 @@ import EditMeterForm from '@/pages/deviceManage/meter/widgets/editMeterForm.vue'
 import { updateMeter, operateMeter } from '../../../../apis/meter'
 import { meter_type } from '../../../../data/meter'
 import { MeterOperationType } from '../../../../data/api_field_type/api_field_type'
-import editGatewayForm from '@/pages/deviceManage/gateway/widgets/editGatewayForm.vue'
 import DetailCard from '@/components/cards/DetailCard.vue'
 
 // State and Reactive Properties
@@ -157,8 +156,6 @@ const route = useRoute()
 const gatewayId = ref(route.query.id)
 const toast = useToast()
 const meters = ref<any[]>([])
-const editable = ref(false)
-
 const showContentMeter = ref<meter_type | null>(null)
 const showEditModal = ref(false)
 const unitEditMeter = ref<meter_type>()
@@ -175,9 +172,9 @@ const fetchGateway = async () => {
       const res = await getGateway({ params: gatewayId.value })
       gateway.value = res.data.data
       meters.value = res.data.data.meters
-    } catch (error) {
+    } catch (error: any) {
+      toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
       console.error(error)
-      toast.init({ color: 'danger', message: 'Failed to fetch data' })
     }
   }
 }
@@ -191,8 +188,8 @@ const operateMeterStatus = async (query: number) => {
   try {
     await operateMeter({ id: Number(showContentMeter.value?.id), body: { type: query } })
     toast.init({ message: 'operate successfully', color: 'success' })
-  } catch (error) {
-    toast.init({ message: 'operate Meter failed', color: 'danger' })
+  } catch (error: any) {
+    toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
     console.error(error)
     return
   }
@@ -210,8 +207,8 @@ const saveMeter = async (updatedMeter: any) => {
   try {
     await updateMeter({ id: Number(showContentMeter.value?.id), ...updatedMeter })
     toast.init({ message: 'Edit Meter successfully', color: 'success' })
-  } catch (error) {
-    toast.init({ message: 'Edit Meter failed', color: 'danger' })
+  } catch (error: any) {
+    toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
     console.error(error)
     return
   }
@@ -228,8 +225,8 @@ const pingGatewayByID = async () => {
   try {
     await pingGateway({ id: Number(gatewayId.value) })
     toast.init({ message: 'ping successfully', color: 'success' })
-  } catch (error) {
-    toast.init({ message: 'ping failed', color: 'danger' })
+  } catch (error: any) {
+    toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
     console.error(error)
     return
   }
@@ -258,8 +255,8 @@ const saveGateway = async (updatedGateway: gateway_type) => {
     console.log(updatedGateway)
     await updateGateway({ ...updatedGateway })
     toast.init({ message: 'Edit Gateway successfully', color: 'success' })
-  } catch (error) {
-    toast.init({ message: 'Edit Gateway failed', color: 'danger' })
+  } catch (error: any) {
+    toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
     console.error(error)
   }
   closeEditGatewayModal()

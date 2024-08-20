@@ -1,6 +1,6 @@
 import { onBeforeMount, Ref, ref } from 'vue'
 import { gateway_type } from '../../../../data/gateway'
-import { type Filters, Pagination, Sorting } from '../../../../data/page'
+import { Pagination, Sorting } from '../../../../data/page'
 import { fetchGateways, addGateway, deleteGateway, updateGateway, getGateway } from '../../../../apis/gateway'
 import { useThrottle } from '../../../../data/dataControl'
 import { useToast } from 'vuestic-ui' // Import Vuestic UI Toast
@@ -33,10 +33,9 @@ export const useGateways = (options?: { pagination?: Ref<Pagination>; sorting?: 
 
       if (pagination.value.pageSize <= 0) pagination.value.pageSize = 10
       if (pagination.value.pageNum <= 0) pagination.value.pageNum = 1
-    } catch (err: any) {
-      console.error(err)
-      error.value = (err.message || 'Failed to fetch gateways') as string
-      toast.init({ message: error.value, color: 'danger' })
+    } catch (error: any) {
+      toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
+      console.error(error)
     }
     isLoading.value = false
   }
@@ -48,10 +47,9 @@ export const useGateways = (options?: { pagination?: Ref<Pagination>; sorting?: 
       await addGateway(gateway)
       await fetch()
       toast.init({ message: 'Gateway added successfully', color: 'success' })
-    } catch (err: any) {
-      console.error(err)
-      error.value = (err.message || 'Failed to add gateway') as string
-      toast.init({ message: error.value, color: 'danger' })
+    } catch (error: any) {
+      toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
+      console.error(error)
     }
     isLoading.value = false
   }
@@ -63,10 +61,9 @@ export const useGateways = (options?: { pagination?: Ref<Pagination>; sorting?: 
       await deleteGateway({ ids })
       await fetch()
       toast.init({ message: 'Gateway deleted successfully', color: 'success' })
-    } catch (err: any) {
-      console.error(err)
-      error.value = (err.message || 'Failed to delete gateway') as string
-      toast.init({ message: error.value, color: 'danger' })
+    } catch (error: any) {
+      toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
+      console.error(error)
     }
     isLoading.value = false
   }
@@ -78,10 +75,9 @@ export const useGateways = (options?: { pagination?: Ref<Pagination>; sorting?: 
       await updateGateway(gateway)
       await fetch()
       toast.init({ message: 'Gateway updated successfully', color: 'success' })
-    } catch (err: any) {
-      console.error(err)
-      error.value = (err.message || 'Failed to update gateway') as string
-      toast.init({ message: error.value, color: 'danger' })
+    } catch (error: any) {
+      toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
+      console.error(error)
     }
     isLoading.value = false
   }
@@ -92,10 +88,9 @@ export const useGateways = (options?: { pagination?: Ref<Pagination>; sorting?: 
     try {
       const res = await getGateway(query)
       gateways.value = res.data.data
-    } catch (err: any) {
-      console.error(err)
-      error.value = (err.message || 'Failed to fetch gateway by ID') as string
-      toast.init({ message: error.value, color: 'danger' })
+    } catch (error: any) {
+      toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
+      console.error(error)
     }
     isLoading.value = false
   }
