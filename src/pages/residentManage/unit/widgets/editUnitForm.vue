@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, PropType, defineProps, defineEmits, onBeforeMount } from 'vue'
+import { ref, watch, PropType, defineProps, defineEmits } from 'vue'
 import { useForm } from 'vuestic-ui'
 import { validators } from '../../../../services/utils'
 import { unit_type } from '../../../../data/unit'

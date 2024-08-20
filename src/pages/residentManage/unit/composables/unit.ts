@@ -30,25 +30,23 @@ export const useUnits = (options?: {
       })
       units.value = res.data.units
       pagination.value.total = res.data.pagination.total
-    } catch (err: any) {
-      console.error(err)
-      error.value = (err.message || 'Failed to fetch units') as string
-      toast.init({ message: error.value, color: 'danger' })
+    } catch (error: any) {
+      toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
+      console.error(error)
     }
     isLoading.value = false
   }
 
-  const add = async (unit: Omit<unit_type, 'id'>) => {
+  const add = async (unit: any) => {
     isLoading.value = true
     error.value = null
     try {
       await addUnit(unit)
       await fetch()
       toast.init({ message: 'Unit added successfully', color: 'success' })
-    } catch (err: any) {
-      console.error(err)
-      error.value = (err.message || 'Failed to add unit') as string
-      toast.init({ message: error.value, color: 'danger' })
+    } catch (error: any) {
+      toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
+      console.error(error)
     }
     isLoading.value = false
   }
@@ -60,10 +58,9 @@ export const useUnits = (options?: {
       await deleteUnit({ ids })
       await fetch()
       toast.init({ message: 'Unit(s) deleted successfully', color: 'success' })
-    } catch (err: any) {
-      console.error(err)
-      error.value = (err.message || 'Failed to delete unit(s)') as string
-      toast.init({ message: error.value, color: 'danger' })
+    } catch (error: any) {
+      toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
+      console.error(error)
     }
     isLoading.value = false
   }
@@ -75,10 +72,9 @@ export const useUnits = (options?: {
       await updateUnit(unit)
       await fetch()
       toast.init({ message: 'Unit updated successfully', color: 'success' })
-    } catch (err: any) {
-      console.error(err)
-      error.value = (err.message || 'Failed to update unit') as string
-      toast.init({ message: error.value, color: 'danger' })
+    } catch (error: any) {
+      toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
+      console.error(error)
     }
     isLoading.value = false
   }

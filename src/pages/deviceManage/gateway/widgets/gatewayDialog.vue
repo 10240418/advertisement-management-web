@@ -3,7 +3,10 @@
     <div class="w-full h-full flex flex-col ml-1">
       <!-- top part -->
       <div class="flex flex-row gap-0">
-        <detailCard :labels="labelsProp" :datas="datasProp" />
+        <DetailCard
+          :labels="labelsProp"
+          :datas="datasProp"
+        />
       </div>
 
       <!-- table part -->
@@ -26,15 +29,23 @@
         sticky-header
       >
         <template #cell(actions)="{ rowData }">
-          <VaPopover placement="bottom" trigger="click" color="backgroundSecondary">
+          <VaPopover
+            placement="bottom"
+            trigger="click"
+            color="backgroundSecondary"
+          >
             <div
               class="flex justify-start items-center relative hover:bg-blue-200 rounded-[4px]"
               @click.stop="showContent(rowData)"
             >
-              <VaIcon name="more_horiz" size="20px" class="mr-2 cursor-pointer" />
+              <VaIcon
+                name="more_horiz"
+                size="20px"
+                class="mr-2 cursor-pointer"
+              />
             </div>
             <template #body>
-              <transition name="fade">
+              <Transition name="fade">
                 <div
                   v-show="showContentMeter?.id === rowData.id"
                   class="tooltip-content flex flex-col justify-center z-999 items-center relative border p-1 rounded-md"
@@ -44,8 +55,8 @@
                     size="small"
                     icon="mso-edit"
                     aria-label="Edit Resident"
-                    @click="showEidtModal(rowData)"
                     class="w-full justify-between"
+                    @click="showEidtModal(rowData)"
                   >
                     <span>编辑单位</span>
                   </VaButton>
@@ -54,8 +65,8 @@
                     size="small"
                     icon="mso-not_started"
                     aria-label="Update Resident"
-                    @click="operateMeterStatus(MeterOperationType.WaterMeterValveOn)"
                     class="w-full justify-between"
+                    @click="operateMeterStatus(MeterOperationType.WaterMeterValveOn)"
                   >
                     <span>设为使用</span>
                   </VaButton>
@@ -64,13 +75,13 @@
                     size="small"
                     icon="mso-cancel"
                     aria-label="Update Resident"
-                    @click="operateMeterStatus(MeterOperationType.WaterMeterValveOff)"
                     class="w-full justify-between"
+                    @click="operateMeterStatus(MeterOperationType.WaterMeterValveOff)"
                   >
                     <span>设为闲置</span>
                   </VaButton>
                 </div>
-              </transition>
+              </Transition>
             </template>
           </VaPopover>
         </template>
@@ -82,20 +93,32 @@
       </div>
 
       <!-- edit modal -->
-      <VaModal v-model="showEditModal" size="small" mobile-fullscreen close-button hide-default-actions>
+      <VaModal
+        v-model="showEditModal"
+        size="small"
+        mobile-fullscreen
+        close-button
+        hide-default-actions
+      >
         <h1>Edit Meter</h1>
         <EditMeterForm
-          :modelValue="showContentMeter"
+          :model-value="showContentMeter"
           @update:modelValue="updateMeterData"
           @save="saveMeter"
           @close="closeEditModal"
         />
       </VaModal>
       <!-- Edit Gateway Modal -->
-      <VaModal v-model="isShowEditGatewayModal" size="small" mobile-fullscreen close-button hide-default-actions>
+      <VaModal
+        v-model="isShowEditGatewayModal"
+        size="small"
+        mobile-fullscreen
+        close-button
+        hide-default-actions
+      >
         <h1>Edit Gateway</h1>
-        <editGatewayForm
-          :modelValue="gatewayToEdit"
+        <EditGatewayForm
+          :model-value="gatewayToEdit"
           @update:modelValue="updateGatewayData"
           @save="saveGateway"
           @close="closeEditGatewayModal"
@@ -116,7 +139,7 @@ import { updateMeter, operateMeter } from '../../../../apis/meter'
 import { meter_type } from '../../../../data/meter'
 import { MeterOperationType } from '../../../../data/api_field_type/api_field_type'
 import editGatewayForm from '@/pages/deviceManage/gateway/widgets/editGatewayForm.vue'
-import detailCard from '@/components/cards/detailCard.vue'
+import DetailCard from '@/components/cards/DetailCard.vue'
 
 // State and Reactive Properties
 const gateway = ref<gateway_type | null>(null)
@@ -164,7 +187,7 @@ const showContent = (rowData: any) => {
   showContentMeter.value = rowData
 }
 //操作开关表
-const operateMeterStatus = async (query: Number) => {
+const operateMeterStatus = async (query: number) => {
   try {
     await operateMeter({ id: Number(showContentMeter.value?.id), body: { type: query } })
     toast.init({ message: 'operate successfully', color: 'success' })

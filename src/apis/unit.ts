@@ -9,6 +9,12 @@ export const fetchUnitList = (query: any) => {
   })
 }
 
+export const fetchUnit = (id: any) => {
+  return request({
+    url: `/admin/unit/${id}`,
+    method: 'get',
+  })
+}
 export const addUnit = (data: any) => {
   return request({
     url: `/admin/unit`,

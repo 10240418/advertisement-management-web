@@ -1,40 +1,25 @@
 <script setup lang="ts">
 import { defineVaDataTableColumns, useModal, useToast } from 'vuestic-ui'
-import { PropType, computed, toRef, ref, watch, onMounted, onBeforeUnmount } from 'vue'
+import { computed, ref, watch, onMounted, onBeforeUnmount } from 'vue'
 import { unit_type } from '../../../../data/unit'
 import moment from 'moment'
 import { exportUsageReport } from '@/apis/unit'
-// import { saveToFile } from '@/utils/saveFile';
+import { useUnits } from '../composables/unit'
 const toast = useToast()
 
+const { units, isLoading, pagination, sorting, fetch, remove } = useUnits()
 const columns = defineVaDataTableColumns([
   { label: 'ID', key: 'id', sortable: true, width: '5%' },
   { label: 'Floor', key: 'floor', sortable: true, width: '10%' },
   { label: 'Unit ', key: 'unit', sortable: true, width: '10%' },
   { label: 'Created At', key: 'createdAt', sortable: false, width: '25%' },
-  { label: 'remark', key: 'remark', sortable: false, width: '25%' },
+  { label: 'remark', key: 'remark', sortable: false, width: '20%' },
   { label: 'Export', key: 'export', sortable: false, width: '5%' },
+  { label: 'Detail', key: 'detail', sortable: false, width: '5%' },
   { label: 'Actions', key: 'actions', sortable: false, width: '5%' },
 ])
 
-const props = defineProps({
-  units: {
-    type: Array as PropType<unit_type[]>,
-    required: true,
-  },
-  loading: { type: Boolean, default: false },
-  pagination: { type: Object as PropType<any>, required: true },
-  sorting: { type: Object as PropType<any>, required: true },
-})
-
-const emit = defineEmits<{
-  (event: 'edit-unit', unit: any): void
-  (event: 'delete-unit', unit: any): void
-  (event: 'fetch-units'): void
-}>()
-
-const units = toRef(props, 'units')
-const totalPages = computed(() => Math.ceil(props.pagination.total / props.pagination.pageSize))
+const totalPages = computed(() => Math.ceil(pagination.value.total / pagination.value.pageSize))
 const pagesOptions = computed(() => {
   const options = []
   for (let i = 1; i <= totalPages.value; i++) {
@@ -56,7 +41,7 @@ const onUnitDelete = async (unit: any) => {
   })
 
   if (agreed) {
-    emit('delete-unit', unit)
+    remove([unit.id])
   }
 }
 
@@ -68,10 +53,10 @@ const currentPageData = computed(() => {
   } else if (units.value && typeof units.value === 'object') {
     unitsArray = [units.value]
   }
-  const startIndex = (props.pagination.pageNum - 1) * props.pagination.pageSize
-  const endIndex = startIndex + props.pagination.pageSize
+  const startIndex = (pagination.value.pageNum - 1) * pagination.value.pageSize
+  const endIndex = startIndex + pagination.value.pageSize
 
-  if (unitsArray.length <= props.pagination.pageSize) return units.value
+  if (unitsArray.length <= pagination.value.pageSize) return units.value
   else return unitsArray.slice(startIndex, endIndex)
 })
 
@@ -112,13 +97,13 @@ const doExport = () => {
 
 //watch pagination和sorting 变化fetch 数据
 watch(
-  () => [props.pagination.pageNum, props.pagination.pageSize, props.sorting.sortingOrder, props.sorting.sortBy],
+  () => [pagination.value.pageNum, pagination.value.pageSize, sorting.value.sortingOrder, sorting.value.sortBy],
   () => {
-    console.log(props.sorting.sortingOrder)
-    if (props.pagination.total < props.pagination.pageSize * (props.pagination.pageNum - 1)) {
-      props.pagination.pageNum = 1
+    console.log(sorting.value.sortingOrder)
+    if (pagination.value.total < pagination.value.pageSize * (pagination.value.pageNum - 1)) {
+      pagination.value.pageNum = 1
     }
-    emit('fetch-units')
+    fetch()
   },
 )
 //控制气泡下拉框
@@ -147,14 +132,16 @@ onBeforeUnmount(() => {
 
 <template>
   <VaDataTable
+    v-model:sort-by="sorting.sortBy"
+    v-model:sorting-order="sorting.sortingOrder"
     :columns="columns"
     :items="currentPageData"
-    :loading="$props.loading"
-    v-model:sort-by="props.sorting.sortBy"
-    v-model:sorting-order="props.sorting.sortingOrder"
+    :loading="isLoading"
   >
     <template #cell(createdAt)="{ rowData }">
-      <div class="max-w-[120px]">{{ moment(rowData.createdAt).format('YYYY-MM-DD HH:mm:ss') }}</div>
+      <div class="max-w-[120px]">
+        {{ moment(rowData.createdAt).format('YYYY-MM-DD HH:mm:ss') }}
+      </div>
     </template>
     <template #cell(floor)="{ rowData }">
       <div class="max-w-[120px] ellipsis">{{ rowData.floor }}</div>
@@ -165,19 +152,44 @@ onBeforeUnmount(() => {
     </template>
 
     <template #cell(export)="{ rowData }">
-      <div class="text-primary" @click="pickupRange(rowData.id)">Export</div>
+      <div
+        class="text-primary"
+        @click="pickupRange(rowData.id)"
+      >Export</div>
     </template>
 
-    <template #cell(actions)="{ rowData }" class="overflow-y-scroll max-h[40px]">
-      <VaPopover placement="bottom" trigger="click" color=" backgroundSecondary">
+    <template #cell(detail)="{ rowData }">
+      <VaButton
+        preset="secondary"
+        size="small"
+        icon="mso-info"
+        aria-label="Info Resident"
+        @click="$emit('detailUnit', rowData as any)"
+        class="w-full justify-between ml-[-5px]"
+      >
+        <span>Detail</span>
+      </VaButton>
+    </template>
+
+    <template #cell(actions)="{ rowData }">
+      <VaPopover
+        placement="bottom"
+        trigger="click"
+        color=" backgroundSecondary"
+        class="max-h[40px]"
+      >
         <div
           class="flex items-center justify-center relative hover:bg-slate-100 rounded-[4px]"
           @click.stop="showContent(rowData)"
         >
-          <VaIcon name="more_horiz" size="20px" class="mr-2 cursor-pointer"></VaIcon>
+          <VaIcon
+            name="more_horiz"
+            size="20px"
+            class="mr-2 cursor-pointer"
+          ></VaIcon>
         </div>
         <template #body>
-          <transition name="fade">
+          <Transition name="fade">
             <div
               v-show="showContentUnit?.id === rowData.id"
               class="tooltip-content flex flex-col justify-center z-999 items-center relative border border-solid border-gray-300 p-2 rounded-md shadow-lg"
@@ -187,8 +199,8 @@ onBeforeUnmount(() => {
                 size="small"
                 icon="mso-edit"
                 aria-label="Edit unit"
-                @click="$emit('edit-unit', rowData as any)"
                 class="w-full justify-between"
+                @click="$emit('edit-unit', rowData as any)"
               >
                 <span>Edit</span>
               </VaButton>
@@ -198,45 +210,60 @@ onBeforeUnmount(() => {
                 icon="mso-delete"
                 color="danger"
                 aria-label="Delete unit"
-                @click="onUnitDelete(rowData)"
                 class="w-full"
+                @click="onUnitDelete(rowData)"
               >
                 <span>Delete</span>
               </VaButton>
             </div>
-          </transition>
+          </Transition>
         </template>
       </VaPopover>
     </template>
   </VaDataTable>
 
-  <div class="flex flex-col-reverse md:flex-row gap-2 justify-between items-center py-2">
+  <div
+    class="flex flex-col-reverse md:flex-row gap-2 justify-between items-center py-2"
+  >
     <div>
-      <b>total: {{ $props.pagination.total }} </b>
+      <b>total: {{ pagination.total }} </b>
       pageNum:
-      <VaSelect v-model="$props.pagination.pageNum" class="!w-16" selected-top-shown :options="pagesOptions" />
+      <VaSelect
+        v-model="pagination.pageNum"
+        class="!w-16"
+        selected-top-shown
+        :options="pagesOptions"
+      />
       pageSize:
-      <VaSelect v-model="$props.pagination.pageSize" class="!w-20" selected-top-shown :options="[5, 10, 20, 50, 100]" />
+      <VaSelect
+        v-model="pagination.pageSize"
+        class="!w-20"
+        selected-top-shown
+        :options="[5, 10, 20, 50, 100]"
+      />
     </div>
 
-    <div v-if="totalPages > 1" class="flex">
+    <div
+      v-if="totalPages > 1"
+      class="flex"
+    >
       <VaButton
         preset="secondary"
         icon="va-arrow-left"
         aria-label="Previous page"
-        :disabled="$props.pagination.pageNum === 1"
-        @click="$props.pagination.pageNum--"
+        :disabled="pagination.pageNum === 1"
+        @click="pagination.pageNum--"
       />
       <VaButton
         class="mr-2"
         preset="secondary"
         icon="va-arrow-right"
         aria-label="Next page"
-        :disabled="$props.pagination.pageNum === totalPages"
-        @click="$props.pagination.pageNum++"
+        :disabled="pagination.pageNum === totalPages"
+        @click="pagination.pageNum++"
       />
       <VaPagination
-        v-model="$props.pagination.pageNum"
+        v-model="pagination.pageNum"
         buttons-preset="secondary"
         :pages="totalPages"
         :visible-pages="5"
@@ -246,13 +273,26 @@ onBeforeUnmount(() => {
     </div>
   </div>
 
-  <VaModal v-model="showRangePicker" size="small" mobile-fullscreen close-button hide-default-actions>
+  <VaModal
+    v-model="showRangePicker"
+    size="small"
+    mobile-fullscreen
+    close-button
+    hide-default-actions
+  >
     <h5 class="va-h6">Pickup Range</h5>
     <div class="w-full flex justify-center">
-      <VaDatePicker v-model="range" mode="range" />
+      <VaDatePicker
+        v-model="range"
+        mode="range"
+      />
     </div>
     <div class="w-full flex justify-end">
-      <VaButton preset="primary" @click="doExport" :loading="isExportButtonLoading">Export</VaButton>
+      <VaButton
+        preset="primary"
+        :loading="isExportButtonLoading"
+        @click="doExport"
+      >Export</VaButton>
     </div>
   </VaModal>
 </template>

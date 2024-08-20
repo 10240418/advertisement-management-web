@@ -4,8 +4,9 @@ import { useUnits } from './composables/unit'
 import { useToast } from 'vuestic-ui'
 import { unit_type } from '../../../data/unit'
 import _ from 'lodash'
-import unitsTable from './widgets/unitsTable.vue'
-import editUnitForm from './widgets/editUnitForm.vue'
+import UnitsTable from './widgets/UnitsTable.vue'
+import EditUnitForm from './widgets/EditUnitForm.vue'
+import { openWindow } from '@/utils/openWindow'
 
 const doShowEditUnitModal = ref(false)
 const doShowAddUnitModal = ref(false)
@@ -56,6 +57,10 @@ watch(
   },
   { deep: true },
 )
+//detail
+const showEditUnitDialog = (unit: unit_type) => {
+  openWindow({ path: '/unitDetail', query: { id: unit.id }, width: 900, height: 500 })
+}
 </script>
 
 <template>
@@ -66,25 +71,46 @@ watch(
         <VaButton @click="showAddUnitModal">Add Unit</VaButton>
       </div>
 
-      <unitsTable
+      <UnitsTable
         :pagination="pagination"
         :sorting="sorting"
         :units="unitsShowInTable"
         :loading="isLoading"
-        @edit-unit="showEditUnitModal"
-        @delete-unit="onUnitDelete"
-        @fetch-units="fetchUnits"
+        @editUnit="showEditUnitModal"
+        @deleteUnit="onUnitDelete"
+        @fetchUnits="fetchUnits"
+        @detailUnit="showEditUnitDialog"
       />
     </VaCardContent>
   </VaCard>
 
-  <VaModal v-model="doShowAddUnitModal" size="small" mobile-fullscreen close-button hide-default-actions>
+  <VaModal
+    v-model="doShowAddUnitModal"
+    size="small"
+    mobile-fullscreen
+    close-button
+    hide-default-actions
+  >
     <h1 class="va-h5">Add Unit</h1>
-    <editUnitForm v-model="unitToEdit" @close="doShowAddUnitModal = false" @save="onSave(unitToEdit)" />
+    <EditUnitForm
+      v-model="unitToEdit"
+      @close="doShowAddUnitModal = false"
+      @save="onSave(unitToEdit)"
+    />
   </VaModal>
-  <VaModal v-model="doShowEditUnitModal" size="small" mobile-fullscreen close-button hide-default-actions>
+  <VaModal
+    v-model="doShowEditUnitModal"
+    size="small"
+    mobile-fullscreen
+    close-button
+    hide-default-actions
+  >
     <h1 class="va-h5">Edit Unit</h1>
-    <editUnitForm v-model="unitToEdit" @close="doShowEditUnitModal = false" @save="onSave" />
+    <EditUnitForm
+      v-model="unitToEdit"
+      @close="doShowEditUnitModal = false"
+      @save="onSave"
+    />
   </VaModal>
 </template>
 

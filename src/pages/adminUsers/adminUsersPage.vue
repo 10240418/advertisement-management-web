@@ -18,7 +18,6 @@ const showAddUserModal = () => {
   doShowAddUserModal.value = true
   userToEdit.value = null
 }
-
 </script>
 
 <template>
@@ -33,18 +32,9 @@ const showAddUserModal = () => {
     </VaCardContent>
   </VaCard>
 
-  <VaModal
-    v-model="doShowAddUserModal"
-    size="small"
-    mobile-fullscreen
-    close-button
-    hide-default-actions
-  >
+  <VaModal v-model="doShowAddUserModal" size="small" mobile-fullscreen close-button hide-default-actions>
     <h1 class="va-h5">Add AdminUser</h1>
-    <EditAdminUserForm
-      v-model="userToEdit"
-      @close="doShowAddUserModal = false"
-    />
+    <EditAdminUserForm v-model="userToEdit" @close="doShowAddUserModal = false" />
   </VaModal>
 </template>
 <style scoped>
