@@ -1,55 +1,72 @@
 <template>
   <VaDataTable
+    v-model:sort-by="sorting.sortBy"
+    v-model:sorting-order="sorting.sortingOrder"
     :columns="columns"
     :items="currentPageData"
-    :loading="props.loading"
-    v-model:sort-by="props.sorting.sortBy"
-    v-model:sorting-order="props.sorting.sortingOrder"
+    :loading="isLoading"
   >
     <template #cell(startAt)="{ rowData }">
-      <div class="flex flex-col">{{ moment(rowData.startAt).format('YYYY-MM-DD HH:mm:ss') }}</div>
+      <div class="flex flex-col">
+        {{ moment(rowData.startAt).format('YYYY-MM-DD HH:mm:ss') }}
+      </div>
     </template>
     <template #cell(detail)="{ rowData }">
       <VaButton
-        preset="secondary"
         id="detailTask"
+        preset="secondary"
         size="small"
         icon="mso-info"
         aria-label="Info Task"
-        @click="$emit('detail-task', rowData as any)"
         class="w-full justify-between ml-[-5px]"
+        @click="emit('detailTask', rowData as any)"
       >
         <span>Detail</span>
       </VaButton>
     </template>
   </VaDataTable>
-  <div class="flex flex-col-reverse md:flex-row gap-2 justify-between items-center py-2">
+  <div
+    class="flex flex-col-reverse md:flex-row gap-2 justify-between items-center py-2"
+  >
     <div>
-      <b>total: {{ $props.pagination.total }} </b>
+      <b>total: {{ pagination.total }} </b>
       pageNum:
-      <VaSelect v-model="$props.pagination.pageNum" class="!w-16" selected-top-shown :options="pagesOptions" />
+      <VaSelect
+        v-model="pagination.pageNum"
+        class="!w-16"
+        selected-top-shown
+        :options="pagesOptions"
+      />
       pageSize:
-      <VaSelect v-model="$props.pagination.pageSize" class="!w-20" selected-top-shown :options="[5, 10, 20, 50, 100]" />
+      <VaSelect
+        v-model="pagination.pageSize"
+        class="!w-20"
+        selected-top-shown
+        :options="[5, 10, 20, 50, 100]"
+      />
     </div>
 
-    <div v-if="totalPages > 1" class="flex">
+    <div
+      v-if="totalPages > 1"
+      class="flex"
+    >
       <VaButton
         preset="secondary"
         icon="va-arrow-left"
         aria-label="Previous page"
-        :disabled="props.pagination.pageNum === 1"
-        @click="props.pagination.pageNum--"
+        :disabled="pagination.pageNum === 1"
+        @click="pagination.pageNum--"
       />
       <VaButton
         class="mr-2"
         preset="secondary"
         icon="va-arrow-right"
         aria-label="Next page"
-        :disabled="props.pagination.pageNum === totalPages"
-        @click="props.pagination.pageNum++"
+        :disabled="pagination.pageNum === totalPages"
+        @click="pagination.pageNum++"
       />
       <VaPagination
-        v-model="props.pagination.pageNum"
+        v-model="pagination.pageNum"
         buttons-preset="secondary"
         :pages="totalPages"
         :visible-pages="5"
@@ -61,33 +78,25 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits, computed, ref, watch, toRef, PropType } from 'vue'
-import { defineVaDataTableColumns, VaPopover, VaButton, VaIcon, VaInput, VaSelect, VaPagination } from 'vuestic-ui'
-import { task_type } from '../../../../data/task'
+import { computed, watch } from 'vue'
+import { defineVaDataTableColumns, VaButton, VaSelect, VaPagination } from 'vuestic-ui'
 import moment from 'moment'
-
+import { useTasks } from '../composables/systemTask'
 const columns = defineVaDataTableColumns([
   { label: 'ID', key: 'id', sortable: true, width: '5%' },
   { label: 'Name', key: 'name', sortable: true, width: '10%' },
   { label: 'Tag', key: 'tag', sortable: true, width: '10%' },
   { label: 'Operation', key: 'operation', sortable: true, width: '5%' },
   { label: 'Active', key: 'active', sortable: true, width: '5%' },
-  // { label: 'Editable', key: 'editable', sortable: true, width: '5%' },
   { label: 'Interval', key: 'interval', sortable: true, width: '5%' },
   { label: 'Start At', key: 'startAt', sortable: true, width: '10%' },
   { label: 'Gateway ID', key: 'gatewayId', sortable: true, width: '5%' },
   { label: 'Meter ID', key: 'meterId', sortable: true, width: '5%' },
   { label: 'Detail', key: 'detail', sortable: false, width: '5%' },
 ])
-
-const props = defineProps({
-  tasks: { type: Array, default: () => [] },
-  loading: { type: Boolean, default: false },
-  pagination: { type: Object as PropType<any>, required: true },
-  sorting: { type: Object as PropType<any>, required: true },
-})
-
-const totalPages = computed(() => Math.ceil(props.pagination.total / props.pagination.pageSize))
+const emit = defineEmits(['detailTask'])
+const { isLoading, tasks, sorting, pagination, ...taskApi } = useTasks()
+const totalPages = computed(() => Math.ceil(pagination.value.total / pagination.value.pageSize))
 const pagesOptions = computed(() => {
   const options = []
   for (let i = 1; i <= totalPages.value; i++) {
@@ -95,41 +104,30 @@ const pagesOptions = computed(() => {
   }
   return options
 })
-const emit = defineEmits(['edit-task', 'delete-task', 'fetch-task', 'detail-task'])
-
-const onTaskDelete = (task: any) => {
-  emit('delete-task', task)
-}
-
 watch(
-  () => [props.pagination.pageNum, props.pagination.pageSize, props.sorting.sortBy, props.sorting.sortingOrder],
+  () => [pagination.value.pageNum, pagination.value.pageSize, sorting.value.sortBy, sorting.value.sortingOrder],
   () => {
-    if (props.pagination.total < props.pagination.pageSize * (props.pagination.pageNum - 1)) {
-      props.pagination.pageNum = 1
+    if (pagination.value.total < pagination.value.pageSize * (pagination.value.pageNum - 1)) {
+      pagination.value.pageNum = 1
     }
-    emit('fetch-task', { pageNum: props.pagination.pageNum, pageSize: props.pagination.pageSize })
+    taskApi.fetch()
   },
 )
 
 const currentPageData = computed(() => {
   let tasksArray: any = []
 
-  if (Array.isArray(props.tasks)) {
-    tasksArray = props.tasks
+  if (Array.isArray(tasks.value)) {
+    tasksArray = tasks.value
   } else {
-    tasksArray = [props.tasks]
+    tasksArray = [tasks.value]
   }
-  const startIndex = (props.pagination.pageNum - 1) * props.pagination.pageSize
-  const endIndex = startIndex + props.pagination.pageSize
+  const startIndex = (pagination.value.pageNum - 1) * pagination.value.pageSize
+  const endIndex = startIndex + pagination.value.pageSize
 
-  if (tasksArray.length <= props.pagination.pageSize) return tasksArray
+  if (tasksArray.length <= pagination.value.pageSize) return tasksArray
   else return tasksArray.slice(startIndex, endIndex)
 })
-
-const showContentTask = ref<task_type | null>(null)
-const showContent = (task: any) => {
-  showContentTask.value = task
-}
 </script>
 
 <style lang="scss" scoped>

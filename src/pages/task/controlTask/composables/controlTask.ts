@@ -1,14 +1,7 @@
-import { toCSV } from './../../../../services/toCSV'
 import { onBeforeMount, Ref, ref } from 'vue'
 import { type task_type } from '@/data/task'
-import { type Filters, Pagination, Sorting } from '../../../../data/page'
-import {
-  fetchTasks,
-  fetchTask,
-  addTask,
-  updateTask,
-  deleteTask,
-} from '@/apis/task' // Adjust the path as needed
+import { Pagination, Sorting } from '../../../../data/page'
+import { fetchTasks, fetchTask, addTask, updateTask, deleteTask } from '@/apis/task' // Adjust the path as needed
 import { useThrottle } from '../../../../data/dataControl'
 import { useToast } from 'vuestic-ui'
 
@@ -68,7 +61,7 @@ export const useTasks = (options?: { pagination?: Ref<Pagination>; sorting?: Ref
       await deleteTask(ids)
       await fetch()
       toast.init({ message: 'Task deleted successfully', color: 'success' })
-    } catch (err: any) {
+    } catch (error: any) {
       toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
       console.error(error)
     }
@@ -82,10 +75,9 @@ export const useTasks = (options?: { pagination?: Ref<Pagination>; sorting?: Ref
       await updateTask(task)
       await fetch()
       toast.init({ message: 'Task updated successfully', color: 'success' })
-    } catch (err: any) {
-      console.error(err)
-      error.value = (err.message || 'Failed to update task') as string
-      toast.init({ message: error.value, color: 'danger' })
+    } catch (error: any) {
+      toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
+      console.error(error)
     }
     isLoading.value = false
   }
@@ -98,10 +90,9 @@ export const useTasks = (options?: { pagination?: Ref<Pagination>; sorting?: Ref
       const res = await fetchTask({ id: searchValue.id })
       tasks.value = res.data.data
       pagination.value.total = 1
-    } catch (err: any) {
-      console.error(err)
-      error.value = (err.message || 'Failed to fetch task by ID') as string
-      toast.init({ message: error.value, color: 'danger' })
+    } catch (error: any) {
+      toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
+      console.error(error)
     }
     isLoading.value = false
   }

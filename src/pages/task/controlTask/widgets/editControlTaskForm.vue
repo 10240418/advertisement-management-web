@@ -7,8 +7,8 @@
     <div class="self-stretch flex flex-col">
       <div class="flex gap-4 flex-col w-full">
         <VaInput
-          :disabled="newControlTask.id"
           v-model="newControlTask.name"
+          :disabled="newControlTask.id"
           label="Name"
           class="w-full"
           :rules="[validators.required]"
@@ -17,12 +17,7 @@
       </div>
 
       <div class="flex flex-row gap-2 w-full">
-        <VaSelect
-          v-model="selectTaskType"
-          label="Type"
-          class="w-full"
-          :options="taskTypeOptions"
-        />
+        <VaSelect v-model="selectTaskType" label="Type" class="w-full" :options="taskTypeOptions" />
 
         <VaSelect
           v-if="selectTaskType === 'Gateway Task'"
@@ -31,21 +26,10 @@
           class="w-full truncate"
           :options="gatewayOptions"
         />
-        <VaSelect
-          v-else
-          v-model="selectMeterValue"
-          label="Meter ID"
-          class="w-full truncate"
-          :options="meterOptions"
-        />
+        <VaSelect v-else v-model="selectMeterValue" label="Meter ID" class="w-full truncate" :options="meterOptions" />
       </div>
       <div class="flex gap-4 flex-col w-full">
-        <VaSelect
-          v-model="selectOperationValue"
-          label="Operation"
-          class="w-full"
-          :options="operationOptions"
-        />
+        <VaSelect v-model="selectOperationValue" label="Operation" class="w-full" :options="operationOptions" />
       </div>
       <div class="flex gap-4 flex-row justify-center items-center w-full">
         <VaInput
@@ -57,11 +41,7 @@
           name="interval"
           :disabled="!isRepeatable"
         />
-        <VaSwitch
-          class="mt-[18px]"
-          v-model="isRepeatable"
-          label="Repeatable"
-        />
+        <VaSwitch v-model="isRepeatable" class="mt-[18px]" label="Repeatable" />
       </div>
       <div class="flex gap-4 flex-col w-full">
         <VaInput
@@ -75,45 +55,22 @@
       </div>
 
       <div class="flex gap-4 flex-col w-full mt-[18px]">
-        <VaSwitch
-          v-model="newControlTask.active"
-          label="Active"
-        />
+        <VaSwitch v-model="newControlTask.active" label="Active" />
       </div>
       <div class="flex gap-2 flex-row items-stretch justify-end w-full">
-        <VaButton
-          preset="secondary"
-          color="secondary"
-          @click="onCancel"
-        >Cancel</VaButton>
-        <VaButton
-          :disabled="!isValid"
-          @click="onSave"
-        >Save</VaButton>
+        <VaButton preset="secondary" color="secondary" @click="onCancel">Cancel</VaButton>
+        <VaButton :disabled="!isValid" @click="onSave">Save</VaButton>
       </div>
     </div>
 
     <!-- Confirmation Modal -->
-    <VaModal
-      v-model="showConfirmModal"
-      mobile-fullscreen
-      close-button
-      hide-default-actions
-    >
+    <VaModal v-model="showConfirmModal" mobile-fullscreen close-button hide-default-actions>
       <div class="p-4">
         <h3 class="text-lg font-semibold mb-2">Confirm Action</h3>
-        <p class="text-red-500 text-[18px]">Your interval is less than 30
-          seconds, do you want to continue?</p>
+        <p class="text-red-500 text-[18px]">Your interval is less than 30 seconds, do you want to continue?</p>
         <div class="flex justify-end mt-4">
-          <VaButton
-            preset="secondary"
-            color="secondary"
-            @click="onCancelConfirm"
-          >Cancel</VaButton>
-          <VaButton
-            color="primary"
-            @click="onConfirm"
-          >Continue</VaButton>
+          <VaButton preset="secondary" color="secondary" @click="onCancelConfirm">Cancel</VaButton>
+          <VaButton color="primary" @click="onConfirm">Continue</VaButton>
         </div>
       </div>
     </VaModal>
@@ -121,7 +78,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, defineProps, defineEmits, onBeforeMount, PropType, isReactive } from 'vue'
+import { ref, watch, defineProps, defineEmits, onBeforeMount, PropType } from 'vue'
 import { useForm, useToast, VaModal } from 'vuestic-ui'
 import { validators } from '../../../../services/utils'
 import { task_type } from '../../../../data/task'
@@ -154,8 +111,6 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue', 'close', 'save'])
 const newControlTask = ref<any>({})
 const toast = useToast()
-const error = ref<string | null>(null)
-
 const gatewayOptions = ref<any[]>([])
 const meterOptions = ref<any[]>([])
 const selectTagValue = ref('user')
@@ -181,7 +136,6 @@ const pagination = ref({
   pageSize: 30,
 })
 
-const tagOptions = ref<string[]>(['sys', 'user'])
 const operationOptions = ref<string[]>([])
 const taskTypeOptions = ref<string[]>(['Meter Task', 'Gateway Task'])
 
@@ -189,12 +143,12 @@ watch(
   () => props.modelValue,
   (controlTaskToEdit) => {
     if (controlTaskToEdit) {
-      let date = new Date(controlTaskToEdit.startAt)
-      let year = date.getFullYear()
-      let month = String(date.getMonth() + 1).padStart(2, '0') // 月份从0开始，所以要加1
-      let day = String(date.getDate()).padStart(2, '0')
-      let hours = String(date.getHours()).padStart(2, '0')
-      let minutes = String(date.getMinutes()).padStart(2, '0')
+      const date = new Date(controlTaskToEdit.startAt)
+      const year = date.getFullYear()
+      const month = String(date.getMonth() + 1).padStart(2, '0') // 月份从0开始，所以要加1
+      const day = String(date.getDate()).padStart(2, '0')
+      const hours = String(date.getHours()).padStart(2, '0')
+      const minutes = String(date.getMinutes()).padStart(2, '0')
       newControlTask.value.startAt = `${year}-${month}-${day}T${hours}:${minutes}`
 
       newControlTask.value.active = controlTaskToEdit.active
@@ -236,6 +190,7 @@ watch(selectTaskType, () => {
 //name
 watch([selectGatewayValue, selectMeterValue], () => {
   //注意就是需要我的id有才执行
+  // eslint-disable-next-line no-empty
   if (newControlTask.value.id) {
   } else {
     if (selectTaskType.value === 'Gateway Task') {
@@ -280,7 +235,7 @@ const fetchMetersList = () => {
         return `${meter.id} Name: ${meter.name}`
       })
     })
-    .catch((err) => {
+    .catch((error: any) => {
       toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
       console.error(error)
     })
@@ -310,8 +265,8 @@ const saveTask = () => {
         selectOperationValue.value === 'Read Data'
           ? TaskOperation.Read
           : selectOperationValue.value === 'Turn On'
-          ? TaskOperation.SwitchOn
-          : TaskOperation.SwitchOff,
+            ? TaskOperation.SwitchOn
+            : TaskOperation.SwitchOff,
       interval: Number(newControlTask.value.interval),
       startAt: new Date(newControlTask.value.startAt).toISOString(),
     }

@@ -86,19 +86,6 @@ import { gateway_type } from '../../../../data/gateway'
 import { meter_type } from '../../../../data/meter'
 import { TaskOperation } from '../../../../data/api_field_type/api_field_type'
 
-const defaultNewControlTask = {
-  id: null,
-  name: '',
-  tag: 'sys',
-  operation: '',
-  interval: null,
-  startAt: '',
-  gatewayId: null,
-  meterId: null,
-  remark: '',
-  active: true,
-}
-
 const props = defineProps({
   modelValue: {
     type: Object as PropType<task_type | null>,
@@ -109,8 +96,6 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue', 'close', 'save'])
 const newControlTask = ref<any>({})
 const toast = useToast()
-const error = ref<string | null>(null)
-
 const gatewayOptions = ref<any[]>([])
 const meterOptions = ref<any[]>([])
 const selectTagValue = ref('')
@@ -134,12 +119,12 @@ watch(
   () => props.modelValue,
   (controlTaskToEdit) => {
     if (controlTaskToEdit) {
-      let date = new Date(controlTaskToEdit.startAt)
-      let year = date.getFullYear()
-      let month = String(date.getMonth() + 1).padStart(2, '0') // 月份从0开始，所以要加1
-      let day = String(date.getDate()).padStart(2, '0')
-      let hours = String(date.getHours()).padStart(2, '0')
-      let minutes = String(date.getMinutes()).padStart(2, '0')
+      const date = new Date(controlTaskToEdit.startAt)
+      const year = date.getFullYear()
+      const month = String(date.getMonth() + 1).padStart(2, '0') // 月份从0开始，所以要加1
+      const day = String(date.getDate()).padStart(2, '0')
+      const hours = String(date.getHours()).padStart(2, '0')
+      const minutes = String(date.getMinutes()).padStart(2, '0')
       newControlTask.value.startAt = `${year}-${month}-${day}T${hours}:${minutes}`
 
       newControlTask.value.active = controlTaskToEdit.active
@@ -173,6 +158,7 @@ watch(selectTaskType, () => {
 //name
 watch([selectGatewayValue, selectMeterValue], () => {
   //注意就是需要我的id有才执行
+  // eslint-disable-next-line no-empty
   if (newControlTask.value.id) {
   } else {
     if (selectTaskType.value === 'Gateway Task') {
@@ -201,10 +187,9 @@ const fetchGatewaysList = () => {
         return `${gateway.id} Name: ${gateway.name} IP: ${gateway.ipAddr}`
       })
     })
-    .catch((err) => {
-      console.error(err)
-      error.value = (err.message || 'Failed to fetch gateways') as string
-      toast.init({ message: error.value, color: 'danger' })
+    .catch((error: any) => {
+      toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
+      console.error(error)
     })
   if (newControlTask.value.id) {
     console.log(newControlTask.value.id)
@@ -221,10 +206,9 @@ const fetchMetersList = () => {
         return `${meter.id} Name: ${meter.name}`
       })
     })
-    .catch((err) => {
-      console.error(err)
-      error.value = (err.message || 'Failed to fetch meters') as string
-      toast.init({ message: error.value, color: 'danger' })
+    .catch((error: any) => {
+      toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
+      console.error(error)
     })
 }
 

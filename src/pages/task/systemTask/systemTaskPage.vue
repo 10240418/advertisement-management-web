@@ -12,11 +12,7 @@
           <!-- <VaButton @click="showAddControlTaskModal">Add Control Task</VaButton> -->
           <template #appendInner>
             <div class="search-icon-wrapper bg-white hover:bg-slate-300 z-10">
-              <VaIcon
-                name="mso-search"
-                color="secondary"
-                @click="onSearch(searchValue)"
-              />
+              <VaIcon name="mso-search" color="secondary" @click="onSearch(searchValue)" />
             </div>
           </template>
         </VaInput>
@@ -54,7 +50,6 @@ import { useTasks } from './composables/systemTask'
 import { validators } from '../../../services/utils'
 import { openWindow } from '@/utils/openWindow'
 
-const doShowAddControlTaskModal = ref(false)
 const doShowEditControlTaskModal = ref(false)
 const { isLoading, tasks, sorting, pagination, ...taskApi } = useTasks()
 const tasksShowInTable = ref<task_type[]>([])
@@ -95,7 +90,7 @@ const fetchTask = async (fetch: any) => {
 
 const searchValue = ref('')
 const onSearch = async (searchValue: any) => {
-  const res = await taskApi.search({
+  await taskApi.search({
     id: Number(searchValue),
   })
 }

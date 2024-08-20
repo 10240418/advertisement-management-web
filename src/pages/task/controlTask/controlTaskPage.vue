@@ -6,8 +6,8 @@
           v-model="searchValue"
           placeholder="Search By ID"
           class="w-full md:w-2/3"
-          @keyup.enter="onSearch(searchValue)"
           :rules="[validators.required, validators.number]"
+          @keyup.enter="onSearch(searchValue)"
         >
           <template #appendInner>
             <div class="search-icon-wrapper bg-white hover:bg-slate-300 z-10">
@@ -18,49 +18,44 @@
         <VaButton @click="showAddControlTaskModal">Add Control Task</VaButton>
       </div>
 
-      <controlTaskTable
-        :pagination="pagination"
-        :tasks="tasksShowInTable"
-        :loading="isLoading"
-        :sorting="sorting"
-        @edit-task="showEditControlTaskModal"
-        @detail-task="showEditControlTaskDialog"
-        @delete-task="onTaskDelete"
-        @fetch-task="fetchTask"
+      <ControlTaskTable
+        @editTask="showEditControlTaskModal"
+        @detailTask="showEditControlTaskDialog"
+        @deleteTask="onTaskDelete"
+        @fetchTask="fetchTask"
       />
     </VaCardContent>
     <VaModal v-model="doShowAddControlTaskModal" size="small" mobile-fullscreen close-button hide-default-actions>
       <h1 class="va-h5">Add Control Task</h1>
-      <editControlTaskForm v-model="taskToEdit" @close="doShowAddControlTaskModal = false" @save="onSave" />
+      <EditControlTaskForm v-model="taskToEdit" @close="doShowAddControlTaskModal = false" @save="onSave" />
     </VaModal>
     <VaModal v-model="doShowEditControlTaskModal" size="small" mobile-fullscreen close-button hide-default-actions>
       <h1 class="va-h5">Edit Control Task</h1>
-      <editControlTaskForm v-model="taskToEdit" @close="doShowEditControlTaskModal = false" @save="onSave" />
+      <EditControlTaskForm v-model="taskToEdit" @close="doShowEditControlTaskModal = false" @save="onSave" />
     </VaModal>
   </VaCard>
 </template>
 
 <script setup lang="ts">
 import { ref, toRaw, watch, onBeforeMount } from 'vue'
-import { useToast, useModal } from 'vuestic-ui'
+import { useModal } from 'vuestic-ui'
 import { task_type } from '../../../data/task'
 import _ from 'lodash'
-import controlTaskTable from './widgets/controlTaskTable.vue'
-import editControlTaskForm from './widgets/editControlTaskForm.vue'
+import ControlTaskTable from './widgets/ControlTaskTable.vue'
+import EditControlTaskForm from './widgets/EditControlTaskForm.vue'
 import { useTasks } from './composables/controlTask'
 import { validators } from '@/services/utils'
 import { openWindow } from '@/utils/openWindow'
 
-const { init: notify } = useToast()
 const doShowAddControlTaskModal = ref(false)
 const doShowEditControlTaskModal = ref(false)
-const { isLoading, tasks, sorting, pagination, ...taskApi } = useTasks()
+const { tasks, ...taskApi } = useTasks()
 const tasksShowInTable = ref<task_type[]>([])
 const taskToEdit = ref<task_type | null>(null)
 
 // Open new tab dialog
 const showEditControlTaskDialog = (task: task_type) => {
-  openWindow({path: '/taskDetail', query: {id: task.id}})
+  openWindow({ path: '/taskDetail', query: { id: task.id } })
 }
 
 // Add modal
@@ -110,7 +105,7 @@ const onSave = async (newTask: any) => {
 const searchValue = ref('')
 const onSearch = async (searchValue: any) => {
   if (!searchValue) return
-  const res = await taskApi.search({
+  await taskApi.search({
     id: Number(searchValue),
   })
 }

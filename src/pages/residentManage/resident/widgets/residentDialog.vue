@@ -235,10 +235,9 @@ const showDeleteModal = async (rowData: any) => {
         await unbindUnitResident({ unitId: rowData.id, residentUserId: resident.value?.id })
         fetch()
         toast.init({ message: 'Delete successfully', color: 'success' })
-      } catch (err: any) {
-        error.value = (err.message || 'Failed to update unit') as string
-        toast.init({ message: 'Delete failed', color: 'danger' })
-        console.error('Error Delete:', error)
+      } catch (error: any) {
+        toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
+        console.error(error)
       }
     }
   }
@@ -259,8 +258,8 @@ const onSaveEditUnit = async (unit: any) => {
       fetch()
       toast.init({ message: 'ReEdit successfully', color: 'success' })
     } catch (error: any) {
-      toast.init({ message: error.value, color: 'danger' })
-      console.error('Error Save Edit:', error)
+      toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
+      console.error(error)
     }
   }
   doShowEditUnitModal.value = false
