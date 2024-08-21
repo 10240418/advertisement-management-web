@@ -32,7 +32,7 @@ export const useHomes = (options?: { sorting?: Ref<any>; pagination?: Ref<any> }
       .then((res) => {
         meters.value = res.data.data ?? []
       })
-      .catch((error:any) => {
+      .catch((error: any) => {
         toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
         console.error(error)
       })

@@ -46,12 +46,12 @@ import { computed, ref, watch } from 'vue'
 import { useColors } from 'vuestic-ui'
 import MeterCard from './MeterCard.vue'
 import { useHomes } from '@/pages/home/composables/home'
-import { openWindow } from '@/utils/openWindow';
+import { openWindow } from '@/utils/openWindow'
 
 const { fetchMetersStatus, fetchMetersStatusByType, meters } = useHomes()
 
 const showEditMeterDialog = (meterId: number) => {
-  openWindow({path: '/meterDetail', query: {id: meterId}})
+  openWindow({ path: '/meterDetail', query: { id: meterId } })
 }
 
 const meterTypeOptions = [
