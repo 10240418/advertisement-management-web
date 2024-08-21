@@ -1,7 +1,7 @@
 import { onBeforeMount, Ref, ref } from 'vue'
 import { meter_type } from '../../../../data/meter'
 import { Pagination, Sorting } from '../../../../data/page'
-import { fetchMeters, fetchMeter, addMeter, updateMeter, deleteMeter} from '../../../../apis/meter'
+import { fetchMeters, fetchMeter, addMeter, updateMeter, deleteMeter } from '../../../../apis/meter'
 import { useThrottle } from '../../../../data/dataControl'
 import { useToast } from 'vuestic-ui'
 

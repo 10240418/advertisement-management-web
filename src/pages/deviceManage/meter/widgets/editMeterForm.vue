@@ -40,7 +40,7 @@ const gateways = ref<any[]>([])
 const selectGatewayValue = ref<any>()
 const selectGateway2Value = ref<any>()
 
-const typeOptions = ref(['Water Meter', 'Electric Meter'])
+const typeOptions = ref(['WaterMeter', 'ElectricMeter'])
 const selectTypeValue = ref('')
 
 const MeterModelOptions = ref(['MeterModelWaterHDSB', 'MeterModelWaterHDSW', 'ElectricMeterModelTEST'])
@@ -93,8 +93,6 @@ const fetchGateway = () => {
         }
         return { value: gateway.id, label: ` ${gateway.name}(${gateway.ipAddr})` }
       })
-      console.log(gatewayOptions.value)
-      console.log(gatewaysOptions.value)
     })
     .catch((error: any) => {
       toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
@@ -106,12 +104,25 @@ onBeforeMount(() => {
   fetchUnits()
   fetchGateway()
 })
+//watch 自动显示name 先選擇好Unit、Meter Type，然後自動填充NameX格式為:UnitName-MeterTypeName 如:G03-WaterMeter
+watch([selectUnit2Value, selectTypeValue], () => {
+  if (selectUnit2Value.value && selectTypeValue.value) {
+    const unitLabel = units.value.find((unit) => unit.id === selectUnit2Value.value.value)?.floor
+    newMeter.value.name = `${unitLabel}-${selectTypeValue.value}`
+  }
+})
 //监听selectTypeValue的变化
 watch(selectTypeValue, () => {
   if (selectTypeValue.value === 'Water Meter') {
     MeterModelOptions.value = ['MeterModelWaterHDSB', 'MeterModelWaterHDSW']
+    if (!MeterModelOptions.value.includes(selectModelValue.value)) {
+      selectModelValue.value = MeterModelOptions.value[0]
+    }
   } else {
     MeterModelOptions.value = ['ElectricMeterModelTEST']
+    if (!MeterModelOptions.value.includes(selectModelValue.value)) {
+      selectModelValue.value = MeterModelOptions.value[0]
+    }
   }
 })
 //如果传递的值不是null
@@ -119,9 +130,8 @@ watch(
   () => props.modelValue,
   (meterToEdit) => {
     if (meterToEdit) {
-      console.log(meterToEdit)
-      if (meterToEdit.type === MeterType.Electric) selectTypeValue.value = 'Electric Meter'
-      else selectTypeValue.value = 'Water Meter'
+      if (meterToEdit.type === MeterType.Electric) selectTypeValue.value = 'ElectricMeter'
+      else selectTypeValue.value = 'WaterMeter'
       if (meterToEdit.model === MeterModel.MeterModelWaterHDSB && meterToEdit.type === 0)
         selectModelValue.value = 'MeterModelWaterHDSB'
       else if (meterToEdit.model === MeterModel.MeterModelWaterHDSW) selectModelValue.value = 'MeterModelWaterHDSW'
@@ -142,13 +152,13 @@ const onSave = () => {
     emit('save', {
       id: newMeter.value.id,
       name: newMeter.value.name,
-      type: Number(selectTypeValue.value === 'Water Meter' ? MeterType.Water : MeterType.Electric),
+      type: Number(selectTypeValue.value === 'WaterMeter' ? MeterType.Water : MeterType.Electric),
       model: Number(
         selectModelValue.value === 'MeterModelWaterHDSB'
           ? MeterModel.MeterModelWaterHDSB
           : selectModelValue.value === 'MeterModelWaterHDSW'
-          ? MeterModel.MeterModelWaterHDSW
-          : MeterModel.ElectricMeterModelTEST,
+            ? MeterModel.MeterModelWaterHDSW
+            : MeterModel.ElectricMeterModelTEST,
       ),
       modbusAddr: Number(newMeter.value.modbusAddr),
       remark: newMeter.value.remark,
@@ -165,57 +175,8 @@ const onCancel = () => {
 </script>
 
 <template>
-  <VaForm
-    v-slot="{ isValid }"
-    ref="add-meter-form"
-    class="flex-col justify-start items-start gap-4 inline-flex w-full"
-  >
+  <VaForm v-slot="{ isValid }" ref="add-meter-form" class="flex-col justify-start items-start gap-4 inline-flex w-full">
     <div class="self-stretch flex-col justify-start items-start gap-1 flex">
-      <div class="flex gap-4 flex-col w-full">
-        <VaInput
-          v-model="newMeter.name"
-          label="Name"
-          class="w-full"
-          :rules="[validators.required]"
-          name="name"
-        />
-      </div>
-      <div class="flex gap-4 flex-col w-full">
-        <VaSelect
-          v-model="selectGateway2Value"
-          track-by="value"
-          text-by="label"
-          label="Gateway"
-          class="w-full"
-          :options="gatewaysOptions"
-        />
-      </div>
-      <div class="flex gap-4 flex-col w-full">
-        <VaSelect
-          v-model="selectTypeValue"
-          label="Meter Type"
-          class="w-full"
-          :options="typeOptions"
-          name="type"
-        />
-      </div>
-      <div class="flex gap-4 flex-col w-full">
-        <VaSelect
-          v-model="selectModelValue"
-          label="Model"
-          class="w-full"
-          :options="MeterModelOptions"
-        />
-      </div>
-      <div class="flex gap-4 flex-col w-full">
-        <VaInput
-          v-model="newMeter.modbusAddr"
-          label="Modbus Address"
-          class="w-full"
-          :rules="[validators.required, validators.numberBetween0And60]"
-          name="modbusAddr"
-        />
-      </div>
       <div class="flex gap-4 flex-col w-full">
         <VaSelect
           v-model="selectUnit2Value"
@@ -226,24 +187,47 @@ const onCancel = () => {
           :options="unitsOptions"
         />
       </div>
+
+      <div class="flex gap-4 flex-col w-full">
+        <VaSelect v-model="selectTypeValue" label="Meter Type" class="w-full" :options="typeOptions" name="type" />
+      </div>
+
+      <div class="flex gap-4 flex-col w-full">
+        <VaSelect v-model="selectModelValue" label="Model" class="w-full" :options="MeterModelOptions" />
+      </div>
+
+      <div class="flex gap-4 flex-col w-full">
+        <VaInput v-model="newMeter.name" label="Name" class="w-full" :rules="[validators.required]" name="name" />
+      </div>
+
       <div class="flex gap-4 flex-col w-full">
         <VaInput
-          v-model="newMeter.remark"
-          label="Remark"
+          v-model="newMeter.modbusAddr"
+          label="Modbus Address"
           class="w-full"
-          name="remark"
+          :rules="[validators.required, validators.numberBetween0And60]"
+          name="modbusAddr"
         />
       </div>
+
+      <div class="flex gap-4 flex-col w-full">
+        <VaSelect
+          v-model="selectGateway2Value"
+          track-by="value"
+          text-by="label"
+          label="Gateway"
+          class="w-full"
+          :options="gatewaysOptions"
+        />
+      </div>
+
+      <div class="flex gap-4 flex-col w-full">
+        <VaInput v-model="newMeter.remark" label="Remark" class="w-full" name="remark" />
+      </div>
+
       <div class="flex gap-2 flex-col-reverse items-stretch justify-end w-full">
-        <VaButton
-          preset="secondary"
-          color="secondary"
-          @click="onCancel"
-        >Cancel</VaButton>
-        <VaButton
-          :disabled="!isValid"
-          @click="onSave"
-        >Save</VaButton>
+        <VaButton preset="secondary" color="secondary" @click="onCancel">Cancel</VaButton>
+        <VaButton :disabled="!isValid" @click="onSave">Save</VaButton>
       </div>
     </div>
   </VaForm>

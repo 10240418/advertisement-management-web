@@ -1,10 +1,10 @@
 <template>
   <VaDataTable
+    v-model:sort-by="sorting.sortBy"
+    v-model:sorting-order="sorting.sortingOrder"
     :columns="columns"
     :items="currentPageData"
-    :loading="props.loading"
-    v-model:sort-by="props.sorting.sortBy"
-    v-model:sorting-order="props.sorting.sortingOrder"
+    :loading="isLoading"
   >
     <template #cell(type)="{ rowData }">
       <div v-if="rowData.type === 0">WaterMeter</div>
@@ -12,13 +12,13 @@
     </template>
     <template #cell(detail)="{ rowData }">
       <VaButton
-        preset="secondary"
         id="detailMeter"
+        preset="secondary"
         size="small"
         icon="mso-info"
         aria-label="Info Resident"
-        @click="$emit('detail-meter', rowData as any)"
         class="w-full justify-between ml-[-5px]"
+        @click="$emit('detail-meter', rowData as any)"
       >
         <span>Detail</span>
       </VaButton>
@@ -32,7 +32,7 @@
           <VaIcon name="more_horiz" size="20px" class="mr-2 cursor-pointer" />
         </div>
         <template #body>
-          <transition name="fade">
+          <Transition name="fade">
             <div
               v-show="showContentMeter?.id === rowData.id"
               class="tooltip-content flex flex-col justify-center z-999 items-center relative border p-1 rounded-md"
@@ -42,8 +42,8 @@
                 size="small"
                 icon="mso-edit"
                 aria-label="Edit meter"
-                @click="$emit('edit-meter', rowData as any)"
                 class="w-full justify-between"
+                @click="$emit('edit-meter', rowData as any)"
               >
                 <span>Edit</span>
               </VaButton>
@@ -53,24 +53,24 @@
                 icon="mso-delete"
                 color="danger"
                 aria-label="Delete meter"
-                @click="onMeterDelete(rowData)"
                 class="w-full justify-between"
+                @click="onMeterDelete(rowData)"
               >
                 <span>Delete</span>
               </VaButton>
             </div>
-          </transition>
+          </Transition>
         </template>
       </VaPopover>
     </template>
   </VaDataTable>
   <div class="flex flex-col-reverse md:flex-row gap-2 justify-between items-center py-2">
     <div>
-      <b>total: {{ $props.pagination.total }} </b>
+      <b>total: {{ pagination.total }} </b>
       pageNum:
-      <VaSelect v-model="$props.pagination.pageNum" class="!w-16" selected-top-shown :options="pagesOptions" />
+      <VaSelect v-model="pagination.pageNum" class="!w-16" selected-top-shown :options="pagesOptions" />
       pageSize:
-      <VaSelect v-model="$props.pagination.pageSize" class="!w-20" selected-top-shown :options="[5, 10, 20, 50, 100]" />
+      <VaSelect v-model="pagination.pageSize" class="!w-20" selected-top-shown :options="[5, 10, 20, 50, 100]" />
     </div>
 
     <div v-if="totalPages > 1" class="flex">
@@ -78,19 +78,19 @@
         preset="secondary"
         icon="va-arrow-left"
         aria-label="Previous page"
-        :disabled="props.pagination.pageNum === 1"
-        @click="props.pagination.pageNum--"
+        :disabled="pagination.pageNum === 1"
+        @click="pagination.pageNum--"
       />
       <VaButton
         class="mr-2"
         preset="secondary"
         icon="va-arrow-right"
         aria-label="Next page"
-        :disabled="props.pagination.pageNum === totalPages"
-        @click="props.pagination.pageNum++"
+        :disabled="pagination.pageNum === totalPages"
+        @click="pagination.pageNum++"
       />
       <VaPagination
-        v-model="props.pagination.pageNum"
+        v-model="pagination.pageNum"
         buttons-preset="secondary"
         :pages="totalPages"
         :visible-pages="5"
@@ -102,9 +102,10 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits, computed, ref, watch, toRef, PropType } from 'vue'
-import { defineVaDataTableColumns, VaPopover, VaButton, VaIcon, VaInput, VaSelect, VaPagination } from 'vuestic-ui'
+import { defineEmits, computed, ref, watch } from 'vue'
+import { defineVaDataTableColumns, VaPopover, VaButton, VaIcon, VaSelect, VaPagination } from 'vuestic-ui'
 import { meter_type } from '../../../../data/meter'
+import { useMeters } from '../../../../pages/deviceManage/meter/composables/meter'
 
 const columns = defineVaDataTableColumns([
   { label: 'ID', key: 'id', sortable: true, width: '5%' },
@@ -115,15 +116,8 @@ const columns = defineVaDataTableColumns([
   { label: 'Detail', key: 'detail', sortable: false, width: '5%' },
   { label: 'Actions', key: 'actions', sortable: false, width: '5%' },
 ])
-
-const props = defineProps({
-  meters: { type: Array, default: () => [] },
-  loading: { type: Boolean, default: false },
-  pagination: { type: Object as PropType<any>, required: true },
-  sorting: { type: Object as PropType<any>, required: true },
-})
-
-const totalPages = computed(() => Math.ceil(props.pagination.total / props.pagination.pageSize))
+const { isLoading, meters, sorting, pagination, ...meterApi } = useMeters()
+const totalPages = computed(() => Math.ceil(pagination.value.total / pagination.value.pageSize))
 const pagesOptions = computed(() => {
   const options = []
   for (let i = 1; i <= totalPages.value; i++) {
@@ -139,26 +133,26 @@ const onMeterDelete = (meter: any) => {
 }
 
 watch(
-  () => [props.pagination.pageNum, props.pagination.pageSize, props.sorting.sortBy, props.sorting.sortingOrder],
+  () => [pagination.value.pageNum, pagination.value.pageSize, sorting.value.sortBy, sorting.value.sortingOrder],
   () => {
-    if (props.pagination.total < props.pagination.pageSize * (props.pagination.pageNum - 1)) {
-      props.pagination.pageNum = 1
+    if (pagination.value.total < pagination.value.pageSize * (pagination.value.pageNum - 1)) {
+      pagination.value.pageNum = 1
     }
-    emit('fetch-meter', { pageNum: props.pagination.pageNum, pageSize: props.pagination.pageSize })
+    meterApi.fetch()
   },
 )
 const currentPageData = computed(() => {
   let metersArray: any = []
 
-  if (Array.isArray(props.meters)) {
-    metersArray = props.meters
+  if (Array.isArray(meters.value)) {
+    metersArray = meters.value
   } else {
-    metersArray = [props.meters]
+    metersArray = [meters.value]
   }
-  const startIndex = (props.pagination.pageNum - 1) * props.pagination.pageSize
-  const endIndex = startIndex + props.pagination.pageSize
+  const startIndex = (pagination.value.pageNum - 1) * pagination.value.pageSize
+  const endIndex = startIndex + pagination.value.pageSize
 
-  if (metersArray.length <= props.pagination.pageSize) return metersArray
+  if (metersArray.length <= pagination.value.pageSize) return metersArray
   else return metersArray.slice(startIndex, endIndex)
 })
 

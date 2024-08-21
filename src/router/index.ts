@@ -107,7 +107,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     name: 'meterDetail',
     path: '/meterDetail/:id?',
-    component: () => import('@/pages/deviceManage/meter/widgets/meterDialog.vue'),
+    component: () => import('@/pages/deviceManage/meter/widgets/MeterDialog.vue'),
   },
   {
     name: 'residentDetail',

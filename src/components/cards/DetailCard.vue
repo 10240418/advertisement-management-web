@@ -11,7 +11,7 @@
             <div class="flex justify-start items-start">
               <VaListLabel class="flex flex-start">{{ label }}</VaListLabel>
             </div>
-            <div class="flex absolute ml-20">
+            <div class="flex absolute ml-[95px]">
               <!-- Adjusted margin for better alignment -->
               <span
                 :class="[indexWeight > index ? fontWeight : '', 'flex flex-start text-[16px] truncate']"

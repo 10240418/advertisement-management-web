@@ -57,24 +57,16 @@ const formattedDate = (isoDate: string): string => {
 }
 </script>
 <template>
-  <VaCard class="h-[160px] min-w-[280px] w-full md overflow-y-scroll">
+  <VaCard class="h-[160px] min-w-[280px] w-full md overflow-hidden">
     <VaCardContent>
       <table class="mt-0">
         <tbody>
-          <tr
-            v-for="(item, index) in operateLogs"
-            :key="index"
-          >
+          <tr v-for="(item, index) in operateLogs" :key="index">
             <VaTimelineItem :date="formattedDate(item.createdAt)">
               <div class="flex flex-col gap-2">
                 <div class="flex flex-row gap-2 mr-2">
-                  <span>{{ item.meterName }}({{ item.meterId }})</span> <span
-                    class="text-slate-400"
-                  >Operation:</span>
-                  <span
-                    v-if="item.operation === 1"
-                    class="text-blue-500"
-                  >Open</span>
+                  <span>{{ item.meterName }}({{ item.meterId }})</span> <span class="text-slate-400">Operation:</span>
+                  <span v-if="item.operation === 1" class="text-blue-500">Open</span>
                   <span v-if="item.operation === 0">Close</span>
                 </div>
                 <div class="h-[2px]"></div>

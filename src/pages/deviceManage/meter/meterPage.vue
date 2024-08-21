@@ -11,31 +11,27 @@
         <VaButton @click="showAddMeterModal">Add Meter</VaButton>
       </div>
 
-      <meterTable
-        :pagination="pagination"
-        :meters="metersShowInTable"
-        :loading="isLoading"
-        :sorting="sorting"
-        @edit-meter="showEditMeterModal"
-        @detail-meter="showEditMeterDialog"
-        @delete-meter="onMeterDelete"
-        @fetch-meter="fetchMeter"
+      <MeterTable
+        @editMeter="showEditMeterModal"
+        @detailMeter="showEditMeterDialog"
+        @deleteMeter="onMeterDelete"
+        @fetchMeter="fetchMeter"
       />
     </VaCardContent>
     <VaModal
       v-model="doShowAddMeterModal"
       size="small"
-      noOutsideDismiss
+      no-outside-dismiss
       mobile-fullscreen
       close-button
       hide-default-actions
     >
       <h1 class="va-h5">Add Meter</h1>
-      <editMeterForm v-model="meterToEdit" @close="doShowAddMeterModal = false" @save="onSave" />
+      <EditMeterForm v-model="meterToEdit" @close="doShowAddMeterModal = false" @save="onSave" />
     </VaModal>
     <VaModal v-model="doShowEditMeterModal" size="small" mobile-fullscreen close-button hide-default-actions>
       <h1 class="va-h5">Edit Meter</h1>
-      <editMeterForm v-model="meterToEdit" @close="doShowEditMeterModal = false" @save="onSave" />
+      <EditMeterForm v-model="meterToEdit" @close="doShowEditMeterModal = false" @save="onSave" />
     </VaModal>
   </VaCard>
 </template>
@@ -43,24 +39,21 @@
 <script setup lang="ts">
 import { ref, toRaw, watch, onBeforeMount } from 'vue'
 import { useMeters } from './composables/meter'
-import { useToast, useModal } from 'vuestic-ui'
+import { useModal } from 'vuestic-ui'
 import { meter_type } from '../../../data/meter'
 import _ from 'lodash'
-import meterTable from './widgets/meterTable.vue'
-import meterDialog from './widgets/meterDialog.vue'
-import editMeterForm from './widgets/editMeterForm.vue'
+import MeterTable from './widgets/MeterTable.vue'
+import EditMeterForm from './widgets/EditMeterForm.vue'
 import { openWindow } from '@/utils/openWindow'
-
-const { init: notify } = useToast()
 const doShowAddMeterModal = ref(false)
 const doShowEditMeterModal = ref(false)
-const { isLoading, meters, sorting, pagination, ...meterApi } = useMeters()
+const { meters, ...meterApi } = useMeters()
 const metersShowInTable = ref<meter_type[]>([])
 const meterToEdit = ref<meter_type | null>(null)
 
 //打开新的标签页弹窗
 const showEditMeterDialog = (meter: meter_type) => {
-  openWindow({path: '/meterDetail', query: {id: meter.id}})
+  openWindow({ path: '/meterDetail', query: { id: meter.id } })
 }
 
 //添加弹窗
@@ -105,7 +98,7 @@ const onSave = async (newMeter: any) => {
 
 const searchValue = ref('')
 const onSearch = async (searchValue: any) => {
-  const res = await meterApi.search({
+  await meterApi.search({
     id: Number(searchValue),
   })
 }

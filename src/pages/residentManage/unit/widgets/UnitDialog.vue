@@ -3,7 +3,10 @@
     <div class="w-full h-full flex flex-col mt-[-10px]">
       <!-- Top part with Unit details -->
       <div class="flex flex-row justify-between">
-        <DetailCard :labels="labelsProp" :datas="datasProp" />
+        <DetailCard
+          :labels="labelsProp"
+          :datas="datasProp"
+        />
         <div class="flex flex-col justify-end items-end mt-[0px] mr-4">
           <VaButton
             preset="secondary"
@@ -48,12 +51,20 @@
         </template>
 
         <template #cell(actions)="{ rowData }">
-          <VaPopover placement="bottom" trigger="click" color="backgroundSecondary">
+          <VaPopover
+            placement="bottom"
+            trigger="click"
+            color="backgroundSecondary"
+          >
             <div
               class="flex justify-center items-center relative hover:bg-blue-200 rounded-[4px]"
               @click.stop="showContentMeter(rowData)"
             >
-              <VaIcon name="more_horiz" size="20px" class="mr-2 cursor-pointer" />
+              <VaIcon
+                name="more_horiz"
+                size="20px"
+                class="mr-2 cursor-pointer"
+              />
             </div>
             <template #body>
               <Transition name="fade">
@@ -99,19 +110,30 @@
         sticky-header
       >
         <template #cell(active)="{ rowData }">
-          <VaBadge :text="rowData.active ? 'Yes' : 'No'" :color="rowData.active ? 'success' : 'secondary'" />
+          <VaBadge
+            :text="rowData.active ? 'Yes' : 'No'"
+            :color="rowData.active ? 'success' : 'secondary'"
+          />
         </template>
 
         <template #cell(createdAt)="{ rowData }">
           {{ moment(rowData.createdAt).format('YYYY-MM-DD HH:mm:ss') }}
         </template>
         <template #cell(actions)="{ rowData }">
-          <VaPopover placement="bottom" trigger="click" color="backgroundSecondary">
+          <VaPopover
+            placement="bottom"
+            trigger="click"
+            color="backgroundSecondary"
+          >
             <div
               class="flex justify-center items-center relative hover:bg-blue-200 rounded-[4px]"
               @click.stop="showContentResident(rowData)"
             >
-              <VaIcon name="more_horiz" size="20px" class="mr-2 cursor-pointer" />
+              <VaIcon
+                name="more_horiz"
+                size="20px"
+                class="mr-2 cursor-pointer"
+              />
             </div>
             <template #body>
               <Transition name="fade">
@@ -148,31 +170,78 @@
       </VaDataTable>
 
       <!-- Edit Meter Modal -->
-      <VaModal v-model="isShowEditMeterModal" size="small" mobile-fullscreen close-button hide-default-actions>
+      <VaModal
+        v-model="isShowEditMeterModal"
+        size="small"
+        mobile-fullscreen
+        close-button
+        hide-default-actions
+      >
         <h1>Edit Meter</h1>
-        <EditMeterForm :model-value="unitMeterEdit" @save="saveMeter" @close="closeEditModal" />
+        <EditMeterForm
+          :model-value="unitMeterEdit"
+          @save="saveMeter"
+          @close="closeEditModal"
+        />
       </VaModal>
 
-      <VaModal v-model="doShowEditUnitModal" size="small" mobile-fullscreen close-button hide-default-actions>
+      <VaModal
+        v-model="doShowEditUnitModal"
+        size="small"
+        mobile-fullscreen
+        close-button
+        hide-default-actions
+      >
         <h1 class="va-h5">Edit Unit</h1>
-        <EditUnitForm v-model="unit" @close="doShowEditUnitModal = false" @save="onSave" />
+        <EditUnitForm
+          v-model="unit"
+          @close="doShowEditUnitModal = false"
+          @save="onSave"
+        />
       </VaModal>
 
       <!-- Edit Resident Modal -->
-      <VaModal v-model="isShowEditResidentModal" size="small" mobile-fullscreen close-button hide-default-actions>
+      <VaModal
+        v-model="isShowEditResidentModal"
+        size="small"
+        mobile-fullscreen
+        close-button
+        hide-default-actions
+      >
         <h1>Edit Resident</h1>
-        <EditResidentForm :resident="unitResidentEdit" @save="saveResident" @close="closeEditResidentModal" />
+        <EditResidentForm
+          :resident="unitResidentEdit"
+          @save="saveResident"
+          @close="closeEditResidentModal"
+        />
       </VaModal>
 
       <!-- Bind Resident Modal -->
-      <VaModal v-model="isShowAddUnitModal" size="small" mobile-fullscreen close-button hide-default-actions>
+      <VaModal
+        v-model="isShowAddUnitModal"
+        size="small"
+        mobile-fullscreen
+        close-button
+        hide-default-actions
+      >
         <h1 class="va-h5">Add Unit</h1>
-        <BindResidentForm :resident="unit" @close="isShowAddUnitModal = false" @fetch="fetch" />
+        <BindResidentForm
+          :resident="unit"
+          @close="isShowAddUnitModal = false"
+          @fetch="fetch"
+        />
       </VaModal>
 
       <div class="flex flex-row justify-end gap-3">
-        <VaButton color="primary" class="h-[26px] w-[112px]" @click="isShowAddUnitModal = true">BindResident</VaButton>
-        <VaButton class="h-[26px] w-[72px] mr-5" @click="onClose">Cancel</VaButton>
+        <VaButton
+          color="primary"
+          class="h-[26px] w-[112px]"
+          @click="isShowAddUnitModal = true"
+        >BindResident</VaButton>
+        <VaButton
+          class="h-[26px] w-[72px] mr-5"
+          @click="onClose"
+        >Cancel</VaButton>
       </div>
     </div>
   </VaCard>
@@ -182,7 +251,7 @@
 import { ref, computed, onBeforeMount } from 'vue'
 import { useToast, useModal } from 'vuestic-ui'
 import DetailCard from '@/components/cards/DetailCard.vue'
-import EditMeterForm from '@/pages/deviceManage/meter/widgets/editMeterForm.vue'
+import EditMeterForm from '@/pages/deviceManage/meter/widgets/EditMeterForm.vue'
 import EditResidentForm from '@/pages/residentManage/resident/widgets/EditResidentForm.vue'
 import BindResidentForm from './BindResidentForm.vue'
 import { useRoute } from 'vue-router'

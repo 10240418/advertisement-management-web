@@ -4,45 +4,28 @@
       <!-- chart -->
       <!-- <span class="text-[20px] font-bold">Read Meter Logs</span> -->
       <div class="flex min-h-[100px] h-[180px] mr-2">
-        <VaChart
-          :data="chartData"
-          class="h-24"
-          type="line"
-          :options="options"
-        />
+        <VaChart :data="chartData" class="h-24" type="line" :options="options" />
       </div>
       <!-- top -->
       <div class="flex flex-row justify-between items-center">
         <span class="mt-2 ml-2 text-[18px] font-bold">{{ meter?.name }}</span>
-        <div class="flex flex-row justify-center mr-4 gap-3">
+        <div class="flex flex-row justify-center mr-6 gap-3">
           <div
             class="w-[20px] h-[20px] rounded-full border border-solid shadow-lg"
             :class="{ 'bg-green-600': meterStatus === true, 'bg-red-500': meterStatus !== true }"
           ></div>
-          <span
-            v-if="meterStatus === true"
-            class="text-[15px] font-bold"
-          >开启</span>
-          <span
-            v-if="meterStatus !== true"
-            class="text-[15px] font-bold"
-          >关闭</span>
+          <span v-if="meterStatus === true" class="text-[15px] font-bold">开启</span>
+          <span v-if="meterStatus !== true" class="text-[15px] font-bold">关闭</span>
         </div>
       </div>
       <div class="flex flex-row justify-between">
-        <DetailCard
-          :labels="labelsProp"
-          :datas="datasProp"
-          :font-weight="`font-bold`"
-          :index-weight="3"
-        >
+        <DetailCard :labels="labelsProp" :datas="datasProp" :font-weight="`font-bold`" :index-weight="3">
           <div class="flex flex-col relative">
             <!-- Gateway Section -->
             <div class="flex flex-row w-full items-center">
               <VaListLabel class="flex justify-start">Gateway</VaListLabel>
-              <div class="absolute ml-20">
-                <span
-                  class="truncate w-[72px]">{{ meter?.gateway?.name }}</span>
+              <div class="absolute ml-[95px]">
+                <span class="truncate w-[72px]">{{ meter?.gateway?.name }}</span>
               </div>
               <VaPopover
                 class="absolute ml-52"
@@ -56,20 +39,16 @@
                   @click="isGatewayCollapsed = !isGatewayCollapsed"
                 />
                 <template #body>
-                  <div
-                    class="grid grid-cols-2 gap-2 border border-solid p-2 rounded-md shadow-lg"
-                  >
+                  <div class="grid grid-cols-2 gap-2 border border-solid p-2 rounded-md shadow-lg">
                     <VaListLabel class="flex justify-start">ID</VaListLabel>
                     <span>{{ meter?.gateway.id }}</span>
                     <VaListLabel class="flex justify-start">Name</VaListLabel>
                     <span>{{ meter?.gateway.name }}</span>
-                    <VaListLabel class="flex justify-start">IP Address
-                    </VaListLabel>
+                    <VaListLabel class="flex justify-start">IP Address </VaListLabel>
                     <span>{{ meter?.gateway.ipAddr }}</span>
                     <VaListLabel class="flex justify-start">Remark</VaListLabel>
                     <span>{{ meter?.gateway.remark }}</span>
-                    <VaListLabel class="flex justify-start">Created At
-                    </VaListLabel>
+                    <VaListLabel class="flex justify-start">Created At </VaListLabel>
                     <span>{{ meter?.gateway.createdAt }}</span>
                   </div>
                 </template>
@@ -79,9 +58,8 @@
             <!-- Meter Section -->
             <div class="flex flex-row mr-3 items-center gap-3">
               <VaListLabel class="flex justify-start">Unit</VaListLabel>
-              <div class="absolute ml-20">
-                <span
-                  class="truncate w-[72px] text-[16px]">{{ meter?.unit?.unit }}</span>
+              <div class="absolute ml-[95px]">
+                <span class="truncate w-[72px] text-[16px]">{{ meter?.unit?.unit }}</span>
               </div>
               <VaPopover
                 class="absolute ml-52"
@@ -95,9 +73,7 @@
                   @click="isUnitCollapsed = !isUnitCollapsed"
                 />
                 <template #body>
-                  <div
-                    class="grid grid-cols-[1fr_4fr] border border-solid rounded-md shadow-lg p-2"
-                  >
+                  <div class="grid grid-cols-[1fr_4fr] border border-solid rounded-md shadow-lg p-2">
                     <VaListLabel class="flex justify-start">ID</VaListLabel>
                     <span>{{ meter?.unit.id }}</span>
                     <VaListLabel class="flex justify-start">Floor</VaListLabel>
@@ -107,8 +83,7 @@
 
                     <VaListLabel class="flex justify-start">Remark</VaListLabel>
                     <span>{{ meter?.unit.remark }}</span>
-                    <VaListLabel class="flex justify-start">Created At
-                    </VaListLabel>
+                    <VaListLabel class="flex justify-start">Created At </VaListLabel>
                     <span>{{ meter?.unit.createdAt }}</span>
                   </div>
                 </template>
@@ -146,26 +121,21 @@
                         </div> -->
           </div>
         </DetailCard>
-        <div class="flex flex-col justify-end items-end mt-[3px] mr-4">
-          <VaButton
-            preset="secondary"
-            border-color="primary"
-            class="h-[24px] w-[82px]"
-            @click="openEditModal"
-          >
-            Edit
+        <div class="flex flex-col justify-end items-end mt-[0px] mr-6">
+          <VaButton preset="secondary" border-color="primary" class="h-[26px] w-[82px]" @click="openEditModal">
+            <span class="text-[14px]">Edit</span>
           </VaButton>
         </div>
       </div>
     </div>
 
     <!-- operate timeling -->
-    <div class="flex flex-row *:">
+    <div class="flex flex-row *: ml-[105px]">
       <MeterOperateLogsCard :isfetch="logsCardFetch"></MeterOperateLogsCard>
     </div>
     <!-- footer -->
-    <div class="dialog-footer flex flex-row gap-2 mr-1">
-      <div class="flex flex-row items-center gap-5">
+    <div class="dialog-footer flex flex-row gap-2 mr-4">
+      <div class="flex flex-row items-center justify-center gap-5">
         <VaButton
           v-if="meterStatus === true"
           color="primary"
@@ -173,7 +143,7 @@
           class="h-[30px] w-[92px] text-nowrap"
           @click="operateMeterStatus"
         >
-          Turn ON
+          <span class="text-[14px]">Turn ON</span>
         </VaButton>
         <VaButton
           v-if="meterStatus === false"
@@ -182,27 +152,15 @@
           class="h-[30px] w-[92px] text-nowrap"
           @click="operateMeterStatus"
         >
-          Turn OFF
+          <span class="text-[14px]">Turn OFF</span>
         </VaButton>
       </div>
-      <VaButton
-        color="primary"
-        :loading="isOperating ? true : false"
-        class="h-[30px] w-[82px]"
-        @click="read"
-      >
-        <span>Realtime</span>
+      <VaButton color="primary" :loading="isOperating ? true : false" class="h-[30px] w-[82px]" @click="read">
+        <span class="text-[14px]">Realtime</span>
       </VaButton>
-      <VaButton @click="cancel">Cancel</VaButton>
     </div>
     <!-- edit modal -->
-    <VaModal
-      v-model="showEditModal"
-      size="small"
-      mobile-fullscreen
-      close-button
-      hide-default-actions
-    >
+    <VaModal v-model="showEditModal" size="small" mobile-fullscreen close-button hide-default-actions>
       <h1>Edit Meter</h1>
       <EditMeterForm
         :model-value="meter"
@@ -211,20 +169,9 @@
         @close="closeEditModal"
       />
     </VaModal>
-    <VaModal
-      v-model="showReadModal"
-      size="small"
-      mobile-fullscreen
-      close-button
-      hide-default-actions
-    >
-      <div
-        v-if="meter?.type === 1"
-        class="flex flex-col p-4"
-      >
-        <h1
-          class="text-xl font-bold mb-4 flex flex-row items-start justify-start"
-        >Status</h1>
+    <VaModal v-model="showReadModal" size="small" mobile-fullscreen close-button hide-default-actions>
+      <div v-if="meter?.type === 1" class="flex flex-col p-4">
+        <h1 class="text-xl font-bold mb-4 flex flex-row items-start justify-start">Status</h1>
         <div class="space-y-2 w-full">
           <div class="flex justify-between">
             <VaListLabel class="flex justify-start">Voltage</VaListLabel>
@@ -256,13 +203,8 @@
           </div>
         </div>
       </div>
-      <div
-        v-else
-        class="flex flex-col p-4"
-      >
-        <h1
-          class="text-xl font-bold mb-4 flex justify-start items-start ml-[-2px]"
-        >Status</h1>
+      <div v-else class="flex flex-col p-4">
+        <h1 class="text-xl font-bold mb-4 flex justify-start items-start ml-[-2px]">Status</h1>
         <div class="space-y-2 w-full">
           <div class="flex justify-between">
             <VaListLabel class="flex justify-start">Volume</VaListLabel>
@@ -289,13 +231,13 @@ import { useChartData } from '../../../../data/charts/composables/useChartData'
 import { ChartOptions } from 'chart.js'
 import { useRoute } from 'vue-router'
 import { fetchMeter } from '../../../../apis/meter'
-import EditMeterForm from './editMeterForm.vue'
+import EditMeterForm from './EditMeterForm.vue'
 import { useToast } from 'vuestic-ui'
 import { updateMeter, operateMeter, readMeter } from '../../../../apis/meter'
 import { useMeters } from '../composables/meter'
 import { MeterOperationType } from '../../../../data/api_field_type/api_field_type'
 import { fetchReadMeterLogsData } from '../../../../apis/meter'
-// import meterOperateLogsCard from './meterOperateLogsCard.vue'
+import MeterOperateLogsCard from './meterOperateLogsCard.vue'
 import DetailCard from '@/components/cards/DetailCard.vue'
 
 const toast = useToast()
@@ -459,10 +401,6 @@ const saveMeter = async (updatedMeter: any) => {
   await useMeters().fetch()
   closeEditModal()
 }
-
-const cancel = () => {
-  window.close()
-}
 </script>
 
 <style lang="scss">
@@ -472,6 +410,9 @@ const cancel = () => {
   }
 }
 
+.va-button {
+  min-height: 30px;
+}
 .dialog-footer {
   display: flex;
   justify-content: flex-end;
