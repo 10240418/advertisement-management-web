@@ -122,7 +122,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     name: 'sysTaskDetail',
     path: '/sysTaskDetail/:id?',
-    component: () => import('@/pages/task/systemTask/widgets/systemTaskDialog.vue'),
+    component: () => import('@/pages/task/systemTask/widgets/SystemTaskDialog.vue'),
   },
   {
     name: 'unitDetail',

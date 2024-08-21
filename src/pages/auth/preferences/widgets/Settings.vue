@@ -6,6 +6,7 @@
         {{ preferences?.readingInterval }}
       </div>
     </div>
+    <!-- eslint-disable-next-line vue/valid-v-on -->
     <VaButton :style="buttonStyles" class="w-fit h-fit" preset="primary" @click=""> Edit </VaButton>
   </div>
 

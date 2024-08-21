@@ -12,7 +12,11 @@
           <!-- <VaButton @click="showAddControlTaskModal">Add Control Task</VaButton> -->
           <template #appendInner>
             <div class="search-icon-wrapper bg-white hover:bg-slate-300 z-10">
-              <VaIcon name="mso-search" color="secondary" @click="onSearch(searchValue)" />
+              <VaIcon
+                name="mso-search"
+                color="secondary"
+                @click="onSearch(searchValue)"
+              />
             </div>
           </template>
         </VaInput>
@@ -45,7 +49,7 @@ import { ref, toRaw, watch, onBeforeMount } from 'vue'
 import { useModal } from 'vuestic-ui'
 import { task_type } from '../../../data/task'
 import _ from 'lodash'
-import SystemTaskTable from './widgets/systemTaskTable.vue'
+import SystemTaskTable from './widgets/SystemTaskTable.vue'
 import { useTasks } from './composables/systemTask'
 import { validators } from '../../../services/utils'
 import { openWindow } from '@/utils/openWindow'

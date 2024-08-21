@@ -10,7 +10,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 
-import PreferencesHeader from './widgets/PreferencesHeader.vue'
+// import PreferencesHeader from './widgets/PreferencesHeader.vue'
 import Settings from './widgets/Settings.vue'
 import ResetPasswordModal from './widgets/ResetPasswordModal.vue'
 

@@ -1,8 +1,5 @@
 <template>
-  <VaForm
-    ref="form"
-    @submit.prevent="submit"
-  >
+  <VaForm ref="form" @submit.prevent="submit">
     <h1 class="font-semibold text-4xl mb-4">Log in</h1>
     <VaInput
       v-model="formData.email"
@@ -11,10 +8,7 @@
       label="Email"
       type="email"
     />
-    <VaValue
-      v-slot="isPasswordVisible"
-      :default-value="false"
-    >
+    <VaValue v-slot="isPasswordVisible" :default-value="false">
       <VaInput
         v-model="formData.password"
         :rules="[validators.required]"
@@ -34,10 +28,7 @@
     </VaValue>
 
     <div class="flex justify-center mt-4">
-      <VaButton
-        class="w-full"
-        @click="submit"
-      > Login</VaButton>
+      <VaButton class="w-full" @click="submit"> Login</VaButton>
     </div>
   </VaForm>
 </template>

@@ -35,7 +35,7 @@ const props = defineProps<{
   iconColor: string
 }>()
 
-const changeClass = computed(() => ({
+computed(() => ({
   'text-success': props.up,
   'text-red-600': !props.up,
 }))

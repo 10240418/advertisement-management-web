@@ -84,7 +84,7 @@ const notifications = ref([
     <VaCardContent>
       <table class="mt-4">
         <tbody>
-          <VaTimelineItem date="25m ago" v-for="notification in notifications">
+          <VaTimelineItem v-for="notification in notifications" :key="notification.toilet.id" date="25m ago">
             Toilet
             <RouterLink
               class="va-link font-semibold"
