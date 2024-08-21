@@ -33,7 +33,7 @@
     <div class="flex flex-col">
       <VaListLabel class="flex justify-start">Old Password</VaListLabel>
       <VaInput
-        v-model="oldPassowrd"
+        v-model="oldPassword"
         :rules="oldPasswordRules"
         placeholder="Old password"
         required-mark
@@ -80,7 +80,7 @@ import { ref } from 'vue'
 import { VaButton, VaInput, VaListLabel, VaModal } from 'vuestic-ui'
 const store = useUserStore()
 const showChangePasswordModal = ref(false)
-const oldPassowrd = ref<any>()
+const oldPassword = ref<any>()
 const newPassword = ref<any>()
 const repeatNewPassword = ref<any>()
 const toast = useToast()
@@ -93,9 +93,7 @@ const onChangePassword = async () => {
     })
     return
   }
-  console.log(newPassword.value)
-  console.log(oldPassowrd.value)
-  changePasswordAdminUser({ newPassword: newPassword.value, oldPassowrd: oldPassowrd.value })
+  changePasswordAdminUser({ newPassword: newPassword.value, oldPassword: oldPassword.value })
     .then(() => {
       toast.init({
         message: 'You have successfully changed your password',
@@ -115,7 +113,7 @@ const oldPasswordRules = [(v: string) => !!v || 'Old password field is required'
 const newPasswordRules = [
   (v: string) => !!v || 'New password field is required',
   (v: string) => v?.length >= 8 || 'Must be at least 8 characters long',
-  (v: string) => v !== oldPassowrd.value || 'New password cannot be the same',
+  (v: string) => v !== oldPassword.value || 'New password cannot be the same',
 ]
 
 const repeatNewPasswordRules = [
