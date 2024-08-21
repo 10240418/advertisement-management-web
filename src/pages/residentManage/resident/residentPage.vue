@@ -6,9 +6,16 @@
         <VaButton @click="showAddResidentModal">Add Resident</VaButton>
       </div>
 
-      <ResidentTable :pagination="pagination" :residents="residentsShowInTable" :loading="isLoading" :sorting="sorting"
-        @detail-resident="showEditResidentDialog" @update-resident="onResidentUpdateActive"
-        @fetch-resident="fetchResidents" @edit-resident="onResidentEdit" />
+      <ResidentTable
+        :pagination="pagination"
+        :residents="residentsShowInTable"
+        :loading="isLoading"
+        :sorting="sorting"
+        @detailResident="showEditResidentDialog"
+        @updateResident="onResidentUpdateActive"
+        @fetchResident="fetchResidents"
+        @editResident="onResidentEdit"
+      />
     </VaCardContent>
     <VaModal v-model="doShowAddResidentModal" size="small" mobile-fullscreen close-button hide-default-actions>
       <h1 class="va-h5">Add Resident</h1>
@@ -22,16 +29,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref, toRaw, watch, onBeforeMount, toRef } from 'vue'
+import { ref, toRaw, watch, onBeforeMount } from 'vue'
 import { useResidents } from './composables/resident'
-import { useToast } from 'vuestic-ui'
 import { resident_user_type } from '@/data/resident_user'
-import _, { replace } from 'lodash'
-import ResidentTable from './widgets/residentTable.vue'
-import EditResidentForm from './widgets/editResidentForm.vue'
+import _ from 'lodash'
+import ResidentTable from './widgets/ResidentTable.vue'
+import EditResidentForm from './widgets/EditResidentForm.vue'
 import { openWindow } from '@/utils/openWindow'
 
-const { init: notify } = useToast()
 const { isLoading, residents, sorting, pagination, ...residentApi } = useResidents()
 const residentsShowInTable = ref<resident_user_type[]>([])
 const residentToEdit = ref<resident_user_type | null>(null)
@@ -43,9 +48,7 @@ const showAddResidentModal = () => {
   doShowAddResidentModal.value = true
   residentToEdit.value = null
 }
-//... 下拉气泡框
 //detail
-const newWindow = ref<any>()
 const showEditResidentDialog = (resident: resident_user_type) => {
   openWindow({ path: '/residentDetail', query: { id: resident.id }, width: 900, height: 500 })
 }

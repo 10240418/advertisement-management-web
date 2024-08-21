@@ -1,12 +1,7 @@
 import { onBeforeMount, Ref, ref } from 'vue'
 import { resident_user_type } from '@/data/resident_user'
 import { Pagination, Sorting } from '../../../../data/page'
-import {
-  fetchResidents,
-  addResident,
-  resetResidentPassword,
-  updateResidentActive,
-} from '../../../../apis/resident'
+import { fetchResidents, addResident, resetResidentPassword, updateResidentActive } from '../../../../apis/resident'
 import { useThrottle } from '../../../../data/dataControl'
 import { useToast } from 'vuestic-ui'
 

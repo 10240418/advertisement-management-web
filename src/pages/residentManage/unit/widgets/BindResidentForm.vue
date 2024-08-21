@@ -1,9 +1,5 @@
 <template>
-  <VaForm
-    v-slot="{ isValid }"
-    ref="edit-resident-form"
-    class="edit-resident-form"
-  >
+  <VaForm v-slot="{ isValid }" ref="edit-resident-form" class="edit-resident-form">
     <div class="flex flex-col gap-4">
       <VaSelect
         v-model="selectValue"
@@ -13,26 +9,11 @@
         text-by="name"
         track-by="id"
       />
-      <VaSelect
-        v-model="selectTypeValue"
-        label="Select Type"
-        :options="typeOptions"
-        placeholder="Select a type"
-      />
-      <div
-        v-if="error"
-        class="text-red-500"
-      >{{ error }}</div>
+      <VaSelect v-model="selectTypeValue" label="Select Type" :options="typeOptions" placeholder="Select a type" />
+      <div v-if="error" class="text-red-500">{{ error }}</div>
       <div class="flex gap-2 justify-end mt-4">
-        <VaButton
-          preset="secondary"
-          color="secondary"
-          @click="onClose"
-        >Cancel</VaButton>
-        <VaButton
-          :disabled="!isValid"
-          @click="submit"
-        >Save</VaButton>
+        <VaButton preset="secondary" color="secondary" @click="onClose">Cancel</VaButton>
+        <VaButton :disabled="!isValid" @click="submit">Save</VaButton>
       </div>
     </div>
   </VaForm>

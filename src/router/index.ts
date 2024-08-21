@@ -101,37 +101,32 @@ const routes: Array<RouteRecordRaw> = [
 
   {
     name: 'gatewayDetail',
-    path: '/gatewayDetail/:id?', // `?` 表示可选的
+    path: '/gatewayDetail/:id?',
     component: () => import('@/pages/deviceManage/gateway/widgets/gatewayDialog.vue'),
   },
   {
     name: 'meterDetail',
-    path: '/meterDetail/:id?', // `?` 表示可选的
+    path: '/meterDetail/:id?',
     component: () => import('@/pages/deviceManage/meter/widgets/meterDialog.vue'),
   },
-  // {
-  //   name: 'unitDetail',
-  //   path: '/unitDetail/:id?', // `?` 表示可选的
-  //   component: () => import('../pages/residentManage/unit/widgets/unitDialog.vue'),
-  // },
   {
     name: 'residentDetail',
-    path: '/residentDetail/:id?', // `?` 表示可选的
-    component: () => import('@/pages/residentManage/resident/widgets/residentDialog.vue'),
+    path: '/residentDetail/:id?',
+    component: () => import('@/pages/residentManage/resident/widgets/ResidentDialog.vue'),
   },
   {
     name: 'taskDetail',
-    path: '/taskDetail/:id?', // `?` 表示可选的
+    path: '/taskDetail/:id?',
     component: () => import('@/pages/task/controlTask/widgets/ControlTaskDialog.vue'),
   },
   {
     name: 'sysTaskDetail',
-    path: '/sysTaskDetail/:id?', // `?` 表示可选的
+    path: '/sysTaskDetail/:id?',
     component: () => import('@/pages/task/systemTask/widgets/systemTaskDialog.vue'),
   },
   {
     name: 'unitDetail',
-    path: '/unitDetail/:id?', // `?` 表示可选的
+    path: '/unitDetail/:id?',
     component: () => import('@/pages/residentManage/unit/widgets/UnitDialog.vue'),
   },
   {

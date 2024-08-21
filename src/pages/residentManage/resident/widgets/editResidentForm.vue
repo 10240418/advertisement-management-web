@@ -29,7 +29,7 @@
       </div>
 
       <div class="flex gap-2 justify-end mt-4">
-        <VaButton preset="secondary" color="secondary" @click="onClose">Cancel</VaButton>
+        <VaButton preset="secondary" color="secondary" @click="onCloseWindow">Cancel</VaButton>
         <VaButton :disabled="!isValid" @click="submit">Save</VaButton>
       </div>
     </div>
@@ -45,7 +45,6 @@ import { resident_user_type } from '@/data/resident_user'
 
 const props = defineProps({
   resident: { type: Object as PropType<resident_user_type | null>, required: true },
-  onClose: Function,
 })
 
 const emit = defineEmits(['close'])
@@ -83,7 +82,7 @@ const submit = () => {
     emit('close')
   }
 }
-const onClose = () => {
+const onCloseWindow = () => {
   emit('close')
 }
 </script>

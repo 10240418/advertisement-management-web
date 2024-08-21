@@ -4,24 +4,12 @@
       <div class="w-full h-full flex flex-col ml-3">
         <!-- Top section -->
         <div class="flex flex-row justify-between">
-          <DetailCard
-            :labels="labelsProp"
-            :datas="datasProp"
-            class="ml-[-14px] mt-[-8px]"
-          />
+          <DetailCard :labels="labelsProp" :datas="datasProp" class="ml-[-14px] mt-[-8px]" />
           <div class="flex flex-col justify-between w-[72px] mt-[3px] mr-4">
-            <VaButton
-              color="primary"
-              icon="mso-edit"
-              class="h-[30px] w-[72px]"
-              @click="doShowEditResidentModal = true"
+            <VaButton color="primary" icon="mso-edit" class="h-[30px] w-[72px]" @click="doShowEditResidentModal = true">
+              Edit</VaButton
             >
-              Edit</VaButton>
-            <VaButton
-              color="primary"
-              class="h-[30px] w-[72px]"
-              @click="doShowAddUnitModal = true"
-            >AddUnit</VaButton>
+            <VaButton color="primary" class="h-[30px] w-[72px]" @click="doShowAddUnitModal = true">AddUnit</VaButton>
           </div>
         </div>
 
@@ -45,20 +33,12 @@
           sticky-footer
         >
           <template #cell(actions)="{ rowData }">
-            <VaPopover
-              placement="bottom"
-              trigger="click"
-              color="backgroundSecondary"
-            >
+            <VaPopover placement="bottom" trigger="click" color="backgroundSecondary">
               <div
                 class="flex justify-start items-center relative hover:bg-blue-200 rounded-[4px]"
                 @click.stop="showContent(rowData)"
               >
-                <VaIcon
-                  name="more_horiz"
-                  size="20px"
-                  class="mr-2 cursor-pointer"
-                />
+                <VaIcon name="more_horiz" size="20px" class="mr-2 cursor-pointer" />
               </div>
               <template #body>
                 <Transition name="fade">
@@ -113,59 +93,27 @@
 
         <!-- Dialog Footer -->
         <div class="dialog-footer">
-          <VaButton
-            class="h-[30px] w-[72px] mr-5"
-            @click="onClose"
-          >Cancel</VaButton>
+          <VaButton class="h-[30px] w-[72px] mr-5" @click="onClose">Cancel</VaButton>
         </div>
       </div>
     </VaCard>
 
     <!-- Edit Resident Modal -->
-    <VaModal
-      v-model="doShowEditResidentModal"
-      size="small"
-      mobile-fullscreen
-      close-button
-      hide-default-actions
-    >
+    <VaModal v-model="doShowEditResidentModal" size="small" mobile-fullscreen close-button hide-default-actions>
       <h1 class="va-h5">Edit Resident</h1>
-      <EditResidentForm
-        :resident="residentToEdit"
-        @close="onCloseEditResidentModal"
-      />
+      <EditResidentForm :resident="residentToEdit" @close="onCloseEditResidentModal" />
     </VaModal>
 
     <!-- Add Unit Modal -->
-    <VaModal
-      v-model="doShowAddUnitModal"
-      size="small"
-      mobile-fullscreen
-      close-button
-      hide-default-actions
-    >
+    <VaModal v-model="doShowAddUnitModal" size="small" mobile-fullscreen close-button hide-default-actions>
       <h1 class="va-h5">Add Unit</h1>
-      <AddUnitForm
-        :resident="residentToEdit"
-        @close="onCloseAddUnitModal"
-        @fetch="fetch"
-      />
+      <AddUnitForm :resident="residentToEdit" @close="onCloseAddUnitModal" @fetch="fetch" />
     </VaModal>
 
     <!-- Edit Unit Modal -->
-    <VaModal
-      v-model="doShowEditUnitModal"
-      size="small"
-      mobile-fullscreen
-      close-button
-      hide-default-actions
-    >
+    <VaModal v-model="doShowEditUnitModal" size="small" mobile-fullscreen close-button hide-default-actions>
       <h1 class="va-h5">Edit Unit</h1>
-      <EditUnitForm
-        v-model="unitToEdit"
-        @close="doShowEditUnitModal = false"
-        @save="onSaveEditUnit"
-      />
+      <EditUnitForm v-model="unitToEdit" @close="doShowEditUnitModal = false" @save="onSaveEditUnit" />
     </VaModal>
   </div>
 </template>
@@ -174,12 +122,12 @@
 import { ref, onBeforeMount, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { resident_user_type } from '@/data/resident_user'
-import { fetchResident, updateResidentActive } from '../../../../apis/resident'
-import EditResidentForm from '../widgets/editResidentForm.vue'
-import addUnitForm from '../widgets/addUnitForm.vue'
+import { fetchResident } from '../../../../apis/resident'
+import EditResidentForm from './EditResidentForm.vue'
+import AddUnitForm from './AddUnitForm.vue'
 import { unit_type } from '@/data/unit'
 import { useToast } from 'vuestic-ui'
-import editUnitForm from '../../unit/widgets/editUnitForm.vue'
+import EditUnitForm from '../../unit/widgets/EditUnitForm.vue'
 import { useModal } from 'vuestic-ui'
 import { unbindUnitResident, updateUnit } from '@/apis/unit'
 import DetailCard from '@/components/cards/DetailCard.vue'
@@ -195,9 +143,7 @@ const datasProp = computed(() => {
 })
 const resident = ref<resident_user_type | null>(null)
 const residentToEdit = ref<resident_user_type | null>(null)
-const editable = ref(false)
-const toast = useToast() //报错提示
-const error = ref<string | null>(null) // Error state
+const toast = useToast() //报错提示e
 
 const fetch = async () => {
   if (residentId.value) {
@@ -248,8 +194,7 @@ const unitToEdit = ref<unit_type | null>(null)
 const onSaveEditUnit = async (unit: any) => {
   if (unit.id) {
     try {
-      // console.log(unit)
-      const res = await updateUnit({
+      await updateUnit({
         id: unit.id,
         floor: unit.floor,
         unit: unit.unit,
@@ -283,14 +228,6 @@ const currentPageData = computed(() => {
 // Show Edit Resident Modal
 const doShowEditResidentModal = ref(false)
 const doShowAddUnitModal = ref(false)
-
-const onSave = async (resident: any) => {
-  if (resident.id) {
-    await updateResidentActive(resident)
-    fetch()
-  }
-  doShowEditResidentModal.value = false
-}
 //关闭
 const onClose = () => {
   fetch()

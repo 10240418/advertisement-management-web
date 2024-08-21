@@ -16,7 +16,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import ThemeSwitcher from './widgets/ThemeSwitcher.vue';
-import Preferences from './widgets/Preferences.vue';
-import AuthPreferences from './widgets/AuthPreferences.vue';
+import ThemeSwitcher from './widgets/ThemeSwitcher.vue'
+import Preferences from './widgets/Preferences.vue'
+import AuthPreferences from './widgets/AuthPreferences.vue'
 </script>

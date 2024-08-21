@@ -1,36 +1,12 @@
 <template>
-  <VaForm
-    v-slot="{ isValid }"
-    ref="edit-resident-form"
-    class="edit-resident-form"
-  >
+  <VaForm v-slot="{ isValid }" ref="edit-resident-form" class="edit-resident-form">
     <div class="flex flex-col gap-4">
-      <VaSelect
-        v-model="selectValue"
-        label="Add Unit"
-        :options="unitOptions"
-        placeholder="Select a unit"
-      />
-      <VaSelect
-        v-model="selectTypeValue"
-        label="Select Type"
-        :options="typeOptions"
-        placeholder="Select a type"
-      />
-      <div
-        v-if="error"
-        class="text-red-500"
-      >{{ error }}</div>
+      <VaSelect v-model="selectValue" label="Add Unit" :options="unitOptions" placeholder="Select a unit" />
+      <VaSelect v-model="selectTypeValue" label="Select Type" :options="typeOptions" placeholder="Select a type" />
+      <div v-if="error" class="text-red-500">{{ error }}</div>
       <div class="flex gap-2 justify-end mt-4">
-        <VaButton
-          preset="secondary"
-          color="secondary"
-          @click="onClose"
-        >Cancel</VaButton>
-        <VaButton
-          :disabled="!isValid"
-          @click="submit"
-        >Save</VaButton>
+        <VaButton preset="secondary" color="secondary" @click="onClose">Cancel</VaButton>
+        <VaButton :disabled="!isValid" @click="submit">Save</VaButton>
       </div>
     </div>
   </VaForm>
@@ -48,7 +24,6 @@ const error = ref<string | null>(null)
 
 const props = defineProps({
   resident: { type: Object as PropType<resident_user_type | null>, required: true },
-  onClose: Function,
 })
 
 const pagination = ref({
@@ -70,9 +45,7 @@ const fetchUnits = async () => {
   try {
     const res = await fetchUnitList(pagination.value)
     units.value = res.data.units
-
     unitOptions.value = units.value.map((unit) => `${unit.id} Floor: ${unit.floor} Unit: ${unit.unit}`)
-
     //去掉 resident.units
     unitNeedRemove.value = props.resident?.units.map(
       (unit: any) => `${unit.id} Floor: ${unit.floor} Unit: ${unit.unit}`,
@@ -85,7 +58,6 @@ const fetchUnits = async () => {
     console.error(error)
   }
 }
-
 onBeforeMount(() => {
   fetchUnits()
 })

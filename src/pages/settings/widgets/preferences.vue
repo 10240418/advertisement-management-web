@@ -1,26 +1,18 @@
 <template>
   <div>
     <!-- Reading Interval Section -->
-    <div
-      class="flex flex-col md:flex-row md:items-center space-y-2 md:space-y-0 md:space-x-6 min-h-[36px] leading-5"
-    >
+    <div class="flex flex-col md:flex-row md:items-center space-y-2 md:space-y-0 md:space-x-6 min-h-[36px] leading-5">
       <p class="font-bold w-[200px]">Reading Interval</p>
       <div class="flex-1">
         <div class="max-w-[748px]">
           {{ preferences?.readingInterval }}
         </div>
       </div>
-      <VaButton
-        class="w-fit h-fit"
-        preset="primary"
-        @click="showModal = true"
-      > Edit </VaButton>
+      <VaButton class="w-fit h-fit" preset="primary" @click="showModal = true"> Edit </VaButton>
     </div>
 
     <!-- Mobile Section -->
-    <div
-      class="flex flex-col md:flex-row md:items-center space-y-2 md:space-y-0 md:space-x-6 min-h-[36px] leading-5"
-    >
+    <div class="flex flex-col md:flex-row md:items-center space-y-2 md:space-y-0 md:space-x-6 min-h-[36px] leading-5">
       <p class="font-bold w-[200px]">Mobile</p>
       <div class="flex-1">
         <div class="max-w-[748px]">
@@ -30,9 +22,7 @@
     </div>
 
     <!-- Location Section -->
-    <div
-      class="flex flex-col md:flex-row md:items-center space-y-2 md:space-y-0 md:space-x-6 min-h-[36px] leading-5"
-    >
+    <div class="flex flex-col md:flex-row md:items-center space-y-2 md:space-y-0 md:space-x-6 min-h-[36px] leading-5">
       <p class="font-bold w-[200px]">Location</p>
       <div class="flex-1">
         <div class="max-w-[748px]">
@@ -42,9 +32,7 @@
     </div>
 
     <!-- Language Section -->
-    <div
-      class="flex flex-col md:flex-row md:items-center space-y-2 md:space-y-0 md:space-x-6 min-h-[36px] leading-5"
-    >
+    <div class="flex flex-col md:flex-row md:items-center space-y-2 md:space-y-0 md:space-x-6 min-h-[36px] leading-5">
       <p class="font-bold w-[200px]">Language</p>
       <div class="flex-1">
         <div class="max-w-[748px]">
@@ -54,9 +42,7 @@
     </div>
 
     <!-- Time Zone Section -->
-    <div
-      class="flex flex-col md:flex-row md:items-center space-y-2 md:space-y-0 md:space-x-6 min-h-[36px] leading-5"
-    >
+    <div class="flex flex-col md:flex-row md:items-center space-y-2 md:space-y-0 md:space-x-6 min-h-[36px] leading-5">
       <p class="font-bold w-[200px]">Time Zone</p>
       <div class="flex-1">
         <div class="max-w-[748px]">
@@ -66,74 +52,42 @@
     </div>
 
     <!-- Modal -->
-    <VaModal
-      v-model="showModal"
-      width="500px"
-      mobile-fullscreen
-      close-button
-      hide-default-actions
-    >
+    <VaModal v-model="showModal" width="500px" mobile-fullscreen close-button hide-default-actions>
       <h1 class="va-h5">Edit Perference</h1>
       <div class="flex flex-col space-y-4">
         <!-- Reading Interval Input -->
         <div class="flex flex-col">
           <VaListLabel class="flex justify-start">Reading Interval</VaListLabel>
-          <VaInput
-            v-model="formData.readingInterval"
-            type="number"
-            placeholder="Enter reading interval"
-          />
+          <VaInput v-model="formData.readingInterval" type="number" placeholder="Enter reading interval" />
         </div>
 
         <!-- Mobile Input -->
         <div class="flex flex-col">
           <VaListLabel class="flex justify-start">Mobile</VaListLabel>
-          <VaInput
-            v-model="formData.mobile"
-            type="text"
-            placeholder="Enter mobile number"
-          />
+          <VaInput v-model="formData.mobile" type="text" placeholder="Enter mobile number" />
         </div>
 
         <!-- Location Input -->
         <div class="flex flex-col">
           <VaListLabel class="flex justify-start">Location</VaListLabel>
-          <VaInput
-            v-model="formData.location"
-            type="text"
-            placeholder="Enter location"
-          />
+          <VaInput v-model="formData.location" type="text" placeholder="Enter location" />
         </div>
 
         <!-- Language Select -->
         <div class="flex flex-col flex-start">
           <VaListLabel class="flex justify-start">Language</VaListLabel>
-          <VaSelect
-            v-model="selectLanguage"
-            :options="languageOptions"
-            track-by="value"
-            text-by="label"
-          />
+          <VaSelect v-model="selectLanguage" :options="languageOptions" track-by="value" text-by="label" />
         </div>
 
         <!-- Time Zone Select -->
         <div class="flex flex-col">
           <VaListLabel class="flex justify-start">Time Zone</VaListLabel>
-          <VaSelect
-            v-model="selectTimeZone"
-            :options="timeZoneOptions"
-            track-by="value"
-            text-by="label"
-          />
+          <VaSelect v-model="selectTimeZone" :options="timeZoneOptions" track-by="value" text-by="label" />
         </div>
 
         <!-- Buttons -->
         <div class="flex justify-end space-x-2">
-          <VaButton
-            preset="secondary"
-            color="secondary"
-            @click="showModal = false"
-          >Cancel</VaButton>
+          <VaButton preset="secondary" color="secondary" @click="showModal = false">Cancel</VaButton>
           <VaButton @click="savePreferences">Save</VaButton>
         </div>
       </div>
