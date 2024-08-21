@@ -24,12 +24,20 @@
       </VaButton>
     </template>
     <template #cell(actions)="{ rowData }">
-      <VaPopover placement="bottom" trigger="click" color="backgroundSecondary">
+      <VaPopover
+        placement="bottom"
+        trigger="click"
+        color="backgroundSecondary"
+      >
         <div
           class="flex justify-center items-center relative hover:bg-blue-200 rounded-[4px]"
           @click.stop="showContent(rowData)"
         >
-          <VaIcon name="more_horiz" size="20px" class="mr-2 cursor-pointer" />
+          <VaIcon
+            name="more_horiz"
+            size="20px"
+            class="mr-2 cursor-pointer"
+          />
         </div>
         <template #body>
           <Transition name="fade">
@@ -64,16 +72,31 @@
       </VaPopover>
     </template>
   </VaDataTable>
-  <div class="flex flex-col-reverse md:flex-row gap-2 justify-between items-center py-2">
+  <div
+    class="flex flex-col-reverse md:flex-row gap-2 justify-between items-center py-2"
+  >
     <div>
       <b>total: {{ pagination.total }} </b>
       pageNum:
-      <VaSelect v-model="pagination.pageNum" class="!w-16" selected-top-shown :options="pagesOptions" />
+      <VaSelect
+        v-model="pagination.pageNum"
+        class="!w-16"
+        selected-top-shown
+        :options="pagesOptions"
+      />
       pageSize:
-      <VaSelect v-model="pagination.pageSize" class="!w-20" selected-top-shown :options="[5, 10, 20, 50, 100]" />
+      <VaSelect
+        v-model="pagination.pageSize"
+        class="!w-20"
+        selected-top-shown
+        :options="[5, 10, 20, 50, 100]"
+      />
     </div>
 
-    <div v-if="totalPages > 1" class="flex">
+    <div
+      v-if="totalPages > 1"
+      class="flex"
+    >
       <VaButton
         preset="secondary"
         icon="va-arrow-left"

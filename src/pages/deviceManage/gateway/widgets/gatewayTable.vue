@@ -2,11 +2,11 @@
 
 <template>
   <VaDataTable
+    v-model:sort-by="sorting.sortBy"
+    v-model:sorting-order="sorting.sortingOrder"
     :columns="columns"
     :items="currentPageData"
-    :loading="props.loading"
-    v-model:sort-by="props.sorting.sortBy"
-    v-model:sorting-order="props.sorting.sortingOrder"
+    :loading="isLoading"
   >
     <template #cell(name)="{ rowData }">
       <div class="max-w-[120px] ellipsis">{{ rowData.name }}</div>
@@ -29,7 +29,7 @@
     <!-- 拓展出来的信息 -->
     <template #expandableRow="{ rowData }">
       <div class="flex w-full">
-        <infoMeterTable :gatewayId="rowData.id"></infoMeterTable>
+        <InfoMeterTable :gateway-id="rowData.id"></InfoMeterTable>
       </div>
     </template>
 
@@ -39,14 +39,14 @@
         size="small"
         icon="mso-info"
         aria-label="Edit user"
-        @click="$emit('detail-gateway', rowData as any)"
         class="w-full justify-start ml-[-5px]"
+        @click="$emit('detail-gateway', rowData as any)"
       >
         <span>Detail</span>
       </VaButton>
     </template>
 
-    <template #cell(actions)="{ rowData }" class="overflow-y-scroll">
+    <template #cell(actions)="{ rowData }">
       <VaPopover placement="bottom" trigger="click" color="backgroundSecondary">
         <div
           class="flex justify-center items-center relative hover:bg-blue-200 rounded-[4px]"
@@ -56,7 +56,7 @@
         </div>
 
         <template #body>
-          <transition name="fade">
+          <Transition name="fade">
             <div
               v-show="showContentGateway?.id === rowData.id"
               class="tooltip-content flex flex-col justify-start z-999 items-center relative border border-solid p-2 rounded-md shadow-lg"
@@ -66,8 +66,8 @@
                 size="small"
                 icon="mso-edit"
                 aria-label="Edit user"
-                @click="$emit('edit-gateway', rowData as any)"
                 class="w-full justify-start"
+                @click="$emit('edit-gateway', rowData as any)"
               >
                 <span>Edit</span>
               </VaButton>
@@ -77,24 +77,24 @@
                 icon="mso-delete"
                 color="danger"
                 aria-label="Delete user"
-                @click="onGatewayDelete(rowData)"
                 class="w-full flex-start"
+                @click="onGatewayDelete(rowData)"
               >
                 <span>Delete</span>
               </VaButton>
             </div>
-          </transition>
+          </Transition>
         </template>
       </VaPopover>
     </template>
   </VaDataTable>
   <div class="flex flex-col-reverse md:flex-row gap-2 justify-between items-center py-2">
     <div>
-      <b>total: {{ $props.pagination.total }} </b>
+      <b>total: {{ pagination.total }} </b>
       pageNum:
-      <VaSelect v-model="$props.pagination.pageNum" class="!w-16" selected-top-shown :options="pagesOptions" />
+      <VaSelect v-model="pagination.pageNum" class="!w-16" selected-top-shown :options="pagesOptions" />
       pageSize:
-      <VaSelect v-model="$props.pagination.pageSize" class="!w-20" selected-top-shown :options="[5, 10, 20, 50, 100]" />
+      <VaSelect v-model="pagination.pageSize" class="!w-20" selected-top-shown :options="[1, 2, 5, 10, 20, 50, 100]" />
     </div>
 
     <div v-if="totalPages > 1" class="flex">
@@ -102,19 +102,19 @@
         preset="secondary"
         icon="va-arrow-left"
         aria-label="Previous page"
-        :disabled="props.pagination.pageNum === 1"
-        @click="props.pagination.pageNum--"
+        :disabled="pagination.pageNum === 1"
+        @click="pagination.pageNum--"
       />
       <VaButton
         class="mr-2"
         preset="secondary"
         icon="va-arrow-right"
         aria-label="Next page"
-        :disabled="props.pagination.pageNum === totalPages"
-        @click="props.pagination.pageNum++"
+        :disabled="pagination.pageNum === totalPages"
+        @click="pagination.pageNum++"
       />
       <VaPagination
-        v-model="props.pagination.pageNum"
+        v-model="pagination.pageNum"
         buttons-preset="secondary"
         :pages="totalPages"
         :visible-pages="5"
@@ -126,9 +126,10 @@
 </template>
 <script setup lang="ts">
 import { defineVaDataTableColumns, useModal } from 'vuestic-ui'
-import { PropType, computed, toRef, watch, ref } from 'vue'
+import { computed, watch, ref } from 'vue'
 import { gateway_type } from '../../../../data/gateway'
-import infoMeterTable from './infoMeterTable.vue'
+import InfoMeterTable from './InfoMeterTable.vue'
+import { useGateways } from '../composables/gateway'
 
 const columns = defineVaDataTableColumns([
   { label: 'ID', key: 'id', sortable: true, width: '5%' },
@@ -140,23 +141,17 @@ const columns = defineVaDataTableColumns([
   { label: 'Actions', key: 'actions', sortable: false, width: '5%' },
 ])
 
-const props = defineProps({
-  gateways: { type: Array as PropType<gateway_type[]>, required: true },
-  loading: { type: Boolean, default: false },
-  pagination: { type: Object as PropType<any>, required: true },
-  sorting: { type: Object as PropType<any>, required: true },
-})
-
+const { isLoading, gateways, sorting, pagination, fetch } = useGateways()
 const emit = defineEmits<{
   (event: 'detail-gateway', gateway: any): void
   (event: 'edit-gateway', gateway: any): void
   (event: 'delete-gateway', gateway: any): void
   (event: 'fetch-gateway', params: any): void
 }>()
-
-const gateways = toRef(props, 'gateways')
-
-const totalPages = computed(() => Math.ceil(props.pagination.total / props.pagination.pageSize))
+const gatewaysShowInTable = computed(() => {
+  return gateways.value
+})
+const totalPages = computed(() => Math.ceil(pagination.value.total / pagination.value.pageSize))
 const pagesOptions = computed(() => {
   const options = []
   for (let i = 1; i <= totalPages.value; i++) {
@@ -183,28 +178,39 @@ const onGatewayDelete = async (gateway: any) => {
 }
 
 const currentPageData = computed(() => {
-  let gatewaysArray: any = []
-
-  // 检查是否为数组，如果不是，则包裹在数组中
-  if (Array.isArray(gateways.value)) {
-    gatewaysArray = gateways.value
-  } else if (gateways.value && typeof gateways.value === 'object') {
-    gatewaysArray = [gateways.value]
+  let gatewayArray: any = []
+  if (Array.isArray(gatewaysShowInTable.value)) {
+    gatewayArray = gatewaysShowInTable.value
+  } else if (gatewaysShowInTable.value && typeof gatewaysShowInTable.value === 'object') {
+    gatewayArray = [gatewaysShowInTable.value]
   }
+  const startIndex = (pagination.value.pageNum - 1) * pagination.value.pageSize
+  const endIndex = startIndex + pagination.value.pageSize
 
-  const startIndex = (props.pagination.pageNum - 1) * props.pagination.pageSize
-  const endIndex = startIndex + props.pagination.pageSize
-
-  if (gatewaysArray.length <= props.pagination.pageSize) return gatewaysArray
-  else return gatewaysArray.slice(startIndex, endIndex)
+  if (gatewayArray.length <= pagination.value.pageSize) return gatewaysShowInTable.value
+  else return gatewayArray.slice(startIndex, endIndex)
 })
+
+// const currentPageData = computed(() => {
+//   let usersArray: any = []
+//   if (Array.isArray(users.value)) {
+//     usersArray = users.value
+//   } else if (users.value && typeof users.value === 'object') {
+//     usersArray = [users.value]
+//   }
+//   const startIndex = (pagination.value.pageNum - 1) * pagination.value.pageSize
+//   const endIndex = startIndex + pagination.value.pageSize
+
+//   if (usersArray.length <= pagination.value.pageSize) return users.value
+//   else return usersArray.value.slice(startIndex, endIndex)
+// })
 watch(
-  () => [props.pagination.pageNum, props.pagination.pageSize, props.sorting.sortingOrder, props.sorting.sortBy],
+  () => [pagination.value.pageNum, pagination.value.pageSize, sorting.value.sortingOrder, sorting.value.sortBy],
   () => {
-    if (props.pagination.total < props.pagination.pageSize * (props.pagination.pageNum - 1)) {
-      props.pagination.pageNum = 1
+    if (pagination.value.total < pagination.value.pageSize * (pagination.value.pageNum - 1)) {
+      pagination.value.pageNum = 1
     }
-    emit('fetch-gateway', { pageNum: props.pagination.pageNum, pageSize: props.pagination.pageSize })
+    fetch()
   },
 )
 //气泡下拉框

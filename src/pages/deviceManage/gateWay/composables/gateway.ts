@@ -26,7 +26,11 @@ export const useGateways = (options?: { pagination?: Ref<Pagination>; sorting?: 
     error.value = null
     try {
       const res = await fetchGateways({
-        params: { pageNum: pagination.value.pageNum, pageSize: pagination.value.pageSize },
+        params: {
+          pageNum: pagination.value.pageNum,
+          pageSize: pagination.value.pageSize,
+          desc: sorting.value.sortingOrder === 'asc' ? false : true,
+        },
       })
       gateways.value = res.data.data
       pagination.value.total = res.data.pagination.total

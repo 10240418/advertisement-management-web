@@ -4,7 +4,7 @@ export const fetchGateways = (query: any) => {
   return request({
     url: `/admin/gateway`,
     method: 'get',
-    params: query,
+    params: query.params,
   })
 }
 //    {

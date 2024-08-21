@@ -11,24 +11,20 @@
         <VaButton @click="showAddGatewayModal">Add Gateway</VaButton>
       </div>
 
-      <gatewayTable
-        :pagination="pagination"
-        :gateways="gatewaysShowInTable"
-        :loading="isLoading"
-        :sorting="sorting"
-        @edit-gateway="showEditGatewayModal"
-        @detail-gateway="showEditGatewayDialog"
-        @delete-gateway="onGatewayDelete"
-        @fetch-gateway="fetchGateway"
+      <GatewayTable
+        @editGateway="showEditGatewayModal"
+        @detailGateway="showEditGatewayDialog"
+        @deleteGateway="onGatewayDelete"
+        @fetchGateway="fetchGateway"
       />
     </VaCardContent>
     <VaModal v-model="doShowAddGatewayModal" size="small" mobile-fullscreen close-button hide-default-actions>
       <h1 class="va-h5">Add Gateway</h1>
-      <editGatewayForm v-model="gatewayToEdit" @close="doShowAddGatewayModal = false" @save="onSave(gatewayToEdit)" />
+      <EditGatewayForm v-model="gatewayToEdit" @close="doShowAddGatewayModal = false" @save="onSave(gatewayToEdit)" />
     </VaModal>
     <VaModal v-model="doShowEditGatewayModal" size="small" mobile-fullscreen close-button hide-default-actions>
       <h1 class="va-h5">Edit Gateway</h1>
-      <editGatewayForm v-model="gatewayToEdit" @close="doShowEditGatewayModal = false" @save="onSave(gatewayToEdit)" />
+      <EditGatewayForm v-model="gatewayToEdit" @close="doShowEditGatewayModal = false" @save="onSave(gatewayToEdit)" />
     </VaModal>
   </VaCard>
 </template>
@@ -36,22 +32,20 @@
 <script setup lang="ts">
 import { ref, toRaw, watch, onBeforeMount } from 'vue'
 import { useGateways } from './composables/gateway'
-import { useToast } from 'vuestic-ui'
 import { gateway_type } from '../../../data/gateway'
 import _ from 'lodash'
-import gatewayTable from './widgets/gatewayTable.vue'
-import editGatewayForm from './widgets/editGatewayForm.vue'
+import GatewayTable from './widgets/GatewayTable.vue'
+import EditGatewayForm from './widgets/EditGatewayForm.vue'
 import { openWindow } from '@/utils/openWindow'
 
-const { init: notify } = useToast()
 const doShowAddGatewayModal = ref(false)
 const doShowEditGatewayModal = ref(false)
-const { isLoading, gateways, sorting, pagination, ...gatewayApi } = useGateways()
+const { gateways, ...gatewayApi } = useGateways()
 const gatewaysShowInTable = ref<gateway_type[]>([])
 const gatewayToEdit = ref<gateway_type | null>(null)
 
 const showEditGatewayDialog = (gateway: gateway_type) => {
-  openWindow({path: '/gatewayDetail', query: {id: gateway.id}, width: 900})
+  openWindow({ path: '/gatewayDetail', query: { id: gateway.id }, width: 900 })
 }
 
 const showAddGatewayModal = () => {
@@ -86,7 +80,7 @@ const onSave = async (gateway: any) => {
 
 const searchValue = ref('')
 const onSearch = async (searchValue: any) => {
-  const res = await gatewayApi.searchGateway({
+  await gatewayApi.searchGateway({
     data: { email: localStorage.getItem('AdminEmail'), password: localStorage.getItem('AdminPassword') },
     params: Number(searchValue),
   })

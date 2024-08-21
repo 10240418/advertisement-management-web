@@ -3,7 +3,6 @@
 import { ref, watch, PropType, defineProps, defineEmits } from 'vue'
 import { useForm } from 'vuestic-ui'
 import { validators } from '../../../../services/utils'
-import { gateway_type } from '../../../../data/gateway'
 
 const defaultNewGateway = {
   name: '',

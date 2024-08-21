@@ -102,7 +102,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     name: 'gatewayDetail',
     path: '/gatewayDetail/:id?',
-    component: () => import('@/pages/deviceManage/gateway/widgets/gatewayDialog.vue'),
+    component: () => import('@/pages/deviceManage/gateway/widgets/GatewayDialog.vue'),
   },
   {
     name: 'meterDetail',

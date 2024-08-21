@@ -3,10 +3,7 @@
     <div class="w-full h-full flex flex-col ml-1">
       <!-- top part -->
       <div class="flex flex-row gap-0">
-        <DetailCard
-          :labels="labelsProp"
-          :datas="datasProp"
-        />
+        <DetailCard :labels="labelsProp" :datas="datasProp" />
       </div>
 
       <!-- table part -->
@@ -29,20 +26,12 @@
         sticky-header
       >
         <template #cell(actions)="{ rowData }">
-          <VaPopover
-            placement="bottom"
-            trigger="click"
-            color="backgroundSecondary"
-          >
+          <VaPopover placement="bottom" trigger="click" color="backgroundSecondary">
             <div
               class="flex justify-start items-center relative hover:bg-blue-200 rounded-[4px]"
               @click.stop="showContent(rowData)"
             >
-              <VaIcon
-                name="more_horiz"
-                size="20px"
-                class="mr-2 cursor-pointer"
-              />
+              <VaIcon name="more_horiz" size="20px" class="mr-2 cursor-pointer" />
             </div>
             <template #body>
               <Transition name="fade">
@@ -93,13 +82,7 @@
       </div>
 
       <!-- edit modal -->
-      <VaModal
-        v-model="showEditModal"
-        size="small"
-        mobile-fullscreen
-        close-button
-        hide-default-actions
-      >
+      <VaModal v-model="showEditModal" size="small" mobile-fullscreen close-button hide-default-actions>
         <h1>Edit Meter</h1>
         <EditMeterForm
           :model-value="showContentMeter"
@@ -109,13 +92,7 @@
         />
       </VaModal>
       <!-- Edit Gateway Modal -->
-      <VaModal
-        v-model="isShowEditGatewayModal"
-        size="small"
-        mobile-fullscreen
-        close-button
-        hide-default-actions
-      >
+      <VaModal v-model="isShowEditGatewayModal" size="small" mobile-fullscreen close-button hide-default-actions>
         <h1>Edit Gateway</h1>
         <EditGatewayForm
           :model-value="gatewayToEdit"
@@ -134,7 +111,7 @@ import { gateway_type } from '../../../../data/gateway'
 import { useRoute } from 'vue-router'
 import { useToast } from 'vuestic-ui'
 import { getGateway, pingGateway, updateGateway } from '../../../../apis/gateway'
-import EditMeterForm from '@/pages/deviceManage/meter/widgets/editMeterForm.vue'
+import EditMeterForm from '@/pages/deviceManage/meter/widgets/EditMeterForm.vue'
 import { updateMeter, operateMeter } from '../../../../apis/meter'
 import { meter_type } from '../../../../data/meter'
 import { MeterOperationType } from '../../../../data/api_field_type/api_field_type'
