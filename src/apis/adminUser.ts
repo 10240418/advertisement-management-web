@@ -28,7 +28,7 @@ export const changePasswordAdminUser = (data: any) => {
   return request({
     url: '/admin/admin_user/change_password',
     method: 'post',
-    data: data
+    data: data,
   })
 }
 

@@ -23,7 +23,7 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 import { useGlobalStore } from '@/stores/global-store'
-import AppNavbarActions from './components/AppNavbarActions.vue'
+// import AppNavbarActions from './components/AppNavbarActions.vue'
 defineProps({
   isMobile: { type: Boolean, default: false },
 })

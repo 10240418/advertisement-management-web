@@ -12,11 +12,7 @@
           <!-- <VaButton @click="showAddControlTaskModal">Add Control Task</VaButton> -->
           <template #appendInner>
             <div class="search-icon-wrapper bg-white hover:bg-slate-300 z-10">
-              <VaIcon
-                name="mso-search"
-                color="secondary"
-                @click="onSearch(searchValue)"
-              />
+              <VaIcon name="mso-search" color="secondary" @click="onSearch(searchValue)" />
             </div>
           </template>
         </VaInput>

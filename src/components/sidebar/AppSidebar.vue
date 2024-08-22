@@ -82,7 +82,7 @@ export default defineComponent({
 
     const isActiveChildRoute = (child: INavigationRoute) => {
       // Special case for toilet section
-        return route.name === child.name
+      return route.name === child.name
     }
 
     const routeHasActiveChild = (section: INavigationRoute) => {

@@ -6,14 +6,11 @@ export const useGlobalStore = defineStore('global', {
   } => ({
     isSidebarMinimized: false, // 侧边栏是否最小化
   }),
-  getters: {
-  },
+  getters: {},
   actions: {
     toggleSidebar() {
       this.isSidebarMinimized = !this.isSidebarMinimized
     },
-    reset() {
-
-    },
+    reset() {},
   },
 })

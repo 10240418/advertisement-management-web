@@ -1,4 +1,5 @@
 import { ref } from 'vue'
+// eslint-disable-next-line @typescript-eslint/ban-types
 export const useThrottle = (fn: Function, delay: number) => {
   const canRun = ref(true)
   return (...args: any[]) => {
@@ -11,6 +12,7 @@ export const useThrottle = (fn: Function, delay: number) => {
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 export const useDebounce = (fn: Function, delay: number) => {
   let timer: ReturnType<typeof setTimeout> | null = null
   return (...args: any[]) => {

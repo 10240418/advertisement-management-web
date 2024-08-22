@@ -13,13 +13,12 @@ export type unit_type = {
 //   "remark": ""
 // }
 
-export type  unit_detail_type = {
+export type unit_detail_type = {
   id: number
   createdAt: string
   floor: string
   unit: string
   remark: string
-  meters : object[]
-  residents : object[]
-
+  meters: object[]
+  residents: object[]
 }

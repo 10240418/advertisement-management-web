@@ -36,8 +36,7 @@ export default defineVuesticConfig({
         preset: 'primary',
       },
     },
-    VaDataTable: {
-    },
+    VaDataTable: {},
     presets: {
       VaSelect: {
         small: {

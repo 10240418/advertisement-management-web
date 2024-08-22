@@ -10,6 +10,7 @@ export enum MeterType {
 export enum MeterModel {
   MeterModelWaterHDSB = 0,
   MeterModelWaterHDSW = 1,
+  // eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values
   ElectricMeterModelTEST = 0,
 }
 
@@ -17,7 +18,9 @@ export enum MeterModel {
 export enum MeterOperationType {
   WaterMeterValveOff = 0,
   WaterMeterValveOn = 1,
+  // eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values
   ElectricMeterOff = 0,
+  // eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values
   ElectricMeterOn = 1,
 }
 
