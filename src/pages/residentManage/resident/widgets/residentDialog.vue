@@ -5,11 +5,15 @@
         <!-- Top section -->
         <div class="flex flex-row justify-between">
           <DetailCard :labels="labelsProp" :datas="datasProp" class="ml-[-14px] mt-[-8px]" />
-          <div class="flex flex-col justify-between w-[72px] mt-[3px] mr-4">
-            <VaButton color="primary" icon="mso-edit" class="h-[30px] w-[72px]" @click="doShowEditResidentModal = true">
-              Edit</VaButton
+          <div class="flex flex-col justify-end w-[72px] mt-[3px] mr-4">
+            <VaButton
+              preset="secondary"
+              border-color="primary"
+              class="h-[26px] w-[82px]"
+              @click="doShowEditResidentModal = true"
             >
-            <VaButton color="primary" class="h-[30px] w-[72px]" @click="doShowAddUnitModal = true">AddUnit</VaButton>
+              <span class="text-[14px]">Edit</span>
+            </VaButton>
           </div>
         </div>
 
@@ -25,12 +29,10 @@
           ]"
           class="mr-3 va-data-table"
           :style="{
-            '--va-data-table-height': '320px',
-            '--va-data-table-tfoot-background': 'var(--va-background-element)',
+            '--va-data-table-height': '360px',
+            '--va-data-table-thead-background': '#ffffff',
           }"
           sticky-header
-          footer-clone
-          sticky-footer
         >
           <template #cell(actions)="{ rowData }">
             <VaPopover placement="bottom" trigger="click" color="backgroundSecondary">
@@ -92,8 +94,10 @@
         </VaDataTable>
 
         <!-- Dialog Footer -->
-        <div class="dialog-footer">
-          <VaButton class="h-[30px] w-[72px] mr-5" @click="onClose">Cancel</VaButton>
+        <div class="flex flex-row gap-2 justify-end mr-2 mb-3">
+          <VaButton color="primary" class="h-[30px] w-[92px]" @click="doShowAddUnitModal = true"
+            ><span class="text-[14px]">BindUnit</span></VaButton
+          >
         </div>
       </div>
     </VaCard>
@@ -228,11 +232,6 @@ const currentPageData = computed(() => {
 // Show Edit Resident Modal
 const doShowEditResidentModal = ref(false)
 const doShowAddUnitModal = ref(false)
-//关闭
-const onClose = () => {
-  fetch()
-  window.close()
-}
 
 const onCloseEditResidentModal = () => {
   doShowEditResidentModal.value = false
@@ -311,5 +310,8 @@ onBeforeMount(() => {
 
 .h-full {
   height: 100%;
+}
+.va-button {
+  min-height: 30px;
 }
 </style>

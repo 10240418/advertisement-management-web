@@ -1,79 +1,81 @@
 <template>
   <VaCard class="w-full h-full flex">
-    <div class="w-full h-full flex flex-col ml-3">
-      <!-- Top Section -->
-      <DetailCard :labels="labelsProp" :datas="datasProp" :font-weight="`font-bold`" :index-weight="3">
-        <div class="flex flex-col relative">
-          <div class="flex flex-row mr-3 items-center gap-3">
-            <VaListLabel class="flex justify-start">Gateway</VaListLabel>
-            <span class="absolute ml-20 truncate text-[16px]">{{ controlTask?.gatewayId }}</span>
-            <VaPopover
-              class="absolute ml-52"
-              color="backgroundSecondary"
-              trigger="click"
-              :style="{ '--va-popover-content-background-color': '#ffffff' }"
-            >
-              <VaIcon
-                :name="arrowDirection(isGatewayCollapsed)"
-                size="20px"
-                @click="isGatewayCollapsed = !isGatewayCollapsed"
-              />
-              <template #body>
-                <div class="grid grid-cols-[1fr_3fr] border border-solid p-2 rounded-md shadow-lg">
-                  <VaListLabel class="flex justify-start">ID</VaListLabel>
-                  <span>{{ controlTask?.gateway.id }}</span>
-                  <VaListLabel class="flex justify-start">Name</VaListLabel>
-                  <span>{{ controlTask?.gateway.name }}</span>
-                  <VaListLabel class="flex justify-start">IP Address </VaListLabel>
-                  <span>{{ controlTask?.gateway.ipAddr }}</span>
-                  <VaListLabel class="flex justify-start">Remark</VaListLabel>
-                  <span>{{ controlTask?.gateway.remark }}</span>
-                  <VaListLabel class="flex justify-start">Created At </VaListLabel>
-                  <span>{{ controlTask?.gateway.createdAt }}</span>
-                </div>
-              </template>
-            </VaPopover>
-          </div>
+    <div class="w-full h-[600px] flex flex-col ml-3">
+      <div class="flex flex-row justify-between">
+        <!-- Top Section -->
+        <DetailCard :labels="labelsProp" :datas="datasProp" :font-weight="`font-bold`" :index-weight="3">
+          <div class="flex flex-col relative">
+            <div class="flex flex-row mr-3 items-center gap-3">
+              <VaListLabel class="flex justify-start">Gateway</VaListLabel>
+              <span class="absolute ml-20 truncate text-[16px]">{{ controlTask?.gatewayId }}</span>
+              <VaPopover
+                class="absolute ml-52"
+                color="backgroundSecondary"
+                trigger="click"
+                :style="{ '--va-popover-content-background-color': '#ffffff' }"
+              >
+                <VaIcon
+                  :name="arrowDirection(isGatewayCollapsed)"
+                  size="20px"
+                  @click="isGatewayCollapsed = !isGatewayCollapsed"
+                />
+                <template #body>
+                  <div class="grid grid-cols-[1fr_3fr] border border-solid p-2 rounded-md shadow-lg">
+                    <VaListLabel class="flex justify-start">ID</VaListLabel>
+                    <span>{{ controlTask?.gateway.id }}</span>
+                    <VaListLabel class="flex justify-start">Name</VaListLabel>
+                    <span>{{ controlTask?.gateway.name }}</span>
+                    <VaListLabel class="flex justify-start">IP Address </VaListLabel>
+                    <span>{{ controlTask?.gateway.ipAddr }}</span>
+                    <VaListLabel class="flex justify-start">Remark</VaListLabel>
+                    <span>{{ controlTask?.gateway.remark }}</span>
+                    <VaListLabel class="flex justify-start">Created At </VaListLabel>
+                    <span>{{ controlTask?.gateway.createdAt }}</span>
+                  </div>
+                </template>
+              </VaPopover>
+            </div>
 
-          <div class="flex flex-row mr-3 items-center gap-3">
-            <VaListLabel class="flex justify-start">Meter</VaListLabel>
-            <span class="absolute ml-20 truncate text-[16px]">{{ controlTask?.meter?.name }}</span>
-            <VaPopover
-              class="absolute ml-52"
-              color="backgroundSecondary"
-              trigger="click"
-              :style="{ '--va-popover-content-background-color': '#ffffff' }"
-            >
-              <VaIcon
-                :name="arrowDirection(isMeterCollapsed)"
-                size="20px"
-                @click="isMeterCollapsed = !isMeterCollapsed"
-              />
-              <template #body>
-                <div class="grid grid-cols-[1fr_3fr] border border-solid p-2 rounded-md shadow-lg">
-                  <VaListLabel class="flex justify-start">ID</VaListLabel>
-                  <span>{{ controlTask?.meter.id }}</span>
-                  <VaListLabel class="flex justify-start">Name</VaListLabel>
-                  <span>{{ controlTask?.meter.name }}</span>
-                  <VaListLabel class="flex justify-start">Type</VaListLabel>
-                  <span>{{ controlTask?.meter.type === 0 ? 'Electricity' : 'Water' }}</span>
-                  <VaListLabel class="flex justify-start">UnitID</VaListLabel>
-                  <span>{{ controlTask?.meter.unitId }}</span>
-                  <VaListLabel class="flex justify-start">Remark</VaListLabel>
-                  <span>{{ controlTask?.meter.remark }}</span>
-                  <VaListLabel class="flex justify-start">Created At </VaListLabel>
-                  <span>{{ controlTask?.meter.createdAt }}</span>
-                </div>
-              </template>
-            </VaPopover>
+            <div class="flex flex-row mr-3 items-center gap-3">
+              <VaListLabel class="flex justify-start">Meter</VaListLabel>
+              <span class="absolute ml-20 truncate text-[16px]">{{ controlTask?.meter?.name }}</span>
+              <VaPopover
+                class="absolute ml-52"
+                color="backgroundSecondary"
+                trigger="click"
+                :style="{ '--va-popover-content-background-color': '#ffffff' }"
+              >
+                <VaIcon
+                  :name="arrowDirection(isMeterCollapsed)"
+                  size="20px"
+                  @click="isMeterCollapsed = !isMeterCollapsed"
+                />
+                <template #body>
+                  <div class="grid grid-cols-[1fr_3fr] border border-solid p-2 rounded-md shadow-lg">
+                    <VaListLabel class="flex justify-start">ID</VaListLabel>
+                    <span>{{ controlTask?.meter.id }}</span>
+                    <VaListLabel class="flex justify-start">Name</VaListLabel>
+                    <span>{{ controlTask?.meter.name }}</span>
+                    <VaListLabel class="flex justify-start">Type</VaListLabel>
+                    <span>{{ controlTask?.meter.type === 0 ? 'Electricity' : 'Water' }}</span>
+                    <VaListLabel class="flex justify-start">UnitID</VaListLabel>
+                    <span>{{ controlTask?.meter.unitId }}</span>
+                    <VaListLabel class="flex justify-start">Remark</VaListLabel>
+                    <span>{{ controlTask?.meter.remark }}</span>
+                    <VaListLabel class="flex justify-start">Created At </VaListLabel>
+                    <span>{{ controlTask?.meter.createdAt }}</span>
+                  </div>
+                </template>
+              </VaPopover>
+            </div>
           </div>
+        </DetailCard>
+
+        <div class="flex flex-col justify-end mt-[-4px] mr-2">
+          <VaButton preset="secondary" border-color="primary" class="h-[26px] w-[82px]" @click="openEditModal">
+            <span class="text-[14px]">Edit</span>
+          </VaButton>
         </div>
-      </DetailCard>
-
-      <!-- Footer Section -->
-      <div class="dialog-footer">
-        <VaButton @click="cancel">Cancel</VaButton>
-        <VaButton color="primary" icon="mso-edit" class="ml-2 h-[30px] w-[72px]" @click="openEditModal">Edit</VaButton>
       </div>
 
       <!-- Edit Modal -->
@@ -198,13 +200,9 @@ const saveControlTask = async (updatedControlTask: task_type_fetch) => {
   await fetch() // Refresh data
   closeEditModal()
 }
-
-const cancel = () => {
-  window.close()
-}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .va-data-table {
   ::v-deep(.va-data-table__table-tr) {
     border-bottom: 1px solid var(--va-background-border);
@@ -215,5 +213,8 @@ const cancel = () => {
   display: flex;
   justify-content: flex-end;
   margin-top: 20px;
+}
+.va-button {
+  min-height: 30px;
 }
 </style>

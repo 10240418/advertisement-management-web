@@ -2,8 +2,13 @@
   <VaCard>
     <div class="w-full h-full flex flex-col ml-1">
       <!-- top part -->
-      <div class="flex flex-row gap-0">
+      <div class="flex flex-row justify-between gap-0">
         <DetailCard :labels="labelsProp" :datas="datasProp" />
+        <div class="flex flex-col justify-end mr-4">
+          <VaButton preset="secondary" border-color="primary" class="h-[26px] w-[82px]" @click="showEditGatewayModal">
+            <span class="text-[14px]">Edit</span>
+          </VaButton>
+        </div>
       </div>
 
       <!-- table part -->
@@ -25,6 +30,10 @@
         }"
         sticky-header
       >
+        <template #cell(type)="{ rowData }">
+          <span v-if="rowData.type === 0">WaterMeter</span>
+          <span v-else>ElectricMeter</span>
+        </template>
         <template #cell(actions)="{ rowData }">
           <VaPopover placement="bottom" trigger="click" color="backgroundSecondary">
             <div
@@ -75,10 +84,9 @@
           </VaPopover>
         </template>
       </VaDataTable>
-      <div class="dialog-footer flex flex-row gap-2 justify-end items-center">
-        <VaButton @click="showEditGatewayModal">Edit</VaButton>
-        <VaButton @click="pingGatewayByID">Ping</VaButton>
-        <VaButton @click="cancel">Cancel</VaButton>
+      <div class="dialog-footer flex flex-row gap-2 justify-end items-center mr-4">
+        <!-- <VaButton @click="showEditGatewayModal">Edit</VaButton> -->
+        <VaButton class="h-[26px] w-[82px]" @click="pingGatewayByID"><span class="text-[12px]]">Ping</span></VaButton>
       </div>
 
       <!-- edit modal -->
@@ -112,6 +120,7 @@ import { useRoute } from 'vue-router'
 import { useToast } from 'vuestic-ui'
 import { getGateway, pingGateway, updateGateway } from '../../../../apis/gateway'
 import EditMeterForm from '@/pages/deviceManage/meter/widgets/EditMeterForm.vue'
+import EditGatewayForm from '@/pages/deviceManage/gateway/widgets/EditGatewayForm.vue'
 import { updateMeter, operateMeter } from '../../../../apis/meter'
 import { meter_type } from '../../../../data/meter'
 import { MeterOperationType } from '../../../../data/api_field_type/api_field_type'
@@ -208,9 +217,6 @@ const pingGatewayByID = async () => {
     return
   }
 }
-const cancel = () => {
-  window.close()
-}
 
 // State and Reactive Properties
 const gatewayToEdit = ref<gateway_type | null>(null)
@@ -244,7 +250,7 @@ const closeEditGatewayModal = () => {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .va-data-table__table-tr {
   border-bottom: 1px solid var(--va-background-border);
 }
@@ -294,6 +300,9 @@ const closeEditGatewayModal = () => {
   border-width: 7px;
   border-style: solid;
   border-color: transparent transparent white transparent;
+}
+.va-button {
+  min-height: 30px;
 }
 </style>
 <!-- gatewayDialog.vue -->

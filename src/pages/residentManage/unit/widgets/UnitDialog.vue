@@ -1,6 +1,6 @@
 <template>
   <VaCard>
-    <div class="w-full h-full flex flex-col mt-[-10px]">
+    <div class="w-full h-[500px] flex flex-col mt-[-10px]">
       <!-- Top part with Unit details -->
       <div class="flex flex-row justify-between">
         <DetailCard :labels="labelsProp" :datas="datasProp" />
@@ -8,7 +8,7 @@
           <VaButton
             preset="secondary"
             border-color="primary"
-            class="h-[24px] w-[82px]"
+            class="h-[24px] w-[92px]"
             @click="doShowEditUnitModal = true"
           >
             Edit
@@ -30,7 +30,7 @@
         ]"
         class="mr-3 va-data-table"
         :style="{
-          '--va-data-table-height': '140px',
+          '--va-data-table-height': '160px',
           '--va-data-table-thead-background': '#ffffff',
         }"
         sticky-header
@@ -93,7 +93,7 @@
         ]"
         class="mr-3 va-data-table"
         :style="{
-          '--va-data-table-height': '140px',
+          '--va-data-table-height': '160px',
           '--va-data-table-thead-background': '#ffffff',
         }"
         sticky-header
@@ -169,10 +169,8 @@
         <h1 class="va-h5">Add Unit</h1>
         <BindResidentForm :resident="unit" @close="isShowAddUnitModal = false" @fetch="fetch" />
       </VaModal>
-
-      <div class="flex flex-row justify-end gap-3">
+      <div class="flex flex-row justify-end gap-3 mr-2">
         <VaButton color="primary" class="h-[26px] w-[112px]" @click="isShowAddUnitModal = true">BindResident</VaButton>
-        <VaButton class="h-[26px] w-[72px] mr-5" @click="onClose">Cancel</VaButton>
       </div>
     </div>
   </VaCard>
@@ -302,9 +300,6 @@ const showDeleteModal = async (rowData: any) => {
     }
   }
 }
-const onClose = () => {
-  window.close()
-}
 
 onBeforeMount(fetch)
 </script>
@@ -348,5 +343,8 @@ onBeforeMount(fetch)
   margin-top: 16px;
   display: flex;
   justify-content: flex-end;
+}
+.va-button {
+  min-height: 30px;
 }
 </style>

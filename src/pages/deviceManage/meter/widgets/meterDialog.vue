@@ -1,5 +1,5 @@
 <template>
-  <VaCard class="w-full h-full flex-col flex">
+  <VaCard class="w-full h-[584px] flex-col flex">
     <div class="w-full h-full flex flex-col ml-3">
       <!-- chart -->
       <!-- <span class="text-[20px] font-bold">Read Meter Logs</span> -->
@@ -134,7 +134,7 @@
       <MeterOperateLogsCard :isfetch="logsCardFetch"></MeterOperateLogsCard>
     </div>
     <!-- footer -->
-    <div class="dialog-footer flex flex-row gap-2 mr-4">
+    <div class="dialog-footer flex flex-row gap-2 mr-2">
       <div class="flex flex-row items-center justify-center gap-5">
         <VaButton
           v-if="meterStatus === true"
@@ -152,11 +152,11 @@
           class="h-[30px] w-[92px] text-nowrap"
           @click="operateMeterStatus"
         >
-          <span class="text-[14px]">Turn OFF</span>
+          <span class="text-[12px]">Turn OFF</span>
         </VaButton>
       </div>
-      <VaButton color="primary" :loading="isOperating ? true : false" class="h-[30px] w-[82px]" @click="read">
-        <span class="text-[14px]">Realtime</span>
+      <VaButton color="primary" :loading="isOperating ? true : false" class="h-[30px] w-[92px]" @click="read">
+        <span class="text-[14px]">RealTime</span>
       </VaButton>
     </div>
     <!-- edit modal -->
@@ -403,7 +403,7 @@ const saveMeter = async (updatedMeter: any) => {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .va-data-table {
   ::v-deep(.va-data-table__table-tr) {
     border-bottom: 1px solid var(--va-background-border);

@@ -1,6 +1,6 @@
 <template>
   <VaCard class="w-full h-full flex">
-    <div class="w-full h-full flex flex-col ml-3">
+    <div class="w-full h-[600px] flex flex-col ml-3">
       <!-- Top Section -->
       <DetailCard :labels="labelsProp" :datas="datasProp" :font-weight="`font-bold`" :index-weight="3">
         <div class="flex flex-col relative">
@@ -75,11 +75,6 @@
           </div>
         </div>
       </DetailCard>
-
-      <!-- Footer Section -->
-      <div class="dialog-footer">
-        <VaButton @click="cancel">Cancel</VaButton>
-      </div>
     </div>
   </VaCard>
 </template>
@@ -173,16 +168,15 @@ const fetch = async () => {
 onBeforeMount(() => {
   fetch()
 })
-
-const cancel = () => {
-  window.close()
-}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .dialog-footer {
   display: flex;
   justify-content: flex-end;
   margin-top: 20px;
+}
+.va-button {
+  min-height: 30px;
 }
 </style>
