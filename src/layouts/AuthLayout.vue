@@ -7,7 +7,7 @@
         to="/"
         aria-label="Visit homepage"
       >
-        Smart Meter Admin
+        Advertisement Admin
       </RouterLink>
     </template>
     <template #content>

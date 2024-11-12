@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { admin_user_type } from '../../data/admin_user'
-import AdminUsersTable from './widgets/AdminUsersTable.vue'
-import EditAdminUserForm from './widgets/EditAdminUserForm.vue'
+import AdminUsersTable from './widgets/adminUsersTable.vue'
+import EditAdminUserForm from './widgets/editAdminUserForm.vue'
 
 const doShowEditUserModal = ref(false)
 const doShowAddUserModal = ref(false)

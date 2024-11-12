@@ -114,7 +114,9 @@
     "resident": "住户管理",
     "adminUser": "管理员",
     "settings": "设置",
-    "logs": "日志"
+    "logs": "日志",
+    "advertisement": "广告",
+    "notice": "公告"
   },
   "messages": {
     "all": "查看所有消息",

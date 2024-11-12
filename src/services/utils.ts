@@ -13,6 +13,10 @@ export const validators = {
   maxLength: (v: any, max: number) => (v && v.length <= max) || `Max ${max} characters`,
   sameAs: (v: any, field: any) => v === field || 'Password does not match',
   number: (v: any) => (v && !isNaN(Number(v))) || 'Please enter a valid number',
+  url: (v: any) => {
+    const pattern = /^(https?:\/\/)?[^\s/$.?#].[^\s]*$/
+    return pattern.test(v) || 'Please enter a valid URL'
+  },
 
   // IP Address and Port
   ipAddress: (v: string) => {

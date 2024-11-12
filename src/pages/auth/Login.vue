@@ -1,13 +1,7 @@
 <template>
   <VaForm ref="form" @submit.prevent="submit">
     <h1 class="font-semibold text-4xl mb-4">Log in</h1>
-    <VaInput
-      v-model="formData.email"
-      :rules="[validators.required, validators.email]"
-      class="mb-4"
-      label="Email"
-      type="email"
-    />
+    <VaInput v-model="formData.username" :rules="[validators.required]" class="mb-4" label="Username" type="userName" />
     <VaValue v-slot="isPasswordVisible" :default-value="false">
       <VaInput
         v-model="formData.password"
@@ -47,8 +41,8 @@ const toast = useToast()
 const useUsers = useUserStore()
 
 const formData = reactive({
-  email: '',
-  password: '',
+  username: 'admin',
+  password: 'healthist',
 })
 
 const submit = () => {
@@ -57,15 +51,15 @@ const submit = () => {
       .then((res) => {
         localStorage.setItem('AdminToken', res.data.token)
         //保存賬號和密碼在localStorage
-        localStorage.setItem('AdminEmail', formData.email)
+        localStorage.setItem('AdminUserName', formData.username)
         localStorage.setItem('AdminPassword', formData.password)
-        useUsers.changeEmail(formData.email)
+        useUsers.changeUserName(formData.username)
         useUsers.changePassWord(formData.password)
-        console.log(useUsers.getEmail)
+        console.log(useUsers.getUserName)
         console.log(useUsers.getPassWord)
 
         toast.init({ message: res.data.message, color: 'success' })
-        router.push({ name: 'home' })
+        router.push({ name: 'adminUsers' })
       })
       .catch((error) => {
         toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })

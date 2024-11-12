@@ -7,8 +7,8 @@ import { useAdminUsers } from '../composables/adminUsers'
 
 const { add, fetch } = useAdminUsers()
 const defaultNewAdminUser = {
-  name: '',
-  email: '',
+  username: '',
+  // email: '',
   password: '',
   created_at: '',
   updated_at: '',
@@ -57,10 +57,16 @@ const onCancel = () => {
   <VaForm v-slot="{ isValid }" ref="add-user-form" class="flex-col justify-start items-start inline-flex w-full">
     <div class="self-stretch flex-col justify-start items-start gap-2 flex">
       <div v-if="!newAdminUser.id" class="flex gap-4 flex-col w-full">
-        <VaInput v-model="newAdminUser.name" label="Name" class="w-full" :rules="[validators.required]" name="name" />
+        <VaInput
+          v-model="newAdminUser.username"
+          label="UserName"
+          class="w-full"
+          :rules="[validators.required]"
+          name="username"
+        />
       </div>
 
-      <div v-if="!newAdminUser.id" class="flex gap-4 flex-col w-full">
+      <!-- <div v-if="!newAdminUser.id" class="flex gap-4 flex-col w-full">
         <VaInput
           v-model="newAdminUser.email"
           label="Email"
@@ -68,7 +74,7 @@ const onCancel = () => {
           :rules="[validators.required, validators.email]"
           name="email"
         />
-      </div>
+      </div> -->
 
       <div class="flex gap-4 flex-col w-full">
         <VaInput

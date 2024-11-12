@@ -1,20 +1,22 @@
 <script setup lang="ts">
 import { defineVaDataTableColumns, useModal } from 'vuestic-ui'
 import { computed, watch, ref, onMounted, onBeforeUnmount } from 'vue'
-import { admin_user_type } from '../../../data/admin_user'
+import { advertisement_type } from '../../../data/advertisement/advertisement_type'
 import moment from 'moment'
-import { useAdminUsers } from '../composables/adminUsers'
+import { useAdvertisements } from '../composable/advertisements'
 
 const columns = defineVaDataTableColumns([
-  { label: 'ID', key: 'ID', sortable: true, width: '5%' },
-  { label: 'UserName', key: 'Username', sortable: true, width: '20%' },
-  // { label: 'Email', key: 'email', sortable: false, width: '25%' },
-  { label: 'create_at', key: 'createdAt', sortable: false, width: '25%' },
-  { label: 'Actions', key: 'actions', sortable: false, width: '5%' },
+  { label: 'ID', key: 'id', sortable: true, width: '10%' },
+  { label: 'Title', key: 'title', sortable: true, width: '25%' },
+  { label: 'Content', key: 'content', sortable: false, width: '35%' },
+  { label: 'URL', key: 'url', sortable: false, width: '20%' },
+  { label: 'Created At', key: 'createdAt', sortable: true, width: '10%' },
+  { label: 'Actions', key: 'actions', sortable: false, width: '10%' },
 ])
-const { sorting, pagination, adminUsers, isLoading, fetch, remove } = useAdminUsers()
-const users = computed(() => {
-  return adminUsers.value
+
+const { sorting, pagination, advertisements, isLoading, fetch, remove } = useAdvertisements()
+const ads = computed(() => {
+  return advertisements.value
 })
 const Loading = computed(() => isLoading.value)
 const totalPages = computed(() => Math.ceil(pagination.value.total / pagination.value.pageSize))
@@ -27,10 +29,10 @@ const pagesOptions = computed(() => {
 })
 
 const { confirm } = useModal()
-const onUserDelete = async (user: any) => {
+const onAdvertisementDelete = async (ad: any) => {
   const agreed = await confirm({
-    title: 'Delete user',
-    message: `Are you sure you want to delete ${user.ID}?`,
+    title: 'Delete Advertisement',
+    message: `Are you sure you want to delete "${ad.title}"?`,
     okText: 'Delete',
     cancelText: 'Cancel',
     size: 'small',
@@ -38,50 +40,26 @@ const onUserDelete = async (user: any) => {
   })
 
   if (agreed) {
-    console.log(user.ID)
-    remove(user.ID)
+    remove([ad.id])
   }
 }
-
-const onAdminUserReset = async (user: any) => {
-  const agreed = await confirm({
-    title: 'Reset password',
-    message: `Are you sure you want to reset password for ${user.name}?`,
-    okText: 'Reset',
-    cancelText: 'Cancel',
-    size: 'small',
-    maxWidth: '380px',
-  })
-
-  if (agreed) {
-    // reset({ id: user.id })
-  }
-}
-
 const currentPageData = computed(() => {
-  let usersArray: any = []
-  if (Array.isArray(users.value)) {
-    usersArray = users.value
-  } else if (users.value && typeof users.value === 'object') {
-    usersArray = [users.value]
-  }
+  const adsArray: any = Array.isArray(ads.value) ? ads.value : ads.value ? [ads.value] : []
   const startIndex = (pagination.value.pageNum - 1) * pagination.value.pageSize
   const endIndex = startIndex + pagination.value.pageSize
 
-  if (usersArray.length <= pagination.value.pageSize) return users.value
-  else return usersArray.value.slice(startIndex, endIndex)
+  return adsArray.slice(startIndex, endIndex)
 })
 
 watch(
   () => [
-    Loading,
+    Loading.value,
     pagination.value.pageNum,
     pagination.value.pageSize,
     sorting.value.sortingOrder,
     sorting.value.sortBy,
   ],
   () => {
-    console.log(Loading)
     if (pagination.value.total < pagination.value.pageSize * (pagination.value.pageNum - 1)) {
       pagination.value.pageNum = 1
     }
@@ -89,17 +67,16 @@ watch(
   },
 )
 
-//气泡提示框
-const showContentUser = ref<admin_user_type | null>(null)
+const showContentAd = ref<advertisement_type | null>(null)
 const showContent = (rowData: any) => {
-  showContentUser.value = rowData
+  showContentAd.value = rowData
 }
 const handleClickOutside = (event: MouseEvent) => {
   const target = event.target as HTMLElement
   const dropdowns = document.querySelectorAll('.dropdown-content')
   dropdowns.forEach((dropdown) => {
     if (!dropdown.contains(target)) {
-      showContentUser.value = null
+      showContentAd.value = null
     }
   })
 }
@@ -127,21 +104,27 @@ onBeforeUnmount(() => {
         {{ moment(rowData.createdAt).format('YYYY-MM-DD HH:mm:ss') }}
       </div>
     </template>
-    <template #cell(Username)="{ rowData }">
-      <div class="max-w-[120px] ellipsis">
-        {{ rowData.Username }}
+    <template #cell(title)="{ rowData }">
+      <div class="max-w-[200px] ellipsis">
+        {{ rowData.title }}
       </div>
     </template>
 
-    <!-- <template #cell(email)="{ rowData }">
-      <div class="ellipsis max-w-[230px]">
-        {{ rowData.email }}
+    <template #cell(content)="{ rowData }">
+      <div class="ellipsis max-w-[300px]">
+        {{ rowData.content }}
       </div>
-    </template> -->
+    </template>
+
+    <template #cell(url)="{ rowData }">
+      <a :href="rowData.url" target="_blank" class="text-blue-500 underline ellipsis max-w-[200px]">
+        {{ rowData.url }}
+      </a>
+    </template>
 
     <!-- eslint-disable-next-line vue/no-useless-template-attributes -->
     <template #cell(actions)="{ rowData }">
-      <VaPopover placement="bottom" trigger="click" color=" backgroundSecondary" class="max-h[40px]">
+      <VaPopover placement="bottom" trigger="click" color="backgroundSecondary" class="max-h[40px]">
         <div
           class="flex items-center justify-center relative hover:bg-slate-100 rounded-[4px]"
           @click.stop="showContent(rowData)"
@@ -151,27 +134,27 @@ onBeforeUnmount(() => {
         <template #body>
           <Transition name="fade">
             <div
-              v-show="showContentUser?.id === rowData.id"
+              v-show="showContentAd?.id === rowData.id"
               class="tooltip-content flex flex-col justify-center z-999 items-center relative border border-solid border-gray-300 p-2 rounded-md shadow-lg"
             >
               <VaButton
                 preset="secondary"
                 size="small"
-                icon="mso-restart_alt"
-                aria-label="Edit user"
+                icon="va-edit"
+                aria-label="Edit advertisement"
                 class="w-full justify-between"
-                @click="onAdminUserReset(rowData)"
+                @click="$emit('editAdvertisement', rowData)"
               >
-                <span>Reset</span>
+                <span>Edit</span>
               </VaButton>
               <VaButton
                 preset="secondary"
                 size="small"
-                icon="mso-delete"
+                icon="va-delete"
                 color="danger"
-                aria-label="Delete user"
+                aria-label="Delete advertisement"
                 class="w-full"
-                @click="onUserDelete(rowData)"
+                @click="onAdvertisementDelete(rowData)"
               >
                 <span>Delete</span>
               </VaButton>
@@ -184,10 +167,10 @@ onBeforeUnmount(() => {
 
   <div class="flex flex-col-reverse md:flex-row gap-2 justify-between items-center py-2">
     <div>
-      <b>total: {{ pagination.total }} </b>
-      pageNum:
+      <b>Total: {{ pagination.total }} </b>
+      Page:
       <VaSelect v-model="pagination.pageNum" class="!w-16" selected-top-shown :options="pagesOptions" />
-      pageSize:
+      Page Size:
       <VaSelect v-model="pagination.pageSize" class="!w-20" selected-top-shown :options="[5, 10, 20, 50, 100]" />
     </div>
 
@@ -231,7 +214,6 @@ onBeforeUnmount(() => {
   flex-direction: column;
   border-radius: 4px;
   padding: 0 8px;
-  // box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .dropdown-content > * {
@@ -245,7 +227,6 @@ onBeforeUnmount(() => {
 
 .tooltip-content {
   position: relative;
-  // background-color: white;
   border: 1px solid #d1d5db;
   padding: 6px;
   border-radius: 8px;
@@ -271,6 +252,6 @@ onBeforeUnmount(() => {
   transform: translateX(-50%);
   border-width: 7px;
   border-style: solid;
-  border-color: transparent transparent white transparent; //
+  border-color: transparent transparent white transparent;
 }
 </style>

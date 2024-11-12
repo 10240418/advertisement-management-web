@@ -3,11 +3,10 @@ import { admin_user_type } from '../../../data/admin_user'
 import { type Filters, Pagination, Sorting } from '../../../data/page'
 import {
   fetchAdminUsers,
-  addAdminUser,
+  registerAdminUser,
   deleteAdminUser,
-  resetPasswordAdminUser,
-  changePasswordAdminUser,
-} from '../../../apis/adminUser'
+  changeAdminUser,
+} from '../../../apis/advertisement/ad_adminUser' // 更新导入路径
 import { useToast } from 'vuestic-ui/web-components'
 
 const makePaginationRef = () => ref<Pagination>({ pageNum: 1, pageSize: 5, total: 30 })
@@ -17,7 +16,7 @@ const makeFiltersRef = () => ref<Filters>({ isActive: true, search: '' })
 export const useAdminUsers = (options?: {
   pagination?: Ref<Pagination>
   sorting?: Ref<Sorting>
-  filters?: Ref<Partial<Partial<Filters>>>
+  filters?: Ref<Partial<Filters>>
 }) => {
   const isLoading = ref(false)
   const adminUsers = ref<admin_user_type[]>([])
@@ -31,9 +30,10 @@ export const useAdminUsers = (options?: {
       pageSize: pagination.value.pageSize,
       desc: sorting.value.sortingOrder === 'desc' ? true : false,
     })
-      .then((res) => {
+      .then((res: any) => {
         adminUsers.value = res.data.data
-        pagination.value.total = res.data.pagination.total
+        pagination.value.total = res.data.total
+        console.log(res)
       })
       .catch((error) => {
         toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
@@ -46,7 +46,7 @@ export const useAdminUsers = (options?: {
 
   const add = (user: any) => {
     isLoading.value = true
-    addAdminUser(user)
+    registerAdminUser(user)
       .then(() => {
         fetch()
         toast.init({ message: `${user.name} added successfully`, color: 'success' })
@@ -60,9 +60,9 @@ export const useAdminUsers = (options?: {
       })
   }
 
-  const remove = (ids: number[]) => {
+  const remove = (ids: any) => {
     isLoading.value = true
-    deleteAdminUser({ ids })
+    deleteAdminUser(ids)
       .then(() => {
         fetch()
         toast.init({ message: `${ids.length} users deleted successfully`, color: 'success' })
@@ -76,24 +76,9 @@ export const useAdminUsers = (options?: {
       })
   }
 
-  const reset = (user: any) => {
-    isLoading.value = true
-    resetPasswordAdminUser({ id: user.id })
-      .then(() => {
-        toast.init({ message: `${user.name} reset successfully`, color: 'success' })
-      })
-      .catch((error) => {
-        toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
-        console.error(error)
-      })
-      .finally(() => {
-        isLoading.value = false
-      })
-  }
-
   const change = (user: any) => {
     isLoading.value = true
-    changePasswordAdminUser({ oldPassword: user.oldPassword, newPassword: user.newPassword })
+    changeAdminUser({ oldPassword: user.oldPassword, newPassword: user.newPassword })
       .then(() => {
         toast.init({ message: `${user.name} password changed successfully`, color: 'success' })
       })
@@ -117,7 +102,6 @@ export const useAdminUsers = (options?: {
     fetch,
     add,
     remove,
-    reset,
     change,
   }
 }

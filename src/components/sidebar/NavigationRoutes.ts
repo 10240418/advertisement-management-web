@@ -11,82 +11,110 @@ export default {
     displayName: 'navigationRoutes.home',
   },
   routes: [
+    // {
+    //   name: 'home',
+    //   displayName: 'menu.home',
+    //   meta: {
+    //     icon: 'home',
+    //   },
+    // },
     {
-      name: 'home',
-      displayName: 'menu.home',
+      name: 'adminUsers',
+      displayName: 'menu.adminUser',
       meta: {
-        icon: 'home',
+        icon: 'manage_accounts',
       },
     },
+    // {
+    //   name: 'advertisement',
+    //   displayName: 'menu.advertisement',
+    //   meta: {
+    //     icon: 'featured_video',
+    //   },
+    // },
+    // {
+    //   name: 'notice',
+    //   displayName: 'menu.notice',
+    //   meta: {
+    //     icon: 'notifications',
+    //   },
+    // },
+    // {
+    //   name: 'resident',
+    //   displayName: 'menu.residentManage',
+    //   meta: {
+    //     icon: 'group',
+    //   },
+    //   children: [
+    //     {
+    //       name: 'resident',
+    //       displayName: 'menu.resident',
+    //       meta: {
+    //         icon: 'group',
+    //       },
+    //     },
+    //     {
+    //       name: 'unit',
+    //       displayName: 'menu.unit',
+    //       meta: {
+    //         icon: 'group',
+    //       },
+    //     },
+    //   ],
+    // },
+    // {
+    //   name: 'deviceManage',
+    //   displayName: 'menu.deviceManage',
+    //   meta: {
+    //     icon: 'dvr',
+    //   },
+    //   children: [
+    //     {
+    //       name: 'status',
+    //       displayName: 'menu.status',
+    //       meta: {
+    //         icon: 'browse_activity',
+    //       },
+    //     },
+    //     {
+    //       name: 'meter',
+    //       displayName: 'menu.meter',
+    //       meta: {
+    //         icon: 'browse_activity',
+    //       },
+    //     },
+    //     {
+    //       name: 'gateway',
+    //       displayName: 'menu.gateway',
+    //       meta: {
+    //         icon: 'browse_activity',
+    //       },
+    //     },
+    //   ],
+    // },
+    // {
+    //   name: 'task',
+    //   displayName: 'menu.task',
+    //   meta: {
+    //     icon: 'sort',
+    //   },
+    //   children: [
+    //     {
+    //       name: 'controlTask',
+    //       displayName: 'menu.controlTask',
+    //     },
+    //     {
+    //       name: 'systemTask',
+    //       displayName: 'menu.systemTask',
+    //     },
+    //   ],
+    // },
     {
-      name: 'resident',
-      displayName: 'menu.residentManage',
+      name: 'login',
+      displayName: 'menu.login',
       meta: {
-        icon: 'group',
+        icon: 'login',
       },
-      children: [
-        {
-          name: 'resident',
-          displayName: 'menu.resident',
-          meta: {
-            icon: 'group',
-          },
-        },
-        {
-          name: 'unit',
-          displayName: 'menu.unit',
-          meta: {
-            icon: 'group',
-          },
-        },
-      ],
-    },
-    {
-      name: 'deviceManage',
-      displayName: 'menu.deviceManage',
-      meta: {
-        icon: 'dvr',
-      },
-      children: [
-        {
-          name: 'status',
-          displayName: 'menu.status',
-          meta: {
-            icon: 'browse_activity',
-          },
-        },
-        {
-          name: 'meter',
-          displayName: 'menu.meter',
-          meta: {
-            icon: 'browse_activity',
-          },
-        },
-        {
-          name: 'gateway',
-          displayName: 'menu.gateway',
-          meta: {
-            icon: 'browse_activity',
-          },
-        },
-      ],
-    },
-    {
-      name: 'task',
-      displayName: 'menu.task',
-      meta: {
-        icon: 'sort',
-      },
-      children: [
-        {
-          name: 'controlTask',
-          displayName: 'menu.controlTask',
-        },
-        {
-          name: 'systemTask',
-          displayName: 'menu.systemTask',
-        },
-      ],
     },
 
     // {
@@ -107,20 +135,13 @@ export default {
 
     //   ],
     // },
-    {
-      name: 'adminUsers',
-      displayName: 'menu.adminUser',
-      meta: {
-        icon: 'manage_accounts',
-      },
-    },
 
-    {
-      name: 'settings',
-      displayName: 'menu.settings',
-      meta: {
-        icon: 'settings',
-      },
-    },
+    // {
+    //   name: 'settings',
+    //   displayName: 'menu.settings',
+    //   meta: {
+    //     icon: 'settings',
+    //   },
+    // },
   ] as INavigationRoute[],
 }

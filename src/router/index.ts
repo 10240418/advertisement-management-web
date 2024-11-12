@@ -12,7 +12,7 @@ const routes: Array<RouteRecordRaw> = [
     name: 'admin',
     path: '/',
     component: AppLayout,
-    redirect: { name: 'home' },
+    redirect: { name: 'adminUsers' },
     children: [
       {
         name: 'home',
@@ -50,7 +50,7 @@ const routes: Array<RouteRecordRaw> = [
           {
             name: 'gateway',
             path: 'gateway',
-            component: () => import('@/pages/deviceManage/gateway/gatewayPage.vue'),
+            component: () => import('@/pages/deviceManage/gateWay/gatewayPage.vue'),
           },
         ],
       },
@@ -84,6 +84,16 @@ const routes: Array<RouteRecordRaw> = [
         path: 'preferences',
         component: () => import('@/pages/auth/preferences/Preferences.vue'),
       },
+      {
+        name: 'advertisement',
+        path: 'advertisement',
+        component: () => import('@/pages/advertisement/advertisementPage.vue'),
+      },
+      {
+        name: 'notice',
+        path: 'notice',
+        component: () => import('@/pages/notice/noticePage.vue'),
+      },
     ],
   },
 
@@ -102,27 +112,27 @@ const routes: Array<RouteRecordRaw> = [
   {
     name: 'gatewayDetail',
     path: '/gatewayDetail/:id?',
-    component: () => import('@/pages/deviceManage/gateway/widgets/GatewayDialog.vue'),
+    component: () => import('@/pages/deviceManage/gateWay/widgets/gatewayDialog.vue'),
   },
   {
     name: 'meterDetail',
     path: '/meterDetail/:id?',
-    component: () => import('@/pages/deviceManage/meter/widgets/MeterDialog.vue'),
+    component: () => import('@/pages/deviceManage/meter/widgets/meterDialog.vue'),
   },
   {
     name: 'residentDetail',
     path: '/residentDetail/:id?',
-    component: () => import('@/pages/residentManage/resident/widgets/ResidentDialog.vue'),
+    component: () => import('@/pages/residentManage/resident/widgets/residentDialog.vue'),
   },
   {
     name: 'taskDetail',
     path: '/taskDetail/:id?',
-    component: () => import('@/pages/task/controlTask/widgets/ControlTaskDialog.vue'),
+    component: () => import('@/pages/task/controlTask/widgets/controlTaskDialog.vue'),
   },
   {
     name: 'sysTaskDetail',
     path: '/sysTaskDetail/:id?',
-    component: () => import('@/pages/task/systemTask/widgets/SystemTaskDialog.vue'),
+    component: () => import('@/pages/task/systemTask/widgets/systemTaskDialog.vue'),
   },
   {
     name: 'unitDetail',

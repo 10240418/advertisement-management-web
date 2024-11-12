@@ -90,10 +90,10 @@ export const fetchScheduleTask = (id: number) => {
   })
 }
 
-export const fetchErrorLogs = (params:any) => {
+export const fetchErrorLogs = (params: any) => {
   return request({
     url: '/admin/task/logs/error',
     method: 'get',
-    params: params
+    params: params,
   })
 }
