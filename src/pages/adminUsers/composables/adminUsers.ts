@@ -33,10 +33,11 @@ export const useAdminUsers = (options?: {
       .then((res: any) => {
         adminUsers.value = res.data.data
         pagination.value.total = res.data.total
-        console.log(res)
+        console.log(res.data.data)
+        console.log(adminUsers.value)
       })
       .catch((error) => {
-        toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
+        toast.init({ message: `Error: ${error}`, color: 'danger' })
         console.error(error)
       })
       .finally(() => {
@@ -52,7 +53,7 @@ export const useAdminUsers = (options?: {
         toast.init({ message: `${user.name} added successfully`, color: 'success' })
       })
       .catch((error) => {
-        toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
+        toast.init({ message: `Error: ${error}`, color: 'danger' })
         console.error(error)
       })
       .finally(() => {
@@ -60,15 +61,15 @@ export const useAdminUsers = (options?: {
       })
   }
 
-  const remove = (ids: any) => {
+  const remove = (id: any) => {
     isLoading.value = true
-    deleteAdminUser(ids)
+    deleteAdminUser({ id: id })
       .then(() => {
         fetch()
-        toast.init({ message: `${ids.length} users deleted successfully`, color: 'success' })
+        toast.init({ message: `User deleted successfully`, color: 'success' })
       })
       .catch((error) => {
-        toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
+        toast.init({ message: `Error: ${error}`, color: 'danger' })
         console.error(error)
       })
       .finally(() => {
@@ -83,7 +84,7 @@ export const useAdminUsers = (options?: {
         toast.init({ message: `${user.name} password changed successfully`, color: 'success' })
       })
       .catch((error) => {
-        toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
+        toast.init({ message: `Error: ${error}`, color: 'danger' })
         console.error(error)
       })
       .finally(() => {
