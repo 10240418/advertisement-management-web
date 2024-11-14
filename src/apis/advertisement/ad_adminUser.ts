@@ -28,7 +28,7 @@ export const deleteAdminUser = (data: any) => {
   return request({
     url: '/admin/users',
     method: 'delete',
-    data: data,
+    params: data,
   })
 }
 

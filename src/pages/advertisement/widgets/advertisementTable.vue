@@ -32,7 +32,7 @@ const { confirm } = useModal()
 const onAdvertisementDelete = async (ad: any) => {
   const agreed = await confirm({
     title: 'Delete Advertisement',
-    message: `Are you sure you want to delete "${ad.username}"?`,
+    message: `Are you sure you want to delete "${ad.title}"?`,
     okText: 'Delete',
     cancelText: 'Cancel',
     size: 'small',
@@ -40,7 +40,7 @@ const onAdvertisementDelete = async (ad: any) => {
   })
 
   if (agreed) {
-    remove(ad.ID)
+    remove([ad.id])
   }
 }
 const currentPageData = computed(() => {
