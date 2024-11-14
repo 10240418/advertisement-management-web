@@ -1,16 +1,9 @@
 import request from '../index'
 
-export const fetchAdvertisements = (query: any) => {
-  return request({
-    url: '/admin/advertisement',
-    method: 'get',
-    params: query,
-  })
-}
 
 export const addAdvertisement = (data: any) => {
   return request({
-    url: '/admin/advertisement',
+    url: '/api/ads',
     method: 'post',
     data,
   })
@@ -18,7 +11,7 @@ export const addAdvertisement = (data: any) => {
 
 export const deleteAdvertisement = (data: any) => {
   return request({
-    url: '/admin/advertisement',
+    url: '/api/ads',
     method: 'delete',
     data,
   })
@@ -26,8 +19,16 @@ export const deleteAdvertisement = (data: any) => {
 
 export const changeAdvertisement = (data: any) => {
   return request({
-    url: '/admin/advertisement/change_password',
-    method: 'post',
+    url: `/api/ads/${data.id}`,
+    method: 'put',
     data: data,
+  })
+}
+
+export const fetchAdvertisements = (query: any) => {
+  return request({
+    url: '/api/ads',
+    method: 'get',
+    params: query,
   })
 }

@@ -7,7 +7,7 @@ import { useAdminUsers } from '../composables/adminUsers'
 
 const columns = defineVaDataTableColumns([
   { label: 'ID', key: 'ID', sortable: true, width: '5%' },
-  { label: 'UserName', key: 'Username', sortable: true, width: '20%' },
+  { label: 'UserName', key: 'username', sortable: true, width: '20%' },
   // { label: 'Email', key: 'email', sortable: false, width: '25%' },
   { label: 'create_at', key: 'createdAt', sortable: false, width: '25%' },
   { label: 'Actions', key: 'actions', sortable: false, width: '5%' },

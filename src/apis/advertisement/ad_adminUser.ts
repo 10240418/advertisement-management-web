@@ -1,5 +1,5 @@
 import request from '../index'
-
+// Existing Admin Interfaces
 export const fetchAdminUsers = (query: any) => {
   return request({
     url: '/admin/users',
@@ -15,6 +15,7 @@ export const registerAdminUser = (data: any) => {
     data: data,
   })
 }
+
 export const loginAdminUser = (data: any) => {
   return request({
     url: '/admin/login',
