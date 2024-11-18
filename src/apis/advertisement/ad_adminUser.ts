@@ -1,12 +1,5 @@
 import request from '../index'
 // Existing Admin Interfaces
-export const fetchAdminUsers = (query: any) => {
-  return request({
-    url: '/admin/users',
-    method: 'get',
-    params: query,
-  })
-}
 
 export const registerAdminUser = (data: any) => {
   return request({
@@ -23,18 +16,25 @@ export const loginAdminUser = (data: any) => {
     data: data,
   })
 }
+export const fetchAdminUsers = (query: any) => {
+  return request({
+    url: '/api/admins/users',
+    method: 'get',
+    params: query,
+  })
+}
 
 export const deleteAdminUser = (data: any) => {
   return request({
-    url: '/admin/users',
+    url: '/api/admins/users',
     method: 'delete',
-    params: data,
+    data: data,
   })
 }
 
 export const changeAdminUser = (data: any) => {
   return request({
-    url: '/admin/user',
+    url: '/api/admins/user',
     method: 'put',
     data: data,
   })

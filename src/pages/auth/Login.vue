@@ -62,7 +62,7 @@ const submit = () => {
         router.push({ name: 'adminUsers' })
       })
       .catch((error) => {
-        toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })
+        toast.init({ message: `Error: ${error.response?.data.error || error.message}`, color: 'danger' })
         console.error(error)
       })
   }

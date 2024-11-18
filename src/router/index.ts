@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 
-import AuthLayout from '../layouts/AuthLayout.vue'
-import AppLayout from '../layouts/AppLayout.vue'
+import AuthLayout from '@/layouts/AuthLayout.vue'
+import AppLayout from '@/layouts/AppLayout.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -75,6 +75,11 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/pages/adminUsers/adminUsersPage.vue'),
       },
       {
+        name: 'building',
+        path: 'building',
+        component: () => import('@/pages/building/buildingPage.vue'),
+      },
+      {
         name: 'settings',
         path: 'settings',
         component: () => import('@/pages/settings/Settings.vue'),
@@ -107,6 +112,11 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/pages/auth/Login.vue'),
       },
     ],
+  },
+  {
+    name: 'buildingDetail',
+    path: '/buildingDetail/:id?',
+    component: () => import('@/pages/building/widgets/buildingDialog.vue'),
   },
 
   {

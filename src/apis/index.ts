@@ -7,12 +7,15 @@ const service: AxiosInstance = axios.create({
 // 请求拦截器 添加token
 service.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
-    if (config.headers) config.headers['Authorization'] = String(localStorage.getItem('AdminToken'))
+    const token = localStorage.getItem('AdminToken')
+    if (config.headers && token) {
+      config.headers['Authorization'] = `Bearer ${token}`
+    }
     return config
   },
   (error: AxiosError) => {
     console.log(error)
-    return Promise.reject()
+    return Promise.reject(error)
   },
 )
 // 响应拦截器 响应错误处理

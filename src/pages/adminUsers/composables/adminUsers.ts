@@ -62,10 +62,10 @@ export const useAdminUsers = (options?: {
 
   const remove = (ids: any) => {
     isLoading.value = true
-    deleteAdminUser(ids)
+    deleteAdminUser({ id: ids })
       .then(() => {
         fetch()
-        toast.init({ message: `${ids.length} users deleted successfully`, color: 'success' })
+        toast.init({ message: `User deleted successfully`, color: 'success' })
       })
       .catch((error) => {
         toast.init({ message: `Error: ${error.response.data.error}`, color: 'danger' })

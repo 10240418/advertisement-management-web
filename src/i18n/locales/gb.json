@@ -73,7 +73,8 @@
     "task": "Tasks",
     "controlTask": "Control Task",
     "scheduleTask": "Schedule Task",
-    "systemTask": "System Task"
+    "systemTask": "System Task",
+    "building": "Building"
   },
   "navbar": {
     "messageUs": "Web development inquiries:",

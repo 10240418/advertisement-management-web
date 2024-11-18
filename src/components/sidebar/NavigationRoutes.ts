@@ -25,6 +25,13 @@ export default {
         icon: 'manage_accounts',
       },
     },
+    {
+      name: 'building',
+      displayName: 'menu.building',
+      meta: {
+        icon: 'apartment',
+      },
+    },
     // {
     //   name: 'advertisement',
     //   displayName: 'menu.advertisement',
