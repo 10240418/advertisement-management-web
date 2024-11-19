@@ -120,6 +120,12 @@ const routes: Array<RouteRecordRaw> = [
   },
 
   {
+    name: 'advertisementDetail',
+    path: '/advertisementDetail/:id?',
+    component: () => import('@/pages/advertisement/widgets/advertisementDialog.vue'),
+  },
+
+  {
     name: 'gatewayDetail',
     path: '/gatewayDetail/:id?',
     component: () => import('@/pages/deviceManage/gateWay/widgets/gatewayDialog.vue'),

@@ -1,12 +1,12 @@
-export type advertisement_type = {
-  ID: number
+export type Advertisement_type = {
+  ID?: number
   title: string
-  description: string
-  image_url: string
-  video_url: string
-  video_duration: number
+  description?: string
+  image_url?: string
+  video_url?: string
+  video_duration?: number
   status: string
-  AdvertisementBuildings: any[]
+  advertisements_buildings?: any[]
 }
 // type Advertisement struct {
 // 	gorm.Model

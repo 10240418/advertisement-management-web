@@ -178,7 +178,7 @@ import { useToast } from 'vuestic-ui'
 import { useModal } from 'vuestic-ui'
 import DetailCard from '@/components/cards/DetailCard.vue'
 import { building_type } from '@/data/advertisement/building_type'
-import { advertisement_type } from '@/data/advertisement/advertisement_type'
+import { Advertisement_type } from '@/data/advertisement/advertisement_type'
 import { removeAdsFromBuilding, getBuildingDetail } from '@/apis/advertisement/ad_building'
 import { updateAd } from '@/apis/advertisement/ad_advertisement'
 
@@ -268,7 +268,7 @@ const showUpdateStatusModal = async (rowData: any, status: string) => {
 
 //advertisement edit modal
 const doShowEditadvertisementModal = ref(false)
-const advertisementToEdit = ref<advertisement_type | null>(null)
+const advertisementToEdit = ref<Advertisement_type | null>(null)
 const onSaveEditadvertisement = async (advertisement: any) => {
   if (advertisement.id) {
     try {

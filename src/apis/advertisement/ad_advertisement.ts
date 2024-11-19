@@ -1,3 +1,4 @@
+import { Advertisement_type } from '@/data/advertisement/advertisement_type'
 import request from '../index'
 
 // ------------------------
@@ -31,14 +32,7 @@ export const getAd = (adId: number) => {
  * 创建新广告
  * @param adData 广告数据
  */
-export const createAd = (adData: {
-  title: string
-  description: string
-  image_url: string
-  video_url: string
-  status: string
-  video_duration: number
-}) => {
+export const createAd = (adData: Advertisement_type) => {
   return request({
     url: `/api/ads`,
     method: 'post',

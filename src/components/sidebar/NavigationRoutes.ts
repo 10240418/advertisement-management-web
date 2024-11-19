@@ -32,13 +32,13 @@ export default {
         icon: 'apartment',
       },
     },
-    // {
-    //   name: 'advertisement',
-    //   displayName: 'menu.advertisement',
-    //   meta: {
-    //     icon: 'featured_video',
-    //   },
-    // },
+    {
+      name: 'advertisement',
+      displayName: 'menu.advertisement',
+      meta: {
+        icon: 'featured_video',
+      },
+    },
     // {
     //   name: 'notice',
     //   displayName: 'menu.notice',

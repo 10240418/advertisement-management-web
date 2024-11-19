@@ -1,162 +1,113 @@
-<script setup lang="ts">
-import { defineVaDataTableColumns, useModal } from 'vuestic-ui'
-import { computed, watch, ref, onMounted, onBeforeUnmount } from 'vue'
-import { advertisement_type } from '../../../data/advertisement/advertisement_type'
-import moment from 'moment'
-import { useAdvertisements } from '../composable/advertisements'
-
-const columns = defineVaDataTableColumns([
-  { label: 'ID', key: 'id', sortable: true, width: '10%' },
-  { label: 'Title', key: 'title', sortable: true, width: '25%' },
-  { label: 'Content', key: 'content', sortable: false, width: '35%' },
-  { label: 'URL', key: 'url', sortable: false, width: '20%' },
-  { label: 'Created At', key: 'createdAt', sortable: true, width: '10%' },
-  { label: 'Actions', key: 'actions', sortable: false, width: '10%' },
-])
-
-const { sorting, pagination, advertisements, isLoading, fetch, remove } = useAdvertisements()
-const ads = computed(() => {
-  return advertisements.value
-})
-const Loading = computed(() => isLoading.value)
-const totalPages = computed(() => Math.ceil(pagination.value.total / pagination.value.pageSize))
-const pagesOptions = computed(() => {
-  const options = []
-  for (let i = 1; i <= totalPages.value; i++) {
-    options.push(i)
-  }
-  return options
-})
-
-const { confirm } = useModal()
-const onAdvertisementDelete = async (ad: any) => {
-  const agreed = await confirm({
-    title: 'Delete Advertisement',
-    message: `Are you sure you want to delete "${ad.title}"?`,
-    okText: 'Delete',
-    cancelText: 'Cancel',
-    size: 'small',
-    maxWidth: '380px',
-  })
-
-  if (agreed) {
-    remove([ad.id])
-  }
-}
-const currentPageData = computed(() => {
-  const adsArray: any = Array.isArray(ads.value) ? ads.value : ads.value ? [ads.value] : []
-  const startIndex = (pagination.value.pageNum - 1) * pagination.value.pageSize
-  const endIndex = startIndex + pagination.value.pageSize
-
-  return adsArray.slice(startIndex, endIndex)
-})
-
-watch(
-  () => [
-    Loading.value,
-    pagination.value.pageNum,
-    pagination.value.pageSize,
-    sorting.value.sortingOrder,
-    sorting.value.sortBy,
-  ],
-  () => {
-    if (pagination.value.total < pagination.value.pageSize * (pagination.value.pageNum - 1)) {
-      pagination.value.pageNum = 1
-    }
-    fetch()
-  },
-)
-
-const showContentAd = ref<advertisement_type | null>(null)
-const showContent = (rowData: any) => {
-  showContentAd.value = rowData
-}
-const handleClickOutside = (event: MouseEvent) => {
-  const target = event.target as HTMLElement
-  const dropdowns = document.querySelectorAll('.dropdown-content')
-  dropdowns.forEach((dropdown) => {
-    if (!dropdown.contains(target)) {
-      showContentAd.value = null
-    }
-  })
-}
-
-onMounted(() => {
-  document.addEventListener('click', handleClickOutside)
-})
-
-onBeforeUnmount(() => {
-  fetch()
-  document.removeEventListener('click', handleClickOutside)
-})
-</script>
-
 <template>
   <VaDataTable
     v-model:sort-by="sorting.sortBy"
     v-model:sorting-order="sorting.sortingOrder"
     :columns="columns"
     :items="currentPageData"
-    :loading="Loading"
+    :loading="isLoading"
   >
-    <template #cell(createdAt)="{ rowData }">
-      <div>
-        {{ moment(rowData.createdAt).format('YYYY-MM-DD HH:mm:ss') }}
-      </div>
+    <template #cell(detail)="{ rowData }">
+      <VaButton
+        preset="secondary"
+        size="small"
+        icon="mso-info"
+        aria-label="Info advertisement"
+        class="w-full justify-between ml-[-5px]"
+        @click="$emit('detail-advertisement', rowData as any)"
+      >
+        <span>Detail</span>
+      </VaButton>
     </template>
+
+    <!-- title -->
     <template #cell(title)="{ rowData }">
-      <div class="max-w-[200px] ellipsis">
-        {{ rowData.title }}
+      <div class="tooltip-container">
+        <span class="url-span">
+          {{ rowData.title }}
+        </span>
+        <span class="tooltip-text">
+          {{ rowData.title }}
+        </span>
+      </div>
+    </template>
+    <!-- description -->
+    <template #cell(description)="{ rowData }">
+      <div class="tooltip-container">
+        <span class="url-span">
+          {{ rowData.description }}
+        </span>
+        <span class="tooltip-text">
+          {{ rowData.description }}
+        </span>
       </div>
     </template>
 
-    <template #cell(content)="{ rowData }">
-      <div class="ellipsis max-w-[300px]">
-        {{ rowData.content }}
+    <!-- image_url -->
+    <template #cell(image_url)="{ rowData }">
+      <div class="tooltip-container">
+        <span class="url-span">
+          {{ rowData.image_url }}
+        </span>
+        <span class="tooltip-text">
+          {{ rowData.image_url }}
+        </span>
       </div>
     </template>
 
-    <template #cell(url)="{ rowData }">
-      <a :href="rowData.url" target="_blank" class="text-blue-500 underline ellipsis max-w-[200px]">
-        {{ rowData.url }}
-      </a>
+    <template #cell(video_url)="{ rowData }">
+      <div class="tooltip-container">
+        <span class="url-span">
+          {{ rowData.video_url }}
+        </span>
+        <span class="tooltip-text">
+          {{ rowData.video_url }}
+        </span>
+      </div>
     </template>
 
-    <!-- eslint-disable-next-line vue/no-useless-template-attributes -->
     <template #cell(actions)="{ rowData }">
-      <VaPopover placement="bottom" trigger="click" color="backgroundSecondary" class="max-h[40px]">
+      <VaPopover placement="bottom" trigger="click" color="backgroundSecondary" class="flex flex-row">
         <div
-          class="flex items-center justify-center relative hover:bg-slate-100 rounded-[4px]"
+          class="flex justify-center items-center relative hover:bg-blue-200 rounded-[4px]"
           @click.stop="showContent(rowData)"
         >
-          <VaIcon name="more_horiz" size="20px" class="mr-2 cursor-pointer"> </VaIcon>
+          <VaIcon name="more_horiz" size="20px" class="mr-2 cursor-pointer" />
         </div>
         <template #body>
           <Transition name="fade">
             <div
-              v-show="showContentAd?.id === rowData.id"
-              class="tooltip-content flex flex-col justify-center z-999 items-center relative border border-solid border-gray-300 p-2 rounded-md shadow-lg"
+              v-show="showContentAdvertisement?.ID === rowData.ID"
+              class="tooltip-content flex flex-col justify-center z-999 items-center relative border p-1 rounded-md"
             >
               <VaButton
                 preset="secondary"
                 size="small"
-                icon="va-edit"
+                icon="mso-edit"
                 aria-label="Edit advertisement"
                 class="w-full justify-between"
-                @click="$emit('editAdvertisement', rowData)"
+                @click="$emit('edit-advertisement', rowData as any)"
               >
                 <span>Edit</span>
               </VaButton>
               <VaButton
                 preset="secondary"
                 size="small"
-                icon="va-delete"
-                color="danger"
-                aria-label="Delete advertisement"
-                class="w-full"
-                @click="onAdvertisementDelete(rowData)"
+                icon="mso-cancel"
+                aria-label="Set Inactive advertisement"
+                class="w-full justify-between"
+                @click="onadvertisementUpdate(rowData, 'inactive')"
               >
-                <span>Delete</span>
+                <span>Set Inactive</span>
+              </VaButton>
+              <VaButton
+                preset="secondary"
+                size="small"
+                icon="update"
+                aria-label="Set Active advertisement"
+                class="w-full justify-between"
+                @click="onadvertisementUpdate(rowData, 'active')"
+              >
+                <span>Set Active</span>
               </VaButton>
             </div>
           </Transition>
@@ -169,9 +120,9 @@ onBeforeUnmount(() => {
     <div>
       <b>Total: {{ pagination.total }} </b>
       Page:
-      <VaSelect v-model="pagination.pageNum" class="!w-16" selected-top-shown :options="pagesOptions" />
+      <VaSelect v-model="pagination.pageNum" class="!w-16" :options="pagesOptions" />
       Page Size:
-      <VaSelect v-model="pagination.pageSize" class="!w-20" selected-top-shown :options="[5, 10, 20, 50, 100]" />
+      <VaSelect v-model="pagination.pageSize" class="!w-20" :options="[5, 10, 20, 50, 100]" />
     </div>
 
     <div v-if="totalPages > 1" class="flex">
@@ -202,6 +153,95 @@ onBeforeUnmount(() => {
   </div>
 </template>
 
+<script setup lang="ts">
+import { defineVaDataTableColumns, useModal, VaPopover, VaButton, VaIcon, VaSelect, VaPagination } from 'vuestic-ui'
+import { computed, ref, watch } from 'vue'
+import { Advertisement_type } from '@/data/advertisement/advertisement_type'
+import { useAdvertisements } from '@/pages/advertisement/composables/advertisement'
+import { updateAd } from '@/apis/advertisement/ad_advertisement'
+import { useToast } from 'vuestic-ui'
+
+const columns = defineVaDataTableColumns([
+  { label: 'ID', key: 'ID', sortable: true, width: '5%' },
+  { label: 'Title', key: 'title', sortable: false, width: '20%' },
+  { label: 'Description', key: 'description', sortable: false, width: '20%' },
+  { label: 'Image URL', key: 'image_url', sortable: false, width: '20%' },
+  { label: 'Video URL', key: 'video_url', sortable: false, width: '20%' },
+  { label: 'Active', key: 'status', sortable: false, width: '5%' },
+  { label: 'Detail', key: 'detail', sortable: false, width: '5%' },
+  { label: 'Actions', key: 'actions', sortable: false, width: '5%' },
+])
+
+const { isLoading, Advertisements, sorting, pagination, ...advertisementApi } = useAdvertisements()
+defineEmits<{
+  (event: 'detail-advertisement', advertisement: any): void
+  (event: 'update-advertisement', advertisement: any): void
+  (event: 'fetch-advertisement'): void
+  (event: 'edit-advertisement', advertisement: any): void
+}>()
+
+const totalPages = computed(() => Math.ceil(pagination.value.total / pagination.value.pageSize))
+
+const pagesOptions = computed(() => {
+  const options = []
+  for (let i = 1; i <= totalPages.value; i++) {
+    options.push(i)
+  }
+  return options
+})
+
+const { confirm } = useModal()
+const toast = useToast()
+const onadvertisementUpdate = async (advertisement: any, status: string) => {
+  const agreed = await confirm({
+    title: 'Set Active',
+    message: `Are you sure you want to set to ${status} ?`,
+    okText: 'Confirm',
+    cancelText: 'Cancel',
+    size: 'small',
+    maxWidth: '380px',
+  })
+
+  if (agreed) {
+    try {
+      await updateAd(advertisement.ID, { status: status })
+      advertisementApi.fetch()
+      toast.init({ message: 'Advertisement updated successfully', color: 'success' })
+    } catch (error: any) {
+      toast.init({ message: error.message, color: 'danger' })
+    }
+  }
+}
+
+const currentPageData = computed(() => {
+  let advertisementsArray: any = []
+  if (Array.isArray(Advertisements.value)) {
+    advertisementsArray = Advertisements.value
+  } else if (Advertisements.value && typeof Advertisements.value === 'object') {
+    advertisementsArray = [Advertisements.value]
+  }
+  const startIndex = (pagination.value.pageNum - 1) * pagination.value.pageSize
+  const endIndex = startIndex + pagination.value.pageSize
+  if (advertisementsArray.length <= pagination.value.pageSize) return Advertisements.value
+  else return advertisementsArray.slice(startIndex, endIndex)
+})
+
+const showContentAdvertisement = ref<Advertisement_type | null>(null)
+const showContent = (rowData: any) => {
+  showContentAdvertisement.value = rowData
+}
+
+watch(
+  () => [pagination.value.pageNum, pagination.value.pageSize, sorting.value.sortingOrder, sorting.value.sortBy],
+  () => {
+    if (pagination.value.total < pagination.value.pageSize * (pagination.value.pageNum - 1)) {
+      pagination.value.pageNum = 1
+    }
+    advertisementApi.fetch()
+  },
+)
+</script>
+
 <style lang="scss" scoped>
 .va-data-table {
   ::v-deep(.va-data-table__table-tr) {
@@ -209,49 +249,75 @@ onBeforeUnmount(() => {
   }
 }
 
-.dropdown-content {
-  display: flex;
-  flex-direction: column;
-  border-radius: 4px;
-  padding: 0 8px;
+.va-data-table__table-td {
+  border-bottom: 1px solid var(--va-background-border);
 }
 
-.dropdown-content > * {
-  margin-bottom: 0%;
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: 0s;
-}
-
-.tooltip-content {
+.tooltip-container {
   position: relative;
-  border: 1px solid #d1d5db;
-  padding: 6px;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  display: inline-block;
 }
 
-.tooltip-content::before {
-  content: '';
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  border-width: 8px;
-  border-style: solid;
-  border-color: transparent transparent #d1d5db transparent;
+.url-span {
+  position: relative;
+  width: 140px; /* 设置最大宽度为140px */
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  cursor: pointer;
 }
 
-.tooltip-content::after {
-  content: '';
+.tooltip-text {
+  visibility: hidden;
+  width: max-content;
+  max-width: 300px; /* 根据需要调整最大宽度 */
+  background-color: #ffffff;
+  color: #000;
+  text-align: left;
+  border: 1px solid #ccc;
+  padding: 5px 10px;
+  border-radius: 4px;
   position: absolute;
-  bottom: 100%;
+  z-index: 1000;
+  bottom: -100%; /* 根据需要调整位置 */
   left: 50%;
   transform: translateX(-50%);
-  border-width: 7px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  white-space: normal;
+}
+
+.tooltip-container:hover ::v-deep .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 0.3s;
+}
+
+.tooltip-container::v-deep .tooltip-text {
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+/* 箭头 */
+.tooltip-text::after {
+  content: '';
+  position: absolute;
+  top: 100%; /* 在tooltip下方 */
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 5px;
   border-style: solid;
-  border-color: transparent transparent white transparent;
+  border-color: #ccc transparent transparent transparent;
+}
+
+.tooltip-text::before {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 5px;
+  border-style: solid;
+  border-color: #ffffff transparent transparent transparent;
 }
 </style>

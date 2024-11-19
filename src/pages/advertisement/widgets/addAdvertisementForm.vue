@@ -1,12 +1,12 @@
 <template>
-  <VaForm v-slot="{ isValid }" ref="edit-advertisement-form" class="edit-advertisement-form">
+  <VaForm v-slot="{ isValid }" ref="edit-building-form" class="edit-building-form">
     <div class="flex flex-col gap-4">
       <VaSelect
         v-model="selectValue"
-        label="Bind New Advertisement"
-        :options="advertisementOptions"
-        :value-by="(advertisementOption: any) => advertisementOption.ID"
-        placeholder="Select a advertisement"
+        label="Bind New building"
+        :options="buildingOptions"
+        :value-by="(buildingOption: any) => buildingOption.ID"
+        placeholder="Select a building"
         multiple
       />
 
@@ -22,15 +22,15 @@
 <script lang="ts" setup>
 import { ref, defineProps, defineEmits, onBeforeMount, watch, PropType } from 'vue'
 import { useToast } from 'vuestic-ui'
-import { building_type } from '@/data/advertisement/building_type'
 import { Advertisement_type } from '@/data/advertisement/advertisement_type'
-import { addAdsToBuilding } from '@/apis/advertisement/ad_building'
-import { getAds } from '@/apis/advertisement/ad_advertisement'
+import { building_type } from '@/data/advertisement/building_type'
+import { getBuildings } from '@/apis/advertisement/ad_building'
+import { addBuildingsToAd } from '@/apis/advertisement/ad_advertisement'
 const toast = useToast()
 const error = ref<string | null>(null)
 
 const props = defineProps({
-  building: { type: Object as PropType<building_type | null>, required: true },
+  advertisement: { type: Object as PropType<Advertisement_type | null>, required: true },
 })
 
 const pagination = ref({
@@ -39,38 +39,38 @@ const pagination = ref({
   desc: false,
 })
 
-//advertisement
-const advertisements = ref<Advertisement_type[]>([])
-const advertisementOptions = ref<string[]>([]) // 修改为字符串数组
+//building
+const buildings = ref<building_type[]>([])
+const buildingOptions = ref<string[]>([]) // 修改为字符串数组
 const selectValue = ref<string[]>([]) // 修改为字符串数组
-const advertisementNeedRemove = ref<any>([])
+const buildingNeedRemove = ref<string[]>([])
 
-const fetchadvertisements = async () => {
+const fetchbuildings = async () => {
   try {
-    // const res = await getAdvertisementsByBuilding(props.building?.ID, pagination.value)
-    const res = await getAds(pagination.value)
-    advertisements.value = res.data.data
-    console.log(advertisements.value)
-    advertisementOptions.value = advertisements.value.map(
-      (advertisement) => `${advertisement.ID} title: ${advertisement.title} status: ${advertisement.status}`,
+    const res = await getBuildings(pagination.value)
+    console.log(res)
+    buildings.value = res.data.data
+    console.log(buildings.value)
+
+    buildingOptions.value = buildings.value.map(
+      (building) => `${building.ID} title: ${building.name} address: ${building.address}`,
     )
-    //去掉 advertisement.advertisements
-    advertisementNeedRemove.value = props.building?.advertisements_buildings?.map(
-      (adToBuilding: any) =>
-        `${adToBuilding.Advertisement.ID} title: ${adToBuilding.Advertisement.title} status: ${adToBuilding.Advertisement.status}`,
-    )
-    // 过滤掉已绑定的单位
-    advertisementOptions.value = advertisementOptions.value.filter(
-      (option) => !advertisementNeedRemove.value.includes(option),
-    )
-    selectValue.value = advertisementOptions.value.length > 0 ? [advertisementOptions.value[0]] : []
+
+    buildingNeedRemove.value =
+      props.advertisement?.advertisements_buildings?.map(
+        (adToBuilding: any) =>
+          `${adToBuilding.Advertisement.ID} title: ${adToBuilding.Advertisement.title} status: ${adToBuilding.Advertisement.status}`,
+      ) ?? []
+
+    buildingOptions.value = buildingOptions.value.filter((option) => !buildingNeedRemove.value.includes(option))
+    selectValue.value = buildingOptions.value.length > 0 ? [buildingOptions.value[0]] : []
   } catch (error: any) {
     toast.init({ message: `Error: ${error.message}`, color: 'danger' })
     console.error(error)
   }
 }
 onBeforeMount(() => {
-  fetchadvertisements()
+  fetchbuildings()
 })
 
 const emit = defineEmits(['close', 'fetch'])
@@ -89,16 +89,14 @@ const extractLeadingNumbers = (options: string[]): number[] => {
 
 const submit = () => {
   if (selectValue.value.length > 0) {
-    console.log(selectValue.value)
-
     // 直接传递数组，无需 split
     const selectedNumbers = extractLeadingNumbers(selectValue.value)
-    console.log(selectedNumbers) // 根据你的需求进一步处理这些数字
+    console.log(props.advertisement)
 
     // 示例：调用 API 传递这些数字
-    addAdsToBuilding(Number(props.building?.ID), selectedNumbers)
+    addBuildingsToAd(Number(props.advertisement?.ID), selectedNumbers)
       .then(() => {
-        toast.init({ message: 'Successfully bind advertisement', color: 'success' })
+        toast.init({ message: 'Successfully bind building', color: 'success' })
         emit('fetch')
         onClose()
       })
@@ -121,7 +119,7 @@ const onClose = () => {
 </script>
 
 <style scoped>
-.edit-advertisement-form {
+.edit-building-form {
   display: flex;
   flex-direction: column;
 }
