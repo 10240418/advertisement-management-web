@@ -9,7 +9,7 @@ export default defineConfig({
   build: {
     sourcemap: true,
   },
-  base: '/admin/',
+  // base: '/admin/',
   plugins: [
     vue(),
     VueI18nPlugin({

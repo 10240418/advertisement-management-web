@@ -17,9 +17,9 @@
 </template>
 
 <script lang="ts" setup>
-import TotalPage from './widgets/TotalCard.vue'
-import LogsCard from './widgets/LogsCard.vue'
-import MeterTable from './widgets/MeterTable.vue'
+import TotalPage from './widgets/totalCard.vue'
+import LogsCard from './widgets/logsCard.vue'
+import MeterTable from './widgets/meterTable.vue'
 </script>
 
 <style scoped>
