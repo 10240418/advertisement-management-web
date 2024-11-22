@@ -1,13 +1,7 @@
 import { onBeforeMount, Ref, ref } from 'vue'
 import { Pagination, Sorting } from '@/data/page'
-import {
-  getBuildings,
-  addBuilding,
-  updateBuilding,
-  deleteBuilding,
-  getBuildingDetail,
-} from '@/apis/advertisement/ad_building'
-import { useThrottle } from '@/data/dataControl'
+import { getBuildings, addBuilding, updateBuilding, deleteBuilding } from '@/apis/advertisement/ad_building'
+
 import { useToast } from 'vuestic-ui'
 import { building_type } from '@/data/advertisement/building_type'
 
@@ -68,6 +62,7 @@ export const useBuildings = (options?: { pagination?: Ref<Pagination>; sorting?:
       await updateBuilding(building.ID, {
         name: building.name,
         address: building.address,
+        blg_id: building.blg_id,
       })
       await fetch()
       toast.init({ message: 'Building updated successfully', color: 'success' })
@@ -92,21 +87,6 @@ export const useBuildings = (options?: { pagination?: Ref<Pagination>; sorting?:
     isLoading.value = false
   }
 
-  const searchBuildings = useThrottle(async (query: any) => {
-    isLoading.value = true
-    error.value = null
-    try {
-      // Implement search functionality if supported by the API
-      const res = await getBuildingDetail(query)
-      buildings.value = res.data.data
-      pagination.value.total = res.data.pagination.total
-    } catch (error: any) {
-      toast.init({ message: `Error: ${error.response?.data.error || error.message}`, color: 'danger' })
-      console.error(error)
-    }
-    isLoading.value = false
-  }, 500)
-
   onBeforeMount(() => {
     fetch()
   })
@@ -121,6 +101,5 @@ export const useBuildings = (options?: { pagination?: Ref<Pagination>; sorting?:
     add,
     update,
     remove,
-    searchBuildings,
   }
 }

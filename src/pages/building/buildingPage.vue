@@ -15,6 +15,7 @@
         @updateBuilding="onBuildingUpdateActive"
         @fetchBuilding="fetchBuildings"
         @editBuilding="onBuildingEdit"
+        @deleteBuilding="onBuildingDelete"
       />
     </VaCardContent>
     <VaModal v-model="doShowAddBuildingModal" size="small" mobile-fullscreen close-button hide-default-actions>
@@ -62,7 +63,13 @@ const onBuildingUpdateActive = async (Building: building_type) => {
   console.log(Building)
   // await BuildingApi.updateActive({ id: Building.id, active: !Building.active })
 }
-
+//delete
+const onBuildingDelete = async (Building: building_type) => {
+  console.log(Building)
+  await BuildingApi.remove(Building.ID).then(() => {
+    fetchBuildings()
+  })
+}
 // 搜索居民
 const fetchBuildings = async () => {
   await BuildingApi.fetch()

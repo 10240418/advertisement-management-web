@@ -14,6 +14,10 @@
       <div class="max-w-[120px] ellipsis">{{ rowData.address }}</div>
     </template>
 
+    <template #cell(blg_id)="{ rowData }">
+      <div class="max-w-[120px] ellipsis">{{ rowData.blg_id }}</div>
+    </template>
+
     <template #cell(detail)="{ rowData }">
       <VaButton
         preset="secondary"
@@ -54,13 +58,13 @@
               <VaButton
                 preset="secondary"
                 size="small"
-                icon="update"
-                aria-label="Update building"
+                icon="mso-delete"
+                color="danger"
+                aria-label="Delete building"
                 class="w-full justify-between"
-                @click="onbuildingUpdate(rowData)"
+                @click="onbuildingDelete(rowData)"
               >
-                <span v-if="rowData.active">Block</span>
-                <span v-else>Unblock</span>
+                <span>delete</span>
               </VaButton>
             </div>
           </Transition>
@@ -116,6 +120,7 @@ const columns = defineVaDataTableColumns([
   { label: 'ID', key: 'ID', sortable: true, width: '5%' },
   { label: 'Name', key: 'name', sortable: false, width: '20%' },
   { label: 'Address', key: 'address', sortable: false, width: '20%' },
+  { label: 'BuildingID', key: 'blg_id', sortable: false, width: '10%' },
   { label: 'Detail', key: 'detail', sortable: false, width: '5%' },
   { label: 'Actions', key: 'actions', sortable: false, width: '5%' },
 ])
@@ -123,9 +128,9 @@ const { isLoading, buildings, sorting, pagination, ...buildingApi } = useBuildin
 
 const emit = defineEmits<{
   (event: 'detail-building', building: any): void
-  (event: 'update-building', building: any): void
   (event: 'fetch-building'): void
   (event: 'edit-building', building: any): void
+  (event: 'delete-building', building: any): void
 }>()
 const totalPages = computed(() => Math.ceil(pagination.value.total / pagination.value.pageSize))
 const pagesOptions = computed(() => {
@@ -138,19 +143,18 @@ const pagesOptions = computed(() => {
 
 const { confirm } = useModal()
 
-const onbuildingUpdate = async (building: any) => {
-  const temp = building.active ? 'Block' : 'Unblock'
+const onbuildingDelete = async (building: any) => {
   const agreed = await confirm({
-    title: 'Set Active',
-    message: `Are you sure you want to ${temp} ${building.name}?`,
-    okText: temp,
+    title: 'Delete',
+    message: `Are you sure you want to delete ${building.name}?`,
+    okText: 'Delete',
     cancelText: 'Cancel',
     size: 'small',
     maxWidth: '380px',
   })
 
   if (agreed) {
-    emit('update-building', building)
+    emit('delete-building', building)
   }
 }
 

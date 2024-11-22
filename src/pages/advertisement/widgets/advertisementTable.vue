@@ -109,6 +109,17 @@
               >
                 <span>Set Active</span>
               </VaButton>
+              <VaButton
+                preset="secondary"
+                size="small"
+                icon="mso-delete"
+                color="danger"
+                aria-label="Delete advertisement"
+                class="w-full justify-between"
+                @click="$emit('delete-advertisement', rowData as any)"
+              >
+                <span>Delete</span>
+              </VaButton>
             </div>
           </Transition>
         </template>
@@ -178,6 +189,7 @@ defineEmits<{
   (event: 'update-advertisement', advertisement: any): void
   (event: 'fetch-advertisement'): void
   (event: 'edit-advertisement', advertisement: any): void
+  (event: 'delete-advertisement', advertisement: any): void
 }>()
 
 const totalPages = computed(() => Math.ceil(pagination.value.total / pagination.value.pageSize))

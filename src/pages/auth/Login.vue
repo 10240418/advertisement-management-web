@@ -32,7 +32,7 @@ import { reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { useForm, useToast } from 'vuestic-ui'
 import { validators } from '../../services/utils'
-import { login } from '../../apis/auth'
+import { loginAdminUser } from '../../apis/advertisement/ad_adminUser'
 import { useUserStore } from '@/stores/user-store'
 
 const { validate } = useForm('form')
@@ -47,7 +47,7 @@ const formData = reactive({
 
 const submit = () => {
   if (validate()) {
-    login({ ...formData })
+    loginAdminUser({ ...formData })
       .then((res) => {
         localStorage.setItem('AdminToken', res.data.token)
         //保存賬號和密碼在localStorage

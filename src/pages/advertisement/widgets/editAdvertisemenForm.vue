@@ -16,7 +16,7 @@
       <!-- video_duration -->
       <VaInput
         v-model.number="form.video_duration"
-        label="Video Duration"
+        label="play_duration"
         placeholder="Enter video duration"
         type="number"
         name="video_duration"
@@ -27,7 +27,7 @@
         <img v-if="form.image_url" :src="form.image_url" alt="" />
         <img v-if="coverImg" ref="coverImg" class="mt10" fit="cover" :src="coverImg.src" style="width: 100%" />
         <input ref="coverInput" type="file" accept="image/*" hidden @change="onAvatarUpload" />
-        <VaButton color="primary" preset="filled" @click="coverInput.click()"> updateCover </VaButton>
+        <VaButton color="primary" preset="filled" @click="coverInput.click()"> 上传图片 </VaButton>
       </div>
       <div class="flex gap-2 flex-col w-full">
         <!-- video url -->

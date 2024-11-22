@@ -15,6 +15,7 @@
         @updateAdvertisement="onAdvertisementUpdateActive"
         @fetchAdvertisement="fetchAdvertisements"
         @editAdvertisement="onAdvertisementEdit"
+        @deleteAdvertisement="onAdvertisementDelete"
       />
     </VaCardContent>
     <VaModal v-model="doShowAddAdvertisementModal" size="small" mobile-fullscreen close-button hide-default-actions>
@@ -62,7 +63,13 @@ const onAdvertisementUpdateActive = async (Advertisement: Advertisement_type) =>
   console.log(Advertisement)
   // await AdvertisementApi.updateActive({ id: Advertisement.id, active: !Advertisement.active })
 }
-
+//delete
+const onAdvertisementDelete = async (Advertisement: Advertisement_type) => {
+  console.log(Advertisement)
+  await AdvertisementApi.remove(Advertisement.ID).then(() => {
+    fetchAdvertisements()
+  })
+}
 // 搜索居民
 const fetchAdvertisements = async () => {
   await AdvertisementApi.fetch()

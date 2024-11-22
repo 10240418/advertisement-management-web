@@ -17,6 +17,14 @@
         name="address"
       />
 
+      <VaInput
+        v-model="form.blg_id"
+        label="BuildingID"
+        placeholder="Enter BuildingID"
+        :rules="[validators.required]"
+        name="blg_id"
+      />
+
       <div class="flex gap-2 justify-end mt-4">
         <VaButton preset="secondary" color="secondary" @click="onCloseWindow">Cancel</VaButton>
         <VaButton :disabled="!isValid" @click="submit">Save</VaButton>
@@ -42,6 +50,7 @@ const defaultForm = {
   id: 0,
   name: '',
   address: '',
+  blg_id: '',
 }
 const form = ref<any>({ ...defaultForm })
 watch(
@@ -63,9 +72,9 @@ const submit = () => {
     if (props.building?.ID) {
       console.log(form.value)
       console.log(form.value)
-      update({ ID: form.value.ID, address: form.value.address, name: form.value.name })
+      update({ ID: form.value.ID, address: form.value.address, name: form.value.name, blg_id: form.value.blg_id })
     } else {
-      add({ name: form.value.name, address: form.value.address })
+      add({ name: form.value.name, address: form.value.address, blg_id: form.value.blg_id })
       console.log(form.value)
     }
     emit('close')

@@ -9,7 +9,7 @@ export default defineConfig({
   build: {
     sourcemap: true,
   },
-  // base: '/admin/',
+  base: '/admin/',
   plugins: [
     vue(),
     VueI18nPlugin({
@@ -27,7 +27,7 @@ export default defineConfig({
       '/api': {
         target: 'http://localhost:8080/',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ''),
+        rewrite: (path: string) => path.replace(/^\/api/, ''),
       },
     },
   },

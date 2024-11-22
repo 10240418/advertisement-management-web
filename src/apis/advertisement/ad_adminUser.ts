@@ -3,7 +3,7 @@ import request from '../index'
 
 export const registerAdminUser = (data: any) => {
   return request({
-    url: '/admin/register',
+    url: '/api/admin/register',
     method: 'post',
     data: data,
   })
@@ -11,7 +11,7 @@ export const registerAdminUser = (data: any) => {
 
 export const loginAdminUser = (data: any) => {
   return request({
-    url: '/admin/login',
+    url: '/api/admin/login',
     method: 'post',
     data: data,
   })

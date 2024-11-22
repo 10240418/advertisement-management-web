@@ -2,7 +2,7 @@ import axios, { AxiosInstance, AxiosError, AxiosResponse, InternalAxiosRequestCo
 
 const service: AxiosInstance = axios.create({
   timeout: 15000,
-  baseURL: import.meta.env.DEV ? 'api' : 'api',
+  baseURL: import.meta.env.DEV ? '/api' : '/api',
 })
 // 请求拦截器 添加token
 service.interceptors.request.use(

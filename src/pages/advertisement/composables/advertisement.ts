@@ -1,7 +1,6 @@
 import { onBeforeMount, Ref, ref } from 'vue'
 import { Pagination, Sorting } from '@/data/page'
-import { getAds, createAd, updateAd, deleteAd, getAd } from '@/apis/advertisement/ad_advertisement'
-import { useThrottle } from '@/data/dataControl'
+import { getAds, createAd, updateAd, deleteAd } from '@/apis/advertisement/ad_advertisement'
 import { useToast } from 'vuestic-ui'
 import { Advertisement_type } from '@/data/advertisement/advertisement_type'
 
@@ -83,21 +82,6 @@ export const useAdvertisements = (options?: { pagination?: Ref<Pagination>; sort
     isLoading.value = false
   }
 
-  const searchAdvertisements = useThrottle(async (query: any) => {
-    isLoading.value = true
-    error.value = null
-    try {
-      // Implement search functionality if supported by the API
-      const res = await getAd(query)
-      Advertisements.value = res.data.data
-      pagination.value.total = res.data.pagination.total
-    } catch (error: any) {
-      toast.init({ message: `Error: ${error.response?.data.error || error.message}`, color: 'danger' })
-      console.error(error)
-    }
-    isLoading.value = false
-  }, 500)
-
   onBeforeMount(() => {
     fetch()
   })
@@ -112,6 +96,5 @@ export const useAdvertisements = (options?: { pagination?: Ref<Pagination>; sort
     add,
     update,
     remove,
-    searchAdvertisements,
   }
 }
